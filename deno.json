@@ -1,5 +1,6 @@
 {
     "compilerOptions": { "strict": true },
+    "tasks": { "start": "deno run --allow-env --allow-net src/main.ts" },
     "fmt": {
         "options": {
             "useTabs": true,
