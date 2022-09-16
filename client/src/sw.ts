@@ -4,10 +4,11 @@ import { manifest, version } from '@parcel/service-worker';
 async function handleInstall() {
     // Pre-cache all the new assets
     const cache = await caches.open(version);
-    await cache.addAll(manifest);
+    return cache.addAll(manifest);
 }
 
 function* deleteAll(keys: Iterable<string>) {
+    // Remove all caches except our current version
     for (const key of keys)
         if (key !== version)
             yield caches.delete(key);
