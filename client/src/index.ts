@@ -20,7 +20,9 @@ async function getSubscription(manager: PushManager): Promise<PushSubscription> 
 }
 
 async function main() {
-    const { pushManager } = await navigator.serviceWorker.register(new URL('sw.ts', import.meta.url), { type: 'module' });
+    await navigator.serviceWorker.register(new URL('sw.ts', import.meta.url), { type: 'module' });
+    const { pushManager } = await navigator.serviceWorker.ready;
+
     const { expirationTime } = await getSubscription(pushManager);
     assert(expirationTime !== null);
 

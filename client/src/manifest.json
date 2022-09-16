@@ -1,0 +1,8 @@
+{
+    "name": "DocTrack",
+    "short_name": "DocTrack",
+    "description": "A document tracking system built for the modern age.",
+    "display": "standalone",
+    "background_color": "#fff",
+    "start_url": "."
+}
