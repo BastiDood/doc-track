@@ -1,0 +1,16 @@
+{
+    "name": "client",
+    "version": "0.1.0",
+    "source": "src/index.html",
+    "scripts": {
+        "start": "parcel",
+        "build": "parcel build"
+    },
+    "devDependencies": {
+        "@types/serviceworker": "^0.0.51",
+        "parcel": "^2.7.0"
+    },
+    "dependencies": {
+        "@parcel/service-worker": "^2.7.0"
+    }
+}

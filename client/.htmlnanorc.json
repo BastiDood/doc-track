@@ -1,0 +1,5 @@
+{
+    "preset": "max",
+    "minifyJs": { "ecma": 2018, "module": true },
+    "minifyCss": { "preset": "advanced" }
+}
