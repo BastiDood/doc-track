@@ -4,7 +4,7 @@ import { PushSubscriptionSchema } from './model/subscription.ts';
 
 async function handle(req: Request): Promise<Response> {
     if (req.method !== 'POST')
-        return new Response('Hello World!', { status: Status.MethodNotAllowed });
+        return new Response(null, { status: Status.MethodNotAllowed });
 
     const json = await req.json();
     const { endpoint, expirationTime } = PushSubscriptionSchema.parse(json);
