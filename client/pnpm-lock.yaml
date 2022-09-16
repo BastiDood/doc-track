@@ -6,9 +6,9 @@ specifiers:
   '@parcel/packager-raw-url': ^2.7.0
   '@parcel/service-worker': ^2.7.0
   '@parcel/transformer-webmanifest': ^2.7.0
+  '@plasmohq/parcel-transformer-svelte3': ^0.2.0
   '@types/serviceworker': ^0.0.51
   parcel: ^2.7.0
-  parcel-transformer-svelte3-plus: ^0.2.8
   svelte: ^3.50.1
   svelte-preprocess: ^4.10.7
   typescript: ^4.8.3
@@ -22,9 +22,9 @@ devDependencies:
   '@parcel/core': 2.7.0
   '@parcel/packager-raw-url': 2.7.0_@parcel+core@2.7.0
   '@parcel/transformer-webmanifest': 2.7.0_@parcel+core@2.7.0
+  '@plasmohq/parcel-transformer-svelte3': 0.2.0
   '@types/serviceworker': 0.0.51
   parcel: 2.7.0
-  parcel-transformer-svelte3-plus: 0.2.8_2fi6ff76muijdg3kdu2izczywm
   svelte: 3.50.1
   svelte-preprocess: 4.10.7_iprco5tylfmvffqgrvqxc46njy
   typescript: 4.8.3
@@ -907,6 +907,17 @@ packages:
       nullthrows: 1.1.1
     dev: true
 
+  /@plasmohq/parcel-transformer-svelte3/0.2.0:
+    resolution: {integrity: sha512-xQ0ZaLZB+zqOZX/8EniYpFQlLOjEBbjR7RY94Zom2DQM5ZG+38/UU8iQVlA/FazAfvwswTfm/oD9zb3GFQa5Dw==}
+    engines: {parcel: '>= 2.7.0'}
+    dependencies:
+      '@parcel/core': 2.7.0
+      '@parcel/diagnostic': 2.7.0
+      '@parcel/plugin': 2.7.0_@parcel+core@2.7.0
+      '@parcel/source-map': 2.1.0
+      '@parcel/utils': 2.7.0
+    dev: true
+
   /@swc/helpers/0.4.11:
     resolution: {integrity: sha512-rEUrBSGIoSFuYxwBYtlUFMlE2CwGhmW+w9355/5oduSw8e5h2+Tj4UrAGNNgP9915++wj5vkQo0UuOBqOAq4nw==}
     dependencies:
@@ -1542,26 +1553,6 @@ packages:
 
   /ordered-binary/1.3.0:
     resolution: {integrity: sha512-knIeYepTI6BDAzGxqFEDGtI/iGqs57H32CInAIxEvAHG46vk1Di0CEpyc1A7iY39B1mfik3g3KLYwOTNnnMHLA==}
-    dev: true
-
-  /parcel-transformer-svelte3-plus/0.2.8_2fi6ff76muijdg3kdu2izczywm:
-    resolution: {integrity: sha512-2Dbl5EayopcxybOiQrozWcP5OYNUV2x3tBlwu/8nN1N+7RbaipMYk2bF/HhDBRnXllDgr8g21HqlgkkpmcEDcA==}
-    engines: {node: '>=12', parcel: ^2.0.0}
-    peerDependencies:
-      svelte: ^3.44.0
-      svelte-preprocess: ^4.0.0
-    peerDependenciesMeta:
-      svelte-preprocess:
-        optional: true
-    dependencies:
-      '@parcel/diagnostic': 2.7.0
-      '@parcel/plugin': 2.7.0_@parcel+core@2.7.0
-      '@parcel/source-map': 2.1.0
-      '@parcel/utils': 2.7.0
-      svelte: 3.50.1
-      svelte-preprocess: 4.10.7_iprco5tylfmvffqgrvqxc46njy
-    transitivePeerDependencies:
-      - '@parcel/core'
     dev: true
 
   /parcel/2.7.0:
