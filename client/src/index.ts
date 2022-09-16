@@ -1,3 +1,4 @@
+import App from './App.svelte';
 import { assert } from './assert';
 
 async function getSubscription(manager: PushManager): Promise<PushSubscription> {
@@ -5,13 +6,11 @@ async function getSubscription(manager: PushManager): Promise<PushSubscription> 
     if (maybeSub !== null) return maybeSub;
 
     const sub = await manager.subscribe({
-        // @ts-expect-error
         applicationServerKey: process.env.VAPID_PUB_KEY,
         userVisibleOnly: true,
     });
 
     const body = JSON.stringify(sub.toJSON());
-    // @ts-expect-error
     const response = await fetch(process.env.SUBSCRIBE_URL, { method: 'POST', body });
     if (response.status !== 201) throw new Error('failed to submit subscription');
 
@@ -30,3 +29,6 @@ async function main() {
 }
 
 main();
+
+const app = new App({ target: document.body });
+export default app;

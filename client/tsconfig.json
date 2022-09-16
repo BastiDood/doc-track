@@ -5,6 +5,7 @@
         "isolatedModules": true,
         "moduleResolution": "Node16",
         "strict": true,
-        "types": ["serviceworker"]
+        "types": ["serviceworker"],
+        "plugins": [{ "name": "typescript-svelte-plugin" }]
     }
 }

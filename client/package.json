@@ -7,8 +7,15 @@
         "build": "parcel build"
     },
     "devDependencies": {
+        "@parcel/config-default": "^2.7.0",
+        "@parcel/core": "^2.7.0",
         "@types/serviceworker": "^0.0.51",
-        "parcel": "^2.7.0"
+        "parcel": "^2.7.0",
+        "parcel-transformer-svelte3-plus": "^0.2.8",
+        "svelte": "^3.50.1",
+        "svelte-preprocess": "^4.10.7",
+        "typescript": "^4.8.3",
+        "typescript-svelte-plugin": "^0.3.9"
     },
     "dependencies": {
         "@parcel/service-worker": "^2.7.0"
