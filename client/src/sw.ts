@@ -8,14 +8,15 @@ async function handleInstall() {
 }
 
 function* deleteAll(keys: Iterable<string>) {
-    for (const key of keys) yield caches.delete(key);
+    for (const key of keys)
+        if (key !== version)
+            yield caches.delete(key);
 }
 
 async function handleActivate() {
     // Delete old cache if we're a new version
-    const keySet = new Set(await caches.keys());
-    assert(keySet.delete(version), 'current version does not exist in cache');
-    const results = await Promise.all(deleteAll(keySet));
+    const keys = await caches.keys();
+    const results = await Promise.all(deleteAll(keys));
     assert(results.every(x => x));
 }
 
