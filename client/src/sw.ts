@@ -30,19 +30,19 @@ async function handleFetch(req: Request): Promise<Response> {
 self.addEventListener('install', evt => {
     assert(evt instanceof ExtendableEvent);
     evt.waitUntil(handleInstall());
-}, { once: true });
+}, { once: true, passive: true });
 
 self.addEventListener('activate', evt => {
     assert(evt instanceof ExtendableEvent);
     evt.waitUntil(handleActivate());
-}, { once: true });
+}, { once: true, passive: true });
 
 self.addEventListener('fetch', evt => {
     assert(evt instanceof FetchEvent);
     evt.respondWith(handleFetch(evt.request));
-});
+}, { passive: true });
 
 self.addEventListener('push', evt => {
     assert(evt instanceof PushEvent);
     // TODO
-});
+}, { passive: true });
