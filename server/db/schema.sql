@@ -36,7 +36,7 @@ CREATE TABLE office(
 
 CREATE TABLE staff(
     user VARCHAR(255) NOT NULL PRIMARY KEY REFERENCES user(id),
-    office SMALLSERIAL NOT NULL PRIMARY KEY REFERENCES office(id)
+    office SMALLINT NOT NULL PRIMARY KEY REFERENCES office(id)
 );
 
 CREATE TABLE batch(
@@ -46,8 +46,8 @@ CREATE TABLE batch(
 );
 
 CREATE TABLE barcode(
-    code INTEGER UNSIGNED NOT NULL PRIMARY KEY,
-    batch SERIAL NOT NULL REFERENCES batch(id)
+    code INTEGER NOT NULL PRIMARY KEY,
+    batch INTEGER NOT NULL REFERENCES batch(id)
 );
 
 CREATE TABLE category(
@@ -56,17 +56,17 @@ CREATE TABLE category(
 );
 
 CREATE TABLE document(
-    id INTEGER UNSIGNED NOT NULL PRIMARY KEY REFERENCES barcode(code),
+    id INTEGER NOT NULL PRIMARY KEY REFERENCES barcode(code),
     title VARCHAR(40) NOT NULL,
-    category SMALLSERIAL NOT NULL REFERENCES category(id),
+    category SMALLINT NOT NULL REFERENCES category(id),
     file LO
 );
 
 CREATE TABLE snapshot(
-    doc INTEGER UNSIGNED NOT NULL PRIMARY KEY REFERENCES document(id),
+    doc INTEGER NOT NULL PRIMARY KEY REFERENCES document(id),
     creation TIMESTAMP NOT NULL PRIMARY KEY,
     evaluator VARCHAR(255) NOT NULL REFERENCES user(id),
-    status INTEGER UNSIGNED NOT NULL,
+    status INTEGER NOT NULL,
     remark VARCHAR(32)
 );
 
@@ -77,6 +77,6 @@ CREATE TABLE subscription(
 );
 
 CREATE TABLE notification(
-    sub SERIAL NOT NULL PRIMARY KEY REFERENCES subscription(id),
-    doc INTEGER UNSIGNED NOT NULL PRIMARY KEY REFERENCES document(id)
+    sub INTEGER NOT NULL PRIMARY KEY REFERENCES subscription(id),
+    doc INTEGER NOT NULL PRIMARY KEY REFERENCES document(id)
 );
