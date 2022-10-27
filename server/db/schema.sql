@@ -76,7 +76,7 @@ CREATE TABLE snapshot(
     creation TIMESTAMP NOT NULL PRIMARY KEY,
     doc INTEGER NOT NULL PRIMARY KEY REFERENCES document (id),
     evaluator GoogleUserId NOT NULL REFERENCES user (id),
-    docStatus DocStatus NOT NULL,
+    status DocStatus NOT NULL,
     remark VARCHAR(32)
 );
 
