@@ -2,30 +2,39 @@
 -- Authorization Code: 256
 -- Access Token:       2048
 -- Refresh Token:      512
+CREATE DOMAIN GoogleUserId AS VARCHAR(255) NOT NULL;
+CREATE DOMAIN AuthorizationCode AS VARCHAR(256) NOT NULL;
+CREATE DOMAIN AccessToken AS VARCHAR(2048) NOT NULL;
+CREATE DOMAIN RefreshToken AS VARCHAR(2048);
+
+-- Expiration Times
+CREATE DOMAIN Expiration AS TIMESTAMP NOT NULL CHECK(VALUE > NOW());
+
+-- Document Status
+CREATE TYPE DocStatus AS ENUM ('Register', 'Send', 'Receive', 'Terminate');
 
 CREATE TABLE user(
     -- Google-assigned globally unique key.
-    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    id GoogleUserId PRIMARY KEY,
     first_name VARCHAR(20) NOT NULL,
     last_name VARCHAR(20) NOT NULL,
     email VARCHAR(20) NOT NULL
 );
 
--- Pending OAuth logins. Must expire within five minutes.
+-- Pending OAuth logins. Must expire periodically.
 CREATE TABLE pending(
-    id UUID NOT NULL PRIMARY KEY,
+    id uuid NOT NULL PRIMARY KEY,
     authorization_code VARCHAR(256) NOT NULL,
     nonce BIGINT NOT NULL
 );
 
 -- Validated OAuth login.
 CREATE TABLE session(
-    id UUID NOT NULL PRIMARY KEY,
-    creation TIMESTAMP NOT NULL,
-    expiration TIMESTAMP NOT NULL,
-    access_token VARCHAR(2048) NOT NULL,
-    refresh_token VARCHAR(512),
-    user VARCHAR(255) NOT NULL REFERENCES user(id)
+    id uuid NOT NULL PRIMARY KEY,
+    user VARCHAR(255) NOT NULL REFERENCES user (id),
+    expiration Expiration,
+    access_token AccessToken,
+    refresh_token RefreshToken
 );
 
 CREATE TABLE office(
@@ -35,48 +44,48 @@ CREATE TABLE office(
 );
 
 CREATE TABLE staff(
-    user VARCHAR(255) NOT NULL PRIMARY KEY REFERENCES user(id),
-    office SMALLINT NOT NULL PRIMARY KEY REFERENCES office(id)
+    user GoogleUserId PRIMARY KEY REFERENCES user (id),
+    office SMALLINT NOT NULL PRIMARY KEY REFERENCES office (id)
 );
 
 CREATE TABLE batch(
     id SERIAL NOT NULL PRIMARY KEY,
-    creation TIMESTAMP NOT NULL,
-    generator VARCHAR(255) NOT NULL REFERENCES user(id),
+    generator GoogleUserId REFERENCES user (id),
+    creation TIMESTAMP NOT NULL
 );
 
 CREATE TABLE barcode(
     code INTEGER NOT NULL PRIMARY KEY,
-    batch INTEGER NOT NULL REFERENCES batch(id)
+    batch INTEGER NOT NULL REFERENCES batch (id)
 );
 
 CREATE TABLE category(
     id SMALLSERIAL NOT NULL PRIMARY KEY,
-    name VARCHAR(20) NOT NULL
+    title VARCHAR(20) UNIQUE NOT NULL,
 );
 
 CREATE TABLE document(
-    id INTEGER NOT NULL PRIMARY KEY REFERENCES barcode(code),
+    id INTEGER NOT NULL PRIMARY KEY REFERENCES barcode (code),
+    category SMALLINT NOT NULL REFERENCES category (id),
     title VARCHAR(40) NOT NULL,
-    category SMALLINT NOT NULL REFERENCES category(id),
     file LO
 );
 
 CREATE TABLE snapshot(
-    doc INTEGER NOT NULL PRIMARY KEY REFERENCES document(id),
     creation TIMESTAMP NOT NULL PRIMARY KEY,
-    evaluator VARCHAR(255) NOT NULL REFERENCES user(id),
-    status INTEGER NOT NULL,
+    doc INTEGER NOT NULL PRIMARY KEY REFERENCES document (id),
+    evaluator GoogleUserId NOT NULL REFERENCES user (id),
+    docStatus DocStatus NOT NULL,
     remark VARCHAR(32)
 );
 
 CREATE TABLE subscription(
     id SERIAL NOT NULL PRIMARY KEY,
-    endpoint VARCHAR(50) NOT NULL,
-    expiration TIMESTAMP NOT NULL
+    endpointUrl VARCHAR(50) NOT NULL,
+    expiration Expiration
 );
 
 CREATE TABLE notification(
-    sub INTEGER NOT NULL PRIMARY KEY REFERENCES subscription(id),
-    doc INTEGER NOT NULL PRIMARY KEY REFERENCES document(id)
+    sub INTEGER NOT NULL PRIMARY KEY REFERENCES subscription (id),
+    doc INTEGER NOT NULL PRIMARY KEY REFERENCES document (id)
 );
