@@ -45,7 +45,8 @@ CREATE TABLE office(
 
 CREATE TABLE staff(
     user GoogleUserId PRIMARY KEY REFERENCES user (id),
-    office SMALLINT NOT NULL PRIMARY KEY REFERENCES office (id)
+    office SMALLINT NOT NULL PRIMARY KEY REFERENCES office (id),
+    permission BIT(3) NOT NULL
 );
 
 CREATE TABLE batch(
