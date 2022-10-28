@@ -24,7 +24,6 @@ CREATE TABLE user(
 -- Pending OAuth logins. Must expire periodically.
 CREATE TABLE pending(
     id uuid NOT NULL PRIMARY KEY,
-    authorization_code VARCHAR(256) NOT NULL,
     nonce BIGINT NOT NULL
 );
 
