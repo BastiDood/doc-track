@@ -74,6 +74,7 @@ CREATE TABLE document(
 CREATE TABLE snapshot(
     creation TIMESTAMP NOT NULL PRIMARY KEY,
     doc uuid NOT NULL PRIMARY KEY REFERENCES document (id),
+    target SMALLINT REFERENCES office (id),
     evaluator GoogleUserId NOT NULL REFERENCES user (id),
     status DocStatus NOT NULL,
     remark VARCHAR(32)
