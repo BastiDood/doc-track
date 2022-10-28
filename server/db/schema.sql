@@ -55,7 +55,7 @@ CREATE TABLE batch(
 );
 
 CREATE TABLE barcode(
-    code INTEGER NOT NULL PRIMARY KEY,
+    code uuid NOT NULL PRIMARY KEY,
     batch INTEGER NOT NULL REFERENCES batch (id)
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE category(
 );
 
 CREATE TABLE document(
-    id INTEGER NOT NULL PRIMARY KEY REFERENCES barcode (code),
+    id uuid NOT NULL PRIMARY KEY REFERENCES barcode (code),
     category SMALLINT NOT NULL REFERENCES category (id),
     title VARCHAR(40) NOT NULL,
     file LO
@@ -73,7 +73,7 @@ CREATE TABLE document(
 
 CREATE TABLE snapshot(
     creation TIMESTAMP NOT NULL PRIMARY KEY,
-    doc INTEGER NOT NULL PRIMARY KEY REFERENCES document (id),
+    doc uuid NOT NULL PRIMARY KEY REFERENCES document (id),
     evaluator GoogleUserId NOT NULL REFERENCES user (id),
     status DocStatus NOT NULL,
     remark VARCHAR(32)
@@ -87,5 +87,5 @@ CREATE TABLE subscription(
 
 CREATE TABLE notification(
     sub INTEGER NOT NULL PRIMARY KEY REFERENCES subscription (id),
-    doc INTEGER NOT NULL PRIMARY KEY REFERENCES document (id)
+    doc uuid NOT NULL PRIMARY KEY REFERENCES document (id)
 );
