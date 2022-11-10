@@ -7,19 +7,19 @@
         "build": "parcel build"
     },
     "devDependencies": {
-        "@parcel/config-default": "^2.7.0",
-        "@parcel/core": "^2.7.0",
-        "@parcel/packager-raw-url": "^2.7.0",
-        "@parcel/transformer-webmanifest": "^2.7.0",
+        "@parcel/config-default": "^2.8.0",
+        "@parcel/core": "^2.8.0",
+        "@parcel/packager-raw-url": "^2.8.0",
+        "@parcel/transformer-webmanifest": "^2.8.0",
         "@plasmohq/parcel-transformer-svelte3": "^0.2.4",
         "@types/serviceworker": "^0.0.54",
-        "parcel": "^2.7.0",
-        "svelte": "^3.52.0",
+        "parcel": "^2.8.0",
+        "svelte": "^3.53.0",
         "svelte-preprocess": "^4.10.7",
         "typescript": "^4.8.4",
         "typescript-svelte-plugin": "^0.3.10"
     },
     "dependencies": {
-        "@parcel/service-worker": "^2.7.0"
+        "@parcel/service-worker": "^2.8.0"
     }
 }
