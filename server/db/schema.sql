@@ -83,7 +83,7 @@ CREATE TABLE snapshot(
 
 CREATE TABLE subscription(
     id SERIAL NOT NULL PRIMARY KEY,
-    endpointUrl VARCHAR(50) NOT NULL,
+    endpoint VARCHAR(50) NOT NULL,
     expiration Expiration
 );
 
