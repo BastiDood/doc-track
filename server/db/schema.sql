@@ -91,3 +91,9 @@ CREATE TABLE notification(
     sub INTEGER NOT NULL PRIMARY KEY REFERENCES subscription (id),
     doc uuid NOT NULL PRIMARY KEY REFERENCES document (id)
 );
+
+CREATE TABLE invitation(
+    id SMALLSERIAL NOT NULL PRIMARY KEY REFERENCES office (id),
+    email VARCHAR(20) NOT NULL PRIMARY KEY,
+    creation TIMESTAMP NOT NULL
+);
