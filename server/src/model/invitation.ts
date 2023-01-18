@@ -1,4 +1,4 @@
-import { z } from '../deps.ts';
+import { z } from 'zod';
 import { Email } from './common.ts';
 import { OfficeId } from './office.ts';
 

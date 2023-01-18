@@ -1,4 +1,5 @@
-import { z } from '../deps.ts';
+import { z } from 'zod';
+
 import { GoogleUserId } from './user.ts';
 
 // https://developers.google.com/identity/protocols/oauth2#size

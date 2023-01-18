@@ -1,4 +1,5 @@
-import { z } from '../deps.ts';
+import { z } from 'zod';
+
 import { DocumentId } from './document.ts';
 import { OfficeId } from './office.ts';
 import { GoogleUserId } from './user.ts';

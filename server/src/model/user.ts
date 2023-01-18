@@ -1,4 +1,5 @@
-import { z } from '../deps.ts';
+import { z } from 'zod';
+
 import { Email } from './common.ts';
 
 export const GoogleUserId = z.string().max(255);

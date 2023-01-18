@@ -1,4 +1,5 @@
 {
+    "importMap": "import.json",
     "compilerOptions": {
         "noUncheckedIndexedAccess": true,
         "strict": true

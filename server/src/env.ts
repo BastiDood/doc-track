@@ -1,4 +1,4 @@
-import { assert } from './deps.ts';
+import { assert } from 'asserts';
 
 const PORT = Deno.env.get('PORT');
 assert(PORT !== undefined);

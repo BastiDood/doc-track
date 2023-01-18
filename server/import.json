@@ -1,0 +1,10 @@
+{
+    "imports": {
+        "asserts": "https://deno.land/std@0.173.0/testing/asserts.ts",
+        "cookie": "https://deno.land/std@0.173.0/http/cookie.ts",
+        "hex": "https://deno.land/std@0.173.0/encoding/hex.ts",
+        "http": "https://deno.land/std@0.173.0/http/http_status.ts",
+        "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
+        "zod": "https://deno.land/x/zod@v3.20.2/mod.ts"
+    }
+}

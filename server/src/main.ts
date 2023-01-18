@@ -1,5 +1,6 @@
+import { Status } from 'http';
+
 import { env } from './env.ts';
-import { Status } from './deps.ts';
 import { get, post } from './routes/mod.ts';
 
 function handle(req: Request): Promise<Response> {

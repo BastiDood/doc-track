@@ -1,4 +1,5 @@
-import { z } from '../deps.ts';
+import { z } from 'zod';
+
 import { BatchId } from './batch.ts';
 
 export const BarcodeId = z.string().uuid();

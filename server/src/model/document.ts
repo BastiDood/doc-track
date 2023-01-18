@@ -1,4 +1,5 @@
-import { z } from '../deps.ts';
+import { z } from 'zod';
+
 import { CategoryId } from './category.ts';
 
 export const DocumentId = z.string().uuid();
