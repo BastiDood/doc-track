@@ -1,5 +1,6 @@
-import { Status } from "../deps.ts";
-import { PushSubscriptionSchema } from "../model/subscription.ts";
+import { Status } from 'http';
+
+import { PushSubscriptionSchema } from '../model/subscription.ts';
 
 export function get(req: Request): Response {
     return new Response('Hello world!');
