@@ -1,14 +1,7 @@
-import { Status } from 'http';
-
 import { env } from './env.ts';
-import { get, post } from './routes/mod.ts';
 
-function handle(req: Request): Promise<Response> {
-    switch (req.method) {
-        case 'GET': return Promise.resolve(get(req));
-        case 'POST': return post(req);
-    }
-    return Promise.resolve(new Response(null, { status: Status.Created }));
+function handle(req: Request): Response | Promise<Response> {
+    return new Response('Hello world');
 }
 
 for await (const conn of Deno.listen({ port: env.PORT }))
