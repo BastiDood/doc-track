@@ -8,7 +8,7 @@ CREATE DOMAIN AccessToken AS VARCHAR(2048) NOT NULL;
 CREATE DOMAIN RefreshToken AS VARCHAR(512);
 
 -- Expiration Times
-CREATE DOMAIN Expiration AS TIMESTAMP NOT NULL CHECK(VALUE > NOW());
+CREATE DOMAIN Expiration AS TIMESTAMPTZ NOT NULL CHECK(VALUE > NOW());
 
 -- Document Status
 CREATE TYPE DocStatus AS ENUM ('Register', 'Send', 'Receive', 'Terminate');
@@ -23,9 +23,9 @@ CREATE TABLE user(
 
 -- Pending OAuth logins. Must expire periodically.
 CREATE TABLE pending(
-    id uuid NOT NULL PRIMARY KEY,
-    nonce BIGINT NOT NULL,
-    expiration Expiration
+    id UUID NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+    nonce BYTEA NOT NULL DEFAULT gen_random_bytes(64),
+    expiration Expiration DEFAULT NOW() + INTERVAL '15 minutes'
 );
 
 -- Validated OAuth login.
@@ -52,7 +52,7 @@ CREATE TABLE staff(
 CREATE TABLE batch(
     id SERIAL NOT NULL PRIMARY KEY,
     generator GoogleUserId REFERENCES user (id),
-    creation TIMESTAMP NOT NULL
+    creation TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE barcode(
@@ -73,7 +73,7 @@ CREATE TABLE document(
 );
 
 CREATE TABLE snapshot(
-    creation TIMESTAMP NOT NULL PRIMARY KEY,
+    creation TIMESTAMPTZ PRIMARY KEY DEFAULT NOW(),
     doc uuid NOT NULL PRIMARY KEY REFERENCES document (id),
     target SMALLINT REFERENCES office (id) CHECK((status = 'Send' AND target IS NOT NULL) OR (target IS NULL)),
     evaluator GoogleUserId NOT NULL REFERENCES user (id),
@@ -95,5 +95,5 @@ CREATE TABLE notification(
 CREATE TABLE invitation(
     id SMALLSERIAL NOT NULL PRIMARY KEY REFERENCES office (id),
     email VARCHAR(20) NOT NULL PRIMARY KEY,
-    creation TIMESTAMP NOT NULL
+    creation TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
