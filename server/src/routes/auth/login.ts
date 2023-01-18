@@ -7,11 +7,16 @@ import { hashUuid } from './util.ts';
 
 /**
  * Rejects users that already have a valid session in the database.
- * Generates a brand new session otherwise. Namely:
+ * Such users are redirected to the dashboard (i.e., `/dashboard`).
+ * Otherwise, the function generates a brand new session. The cases
+ * when this occurs are enumerated below:
  *
  * 1. There is no session ID.
  * 2. Session ID is an empty string.
  * 3. Session ID points to a pending session.
+ *
+ * Once a pending session has been initialized, the user is
+ * redirected to Google's OAuth 2.0 consent page.
  */
 export async function handleLogin(db: Database, req: Request) {
     // Redirect valid sessions to dashboard
