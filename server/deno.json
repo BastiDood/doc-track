@@ -1,5 +1,8 @@
 {
-    "compilerOptions": { "strict": true },
+    "compilerOptions": {
+        "noUncheckedIndexedAccess": true,
+        "strict": true
+    },
     "tasks": { "start": "deno run --allow-env --allow-net src/main.ts" },
     "fmt": {
         "options": {
