@@ -4,7 +4,7 @@ export const PushSubscriptionId = z.string();
 
 export const PushSubscriptionSchema = z.object({
     id: PushSubscriptionId,
-	endpoint: z.string(),
+	endpoint: z.string().url(),
 	expirationTime: z.number().nullable(),
 });
 

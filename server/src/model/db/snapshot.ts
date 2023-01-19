@@ -16,7 +16,7 @@ export const SnapshotSchema = z.object({
     creation: z.coerce.date(),
     evaluator: GoogleUserId,
     status: z.nativeEnum(Status),
-    remark: z.string().max(32),
+    remark: z.string().min(1).max(32),
     target: OfficeId,
 });
 

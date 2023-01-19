@@ -2,9 +2,10 @@ import { getCookies, setCookie } from 'cookie';
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
+import { hashUuid } from './util.ts';
 import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
-import { hashUuid } from './util.ts';
+import { OAUTH_SCOPE } from '../../model/oauth/google.ts';
 
 /**
  * Rejects users that already have a valid session in the database.
@@ -38,9 +39,9 @@ export async function handleLogin(pool: Pool, req: Request) {
         client_id: env.GOOGLE_ID,
         redirect_uri: env.OAUTH_REDIRECT,
         nonce: nonce.slice(2),
-        access_type: 'offline',
+        access_type: 'online',
         response_type: 'code',
-        scope: 'openid name email picture',
+        scope: OAUTH_SCOPE,
         prompt: 'select_account',
         hd: env.HOSTED_GSUITE_DOMAIN,
     });

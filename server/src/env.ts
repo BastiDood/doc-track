@@ -6,6 +6,9 @@ assert(PORT);
 const GOOGLE_ID = Deno.env.get('GOOGLE_ID');
 assert(GOOGLE_ID);
 
+const GOOGLE_SECRET = Deno.env.get('GOOGLE_SECRET');
+assert(GOOGLE_SECRET);
+
 const OAUTH_REDIRECT = Deno.env.get('OAUTH_REDIRECT');
 assert(OAUTH_REDIRECT);
 
@@ -18,6 +21,7 @@ assert(VAPID_PRV_KEY);
 export const env = {
     PORT: parseInt(PORT, 10),
     GOOGLE_ID,
+    GOOGLE_SECRET,
     OAUTH_REDIRECT,
     HOSTED_GSUITE_DOMAIN,
     VAPID_PRV_KEY,

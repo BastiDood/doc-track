@@ -1,7 +1,7 @@
 import { assert } from 'asserts';
 import { Pool, PoolClient } from 'postgres';
 
-import { PendingSchema, type Pending } from './model/pending.ts';
+import { PendingSchema, type Pending } from './model/db/pending.ts';
 
 export class Database {
     #client: PoolClient;

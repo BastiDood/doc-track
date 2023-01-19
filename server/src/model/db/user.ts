@@ -1,13 +1,12 @@
 import { z } from 'zod';
 
 import { Email } from './common.ts';
-
-export const GoogleUserId = z.string().max(255);
+import { GoogleUserId } from '../oauth/openid.ts';
 
 export const UserSchema = z.object({
     id: GoogleUserId,
-    first_name: z.string().max(20),
-    last_name: z.string().max(20),
+    first_name: z.string().max(20).default(''),
+    last_name: z.string().max(20).default(''),
     email: Email,
 });
 

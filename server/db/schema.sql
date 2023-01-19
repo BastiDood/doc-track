@@ -5,7 +5,6 @@
 CREATE DOMAIN GoogleUserId AS VARCHAR(255) NOT NULL;
 CREATE DOMAIN AuthorizationCode AS VARCHAR(256) NOT NULL;
 CREATE DOMAIN AccessToken AS VARCHAR(2048) NOT NULL;
-CREATE DOMAIN RefreshToken AS VARCHAR(512);
 
 -- Expiration Times
 CREATE DOMAIN Expiration AS TIMESTAMPTZ NOT NULL CHECK(VALUE > NOW());
@@ -34,7 +33,6 @@ CREATE TABLE session(
     user VARCHAR(255) NOT NULL REFERENCES user (id),
     expiration Expiration,
     access_token AccessToken,
-    refresh_token RefreshToken
 );
 
 CREATE TABLE office(
