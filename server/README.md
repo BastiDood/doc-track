@@ -28,8 +28,12 @@ The back-end API is powered by the [Deno] runtime for [TypeScript].
 # skip this step.
 pnpm dlx web-push generate-vapid-keys
 
-# Set up environment variables.
+# Set up (example) environment variables.
 PORT=3000
+GOOGLE_ID=
+GOOGLE_SECRET=
+OAUTH_REDIRECT=http://localhost:3000/callback
+HOSTED_GSUITE_DOMAIN=up.edu.ph
 VAPID_PRV_KEY=
 
 # Starts the server at `0.0.0.0:3000`.
