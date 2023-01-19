@@ -1,8 +1,9 @@
 import { getCookies, setCookie } from 'cookie';
 import { Status } from 'http';
+import { Pool } from 'postgres';
 
+import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
-import { Database } from '../../db/mod.ts';
 import { hashUuid } from './util.ts';
 
 /**
@@ -18,9 +19,10 @@ import { hashUuid } from './util.ts';
  * Once a pending session has been initialized, the user is
  * redirected to Google's OAuth 2.0 consent page.
  */
-export async function handleLogin(db: Database, req: Request) {
+export async function handleLogin(pool: Pool, req: Request) {
     // Redirect valid sessions to dashboard
     const { sid } = getCookies(req.headers);
+    const db = await Database.fromPool(pool);
     if (sid && await db.checkValidSession(sid))
         return new Response(null, {
             headers: { Location: '/dashboard' },

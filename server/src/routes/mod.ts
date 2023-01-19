@@ -1,12 +1,13 @@
 import { Status } from 'http';
+import { Pool } from 'postgres';
 
-import { handleLogin } from './auth/login.ts';
-import { Database } from '../db/mod.ts';
+import { handleCallback, handleLogin } from './auth/mod.ts';
 
-export function get(db: Database, req: Request) {
-    const { pathname } = new URL(req.url);
+export function get(pool: Pool, req: Request) {
+    const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
-        case '/login': return handleLogin(db, req);
+        case '/login': return handleLogin(pool, req);
+        case '/callback': return handleCallback(pool, req, searchParams);
         default: return new Response(null, { status: Status.NotFound });
     }
 }

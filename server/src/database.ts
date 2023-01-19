@@ -1,20 +1,20 @@
 import { assert } from 'asserts';
-import { Client, type ClientOptions } from 'postgres';
+import { Pool, PoolClient } from 'postgres';
 
-import { PendingSchema, type Pending } from '../model/pending.ts';
+import { PendingSchema, type Pending } from './model/pending.ts';
 
 export class Database {
-    #client: Client;
+    #client: PoolClient;
 
-    private constructor(client: Client) { this.#client = client }
+    private constructor(client: PoolClient) { this.#client = client }
 
-    async create(options: ClientOptions) {
-        const client = new Client(options);
+    static async fromPool(pool: Pool) {
+        const client = await pool.connect();
         await client.connect();
         return new Database(client);
     }
 
-    end() { return this.#client.end(); }
+    release() { return this.#client.release(); }
 
     async checkValidSession(sid: string) {
         const { rows } = await this.#client.queryObject`SELECT 1 FROM session WHERE id = ${sid}`;
