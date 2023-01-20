@@ -20,6 +20,7 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 `PG_USER` | Provided username when logging into [PostgreSQL]. | &#x2714; |
 `PG_PASSWORD` | Provided password when logging into [PostgreSQL]. | &#x2714; |
 `PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `doctrack`
+`PG_POOL` | Maximum number of pooled connections reserved by the [PostgreSQL] client. | &#x274c; | `4`
 `VAPID_PRV_KEY` | [Vapid private key][vapid] which will be used to subscribe to the [Web Push API]. | &#x2714; |
 
 [vapid]: https://blog.mozilla.org/services/2016/08/23/sending-vapid-identified-webpush-notifications-via-mozillas-push-service/

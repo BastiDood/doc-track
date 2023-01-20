@@ -12,7 +12,7 @@ export function get(pool: Pool, req: Request) {
     }
 }
 
-export async function post(req: Request) {
+export function post(req: Request) {
     // TODO...
-    throw new Error('todo');
+    return new Response(null, { status: Status.NotImplemented });
 }

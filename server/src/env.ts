@@ -27,6 +27,8 @@ const PG_PORT = Deno.env.get('PG_PORT');
 const PG_USER = Deno.env.get('PG_USER');
 assert(PG_USER);
 
+const PG_POOL = Deno.env.get('PG_POOL');
+
 const VAPID_PRV_KEY = Deno.env.get('VAPID_PRV_KEY');
 assert(VAPID_PRV_KEY);
 
@@ -41,5 +43,6 @@ export const env = {
     PG_PASSWORD,
     PG_PORT: PG_PORT ? parseInt(PG_PORT, 10) : 5432,
     PG_USER,
+    PG_POOL: PG_POOL ? parseInt(PG_POOL, 10) : 4,
     VAPID_PRV_KEY,
 };
