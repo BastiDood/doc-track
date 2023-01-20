@@ -56,5 +56,8 @@ export async function handleLogin(pool: Pool, req: Request) {
         httpOnly: true,
         sameSite: 'Lax',
     });
-    return new Response(null, { headers });
+    return new Response(null, {
+        headers,
+        status: Status.Found,
+    });
 }

@@ -1,6 +1,8 @@
 import { assert } from 'asserts';
 import { z } from 'zod';
 
+import { env } from '../../env.ts';
+
 const DiscoveryDocumentSchema = z.object({
     issuer: z.string().url(),
     authorization_endpoint: z.string().url(),
@@ -43,7 +45,7 @@ export const GoogleUserId = z.string().min(1).max(255);
 
 export const IdTokenSchema = z.object({
     // OpenID audience.
-    aud: z.string().min(1),
+    aud: z.literal(env.GOOGLE_ID),
     // OpenID subject. Typically the globally unique Google user ID.
     sub: GoogleUserId,
     // Creation time (in seconds).
@@ -59,7 +61,7 @@ export const IdTokenSchema = z.object({
     email: z.string().email(),
     email_verified: z.boolean(),
     name: z.string().min(1),
-    hd: z.string().min(1),
+    hd: z.literal(env.HOSTED_GSUITE_DOMAIN),
     nonce: z.string().min(1),
     picture: z.string().url(),
 });

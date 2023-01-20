@@ -1,5 +1,5 @@
 import { assert } from 'asserts';
-import { getCookies } from 'cookie';
+import { getCookies, setCookie } from 'cookie';
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
@@ -48,9 +48,38 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
     });
     assert(response.ok);
     const { access_token, id_token } = TokenResponseSchema.parse(await response.json());
+    assert(id_token.exp > new Date);
 
-    // TODO: upgrade the pending session
+    // Register the user into the database if not existing
+    assert(id_token.email_verified);
+    await db.upsertUser({
+        id: id_token.sub,
+        name: id_token.name,
+        email: id_token.email,
+    });
+
+    // Upgrade the pending session
+    await db.upgradeSession({
+        id: sid,
+        user: id_token.sub,
+        expiration: id_token.exp,
+        access_token,
+    });
 
     // FIXME: release on all code paths
     db.release();
+
+    // Set the new session cookie
+    const headers = new Headers({ Location: '/dashboard' });
+    setCookie(headers, {
+        name: 'sid',
+        value: sid,
+        expires: id_token.exp,
+        httpOnly: true,
+        sameSite: 'Lax',
+    });
+    return new Response(null, {
+        headers,
+        status: Status.Found,
+    });
 }

@@ -4,7 +4,7 @@ import { IdTokenSchema } from './openid.ts';
 
 // https://developers.google.com/identity/protocols/oauth2#size
 export const AuthorizationCode = z.string().min(1).max(256);
-const AccessToken = z.string().min(1).max(2048);
+export const AccessToken = z.string().min(1).max(2048);
 
 export const OAUTH_SCOPE = 'openid profile email';
 export const OAUTH_TOKEN_TYPE = 'Bearer';

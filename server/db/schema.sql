@@ -15,8 +15,7 @@ CREATE TYPE DocStatus AS ENUM ('Register', 'Send', 'Receive', 'Terminate');
 CREATE TABLE user(
     -- Google-assigned globally unique key.
     id GoogleUserId PRIMARY KEY,
-    first_name VARCHAR(20) NOT NULL,
-    last_name VARCHAR(20) NOT NULL,
+    name VARCHAR(40) NOT NULL,
     email VARCHAR(20) NOT NULL
 );
 

@@ -5,8 +5,7 @@ import { GoogleUserId } from '../oauth/openid.ts';
 
 export const UserSchema = z.object({
     id: GoogleUserId,
-    first_name: z.string().max(20).default(''),
-    last_name: z.string().max(20).default(''),
+    name: z.string().max(40).default(''),
     email: Email,
 });
 
