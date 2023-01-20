@@ -15,6 +15,18 @@ assert(OAUTH_REDIRECT);
 const HOSTED_GSUITE_DOMAIN = Deno.env.get('HOSTED_GSUITE_DOMAIN');
 assert(HOSTED_GSUITE_DOMAIN);
 
+const PG_HOSTNAME = Deno.env.get('PG_HOSTNAME') || '127.0.0.1';
+
+const PG_DATABASE = Deno.env.get('PG_DATABASE') || 'doctrack';
+
+const PG_PASSWORD = Deno.env.get('PG_PASSWORD');
+assert(PG_PASSWORD);
+
+const PG_PORT = Deno.env.get('PG_PORT');
+
+const PG_USER = Deno.env.get('PG_USER');
+assert(PG_USER);
+
 const VAPID_PRV_KEY = Deno.env.get('VAPID_PRV_KEY');
 assert(VAPID_PRV_KEY);
 
@@ -24,5 +36,10 @@ export const env = {
     GOOGLE_SECRET,
     OAUTH_REDIRECT,
     HOSTED_GSUITE_DOMAIN,
+    PG_HOSTNAME,
+    PG_DATABASE,
+    PG_PASSWORD,
+    PG_PORT: PG_PORT ? parseInt(PG_PORT, 10) : 5432,
+    PG_USER,
     VAPID_PRV_KEY,
 };
