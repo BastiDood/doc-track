@@ -6,6 +6,7 @@ import { hashUuid } from './util.ts';
 import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
 import { OAUTH_SCOPE } from '../../model/oauth/google.ts';
+import { DISCOVERY } from '../../model/oauth/openid.ts';
 
 /**
  * Rejects users that already have a valid session in the database.
@@ -45,10 +46,9 @@ export async function handleLogin(pool: Pool, req: Request) {
         prompt: 'select_account',
         hd: env.HOSTED_GSUITE_DOMAIN,
     });
-    const url = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
 
     // Generate the response headers
-    const headers = new Headers({ Location: url });
+    const headers = new Headers({ Location: `${DISCOVERY.authorization_endpoint}?${params}` });
     setCookie(headers, {
         name: 'sid',
         value: id,

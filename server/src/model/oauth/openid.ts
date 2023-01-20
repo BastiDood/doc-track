@@ -1,6 +1,41 @@
+import { assert } from 'asserts';
 import { z } from 'zod';
 
-export const OPENID_ISSUER = 'https://accounts.google.com or accounts.google.com';
+const DiscoveryDocumentSchema = z.object({
+    issuer: z.string().url(),
+    authorization_endpoint: z.string().url(),
+    token_endpoint: z.string().url(),
+    userinfo_endpoint: z.string().url(),
+    revocation_endpoint: z.string().url(),
+    jwks_uri: z.string().url(),
+});
+
+const DISCOVERY_URL = 'https://accounts.google.com/.well-known/openid-configuration';
+
+async function loadDiscoveryDocument(name: string) {
+    const cache = await caches.open(name);
+    const maybeResponse = await cache.match(DISCOVERY_URL);
+
+    // Check cached value first
+    if (maybeResponse !== undefined) {
+        const expires = maybeResponse.headers.get('Expires');
+        assert(expires);
+        if (new Date < new Date(expires)) {
+            const json = await maybeResponse.json();
+            return DiscoveryDocumentSchema.parse(json);
+        }
+    }
+
+    // Otherwise fetch a new copy
+    const response = await fetch(DISCOVERY_URL);
+    assert(response.ok);
+    const clone = response.clone();
+    const json = DiscoveryDocumentSchema.parse(await response.json());
+    await cache.put(DISCOVERY_URL, clone);
+    return json;
+}
+
+export const DISCOVERY = await loadDiscoveryDocument('discoery');
 
 const UNIX_TIME_SECS = z.number().int().transform(secs => new Date(secs * 1000));
 
@@ -16,7 +51,7 @@ export const IdTokenSchema = z.object({
     // Expiration time (in seconds) on or after which the token is invalid.
     exp: UNIX_TIME_SECS,
     // OpenID issuer.
-    iss: z.literal(OPENID_ISSUER),
+    iss: z.literal(DISCOVERY.issuer),
     // OpenID authorized presenter.
     azp: z.string().min(1),
     // Access token hash.

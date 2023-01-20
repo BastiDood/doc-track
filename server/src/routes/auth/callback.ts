@@ -7,6 +7,7 @@ import { hashUuid } from './util.ts';
 import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
 import { AuthorizationCode, TokenResponseSchema } from '../../model/oauth/google.ts';
+import { DISCOVERY } from '../../model/oauth/openid.ts';
 
 export async function handleCallback(pool: Pool, req: Request, params: URLSearchParams) {
     // Redirect to start of log-in flow if no session ID
@@ -40,7 +41,7 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
         redirect_uri: env.OAUTH_REDIRECT,
         grant_type: 'authorization_code',
     });
-    const response = await fetch('https://oauth2.googleapis.com/token', {
+    const response = await fetch(DISCOVERY.token_endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body,
