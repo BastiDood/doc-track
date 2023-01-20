@@ -1,11 +1,11 @@
 {
     "imports": {
         "asserts": "https://deno.land/std@0.173.0/testing/asserts.ts",
+        "base64url": "https://deno.land/std@0.173.0/encoding/base64url.ts",
         "cookie": "https://deno.land/std@0.173.0/http/cookie.ts",
         "hex": "https://deno.land/std@0.173.0/encoding/hex.ts",
         "http": "https://deno.land/std@0.173.0/http/http_status.ts",
         "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
-        "uuid": "https://raw.githubusercontent.com/domske/uuid-tool/3df4169458777941e04f58edb196f037c016881f/src/uuid.ts",
         "zod": "https://deno.land/x/zod@v3.20.2/mod.ts"
     }
 }

@@ -1,15 +1,13 @@
-import { encode } from 'hex';
-import { Uuid } from 'uuid';
+import { encode } from 'base64url';
+import { decode } from 'hex';
 
-/** Takes a UUID string and applies SHA-256. */
+/** Takes a UUID v4 string, applies SHA-256, and returns a URL-safe Base64-encoded hash. */
 export async function hashUuid(id: string) {
-    // Hash the raw byte representation
-    const uuid = new Uuid(id);
-    const { buffer } = Uint8Array.from(uuid.toBytes());
-    const hashed = await crypto.subtle.digest('SHA-256', buffer);
+    // Convert UUID to raw byte representation
+    const encoder = new TextEncoder;
+    const uuid = decode(encoder.encode(id.replaceAll('-', '')));
 
-    // Generate the hex string of the hashed ID
-    const hex = encode(new Uint8Array(hashed));
-    const decoder = new TextDecoder('ascii', { fatal: true });
-    return decoder.decode(hex);
+    // Hash the bytes using SHA-256
+    const buffer = await crypto.subtle.digest('SHA-256', uuid);
+    return encode(buffer);
 }
