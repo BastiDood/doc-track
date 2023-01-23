@@ -37,16 +37,16 @@ export class Database {
     async upgradeSession({ id, user, expiration, access_token }: Session) {
         const transaction = this.#client.createTransaction('upgrade');
         await transaction.queryArray`DELETE FROM pending WHERE id = ${id}`;
-        await transaction.queryArray`INSERT INTO session VALUES (${id},${user},${expiration.toISOString()},${access_token})`;
+        await transaction.queryArray`INSERT INTO session (id,user,expiration,access_token) VALUES (${id},${user},${expiration.toISOString()},${access_token})`;
         await transaction.commit();
     }
 
     upsertUser({ id, name, email }: User) {
-        return this.#client.queryArray`INSERT INTO user VALUES (${id},${name},${email}) ON CONFLICT DO UPDATE SET name = ${name}, email = ${email}`;
+        return this.#client.queryArray`INSERT INTO user (id,name,email) VALUES (${id},${name},${email}) ON CONFLICT DO UPDATE SET name = ${name}, email = ${email}`;
     }
 
     pushSubscription({ id, endpoint, expirationTime }: PushSubscription) {
         const expires = expirationTime?.toISOString() || 'infinity';
-        return this.#client.queryArray`INSERT INTO subscription VALUES (${id},${endpoint},${expires})`;
+        return this.#client.queryArray`INSERT INTO subscription (id,endpoint,expiration) VALUES (${id},${endpoint},${expires})`;
     }
 }
