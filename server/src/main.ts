@@ -15,7 +15,7 @@ const pool = new Pool({
 function handle(req: Request) {
     switch (req.method) {
         case 'GET': return get(pool, req);
-        case 'POST': return post(req);
+        case 'POST': return post(pool, req);
         default: return new Response(null, { status: Status.NotImplemented });
     }
 }

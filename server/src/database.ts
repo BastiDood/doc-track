@@ -3,6 +3,7 @@ import { Pool, PoolClient } from 'postgres';
 
 import { PendingSchema, type Pending } from './model/db/pending.ts';
 import type { Session } from './model/db/session.ts';
+import type { PushSubscription } from './model/db/subscription.ts';
 import type { User } from './model/db/user.ts';
 
 export class Database {
@@ -42,5 +43,10 @@ export class Database {
 
     upsertUser({ id, name, email }: User) {
         return this.#client.queryArray`INSERT INTO user VALUES (${id},${name},${email}) ON CONFLICT DO UPDATE SET name = ${name}, email = ${email}`;
+    }
+
+    pushSubscription({ id, endpoint, expirationTime }: PushSubscription) {
+        const expires = expirationTime?.toISOString() || 'infinity';
+        return this.#client.queryArray`INSERT INTO subscription VALUES (${id},${endpoint},${expires})`;
     }
 }
