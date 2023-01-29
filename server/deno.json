@@ -1,5 +1,4 @@
 {
-    "importMap": "import.json",
     "compilerOptions": {
         "noUncheckedIndexedAccess": true,
         "strict": true
@@ -7,10 +6,19 @@
     "tasks": { "start": "deno run --allow-env --allow-net src/main.ts" },
     "fmt": {
         "options": {
-            "useTabs": true,
             "lineWidth": 120,
             "indentWidth": 4,
-            "singleQuote": true
+            "singleQuote": true,
+            "semiColons": true
         }
+    },
+    "imports": {
+        "asserts": "https://deno.land/std@0.173.0/testing/asserts.ts",
+        "base64url": "https://deno.land/std@0.173.0/encoding/base64url.ts",
+        "cookie": "https://deno.land/std@0.173.0/http/cookie.ts",
+        "hex": "https://deno.land/std@0.173.0/encoding/hex.ts",
+        "http": "https://deno.land/std@0.173.0/http/http_status.ts",
+        "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
+        "zod": "https://deno.land/x/zod@v3.20.2/mod.ts"
     }
 }
