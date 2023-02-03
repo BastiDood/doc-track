@@ -1,12 +1,13 @@
 import { z } from 'zod';
 
+import { Permission } from './common.ts';
 import { OfficeId } from './office.ts';
-import { GoogleUserId } from './user.ts';
+import { GoogleUserId } from '../oauth/openid.ts';
 
 export const StaffSchema = z.object({
     user: GoogleUserId,
     office: OfficeId,
-    permission: z.number().int().positive(),
+    permission: Permission,
 });
 
 export type Staff = z.infer<typeof StaffSchema>;

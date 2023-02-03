@@ -90,7 +90,8 @@ CREATE TABLE notification(
 );
 
 CREATE TABLE invitation(
-    id SMALLSERIAL NOT NULL PRIMARY KEY REFERENCES office (id),
+    office SMALLSERIAL NOT NULL PRIMARY KEY REFERENCES office (id),
     email VARCHAR(20) NOT NULL PRIMARY KEY,
+    permission BIT(3) NOT NULL,
     creation TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
