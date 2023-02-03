@@ -33,7 +33,10 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 # Initialize the database at the `data` folder (see `-D` flag).
 # The root user will be named `postgres` (see `-U` flag).
 # User will be prompted to set a new password (see `-W` flag).
-initdb -D data -U postgres -W -f db/init.sql
+initdb -D data -U postgres -W
+
+# Run the SQL initialization script.
+psql -U postgres -W -f db/init.sql
 
 # If you have not yet run this command before, place the
 # private key into the `VAPID_PRV_KEY` variable. Otherwise,
