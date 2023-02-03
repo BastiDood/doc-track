@@ -30,10 +30,18 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 # Running the Server
 
 ```bash
+# Initialize the database at the `data` folder (see `-D` flag).
+# The root user will be named `postgres` (see `-U` flag).
+# User will be prompted to set a new password (see `-W` flag).
+initdb -D data -U postgres -W -f db/init.sql
+
 # If you have not yet run this command before, place the
 # private key into the `VAPID_PRV_KEY` variable. Otherwise,
 # skip this step.
 pnpm dlx web-push generate-vapid-keys
+
+# Start the PostgreSQL database server.
+pg_ctl -D data start
 
 # Set up (example) environment variables.
 PORT=3000
@@ -50,4 +58,7 @@ VAPID_PRV_KEY=
 
 # Starts the server at `0.0.0.0:3000`.
 deno task start
+
+# Stop the PostgreSQL database server when done.
+pg_ctl -D data stop
 ```
