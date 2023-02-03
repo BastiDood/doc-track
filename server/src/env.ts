@@ -24,8 +24,7 @@ assert(PG_PASSWORD);
 
 const PG_PORT = Deno.env.get('PG_PORT');
 
-const PG_USER = Deno.env.get('PG_USER');
-assert(PG_USER);
+const PG_USER = Deno.env.get('PG_USER') || 'postgres';
 
 const PG_POOL = Deno.env.get('PG_POOL');
 

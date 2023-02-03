@@ -17,7 +17,7 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 `HOSTED_GSUITE_DOMAIN` | Specifically allowed GSuite organization domain. | &#x2714;
 `PG_HOSTNAME` | IP host name of the [PostgreSQL] instance. | &#x274c; | `127.0.0.1`
 `PG_PORT` | Port number of the [PostgreSQL] instance. | &#x274c; | `5432`
-`PG_USER` | Provided username when logging into [PostgreSQL]. | &#x2714; |
+`PG_USER` | Provided username when logging into [PostgreSQL]. | &#x274c; | `postgres`
 `PG_PASSWORD` | Provided password when logging into [PostgreSQL]. | &#x2714; |
 `PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `doctrack`
 `PG_POOL` | Maximum number of pooled connections reserved by the [PostgreSQL] client. | &#x274c; | `4`
@@ -55,7 +55,7 @@ HOSTED_GSUITE_DOMAIN=up.edu.ph
 PG_HOSTNAME=127.0.0.1
 PG_DATABASE=doctrack
 PG_PASSWORD=
-PG_USER=
+PG_USER=postgres
 PG_PORT=5432
 VAPID_PRV_KEY=
 
