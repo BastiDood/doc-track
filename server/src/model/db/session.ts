@@ -7,7 +7,7 @@ export const SessionId = z.string().min(1);
 
 export const SessionSchema = z.object({
     id: SessionId,
-    user: GoogleUserId,
+    user_id: GoogleUserId,
     expiration: z.coerce.date(),
     access_token: AccessToken,
 });

@@ -5,7 +5,7 @@ import { OfficeId } from './office.ts';
 import { GoogleUserId } from '../oauth/openid.ts';
 
 export const StaffSchema = z.object({
-    user: GoogleUserId,
+    user_id: GoogleUserId,
     office: OfficeId,
     permission: Permission,
 });

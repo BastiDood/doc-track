@@ -61,7 +61,7 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
     // Upgrade the pending session
     await db.upgradeSession({
         id: sid,
-        user: id_token.sub,
+        user_id: id_token.sub,
         expiration: id_token.exp,
         access_token,
     });

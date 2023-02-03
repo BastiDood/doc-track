@@ -37,11 +37,11 @@ export class Database {
         return PendingSchema.parse(first);
     }
 
-    async upgradeSession({ id, user, expiration, access_token }: Session) {
+    async upgradeSession({ id, user_id, expiration, access_token }: Session) {
         const transaction = this.#client.createTransaction('upgrade', { isolation_level: 'serializable' });
         await transaction.queryArray`DELETE FROM pending WHERE id = ${id}`;
         await transaction
-            .queryArray`INSERT INTO session (id,user,expiration,access_token) VALUES (${id},${user},${expiration.toISOString()},${access_token})`;
+            .queryArray`INSERT INTO session (id,user_id,expiration,access_token) VALUES (${id},${user_id},${expiration.toISOString()},${access_token})`;
         await transaction.commit();
     }
 
@@ -53,7 +53,7 @@ export class Database {
     async insertInvitedUser({ id, name, email }: User): Promise<Office['id'][] | null> {
         const transaction = this.#client.createTransaction('registration', { isolation_level: 'serializable' });
         const { rowCount } = await transaction
-            .queryArray`UPDATE user SET name = ${name}, email = ${email} WHERE id = ${id}`;
+            .queryArray`UPDATE users SET name = ${name}, email = ${email} WHERE id = ${id}`;
         assert(rowCount !== undefined);
 
         // User already exists
@@ -83,7 +83,7 @@ export class Database {
 
     async getUserFromSession(sid: string) {
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`SELECT u.name, u.email FROM session AS s INNER JOIN user AS u ON s.user = u.id WHERE s.id = ${sid} LIMIT 1`;
+            .queryObject`SELECT u.name, u.email FROM session AS s INNER JOIN users AS u ON s.user = u.id WHERE s.id = ${sid} LIMIT 1`;
         assert(rest.length === 0);
         return UserSchema.omit({ id: true }).parse(first);
     }
