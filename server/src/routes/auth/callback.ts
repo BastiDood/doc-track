@@ -50,13 +50,13 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
     const { access_token, id_token } = TokenResponseSchema.parse(await response.json());
     assert(id_token.exp > new Date);
 
-    // Register the user into the database if not existing
     assert(id_token.email_verified);
-    await db.upsertUser({
+    const offices = await db.insertInvitedUser({
         id: id_token.sub,
         name: id_token.name,
         email: id_token.email,
     });
+    assert(offices !== null && offices.length > 0);
 
     // Upgrade the pending session
     await db.upgradeSession({
