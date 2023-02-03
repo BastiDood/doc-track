@@ -1,6 +1,5 @@
 import { assert } from 'asserts';
 import { Pool, PoolClient } from 'postgres';
-import { z } from 'zod';
 
 import { InvitationSchema } from './model/db/invitation.ts';
 import type { Office } from './model/db/office.ts';
@@ -44,12 +43,6 @@ export class Database {
         await transaction
             .queryArray`INSERT INTO session (id,user,expiration,access_token) VALUES (${id},${user},${expiration.toISOString()},${access_token})`;
         await transaction.commit();
-    }
-
-    /** @deprecated */
-    upsertUser({ id, name, email }: User) {
-        return this.#client
-            .queryArray`INSERT INTO user (id,name,email) VALUES (${id},${name},${email}) ON CONFLICT DO UPDATE SET name = ${name}, email = ${email}`;
     }
 
     /**
