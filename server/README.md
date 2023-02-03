@@ -44,7 +44,7 @@ psql -U postgres -W -f db/init.sql
 pnpm dlx web-push generate-vapid-keys
 
 # Start the PostgreSQL database server.
-pg_ctl -D data start
+postgres -D data
 
 # Set up (example) environment variables.
 PORT=3000
@@ -61,7 +61,4 @@ VAPID_PRV_KEY=
 
 # Starts the server at `0.0.0.0:3000`.
 deno task start
-
-# Stop the PostgreSQL database server when done.
-pg_ctl -D data stop
 ```
