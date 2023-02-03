@@ -50,7 +50,7 @@ postgres -D data
 PORT=3000
 GOOGLE_ID=
 GOOGLE_SECRET=
-OAUTH_REDIRECT=http://localhost:3000/callback
+OAUTH_REDIRECT=http://localhost:3000/auth/callback
 HOSTED_GSUITE_DOMAIN=up.edu.ph
 PG_HOSTNAME=127.0.0.1
 PG_DATABASE=doctrack
