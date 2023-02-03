@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { GoogleUserId } from '../oauth/google.ts';
+import { GoogleUserId } from '../oauth/openid.ts';
 
 export const BatchId = z.number().int();
 

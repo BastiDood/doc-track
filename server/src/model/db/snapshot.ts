@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { DocumentId } from './document.ts';
 import { OfficeId } from './office.ts';
-import { GoogleUserId } from './user.ts';
+import { GoogleUserId } from '../oauth/openid.ts';
 
 export enum Status {
     Register,
