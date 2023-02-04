@@ -100,7 +100,7 @@ CREATE TABLE snapshot(
 CREATE TABLE subscription(
     endpoint Endpoint,
     expiration Expiration,
-    PRIMARY KEY (id)
+    PRIMARY KEY (endpoint)
 );
 
 CREATE TABLE notification(
