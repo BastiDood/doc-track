@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 import { DocumentId } from './document.ts';
-import { PushSubscriptionEndpoint } from './subscription.ts';
+import { PushSubscriptionId } from './subscription.ts';
 
 export const NotificationSchema = z.object({
-    sub: PushSubscriptionEndpoint,
+    sub: PushSubscriptionId,
     doc: DocumentId,
 });
 
