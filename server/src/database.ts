@@ -143,7 +143,6 @@ export class Database {
      * The user has sufficient permissions to add a new system-wide category.
      */
     async createCategory(name: Category['name']): Promise<Category['id']> {
-        // TODO: Add Tests
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO category (name) VALUES (${name}) RETURNING id`;
         assert(rest.length === 0);
@@ -152,7 +151,6 @@ export class Database {
 
     /** Gets a list of all the categories in the system. */
     async getAllCategories(): Promise<Category[]> {
-        // TODO: Add Tests
         const { rows } = await this.#client.queryObject('SELECT id,name FROM category');
         return CategorySchema.array().parse(rows);
     }
@@ -164,7 +162,6 @@ export class Database {
      * The user has sufficient permissions to add a new system-wide category.
      */
     async renameCategory({ id, name }: Category): Promise<boolean> {
-        // TODO: Add Tests
         const { rowCount } = await this.#client
             .queryObject`UPDATE category SET name = ${name} WHERE id = ${id}`;
         switch (rowCount) {
@@ -179,7 +176,6 @@ export class Database {
      * The user has sufficient permissions to add a new system-wide category.
      */
     async deleteCategory(id: Category['id']): Promise<Category['name']> {
-        // TODO: Add Tests
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`DELETE FROM category WHERE id = ${id} RETURNING name`;
         assert(rest.length === 0);

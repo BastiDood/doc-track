@@ -13,7 +13,7 @@ const options = {
     database: env.PG_DATABASE,
 };
 
-Deno.test('database OAuth flow', async t => {
+Deno.test('full OAuth flow', async t => {
     const pool = new Pool(options, 1, true);
     const db = await Database.fromPool(pool);
 
@@ -70,6 +70,17 @@ Deno.test('database notifications', async t => {
 
     const user1 = 'https://example.com?user=1';
     const user2 = 'https://example.com?user=2';
+
+    await t.step('category tests', async () => {
+        const first = 'Leave of Absence';
+        const id = await db.createCategory(first);
+        assertEquals(await db.getAllCategories(), [ { id, name: first } ]);
+
+        const second = 'Request for Drop';
+        assert(await db.renameCategory({ id, name: second }));
+        assertEquals(await db.getAllCategories(), [ { id, name: second } ]);
+        assertEquals(await db.deleteCategory(id), second);
+    });
 
     // TODO: add documents
 
