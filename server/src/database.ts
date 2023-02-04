@@ -1,8 +1,8 @@
 import { assert } from 'asserts';
 import { Pool, PoolClient } from 'postgres';
 
-import { InvitationSchema } from './model/db/invitation.ts';
-import type { Office } from './model/db/office.ts';
+import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
+import { type Office, OfficeSchema } from './model/db/office.ts';
 import { type Pending, PendingSchema } from './model/db/pending.ts';
 import type { Session } from './model/db/session.ts';
 import type { PushSubscription } from './model/db/subscription.ts';
@@ -37,12 +37,33 @@ export class Database {
         return PendingSchema.parse(first);
     }
 
+    /** Gets the nonce of a pending session. If no such session exists, an empty array is returned. */
+    async getPendingSessionNonce(sid: string): Promise<Uint8Array> {
+        const { rows: [ first, ...rest ] } = await this.#client.queryObject`SELECT nonce FROM pending WHERE id = ${sid} LIMIT 1`;
+        assert(rest.length === 0);
+        return first === undefined
+            ? new Uint8Array
+            : PendingSchema.pick({ nonce: true }).parse(first).nonce;
+    }
+
     async upgradeSession({ id, user_id, expiration, access_token }: Session) {
         const transaction = this.#client.createTransaction('upgrade', { isolation_level: 'serializable' });
+        await transaction.begin();
         await transaction.queryArray`DELETE FROM pending WHERE id = ${id}`;
         await transaction
             .queryArray`INSERT INTO session (id,user_id,expiration,access_token) VALUES (${id},${user_id},${expiration.toISOString()},${access_token})`;
         await transaction.commit();
+    }
+
+    /** Upserts a user to the invite list and returns the creation date. */
+    async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Date> {
+        const { rows: [ first, ...rest ] } = await this.#client.queryObject`
+            INSERT INTO invitation (office,email,permission)
+                VALUES (${office},${email},${permission})
+                ON CONFLICT (office,email) DO UPDATE SET permission = ${permission}, creation = DEFAULT
+                RETURNING creation`;
+        assert(rest.length === 0);
+        return InvitationSchema.pick({ creation: true }).parse(first).creation;
     }
 
     /**
@@ -52,6 +73,8 @@ export class Database {
      */
     async insertInvitedUser({ id, name, email }: User): Promise<Office['id'][] | null> {
         const transaction = this.#client.createTransaction('registration', { isolation_level: 'serializable' });
+        await transaction.begin();
+
         const { rowCount } = await transaction
             .queryArray`UPDATE users SET name = ${name}, email = ${email} WHERE id = ${id}`;
         assert(rowCount !== undefined);
@@ -68,9 +91,13 @@ export class Database {
             .queryObject`DELETE FROM invitation WHERE email = ${email} RETURNING office,permission`;
         const invites = InvitationSchema.pick({ office: true, permission: true }).array().parse(rows);
 
+        // Add the user into the system
+        await transaction.queryArray`INSERT INTO users (id,name,email) VALUES (${id},${name},${email})`;
+
         // Add the user to all the offices (if any)
-        await Promise.all(invites.map(({ office, permission }) =>
-            transaction.queryArray`INSERT INTO staff (user,office,permission) VALUES (${id},${office},${permission})`));
+        for (const { office, permission } of invites)
+            await transaction.queryArray`INSERT INTO staff (user_id,office,permission) VALUES (${id},${office},${permission})`;
+
         await transaction.commit();
         return invites.map(i => i.office);
     }
@@ -81,10 +108,17 @@ export class Database {
             .queryArray`INSERT INTO subscription (id,endpoint,expiration) VALUES (${id},${endpoint},${expires})`;
     }
 
-    async getUserFromSession(sid: string) {
+    async getUserFromSession(sid: string): Promise<Omit<User, 'id'>> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`SELECT u.name, u.email FROM session AS s INNER JOIN users AS u ON s.user = u.id WHERE s.id = ${sid} LIMIT 1`;
         assert(rest.length === 0);
         return UserSchema.omit({ id: true }).parse(first);
+    }
+
+    async createOffice(name: string): Promise<number> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`INSERT INTO office (name) VALUES (${name}) RETURNING id`;
+        assert(rest.length === 0);
+        return OfficeSchema.pick({ id: true }).parse(first).id;
     }
 }

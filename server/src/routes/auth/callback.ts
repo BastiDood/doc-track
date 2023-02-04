@@ -1,4 +1,5 @@
-import { assert } from 'asserts';
+import { assert, assertEquals } from 'asserts';
+import { encode } from 'base64url';
 import { getCookies, setCookie } from 'cookie';
 import { Status } from 'http';
 import { Pool } from 'postgres';
@@ -49,6 +50,10 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
     assert(response.ok);
     const { access_token, id_token } = TokenResponseSchema.parse(await response.json());
     assert(id_token.exp > new Date);
+
+    // Validate the nonce
+    const nonce = encode(await db.getPendingSessionNonce(sid));
+    assertEquals(nonce, id_token.nonce);
 
     assert(id_token.email_verified);
     const offices = await db.insertInvitedUser({

@@ -1,3 +1,4 @@
+import { encode } from 'base64url';
 import { getCookies, setCookie } from 'cookie';
 import { Status } from 'http';
 import { Pool } from 'postgres';
@@ -39,7 +40,7 @@ export async function handleLogin(pool: Pool, req: Request) {
         state: await hashUuid(id),
         client_id: env.GOOGLE_ID,
         redirect_uri: env.OAUTH_REDIRECT,
-        nonce: nonce.slice(2),
+        nonce: encode(nonce),
         access_type: 'online',
         response_type: 'code',
         scope: OAUTH_SCOPE,
