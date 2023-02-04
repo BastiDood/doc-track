@@ -2,11 +2,11 @@ import { assert, unreachable } from 'asserts';
 import { range } from 'itertools';
 import { Pool, PoolClient } from 'postgres';
 
-import { Barcode, BarcodeSchema } from './model/db/barcode.ts';
 import type { Document } from './model/db/document.ts';
 import type { Session } from './model/db/session.ts';
 import type { PushSubscription } from './model/db/subscription.ts';
 
+import { type Barcode, BarcodeSchema } from './model/db/barcode.ts';
 import { type Batch, BatchSchema } from './model/db/batch.ts';
 import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
 import { type Office, OfficeSchema } from './model/db/office.ts';
