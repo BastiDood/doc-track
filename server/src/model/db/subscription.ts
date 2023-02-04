@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const PushSubscriptionId = z.string();
+export const PushSubscriptionId = z.number().int().nonnegative();
 
 export const PushSubscriptionSchema = z.object({
     id: PushSubscriptionId,

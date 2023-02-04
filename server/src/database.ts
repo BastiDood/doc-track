@@ -5,7 +5,7 @@ import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
 import { type Office, OfficeSchema } from './model/db/office.ts';
 import { type Pending, PendingSchema } from './model/db/pending.ts';
 import type { Session } from './model/db/session.ts';
-import type { PushSubscription } from './model/db/subscription.ts';
+import { type PushSubscription, PushSubscriptionId } from './model/db/subscription.ts';
 import { type User, UserSchema } from './model/db/user.ts';
 
 export class Database {
@@ -22,16 +22,18 @@ export class Database {
     }
 
     release() {
-        return this.#client.release();
+        this.#client.release();
     }
 
-    async checkValidSession(sid: string) {
+    /** Checks whether the current session ID maps to a fully valid session (i.e., went through OAuth). */
+    async checkValidSession(sid: string): Promise<boolean> {
         const { rows } = await this.#client.queryObject`SELECT 1 FROM session WHERE id = ${sid}`;
         return rows.length > 0;
     }
 
+    /** Generates a new pending session. */
     async generatePendingSession(): Promise<Pending> {
-        const { rows: [first, ...rest] } = await this.#client
+        const { rows: [ first, ...rest ] } = await this.#client
             .queryObject('INSERT INTO pending DEFAULT VALUES RETURNING *');
         assert(rest.length === 0);
         return PendingSchema.parse(first);
@@ -46,6 +48,7 @@ export class Database {
             : PendingSchema.pick({ nonce: true }).parse(first).nonce;
     }
 
+    /** Upgrades a pending session into a valid session. */
     async upgradeSession({ id, user_id, expiration, access_token }: Session) {
         const transaction = this.#client.createTransaction('upgrade', { isolation_level: 'serializable' });
         await transaction.begin();
@@ -102,19 +105,27 @@ export class Database {
         return invites.map(i => i.office);
     }
 
-    pushSubscription({ id, endpoint, expirationTime }: PushSubscription) {
+    /** Register a push subscription to be used later for notifying a user. */
+    async pushSubscription({ endpoint, expirationTime }: PushSubscription): Promise<number> {
+        // TODO: Add Tests with Document Bindings
         const expires = expirationTime?.toISOString() || 'infinity';
-        return this.#client
-            .queryArray`INSERT INTO subscription (id,endpoint,expiration) VALUES (${id},${endpoint},${expires})`;
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryArray`INSERT INTO subscription (endpoint,expiration) VALUES (${endpoint},${expires}) RETURNING id`;
+        assert(rest.length === 0);
+        return PushSubscriptionId.parse(first);
     }
 
-    async getUserFromSession(sid: string): Promise<Omit<User, 'id'>> {
+    /** Returns the user associated with the valid session ID. */
+    async getUserFromSession(sid: string): Promise<Omit<User, 'id'> | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`SELECT u.name, u.email FROM session AS s INNER JOIN users AS u ON s.user = u.id WHERE s.id = ${sid} LIMIT 1`;
         assert(rest.length === 0);
-        return UserSchema.omit({ id: true }).parse(first);
+        return first === undefined
+            ? null
+            : UserSchema.omit({ id: true }).parse(first);
     }
 
+    /** Adds a new office to the system. */
     async createOffice(name: string): Promise<number> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO office (name) VALUES (${name}) RETURNING id`;
