@@ -1,4 +1,4 @@
-import { assert } from 'asserts';
+import { assert, unreachable } from 'asserts';
 import { Pool, PoolClient } from 'postgres';
 
 import type { Document } from './model/db/document.ts';
@@ -116,11 +116,16 @@ export class Database {
         assert(rowCount === 1);
     }
 
-    /** Hooks a subscription to a valid document. */
-    async hookSubscription(sub: PushSubscription['endpoint'], doc: Document['id']) {
+    /** Hooks a subscription to a valid document. Returns `false` if already added previously. */
+    async hookSubscription(sub: PushSubscription['endpoint'], doc: Document['id']): Promise<boolean> {
+        // TODO: Add Tests with Document Bindings
         const { rowCount } = await this.#client
             .queryArray`INSERT INTO subscription (sub,doc) VALUES (${sub},${doc}) ON CONFLICT (sub,doc) DO NOTHING`;
-        assert(rowCount === 1);
+        switch (rowCount) {
+            case 0: return false;
+            case 1: return true;
+            default: unreachable();
+        }
     }
 
     /** Returns the user associated with the valid session ID. */
