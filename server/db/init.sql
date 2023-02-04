@@ -11,6 +11,9 @@ CREATE DOMAIN AccessToken AS VARCHAR(2048) NOT NULL;
 -- Expiration Times
 CREATE DOMAIN Expiration AS TIMESTAMPTZ NOT NULL CHECK(VALUE > NOW());
 
+-- Permission Bits
+CREATE DOMAIN Permission AS BIT VARYING(3);
+
 -- Document Status
 CREATE TYPE DocStatus AS ENUM ('Register', 'Send', 'Receive', 'Terminate');
 
@@ -49,7 +52,7 @@ CREATE TABLE office(
 CREATE TABLE staff(
     user_id GoogleUserId REFERENCES users (id),
     office SMALLINT NOT NULL REFERENCES office (id),
-    permission BIT(3) NOT NULL,
+    permission Permission NOT NULL,
     PRIMARY KEY (user_id, office)
 );
 
@@ -105,7 +108,7 @@ CREATE TABLE notification(
 CREATE TABLE invitation(
     office SMALLSERIAL NOT NULL REFERENCES office (id),
     email VARCHAR(20) NOT NULL,
-    permission BIT(3) NOT NULL,
+    permission Permission NOT NULL,
     creation TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (office, email)
 );
