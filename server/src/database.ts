@@ -32,7 +32,7 @@ export class Database {
 
     async generatePendingSession(): Promise<Pending> {
         const { rows: [first, ...rest] } = await this.#client
-            .queryObject`INSERT INTO pending DEFAULT VALUES RETURNING *`;
+            .queryObject('INSERT INTO pending DEFAULT VALUES RETURNING *');
         assert(rest.length === 0);
         return PendingSchema.parse(first);
     }
