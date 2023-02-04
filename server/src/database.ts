@@ -1,11 +1,13 @@
 import { assert } from 'asserts';
 import { Pool, PoolClient } from 'postgres';
 
+import type { Document } from './model/db/document.ts';
+import type { Session } from './model/db/session.ts';
+import type { PushSubscription } from './model/db/subscription.ts';
+
 import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
 import { type Office, OfficeSchema } from './model/db/office.ts';
 import { type Pending, PendingSchema } from './model/db/pending.ts';
-import type { Session } from './model/db/session.ts';
-import { type PushSubscription, PushSubscriptionId } from './model/db/subscription.ts';
 import { type User, UserSchema } from './model/db/user.ts';
 
 export class Database {
@@ -40,7 +42,7 @@ export class Database {
     }
 
     /** Gets the nonce of a pending session. If no such session exists, an empty array is returned. */
-    async getPendingSessionNonce(sid: string): Promise<Uint8Array> {
+    async getPendingSessionNonce(sid: string): Promise<Pending['nonce']> {
         const { rows: [ first, ...rest ] } = await this.#client.queryObject`SELECT nonce FROM pending WHERE id = ${sid} LIMIT 1`;
         assert(rest.length === 0);
         return first === undefined
@@ -59,7 +61,7 @@ export class Database {
     }
 
     /** Upserts a user to the invite list and returns the creation date. */
-    async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Date> {
+    async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation']> {
         const { rows: [ first, ...rest ] } = await this.#client.queryObject`
             INSERT INTO invitation (office,email,permission)
                 VALUES (${office},${email},${permission})
@@ -106,13 +108,19 @@ export class Database {
     }
 
     /** Register a push subscription to be used later for notifying a user. */
-    async pushSubscription({ endpoint, expirationTime }: Omit<PushSubscription, 'id'>): Promise<number> {
+    async pushSubscription({ endpoint, expirationTime }: PushSubscription) {
         // TODO: Add Tests with Document Bindings
         const expires = expirationTime?.toISOString() || 'infinity';
-        const { rows: [ first, ...rest ] } = await this.#client
-            .queryArray`INSERT INTO subscription (endpoint,expiration) VALUES (${endpoint},${expires}) RETURNING id`;
-        assert(rest.length === 0);
-        return PushSubscriptionId.parse(first);
+        const { rowCount } = await this.#client
+            .queryArray`INSERT INTO subscription (endpoint,expiration) VALUES (${endpoint},${expires}) ON CONFLICT DO UPDATE SET expiration = ${expires}`;
+        assert(rowCount === 1);
+    }
+
+    /** Hooks a subscription to a valid document. */
+    async hookSubscription(sub: PushSubscription['endpoint'], doc: Document['id']) {
+        const { rowCount } = await this.#client
+            .queryArray`INSERT INTO subscription (sub,doc) VALUES (${sub},${doc}) ON CONFLICT (sub,doc) DO NOTHING`;
+        assert(rowCount === 1);
     }
 
     /** Returns the user associated with the valid session ID. */
@@ -126,7 +134,7 @@ export class Database {
     }
 
     /** Adds a new office to the system. */
-    async createOffice(name: string): Promise<number> {
+    async createOffice(name: string): Promise<Office['id']> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO office (name) VALUES (${name}) RETURNING id`;
         assert(rest.length === 0);

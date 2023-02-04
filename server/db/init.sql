@@ -14,6 +14,9 @@ CREATE DOMAIN Expiration AS TIMESTAMPTZ NOT NULL CHECK(VALUE > NOW());
 -- Permission Bits
 CREATE DOMAIN Permission AS BIT VARYING(3);
 
+-- Push Subscription Endpoint
+CREATE DOMAIN Endpoint AS VARCHAR(50) NOT NULL;
+
 -- Document Status
 CREATE TYPE DocStatus AS ENUM ('Register', 'Send', 'Receive', 'Terminate');
 
@@ -93,14 +96,13 @@ CREATE TABLE snapshot(
 );
 
 CREATE TABLE subscription(
-    id SERIAL NOT NULL,
-    endpoint VARCHAR(50) NOT NULL,
+    endpoint Endpoint,
     expiration Expiration,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE notification(
-    sub INTEGER NOT NULL REFERENCES subscription (id),
+    sub Endpoint REFERENCES subscription (endpoint),
     doc UUID NOT NULL REFERENCES document (id),
     PRIMARY KEY (sub, doc)
 );
