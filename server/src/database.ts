@@ -12,6 +12,7 @@ import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
 import { type Office, OfficeSchema } from './model/db/office.ts';
 import { type Pending, PendingSchema } from './model/db/pending.ts';
 import { type User, UserSchema } from './model/db/user.ts';
+import { type Category, CategorySchema } from './model/db/category.ts';
 
 export class Database {
     #client: PoolClient;
@@ -112,6 +113,8 @@ export class Database {
 
     /** Blindly creates a new batch of barcodes. */
     async generateBatch(user: Batch['generator'], office: Batch['office']): Promise<Pick<Batch, 'id' | 'creation'> & { codes: Barcode['code'][] }> {
+        // TODO: Add Tests
+
         const transaction = this.#client.createTransaction('batch');
         await transaction.begin();
 
@@ -133,6 +136,19 @@ export class Database {
 
         await transaction.commit();
         return { id, creation, codes };
+    }
+
+    /**
+     * # Assumption
+     * The user has sufficient permissions to add a new system-wide category.
+     */
+    async createCategory(name: Category): Promise<Category['id']> {
+        // TODO: Add Tests
+        // TODO: Check User Permissions
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`INSERT INTO category (name) VALUES (${name}) RETURNING id`;
+        assert(rest.length === 0);
+        return CategorySchema.pick({ id: true }).parse(first).id;
     }
 
     /** Register a push subscription to be used later for notifying a user. */
