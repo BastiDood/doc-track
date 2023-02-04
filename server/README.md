@@ -27,7 +27,7 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 [Web Push API]: https://developer.mozilla.org/en-US/docs/Web/API/Push_API
 [Google Cloud Console]: https://console.cloud.google.com/
 
-# Running the Server
+# Running the Application
 
 ```bash
 # Initialize the database at the `data` folder (see `-D` flag).
@@ -37,7 +37,9 @@ deno task init
 
 # Start the PostgreSQL database server.
 deno task db
+```
 
+```bash
 # Run the SQL initialization script.
 deno task schema
 
@@ -61,4 +63,5 @@ VAPID_PRV_KEY=
 
 # Starts the server at `0.0.0.0:3000`.
 deno task start
+
 ```
