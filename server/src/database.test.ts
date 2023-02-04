@@ -67,6 +67,7 @@ Deno.test('database OAuth flow', async t => {
 Deno.test('database notifications', async () => {
     const pool = new Pool(options, 1, true);
     const db = await Database.fromPool(pool);
+
     await db.pushSubscription({
         endpoint: 'http://example.com',
         expirationTime: null,
@@ -75,4 +76,7 @@ Deno.test('database notifications', async () => {
         endpoint: 'http://example.com',
         expirationTime: new Date,
     });
+
+    db.release();
+    await pool.end();
 })
