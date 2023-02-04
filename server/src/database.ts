@@ -1,10 +1,13 @@
 import { assert, unreachable } from 'asserts';
+import { range } from 'itertools';
 import { Pool, PoolClient } from 'postgres';
 
+import { Barcode, BarcodeSchema } from './model/db/barcode.ts';
 import type { Document } from './model/db/document.ts';
 import type { Session } from './model/db/session.ts';
 import type { PushSubscription } from './model/db/subscription.ts';
 
+import { type Batch, BatchSchema } from './model/db/batch.ts';
 import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
 import { type Office, OfficeSchema } from './model/db/office.ts';
 import { type Pending, PendingSchema } from './model/db/pending.ts';
@@ -105,6 +108,31 @@ export class Database {
 
         await transaction.commit();
         return invites.map(i => i.office);
+    }
+
+    /** Blindly creates a new batch of barcodes. */
+    async generateBatch(user: Batch['generator'], office: Batch['office']): Promise<Pick<Batch, 'id' | 'creation'> & { codes: Barcode['code'][] }> {
+        const transaction = this.#client.createTransaction('batch');
+        await transaction.begin();
+
+        // TODO: Check User Permissions
+        // TODO: Check Previous Batches
+        const { rows: [ first, ...rest ] } = await transaction.queryObject`INSERT INTO batch (generator,office) VALUES (${user},${office}) RETURNING id,creation`;
+        assert(rest.length === 0);
+
+        const { id, creation } = BatchSchema.pick({ id: true, creation: true }).parse(first);
+
+        // TODO: Let the Operator decide how many barcodes are pre-allocated per batch.
+        const codes: Barcode['code'][] = [];
+        for (const _ of range(10)) {
+            const { rows: [ first, ...rest ] } = await transaction
+                .queryObject`INSERT INTO barcode (batch) VALUES (${id}) RETURNING code`;
+            assert(rest.length === 0);
+            codes.push(BarcodeSchema.pick({ code: true }).parse(first).code);
+        }
+
+        await transaction.commit();
+        return { id, creation, codes };
     }
 
     /** Register a push subscription to be used later for notifying a user. */

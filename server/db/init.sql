@@ -61,13 +61,15 @@ CREATE TABLE staff(
 
 CREATE TABLE batch(
     id SERIAL NOT NULL,
-    generator GoogleUserId REFERENCES users (id),
+    generator GoogleUserId,
+    office SMALLINT NOT NULL ,
     creation TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (generator, office) REFERENCES staff (user_id, office)
 );
 
 CREATE TABLE barcode(
-    code UUID NOT NULL,
+    code UUID NOT NULL DEFAULT gen_random_uuid(),
     batch INTEGER NOT NULL REFERENCES batch (id),
     PRIMARY KEY (code)
 );
