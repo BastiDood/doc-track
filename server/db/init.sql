@@ -1,4 +1,3 @@
-CREATE DATABASE doctrack;
 CREATE EXTENSION pgcrypto;
 
 -- See `https://developers.google.com/identity/protocols/oauth2#size` for token sizes (in bytes).

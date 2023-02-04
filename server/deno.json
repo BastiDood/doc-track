@@ -3,7 +3,13 @@
         "noUncheckedIndexedAccess": true,
         "strict": true
     },
-    "tasks": { "start": "deno run --allow-env --allow-net src/main.ts" },
+    "tasks": {
+        "init": "initdb -D data -U postgres -W",
+        "schema": "psql -U postgres -W -f db/init.sql",
+        "db": "postgres -D data",
+        "start": "deno run --allow-env --allow-net src/main.ts",
+        "test": "deno test --allow-env --allow-net"
+    },
     "fmt": {
         "options": {
             "lineWidth": 120,

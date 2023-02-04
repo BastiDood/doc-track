@@ -19,7 +19,7 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 `PG_PORT` | Port number of the [PostgreSQL] instance. | &#x274c; | `5432`
 `PG_USER` | Provided username when logging into [PostgreSQL]. | &#x274c; | `postgres`
 `PG_PASSWORD` | Provided password when logging into [PostgreSQL]. | &#x2714; |
-`PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `doctrack`
+`PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `postgres`
 `PG_POOL` | Maximum number of pooled connections reserved by the [PostgreSQL] client. | &#x274c; | `4`
 `VAPID_PRV_KEY` | [Vapid private key][vapid] which will be used to subscribe to the [Web Push API]. | &#x2714; |
 
@@ -33,18 +33,18 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 # Initialize the database at the `data` folder (see `-D` flag).
 # The root user will be named `postgres` (see `-U` flag).
 # User will be prompted to set a new password (see `-W` flag).
-initdb -D data -U postgres -W
+deno task init
+
+# Start the PostgreSQL database server.
+deno task db
 
 # Run the SQL initialization script.
-psql -U postgres -W -f db/init.sql
+deno task schema
 
 # If you have not yet run this command before, place the
 # private key into the `VAPID_PRV_KEY` variable. Otherwise,
 # skip this step.
 pnpm dlx web-push generate-vapid-keys
-
-# Start the PostgreSQL database server.
-postgres -D data
 
 # Set up (example) environment variables.
 PORT=3000
@@ -53,7 +53,7 @@ GOOGLE_SECRET=
 OAUTH_REDIRECT=http://localhost:3000/auth/callback
 HOSTED_GSUITE_DOMAIN=up.edu.ph
 PG_HOSTNAME=127.0.0.1
-PG_DATABASE=doctrack
+PG_DATABASE=postgres
 PG_PASSWORD=
 PG_USER=postgres
 PG_PORT=5432
