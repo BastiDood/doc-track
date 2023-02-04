@@ -106,7 +106,7 @@ export class Database {
     }
 
     /** Register a push subscription to be used later for notifying a user. */
-    async pushSubscription({ endpoint, expirationTime }: PushSubscription): Promise<number> {
+    async pushSubscription({ endpoint, expirationTime }: Omit<PushSubscription, 'id'>): Promise<number> {
         // TODO: Add Tests with Document Bindings
         const expires = expirationTime?.toISOString() || 'infinity';
         const { rows: [ first, ...rest ] } = await this.#client

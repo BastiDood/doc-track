@@ -68,12 +68,10 @@ Deno.test('database notifications', async () => {
     const pool = new Pool(options, 1, true);
     const db = await Database.fromPool(pool);
     await db.pushSubscription({
-        id: crypto.randomUUID(),
         endpoint: 'http://example.com',
         expirationTime: null,
     });
     await db.pushSubscription({
-        id: crypto.randomUUID(),
         endpoint: 'http://example.com',
         expirationTime: new Date,
     });
