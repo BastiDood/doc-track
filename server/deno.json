@@ -25,6 +25,7 @@
         "hex": "https://deno.land/std@0.176.0/encoding/hex.ts",
         "http": "https://deno.land/std@0.176.0/http/http_status.ts",
         "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
+        "uuid": "https://deno.land/std@0.176.0/uuid/v4.ts",
         "zod": "https://deno.land/x/zod@v3.20.2/mod.ts"
     }
 }
