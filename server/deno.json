@@ -5,7 +5,7 @@
     },
     "tasks": {
         "init": "initdb -D data -U postgres -W",
-        "schema": "psql -U postgres -W -f db/init.sql",
+        "schema": "psql -U postgres -W -f db/init.sql -1",
         "db": "postgres -D data",
         "start": "deno run --allow-env --allow-net src/main.ts",
         "test": "deno test --allow-env --allow-net"
