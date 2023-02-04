@@ -84,6 +84,9 @@ Deno.test('database notifications', async t => {
 
     // TODO: add documents
 
+    const expirationTime = new Date;
+    expirationTime.setDate(expirationTime.getDate() + 1);
+
     await t.step('register push subscriptions', async () => {
         await db.pushSubscription({
             endpoint: user1,
@@ -91,7 +94,7 @@ Deno.test('database notifications', async t => {
         });
         await db.pushSubscription({
             endpoint:user2,
-            expirationTime: new Date,
+            expirationTime,
         });
     });
 

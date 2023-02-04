@@ -187,7 +187,7 @@ export class Database {
         // TODO: Add Tests with Document Bindings
         const expires = expirationTime?.toISOString() || 'infinity';
         const { rowCount } = await this.#client
-            .queryArray`INSERT INTO subscription (endpoint,expiration) VALUES (${endpoint},${expires}) ON CONFLICT DO UPDATE SET expiration = ${expires}`;
+            .queryArray`INSERT INTO subscription (endpoint,expiration) VALUES (${endpoint},${expires}) ON CONFLICT (endpoint) DO UPDATE SET expiration = ${expires}`;
         assert(rowCount === 1);
     }
 
@@ -206,7 +206,7 @@ export class Database {
     /** Returns the user associated with the valid session ID. */
     async getUserFromSession(sid: string): Promise<Omit<User, 'id'> | null> {
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`SELECT u.name, u.email FROM session AS s INNER JOIN users AS u ON s.user = u.id WHERE s.id = ${sid} LIMIT 1`;
+            .queryObject`SELECT u.name, u.email FROM session AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.id = ${sid} LIMIT 1`;
         assert(rest.length === 0);
         return first === undefined
             ? null
