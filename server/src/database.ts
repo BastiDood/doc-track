@@ -142,13 +142,48 @@ export class Database {
      * # Assumption
      * The user has sufficient permissions to add a new system-wide category.
      */
-    async createCategory(name: Category): Promise<Category['id']> {
+    async createCategory(name: Category['name']): Promise<Category['id']> {
         // TODO: Add Tests
-        // TODO: Check User Permissions
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO category (name) VALUES (${name}) RETURNING id`;
         assert(rest.length === 0);
         return CategorySchema.pick({ id: true }).parse(first).id;
+    }
+
+    /** Gets a list of all the categories in the system. */
+    async getAllCategories(): Promise<Category[]> {
+        // TODO: Add Tests
+        const { rows } = await this.#client.queryObject('SELECT id,name FROM category');
+        return CategorySchema.array().parse(rows);
+    }
+
+    /**
+     * Returns `true` if successfully renamed the category.
+     *
+     * # Assumption
+     * The user has sufficient permissions to add a new system-wide category.
+     */
+    async renameCategory({ id, name }: Category): Promise<boolean> {
+        // TODO: Add Tests
+        const { rowCount } = await this.#client
+            .queryObject`UPDATE category SET name = ${name} WHERE id = ${id}`;
+        switch (rowCount) {
+            case 0: return false;
+            case 1: return true;
+            default: unreachable();
+        }
+    }
+
+    /**
+     * # Assumption
+     * The user has sufficient permissions to add a new system-wide category.
+     */
+    async deleteCategory(id: Category['id']): Promise<Category['name']> {
+        // TODO: Add Tests
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`DELETE FROM category WHERE id = ${id} RETURNING name`;
+        assert(rest.length === 0);
+        return CategorySchema.pick({ name: true }).parse(first).name;
     }
 
     /** Register a push subscription to be used later for notifying a user. */
