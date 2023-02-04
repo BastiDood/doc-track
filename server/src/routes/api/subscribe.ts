@@ -1,8 +1,8 @@
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
-import { Database } from '../database.ts';
-import { PushSubscriptionSchema } from '../model/db/subscription.ts';
+import { Database } from '../../database.ts';
+import { PushSubscriptionSchema } from '../../model/db/subscription.ts';
 
 export async function handleSubscribe(pool: Pool, req: Request) {
     // FIXME: Add CSRF tokens and nonces to mitigate replay attacks.
