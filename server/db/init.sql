@@ -64,7 +64,7 @@ CREATE TABLE batch(
 );
 
 CREATE TABLE barcode(
-    code uuid NOT NULL,
+    code UUID NOT NULL,
     batch INTEGER NOT NULL REFERENCES batch (id),
     PRIMARY KEY (code)
 );
@@ -76,7 +76,7 @@ CREATE TABLE category(
 );
 
 CREATE TABLE document(
-    id uuid NOT NULL REFERENCES barcode (code),
+    id UUID NOT NULL REFERENCES barcode (code),
     category SMALLINT NOT NULL REFERENCES category (id),
     title VARCHAR(40) NOT NULL,
     PRIMARY KEY (id)
@@ -84,11 +84,11 @@ CREATE TABLE document(
 
 CREATE TABLE snapshot(
     creation TIMESTAMPTZ DEFAULT NOW(),
-    doc uuid NOT NULL REFERENCES document (id),
+    doc UUID NOT NULL REFERENCES document (id),
     target SMALLINT REFERENCES office (id) CHECK((status = 'Send' AND target IS NOT NULL) OR (target IS NULL)),
     evaluator GoogleUserId NOT NULL REFERENCES users (id),
     status DocStatus NOT NULL,
-    remark VARCHAR(32),
+    remark VARCHAR(32) NOT NULL,
     PRIMARY KEY (creation, doc)
 );
 
@@ -101,7 +101,7 @@ CREATE TABLE subscription(
 
 CREATE TABLE notification(
     sub INTEGER NOT NULL REFERENCES subscription (id),
-    doc uuid NOT NULL REFERENCES document (id),
+    doc UUID NOT NULL REFERENCES document (id),
     PRIMARY KEY (sub, doc)
 );
 
