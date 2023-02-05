@@ -56,8 +56,9 @@ export class Database {
         assert(rest.length === 0);
         const old = PendingSchema.omit({ id: true }).parse(first);
 
-        const { rowCount } = await transaction
-            .queryArray`INSERT INTO session (id,user_id,expiration,access_token) VALUES (${id},${user_id},${expiration.toISOString()},${access_token})`;
+        const { rowCount } = await transaction.queryArray`
+            INSERT INTO session (id,user_id,expiration,access_token)
+                VALUES (${id},${user_id},${expiration.toISOString()},${access_token})`;
         assert(rowCount === 1);
 
         await transaction.commit();
