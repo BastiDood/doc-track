@@ -1,7 +1,7 @@
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
-import { handleGetAllCategories } from './api/category.ts';
+import { handleGetAllCategories, handleCreateCategory } from './api/category.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin } from './auth/mod.ts';
 
@@ -19,6 +19,7 @@ export function post(pool: Pool, req: Request) {
     const { pathname } = new URL(req.url);
     switch (pathname) {
         case '/api/subscribe': return handleSubscribe(pool, req);
+        case '/api/category': return handleCreateCategory(pool, req);
         default: return new Response(null, { status: Status.NotFound });
     }
 }

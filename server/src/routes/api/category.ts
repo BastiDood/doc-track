@@ -39,3 +39,34 @@ export async function handleGetAllCategories(pool: Pool, req: Request, params: U
         db.release();
     }
 }
+
+export async function handleCreateCategory(pool: Pool, req: Request) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Category] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    // TODO: validate whether this is a legal category name
+    const category = await req.text();
+    if (!category) {
+        error('[Category] Empty category name');
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const user = await db.getUserFromSession(sid);
+        if (user === null) {
+            error(`[Category] Invalid session ID`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        // TODO: check global permissions
+        const id = await db.createCategory(category);
+        info(`[Category] User ${user.id} ${user.name} <${user.email}> added new category ${id} "${category}"`);
+        return new Response(id.toString(), { status: Status.Created });
+    } finally {
+        db.release();
+    }
+}
