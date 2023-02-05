@@ -26,10 +26,12 @@ jobs:
           sudo systemctl start postgresql.service
           # Wait until the database is ready.
           pg_isready
-          # Finally create a user for the Actions user `runner`.
-          sudo -u postgres createuser -s -d -r -w runner
+          # Create a user for the Actions user `runner`.
+          sudo -u postgres createuser -s -d -r runner
+          # Then allocate a database for it.
+          sudo -u postgres createdb -O runner doctrack
       - name: Setup PostgreSQL Database
-        run: psql -U postgres -f server/db/init.sql -1
+        run: psql -f server/db/init.sql -1 doctrack
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
@@ -43,6 +45,7 @@ jobs:
           GOOGLE_SECRET: 'google-secret'
           OAUTH_REDIRECT: 'http://127.0.0.1:3000/auth/callback'
           HOSTED_GSUITE_DOMAIN: 'up.edu.ph'
+          PG_DATABASE: 'doctrack'
           PG_USER: 'runner'
           PG_POOL: 1
           VAPID_PRV_KEY: 'vapid-prv-key'
