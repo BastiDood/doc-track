@@ -35,8 +35,8 @@ export async function handleLogin(pool: Pool, req: Request) {
                 headers: { Location: '/dashboard' },
                 status: Status.Found,
             });
-        } else
-            warning(`[Login ${sid}] Already existing pending session`);
+        }
+        warning(`[Login ${sid}] Already existing pending session`);
     }
 
     // Otherwise generate the new session
