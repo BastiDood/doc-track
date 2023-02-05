@@ -4,7 +4,20 @@ import { error, info } from 'log';
 import { Pool } from 'postgres';
 
 import { Database } from '../../database.ts';
+import type { Category } from '../../model/db/category.ts';
 
+/**
+ * Retrieves a list of all the categories in the system.
+ *
+ * # Inputs
+ * - Requires a valid session ID.
+ * - Accepts `office` as a query parameter.
+ *
+ * # Outputs
+ * - `200` => return {@linkcode Response} containing {@linkcode Category[]} as JSON body
+ * - `400` => `office` parameter is absent or otherwise malformed.
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ */
 export async function handleGetAllCategories(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
@@ -29,10 +42,10 @@ export async function handleGetAllCategories(pool: Pool, req: Request, params: U
         const permissions = await db.getPermissionsFromSession(sid, oid);
         if (permissions === null) {
             error(`[Category] Invalid session ${sid}`);
-            return new Response(null, { status: Status.BadRequest });
+            return new Response(null, { status: Status.Unauthorized });
         }
 
-        const categories = await db.getAllCategories();
+        const categories: Category[] = await db.getAllCategories();
         info('[Category] Fetched all categories');
         return new Response(JSON.stringify(categories));
     } finally {
@@ -40,6 +53,19 @@ export async function handleGetAllCategories(pool: Pool, req: Request, params: U
     }
 }
 
+/**
+ * Creates a new system-wide category.
+ *
+ * # Inputs
+ * - Requires a valid session ID.
+ * - Accepts the name of the new category as plaintext from the request body.
+ *
+ * # Outputs
+ * - `204` => return {@linkcode Response} containing the ID `number` of the new category
+ * - `400` => category name is unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ */
 export async function handleCreateCategory(pool: Pool, req: Request) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
