@@ -37,7 +37,7 @@ jobs:
           PORT: 3000
           GOOGLE_ID: 'google-id'
           GOOGLE_SECRET: 'google-secret'
-          OAUTH_REDIRECT: 'http://127.0.0.1/auth/callback'
+          OAUTH_REDIRECT: 'http://127.0.0.1:3000/auth/callback'
           HOSTED_GSUITE_DOMAIN: 'up.edu.ph'
           PG_POOL: 1
           VAPID_PRV_KEY: 'vapid-prv-key'
