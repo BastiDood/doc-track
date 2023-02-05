@@ -27,11 +27,11 @@ jobs:
           # Wait until the database is ready.
           pg_isready
           # Create a user for the Actions user `runner`.
-          sudo -u postgres createuser -s -d -r runner
+          sudo -u postgres psql -c "CREATE USER runner PASSWORD 'runner'"
           # Then allocate a database for it.
           sudo -u postgres createdb -O runner doctrack
       - name: Setup PostgreSQL Database
-        run: psql -f server/db/init.sql -1 doctrack
+        run: PGPASSWORD=runner psql -f server/db/init.sql -1 doctrack
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
@@ -47,5 +47,6 @@ jobs:
           HOSTED_GSUITE_DOMAIN: 'up.edu.ph'
           PG_DATABASE: 'doctrack'
           PG_USER: 'runner'
+          PG_PASSWORD: 'runner'
           PG_POOL: 1
           VAPID_PRV_KEY: 'vapid-prv-key'
