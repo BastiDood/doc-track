@@ -54,11 +54,11 @@ export async function handleGetAllCategories(pool: Pool, req: Request, params: U
 }
 
 /**
- * Creates a new system-wide category.
+ * Creates a new system-wide {@linkcode Category}.
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the name of the new category as plaintext from the request body.
+ * - Accepts the name of the new category as plaintext from the {@linkcode Request} body.
  *
  * # Outputs
  * - `201` => return {@linkcode Response} containing the ID `number` of the new category
@@ -98,18 +98,18 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
 }
 
 /**
- * Renames an existing system-wide category.
+ * Renames an existing system-wide {@linkcode Category}.
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the name of the new category as plaintext from the request body.
+ * - Accepts the name of the new category as plaintext from the {@linkcode Request} body.
  *
  * # Outputs
- * - `204` => category successfully renamed
- * - `400` => category name is unacceptable
+ * - `204` => {@linkcode Category} successfully renamed
+ * - `400` => {@linkcode Category} name is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
- * - `404` => category ID does not exist
+ * - `404` => {@linkcode Category} ID does not exist
  */
 export async function handleRenameCategory(pool: Pool, req: Request) {
     const { sid } = getCookies(req.headers);
@@ -147,18 +147,18 @@ export async function handleRenameCategory(pool: Pool, req: Request) {
 }
 
 /**
- * Deletes an existing system-wide category.
+ * Deletes an existing system-wide {@linkcode Category}.
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the to-be-deleted category ID in the response body.
+ * - Accepts the to-be-deleted category ID in the {@linkcode Response} body.
  *
  * # Outputs
  * - `200` => returns the deleted category name as plaintext in the {@linkcode Response} body
- * - `400` => category ID is not an integer
+ * - `400` => {@linkcode Category} ID is not an integer
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
- * - `404` => category ID does not exist
+ * - `404` => {@linkcode Category} ID does not exist
  */
 export async function handleDeleteCategory(pool: Pool, req: Request) {
     const { sid } = getCookies(req.headers);
