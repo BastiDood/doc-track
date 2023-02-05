@@ -1,5 +1,5 @@
 import { assert } from 'asserts';
-import { info } from 'log';
+import { info, warning } from 'log';
 import { z } from 'zod';
 
 import { env } from '../../env.ts';
@@ -36,7 +36,7 @@ async function loadCachedResource<T>(name: string, url: string, schema: z.ZodTyp
         }
 
         assert(await cache.delete(url));
-        info(`[Cache ${name}] Busting ${url}`);
+        warning(`[Cache ${name}] Busting ${url}`);
     }
 
     // Otherwise fetch a new copy
