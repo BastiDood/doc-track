@@ -1,6 +1,7 @@
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
+import { handleGetAllCategories } from './api/invite.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin } from './auth/mod.ts';
 
@@ -9,6 +10,7 @@ export function get(pool: Pool, req: Request) {
     switch (pathname) {
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
+        case '/api/categories': return handleGetAllCategories(pool, req, searchParams);
         default: return new Response(null, { status: Status.NotFound });
     }
 }
