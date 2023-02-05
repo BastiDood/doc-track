@@ -12,7 +12,7 @@ CREATE DOMAIN AccessToken AS VARCHAR(2048) NOT NULL;
 CREATE DOMAIN Expiration AS TIMESTAMPTZ NOT NULL CHECK(VALUE > NOW());
 
 -- Permission Bits
-CREATE DOMAIN Permission AS BIT VARYING(3);
+CREATE DOMAIN Permission AS BIT VARYING(3) NOT NULL;
 
 -- Push Subscription Endpoint
 CREATE DOMAIN Endpoint AS VARCHAR(50) NOT NULL;
@@ -25,6 +25,7 @@ CREATE TABLE users(
     id GoogleUserId,
     name VARCHAR(40) NOT NULL,
     email VARCHAR(20) NOT NULL,
+    permission Permission,
     PRIMARY KEY (id)
 );
 
@@ -55,7 +56,7 @@ CREATE TABLE office(
 CREATE TABLE staff(
     user_id GoogleUserId REFERENCES users (id),
     office SMALLINT NOT NULL REFERENCES office (id),
-    permission Permission NOT NULL,
+    permission Permission,
     PRIMARY KEY (user_id, office)
 );
 

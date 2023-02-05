@@ -80,12 +80,12 @@ export class Database {
      * case `null` is returned). Otherwise, we delete all of the invites of the specified user
      * and return an array of the office IDs to which the user is invited.
      */
-    async insertInvitedUser({ id, name, email }: User): Promise<Office['id'][] | null> {
+    async insertInvitedUser({ id, name, email, permission }: User): Promise<Office['id'][] | null> {
         const transaction = this.#client.createTransaction('registration', { isolation_level: 'serializable' });
         await transaction.begin();
 
         const { rowCount } = await transaction
-            .queryArray`UPDATE users SET name = ${name}, email = ${email} WHERE id = ${id}`;
+            .queryArray`UPDATE users SET name = ${name}, email = ${email}, permission = ${permission} WHERE id = ${id}`;
         assert(rowCount !== undefined);
 
         // User already exists
@@ -101,7 +101,7 @@ export class Database {
         const invites = InvitationSchema.pick({ office: true, permission: true }).array().parse(rows);
 
         // Add the user into the system
-        await transaction.queryArray`INSERT INTO users (id,name,email) VALUES (${id},${name},${email})`;
+        await transaction.queryArray`INSERT INTO users (id,name,email,permission) VALUES (${id},${name},${email},${permission})`;
 
         // Add the user to all the offices (if any)
         for (const { office, permission } of invites)
@@ -204,13 +204,13 @@ export class Database {
     }
 
     /** Returns the user associated with the valid session ID. */
-    async getUserFromSession(sid: Session['id']): Promise<Omit<User, 'id'> | null> {
+    async getUserFromSession(sid: Session['id']): Promise<User | null> {
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`SELECT u.name, u.email FROM session AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.id = ${sid} LIMIT 1`;
+            .queryObject`SELECT u.* FROM session AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.id = ${sid} LIMIT 1`;
         assert(rest.length === 0);
         return first === undefined
             ? null
-            : UserSchema.omit({ id: true }).parse(first);
+            : UserSchema.parse(first);
     }
 
     /** Returns the local permissions of the session in the provided office. */

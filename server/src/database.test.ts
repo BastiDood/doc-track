@@ -21,6 +21,7 @@ Deno.test('full OAuth flow', async t => {
         id: crypto.randomUUID(),
         name: 'Hello World',
         email: 'hello@up.edu.ph',
+        permission: 0,
     };
 
     const office = await db.createOffice('Test');
@@ -57,7 +58,7 @@ Deno.test('full OAuth flow', async t => {
         assertEquals(old, { nonce, expiration });
 
         assert(await db.checkValidSession(id));
-        assertEquals(await db.getUserFromSession(id), { name: USER.name, email: USER.email });
+        assertEquals(await db.getUserFromSession(id), USER);
         assertEquals(await db.getPermissionsFromSession(id, office), 0);
     });
 

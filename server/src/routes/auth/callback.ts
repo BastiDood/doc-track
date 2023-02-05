@@ -73,6 +73,7 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             id: idToken.sub,
             name: idToken.name,
             email: idToken.email,
+            permission: 0,
         });
 
         if (offices === null)
