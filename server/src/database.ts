@@ -54,14 +54,22 @@ export class Database {
             : PendingSchema.pick({ nonce: true }).parse(first).nonce;
     }
 
-    /** Upgrades a pending session into a valid session. */
-    async upgradeSession({ id, user_id, expiration, access_token }: Session) {
+    /** Upgrades a pending session into a valid session. Returns the now-invalidated pending session details. */
+    async upgradeSession({ id, user_id, expiration, access_token }: Session): Promise<Omit<Pending, 'id'>> {
         const transaction = this.#client.createTransaction('upgrade', { isolation_level: 'serializable' });
         await transaction.begin();
-        await transaction.queryArray`DELETE FROM pending WHERE id = ${id}`;
-        await transaction
+
+        const { rows: [ first, ...rest ] } = await transaction
+            .queryArray`DELETE FROM pending WHERE id = ${id} RETURNING nonce,expiration`;
+        assert(rest.length === 0);
+        const old = PendingSchema.omit({ id: true }).parse(first);
+
+        const { rowCount } = await transaction
             .queryArray`INSERT INTO session (id,user_id,expiration,access_token) VALUES (${id},${user_id},${expiration.toISOString()},${access_token})`;
+        assert(rowCount === 1);
+
         await transaction.commit();
+        return old;
     }
 
     /** Upserts a user to the invite list and returns the creation date. */
