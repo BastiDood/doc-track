@@ -3,16 +3,17 @@ import { range } from 'itertools';
 import { Pool, PoolClient } from 'postgres';
 
 import type { Document } from './model/db/document.ts';
-import type { Session } from './model/db/session.ts';
 import type { PushSubscription } from './model/db/subscription.ts';
+import type { Session } from './model/db/session.ts';
 
 import { type Barcode, BarcodeSchema } from './model/db/barcode.ts';
 import { type Batch, BatchSchema } from './model/db/batch.ts';
+import { type Category, CategorySchema } from './model/db/category.ts';
 import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
 import { type Office, OfficeSchema } from './model/db/office.ts';
 import { type Pending, PendingSchema } from './model/db/pending.ts';
 import { type User, UserSchema } from './model/db/user.ts';
-import { type Category, CategorySchema } from './model/db/category.ts';
+import { type Staff, StaffSchema } from './model/db/staff.ts';
 
 export class Database {
     #client: PoolClient;
@@ -32,7 +33,7 @@ export class Database {
     }
 
     /** Checks whether the current session ID maps to a fully valid session (i.e., went through OAuth). */
-    async checkValidSession(sid: string): Promise<boolean> {
+    async checkValidSession(sid: Session['id']): Promise<boolean> {
         const { rows } = await this.#client.queryObject`SELECT 1 FROM session WHERE id = ${sid}`;
         return rows.length > 0;
     }
@@ -203,7 +204,7 @@ export class Database {
     }
 
     /** Returns the user associated with the valid session ID. */
-    async getUserFromSession(sid: string): Promise<Omit<User, 'id'> | null> {
+    async getUserFromSession(sid: Session['id']): Promise<Omit<User, 'id'> | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`SELECT u.name, u.email FROM session AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.id = ${sid} LIMIT 1`;
         assert(rest.length === 0);
@@ -212,8 +213,18 @@ export class Database {
             : UserSchema.omit({ id: true }).parse(first);
     }
 
+    /** Returns the local permissions of the session in the provided office. */
+    async getPermissionsFromSession(sid: Session['id'], office: Office['id']): Promise<Staff['permission'] | null> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`SELECT permission FROM session INNER JOIN staff USING (user_id) WHERE session.id = ${sid} AND staff.office = ${office} LIMIT 1`;
+        assert(rest.length === 0);
+        return first === undefined
+            ? null
+            : StaffSchema.pick({ permission: true }).parse(first).permission;
+    }
+
     /** Adds a new office to the system. */
-    async createOffice(name: string): Promise<Office['id']> {
+    async createOffice(name: Office['name']): Promise<Office['id']> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO office (name) VALUES (${name}) RETURNING id`;
         assert(rest.length === 0);

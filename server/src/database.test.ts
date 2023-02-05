@@ -23,8 +23,8 @@ Deno.test('full OAuth flow', async t => {
         email: 'hello@up.edu.ph',
     };
 
+    const office = await db.createOffice('Test');
     await t.step('invite user to an office', async () => {
-        const office = await db.createOffice('Test');
         const creation = await db.upsertInvitation({
             office,
             email: USER.email,
@@ -46,6 +46,7 @@ Deno.test('full OAuth flow', async t => {
 
         assert(!(await db.checkValidSession(id)));
         assertEquals(await db.getUserFromSession(id), null);
+        assertEquals(await db.getPermissionsFromSession(id, office), null);
 
         const old = await db.upgradeSession({
             id,
@@ -57,6 +58,7 @@ Deno.test('full OAuth flow', async t => {
 
         assert(await db.checkValidSession(id));
         assertEquals(await db.getUserFromSession(id), { name: USER.name, email: USER.email });
+        assertEquals(await db.getPermissionsFromSession(id, office), 0);
     });
 
     db.release();
