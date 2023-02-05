@@ -1,7 +1,7 @@
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
-import { handleGetAllCategories } from './api/invite.ts';
+import { handleGetAllCategories } from './api/category.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin } from './auth/mod.ts';
 
