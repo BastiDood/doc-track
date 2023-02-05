@@ -1,5 +1,5 @@
 import { assert } from 'asserts';
-import { info, warning } from 'log';
+import { debug, info, warning } from 'log';
 import { z } from 'zod';
 
 import { env } from '../../env.ts';
@@ -30,7 +30,7 @@ async function loadCachedResource<T>(name: string, url: string, schema: z.ZodTyp
         info(`[Cache ${name}] Cached response expires at ${expiration.toLocaleString()}`)
 
         if (new Date < expiration) {
-            info(`[Cache ${name}] Using ${url}`);
+            debug(`[Cache ${name}] Using ${url}`);
             const json = await maybeResponse.json();
             return schema.parse(json);
         }
