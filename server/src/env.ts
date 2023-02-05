@@ -20,7 +20,6 @@ const PG_HOSTNAME = Deno.env.get('PG_HOSTNAME') || '127.0.0.1';
 const PG_DATABASE = Deno.env.get('PG_DATABASE') || 'postgres';
 
 const PG_PASSWORD = Deno.env.get('PG_PASSWORD');
-assert(PG_PASSWORD);
 
 const PG_PORT = Deno.env.get('PG_PORT');
 

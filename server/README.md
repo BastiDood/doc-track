@@ -18,7 +18,7 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 `PG_HOSTNAME` | IP host name of the [PostgreSQL] instance. | &#x274c; | `127.0.0.1`
 `PG_PORT` | Port number of the [PostgreSQL] instance. | &#x274c; | `5432`
 `PG_USER` | Provided username when logging into [PostgreSQL]. | &#x274c; | `postgres`
-`PG_PASSWORD` | Provided password when logging into [PostgreSQL]. | &#x2714; |
+`PG_PASSWORD` | Provided password when logging into [PostgreSQL]. | &#x274c; |
 `PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `postgres`
 `PG_POOL` | Maximum number of pooled connections reserved by the [PostgreSQL] client. | &#x274c; | `4`
 `VAPID_PRV_KEY` | [Vapid private key][vapid] which will be used to subscribe to the [Web Push API]. | &#x2714; |
