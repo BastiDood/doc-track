@@ -60,7 +60,7 @@ export class Database {
         await transaction.begin();
 
         const { rows: [ first, ...rest ] } = await transaction
-            .queryArray`DELETE FROM pending WHERE id = ${id} RETURNING nonce,expiration`;
+            .queryObject`DELETE FROM pending WHERE id = ${id} RETURNING nonce,expiration`;
         assert(rest.length === 0);
         const old = PendingSchema.omit({ id: true }).parse(first);
 
