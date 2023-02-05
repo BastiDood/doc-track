@@ -46,7 +46,6 @@ Deno.test('full OAuth flow', async t => {
 
         assert(!(await db.checkValidSession(id)));
         assertEquals(await db.getUserFromSession(id), null);
-        assertEquals(await db.getPendingSessionNonce(id), nonce);
 
         const old = await db.upgradeSession({
             id,
@@ -58,7 +57,6 @@ Deno.test('full OAuth flow', async t => {
 
         assert(await db.checkValidSession(id));
         assertEquals(await db.getUserFromSession(id), { name: USER.name, email: USER.email });
-        assertEquals(await db.getPendingSessionNonce(id), new Uint8Array);
     });
 
     db.release();

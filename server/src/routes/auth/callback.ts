@@ -1,10 +1,11 @@
 import { assert, assertEquals } from 'asserts';
-import { encode } from 'base64url';
+import { decode } from 'base64url';
 import { getCookies, setCookie } from 'cookie';
+import { error, info, warning } from 'log';
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
-import { hashUuid } from './util.ts';
+import { hashUuid, parseJwt } from './util.ts';
 import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
 import { AuthorizationCode, TokenResponseSchema } from '../../model/oauth/google.ts';
@@ -13,25 +14,31 @@ import { DISCOVERY } from '../../model/oauth/openid.ts';
 export async function handleCallback(pool: Pool, req: Request, params: URLSearchParams) {
     // Redirect to start of log-in flow if no session ID
     const { sid } = getCookies(req.headers);
-    if (!sid)
+    if (!sid) {
+        warning('[Callback] Absent session ID redirecting to login');
         return new Response(null, {
             headers: { Location: '/login' },
             status: Status.Found,
         });
+    }
 
     // Redirect to dashboard if already logged in
     const db = await Database.fromPool(pool);
-    if (await db.checkValidSession(sid))
+    if (await db.checkValidSession(sid)) {
+        warning('[Callback] Already valid session redirecting to dashboard');
         return new Response(null, {
             headers: { Location: '/dashboard' },
             status: Status.Found,
         });
+    }
 
     // Validate the `state` argument
     const state = params.get('state');
     assert(state);
-    if (state != await hashUuid(sid))
+    if (state != await hashUuid(sid)) {
+        error('[Callback] state parameter does not match');
         return new Response(null, { status: Status.Forbidden });
+    }
 
     // Exchange authorization code for tokens
     const code = AuthorizationCode.parse(params.get('code'));
@@ -48,28 +55,37 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
         body,
     });
     assert(response.ok);
-    const { access_token, id_token } = TokenResponseSchema.parse(await response.json());
-    assert(id_token.exp > new Date);
+    info('[Callback] Fetched ID token from Google');
 
-    // Validate the nonce
-    const nonce = encode(await db.getPendingSessionNonce(sid));
-    assertEquals(nonce, id_token.nonce);
+    const json = await response.json();
+    console.log(json);
+    const { access_token, id_token } = TokenResponseSchema.parse(json);
+    const idToken = await parseJwt(id_token);
 
-    assert(id_token.email_verified);
+    assert(idToken.exp > new Date);
+    assert(idToken.email_verified);
+    info('[Callback] Successfully parsed ID token from Google');
+
+    // TODO: return offices to the user
     const offices = await db.insertInvitedUser({
-        id: id_token.sub,
-        name: id_token.name,
-        email: id_token.email,
+        id: idToken.sub,
+        name: idToken.name,
+        email: idToken.email,
     });
-    assert(offices !== null && offices.length > 0);
+
+    if (offices === null)
+        info(`[Callback] Returning user ${idToken.sub} logged in`);
+    else
+        info(`[Callback] New user joined offices ${offices}`);
 
     // Upgrade the pending session
-    await db.upgradeSession({
+    const { nonce } = await db.upgradeSession({
         id: sid,
-        user_id: id_token.sub,
-        expiration: id_token.exp,
+        user_id: idToken.sub,
+        expiration: idToken.exp,
         access_token,
     });
+    assertEquals(nonce, decode(idToken.nonce));
 
     // FIXME: release on all code paths
     db.release();
@@ -79,11 +95,11 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
     setCookie(headers, {
         name: 'sid',
         value: sid,
-        expires: id_token.exp,
+        expires: idToken.exp,
         httpOnly: true,
         sameSite: 'Lax',
     });
-    return new Response(null, {
+    return new Response(JSON.stringify(offices), {
         headers,
         status: Status.Found,
     });

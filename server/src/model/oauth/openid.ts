@@ -1,7 +1,9 @@
 import { assert } from 'asserts';
+import { info } from 'log';
 import { z } from 'zod';
 
 import { env } from '../../env.ts';
+import { KeySchema } from '../jwk/key.ts';
 
 const DiscoveryDocumentSchema = z.object({
     issuer: z.string().url(),
@@ -14,30 +16,55 @@ const DiscoveryDocumentSchema = z.object({
 
 const DISCOVERY_URL = 'https://accounts.google.com/.well-known/openid-configuration';
 
-async function loadDiscoveryDocument(name: string) {
+async function loadCachedResource<T>(name: string, url: string, schema: z.ZodType<T>): Promise<T> {
     const cache = await caches.open(name);
-    const maybeResponse = await cache.match(DISCOVERY_URL);
+    const maybeResponse = await cache.match(url);
 
     // Check cached value first
     if (maybeResponse !== undefined) {
+        info(`[Cache ${name}] Hit ${url}`);
         const expires = maybeResponse.headers.get('Expires');
         assert(expires);
-        if (new Date < new Date(expires)) {
+
+        const expiration = new Date(expires);
+        info(`[Cache ${name}] Cached response expires at ${expiration.toLocaleString()}`)
+
+        if (new Date < expiration) {
+            info(`[Cache ${name}] Using ${url}`);
             const json = await maybeResponse.json();
-            return DiscoveryDocumentSchema.parse(json);
+            return schema.parse(json);
         }
+
+        assert(await cache.delete(url));
+        info(`[Cache ${name}] Busting ${url}`);
     }
 
     // Otherwise fetch a new copy
-    const response = await fetch(DISCOVERY_URL);
+    info(`[Cache] Fetching ${url}`);
+    const response = await fetch(url);
     assert(response.ok);
     const clone = response.clone();
-    const json = DiscoveryDocumentSchema.parse(await response.json());
-    await cache.put(DISCOVERY_URL, clone);
+    const json = schema.parse(await response.json());
+    await cache.put(url, clone);
     return json;
 }
 
-export const DISCOVERY = await loadDiscoveryDocument('discoery');
+export const DISCOVERY = await loadCachedResource('discovery', DISCOVERY_URL, DiscoveryDocumentSchema);
+info('[Discovery] Initialized');
+
+const { keys } = await loadCachedResource('certs', DISCOVERY.jwks_uri, z.object({ keys: KeySchema.passthrough().array() }));
+info('[Certs] Initialized');
+
+const map = new Map<string, CryptoKey>();
+for (const jwk of keys) {
+    const options = jwk.alg === 'RS256'
+        ? { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }
+        : { name: 'ECDSA', namedCurve: 'P-256' };
+    const key = await crypto.subtle.importKey('jwk', jwk, options, false, [ 'verify' ]);
+    map.set(jwk.kid, key);
+}
+
+export const KEYS = map;
 
 const UNIX_TIME_SECS = z.number().int().transform(secs => new Date(secs * 1000));
 

@@ -1,12 +1,13 @@
 import { encode } from 'base64url';
 import { getCookies, setCookie } from 'cookie';
 import { Status } from 'http';
+import { debug, warning } from 'log';
 import { Pool } from 'postgres';
 
 import { hashUuid } from './util.ts';
 import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
-import { OAUTH_SCOPE } from '../../model/oauth/google.ts';
+import { OAUTH_SCOPE_STRING } from '../../model/oauth/google.ts';
 import { DISCOVERY } from '../../model/oauth/openid.ts';
 
 /**
@@ -26,24 +27,32 @@ export async function handleLogin(pool: Pool, req: Request) {
     // Redirect valid sessions to dashboard
     const { sid } = getCookies(req.headers);
     const db = await Database.fromPool(pool);
-    if (sid && await db.checkValidSession(sid))
-        return new Response(null, {
-            headers: { Location: '/dashboard' },
-            status: Status.Found,
-        });
+
+    if (sid) {
+        if (await db.checkValidSession(sid)) {
+            debug(`[Login ${sid}] Redirected to dashboard.`);
+            return new Response(null, {
+                headers: { Location: '/dashboard' },
+                status: Status.Found,
+            });
+        } else
+            warning(`[Login ${sid}] Already existing pending session`);
+    }
 
     // Otherwise generate the new session
     const { id, nonce, expiration } = await db.generatePendingSession();
+    const encodedNonce = encode(nonce);
+    debug(`[Login ${id}] Generated new pending session with nonce ${encodedNonce}`);
 
     // Build the OAuth 2.0 redirection parameters
     const params = new URLSearchParams({
         state: await hashUuid(id),
         client_id: env.GOOGLE_ID,
         redirect_uri: env.OAUTH_REDIRECT,
-        nonce: encode(nonce),
+        nonce: encodedNonce,
         access_type: 'online',
         response_type: 'code',
-        scope: OAUTH_SCOPE,
+        scope: OAUTH_SCOPE_STRING,
         prompt: 'select_account',
         hd: env.HOSTED_GSUITE_DOMAIN,
     });

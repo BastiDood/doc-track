@@ -45,15 +45,6 @@ export class Database {
         return PendingSchema.parse(first);
     }
 
-    /** Gets the nonce of a pending session. If no such session exists, an empty array is returned. */
-    async getPendingSessionNonce(sid: string): Promise<Pending['nonce']> {
-        const { rows: [ first, ...rest ] } = await this.#client.queryObject`SELECT nonce FROM pending WHERE id = ${sid} LIMIT 1`;
-        assert(rest.length === 0);
-        return first === undefined
-            ? new Uint8Array
-            : PendingSchema.pick({ nonce: true }).parse(first).nonce;
-    }
-
     /** Upgrades a pending session into a valid session. Returns the now-invalidated pending session details. */
     async upgradeSession({ id, user_id, expiration, access_token }: Session): Promise<Omit<Pending, 'id'>> {
         const transaction = this.#client.createTransaction('upgrade', { isolation_level: 'serializable' });
