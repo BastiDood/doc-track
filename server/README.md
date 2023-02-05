@@ -29,6 +29,8 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 
 # Running the Application
 
+To start the PostgreSQL instance, run the following setup script.
+
 ```bash
 # Initialize the database at the `data` folder (see `-D` flag).
 # The root user will be named `postgres` (see `-U` flag).
@@ -39,13 +41,15 @@ deno task init
 deno task db
 ```
 
+In a separate terminal, run the following script to start the Deno server proper.
+
 ```bash
 # Run the SQL initialization script.
 deno task schema
 
 # If you have not yet run this command before, place the
-# private key into the `VAPID_PRV_KEY` variable. Otherwise,
-# skip this step.
+# private key into the `VAPID_PRV_KEY` environment variable.
+# Otherwise, skip this step.
 pnpm dlx web-push generate-vapid-keys
 
 # Set up (example) environment variables.
@@ -63,5 +67,4 @@ VAPID_PRV_KEY=
 
 # Starts the server at `0.0.0.0:3000`.
 deno task start
-
 ```
