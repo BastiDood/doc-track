@@ -22,17 +22,19 @@ jobs:
         uses: actions/checkout@v3
       # https://github.com/actions/runner-images/blob/8361bb299ba9290b70b6ed8bf337456714c6516d/images/linux/Ubuntu2204-Readme.md#postgresql
       - name: Startup Built-in PostgreSQL Server
-        run: sudo systemctl start postgresql.service
+        run: |
+          sudo systemctl start postgresql.service
+          pg_isready
       - name: Install PostgreSQL Client
         run: sudo apt-get install -y postgresql-client
       - name: Setup PostgreSQL Database
-        run: PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -w -f db/init.sql -1
+        run: sudo -u postgres psql -f db/init.sql -1
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
       - name: Run Tests
-        run: deno task test
+        run: sudo -u postgres deno task test
         env:
           # Many of these are just dummy values.
           PORT: 3000
