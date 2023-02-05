@@ -14,7 +14,7 @@ const options = {
 };
 
 Deno.test('full OAuth flow', async t => {
-    const pool = new Pool(options, 1, true);
+    const pool = new Pool(options, 1, false);
     const db = await Database.fromPool(pool);
 
     const USER = {
@@ -64,7 +64,7 @@ Deno.test('full OAuth flow', async t => {
 });
 
 Deno.test('database notifications', async t => {
-    const pool = new Pool(options, 1, true);
+    const pool = new Pool(options, 1, false);
     const db = await Database.fromPool(pool);
 
     const user1 = 'https://example.com?user=1';
