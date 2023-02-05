@@ -39,7 +39,7 @@ CREATE TABLE pending(
 -- Validated OAuth login.
 CREATE TABLE session(
     id UUID NOT NULL,
-    user_id VARCHAR(255) NOT NULL REFERENCES users (id),
+    user_id GoogleuserId REFERENCES users (id),
     expiration Expiration,
     access_token AccessToken,
     PRIMARY KEY (id)
