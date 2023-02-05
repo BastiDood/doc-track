@@ -27,47 +27,50 @@ export async function handleLogin(pool: Pool, req: Request) {
     // Redirect valid sessions to dashboard
     const { sid } = getCookies(req.headers);
     const db = await Database.fromPool(pool);
-
-    if (sid) {
-        if (await db.checkValidSession(sid)) {
-            debug(`[Login ${sid}] Redirected to dashboard.`);
-            return new Response(null, {
-                headers: { Location: '/dashboard' },
-                status: Status.Found,
-            });
+    try {
+        if (sid) {
+            if (await db.checkValidSession(sid)) {
+                debug(`[Login ${sid}] Redirected to dashboard.`);
+                return new Response(null, {
+                    headers: { Location: '/dashboard' },
+                    status: Status.Found,
+                });
+            }
+            warning(`[Login ${sid}] Already existing pending session`);
         }
-        warning(`[Login ${sid}] Already existing pending session`);
+
+        // Otherwise generate the new session
+        const { id, nonce, expiration } = await db.generatePendingSession();
+        const encodedNonce = encode(nonce);
+        debug(`[Login ${id}] Generated new pending session with nonce ${encodedNonce}`);
+
+        // Build the OAuth 2.0 redirection parameters
+        const params = new URLSearchParams({
+            state: await hashUuid(id),
+            client_id: env.GOOGLE_ID,
+            redirect_uri: env.OAUTH_REDIRECT,
+            nonce: encodedNonce,
+            access_type: 'online',
+            response_type: 'code',
+            scope: OAUTH_SCOPE_STRING,
+            prompt: 'select_account',
+            hd: env.HOSTED_GSUITE_DOMAIN,
+        });
+
+        // Generate the response headers
+        const headers = new Headers({ Location: `${DISCOVERY.authorization_endpoint}?${params}` });
+        setCookie(headers, {
+            name: 'sid',
+            value: id,
+            expires: expiration,
+            httpOnly: true,
+            sameSite: 'Lax',
+        });
+        return new Response(null, {
+            headers,
+            status: Status.Found,
+        });
+    } finally {
+        db.release();
     }
-
-    // Otherwise generate the new session
-    const { id, nonce, expiration } = await db.generatePendingSession();
-    const encodedNonce = encode(nonce);
-    debug(`[Login ${id}] Generated new pending session with nonce ${encodedNonce}`);
-
-    // Build the OAuth 2.0 redirection parameters
-    const params = new URLSearchParams({
-        state: await hashUuid(id),
-        client_id: env.GOOGLE_ID,
-        redirect_uri: env.OAUTH_REDIRECT,
-        nonce: encodedNonce,
-        access_type: 'online',
-        response_type: 'code',
-        scope: OAUTH_SCOPE_STRING,
-        prompt: 'select_account',
-        hd: env.HOSTED_GSUITE_DOMAIN,
-    });
-
-    // Generate the response headers
-    const headers = new Headers({ Location: `${DISCOVERY.authorization_endpoint}?${params}` });
-    setCookie(headers, {
-        name: 'sid',
-        value: id,
-        expires: expiration,
-        httpOnly: true,
-        sameSite: 'Lax',
-    });
-    return new Response(null, {
-        headers,
-        status: Status.Found,
-    });
 }
