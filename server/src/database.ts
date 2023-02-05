@@ -176,11 +176,13 @@ export class Database {
      * # Assumption
      * The user has sufficient permissions to add a new system-wide category.
      */
-    async deleteCategory(id: Category['id']): Promise<Category['name']> {
+    async deleteCategory(id: Category['id']): Promise<Category['name'] | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`DELETE FROM category WHERE id = ${id} RETURNING name`;
         assert(rest.length === 0);
-        return CategorySchema.pick({ name: true }).parse(first).name;
+        return first === undefined
+            ? null
+            : CategorySchema.pick({ name: true }).parse(first).name;
     }
 
     /** Register a push subscription to be used later for notifying a user. */

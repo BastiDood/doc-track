@@ -3,7 +3,12 @@ import { error, info } from 'log';
 import { Pool } from 'postgres';
 
 import { env } from './env.ts';
-import { get, post } from './routes/mod.ts';
+import {
+    handleDelete,
+    handleGet,
+    handlePost,
+    handlePut
+} from './routes/mod.ts';
 
 const pool = new Pool({
     user: env.PG_USER,
@@ -15,8 +20,10 @@ const pool = new Pool({
 
 function handle(req: Request) {
     switch (req.method) {
-        case 'GET': return get(pool, req);
-        case 'POST': return post(pool, req);
+        case 'GET': return handleGet(pool, req);
+        case 'POST': return handlePost(pool, req);
+        case 'PUT': return handlePut(pool, req);
+        case 'DELETE': return handleDelete(pool, req);
         default:
             error(`[${req.method}] Unsupported Method`);
             return new Response(null, { status: Status.NotImplemented });
