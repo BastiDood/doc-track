@@ -99,7 +99,7 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
         httpOnly: true,
         sameSite: 'Lax',
     });
-    return new Response(JSON.stringify(offices), {
+    return new Response(null, {
         headers,
         status: Status.Found,
     });
