@@ -1,0 +1,43 @@
+name: Server Tests
+
+on:
+  push:
+    branches: main
+    paths:
+      - server
+  pull_request:
+    branches: main
+    paths:
+      - server
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - name: Setup Repository
+        uses: actions/checkout@v3
+      # https://github.com/actions/runner-images/blob/8361bb299ba9290b70b6ed8bf337456714c6516d/images/linux/Ubuntu2204-Readme.md#postgresql
+      - name: Startup Built-in PostgreSQL Server
+        run: sudo systemctl start postgresql.service
+      - name: Install PostgreSQL Client
+        run: sudo apt-get install -y postgresql-client
+      - name: Setup PostgreSQL Database
+        run: psql -U postgres -f db/init.sql -1
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Run Tests
+        run: deno task test
+        env:
+          # Many of these are just dummy values.
+          PORT: 3000
+          GOOGLE_ID: 'google-id'
+          GOOGLE_SECRET: 'google-secret'
+          OAUTH_REDIRECT: 'http://127.0.0.1/auth/callback'
+          HOSTED_GSUITE_DOMAIN: 'up.edu.ph'
+          PG_POOL: 1
+          VAPID_PRV_KEY: 'vapid-prv-key'
