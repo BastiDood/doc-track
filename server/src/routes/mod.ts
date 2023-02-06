@@ -9,7 +9,7 @@ import {
 } from './api/category.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe } from './api/subscribe.ts';
-import { handleCallback, handleLogin } from './auth/mod.ts';
+import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 
 export function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
@@ -44,6 +44,7 @@ export function handleDelete(pool: Pool, req: Request) {
     const { pathname } = new URL(req.url);
     switch (pathname) {
         case '/api/category': return handleDeleteCategory(pool, req);
+        case '/auth/logout': return handleLogout(pool, req);
         default: return new Response(null, { status: Status.NotFound });
     }
 }

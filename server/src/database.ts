@@ -4,7 +4,7 @@ import { Pool, PoolClient } from 'postgres';
 
 import type { Document } from './model/db/document.ts';
 import type { PushSubscription } from './model/db/subscription.ts';
-import type { Session } from './model/db/session.ts';
+import { Session, SessionSchema } from './model/db/session.ts';
 
 import { type Barcode, BarcodeSchema } from './model/db/barcode.ts';
 import { type Batch, BatchSchema } from './model/db/batch.ts';
@@ -14,6 +14,16 @@ import { type Office, OfficeSchema } from './model/db/office.ts';
 import { type Pending, PendingSchema } from './model/db/pending.ts';
 import { type User, UserSchema } from './model/db/user.ts';
 import { type Staff, StaffSchema } from './model/db/staff.ts';
+
+export interface InvalidatedPending {
+    valid: false;
+    data: Omit<Pending, 'id'>;
+}
+
+export interface InvalidatedSession {
+    valid: true;
+    data: Omit<Session, 'id'>;
+}
 
 export class Database {
     #client: PoolClient;
@@ -63,6 +73,32 @@ export class Database {
 
         await transaction.commit();
         return old;
+    }
+
+    async invalidateSession(sid: Pending['id'] & Session['id']): Promise<InvalidatedPending | InvalidatedSession | null> {
+        // TODO: Add Tests
+        const transaction = this.#client.createTransaction('invalidate', { isolation_level: 'serializable' });
+
+        await transaction.begin();
+        const { rows: [ pendingFirst, ...pendingRest ] } = await transaction
+            .queryObject`DELETE FROM pending WHERE id = ${sid} RETURNING nonce,expiration`;
+        assert(pendingRest.length === 0);
+        const { rows: [ sessionFirst, ...sessionRest ] } = await transaction
+            .queryObject`DELETE FROM session WHERE id = ${sid} RETURNING user_id,expiration,access_token`;
+        assert(sessionRest.length === 0);
+        await transaction.commit();
+
+        const pending = PendingSchema.omit({ id: true }).optional().parse(pendingFirst);
+        const session = SessionSchema.omit({ id: true }).optional().parse(sessionFirst);
+
+        if (pending === undefined) {
+            if (session === undefined)
+                return null;
+            return { valid: true, data: session };
+        }
+
+        assert(session === undefined);
+        return { valid: false, data: pending };
     }
 
     /** Upserts a user to the invite list and returns the creation date. */
