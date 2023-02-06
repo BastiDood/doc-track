@@ -42,3 +42,6 @@ for await (const conn of Deno.listen({ port: env.PORT })) {
         await respondWith(handle(request));
     }
 }
+
+await pool.end();
+info('[Server] Closed');
