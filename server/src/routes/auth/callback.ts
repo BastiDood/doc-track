@@ -27,7 +27,7 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
     try {
         // Redirect to dashboard if already logged in
         if (await db.checkValidSession(sid)) {
-            warning('[Callback] Already valid session redirecting to dashboard');
+            warning(`[Callback] Already valid session ${sid} redirecting to dashboard`);
             return new Response(null, {
                 headers: { Location: '/dashboard' },
                 status: Status.Found,
@@ -38,7 +38,7 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
         const state = params.get('state');
         assert(state);
         if (state != await hashUuid(sid)) {
-            error('[Callback] state parameter does not match');
+            error('[Callback] State parameter does not match');
             return new Response(null, { status: Status.Forbidden });
         }
 
