@@ -25,6 +25,11 @@ Deno.test('full OAuth flow', async t => {
     };
 
     const office = await db.createOffice('Test');
+    await t.step('update office information', async () => {
+        assert(!(await db.updateOffice({ id: 0, name: 'Hello' })));
+        assert(await db.updateOffice({ id: office, name: 'Hello' }));
+    });
+
     await t.step('invite user to an office', async () => {
         const creation = await db.upsertInvitation({
             office,

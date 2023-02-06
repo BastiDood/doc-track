@@ -233,4 +233,14 @@ export class Database {
         assert(rest.length === 0);
         return OfficeSchema.pick({ id: true }).parse(first).id;
     }
+
+    /** Update office information. Returns `true` if successful. */
+    async updateOffice({ id, name }: Office): Promise<boolean> {
+        const { rowCount } = await this.#client.queryArray`UPDATE office SET name = ${name} WHERE id = ${id}`;
+        switch (rowCount) {
+            case 0: return false;
+            case 1: return true;
+            default: unreachable();
+        }
+    }
 }
