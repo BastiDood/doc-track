@@ -76,7 +76,6 @@ export class Database {
     }
 
     async invalidateSession(sid: Pending['id'] & Session['id']): Promise<InvalidatedPending | InvalidatedSession | null> {
-        // TODO: Add Tests
         const transaction = this.#client.createTransaction('invalidate', { isolation_level: 'serializable' });
 
         await transaction.begin();

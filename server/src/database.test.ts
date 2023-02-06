@@ -43,8 +43,27 @@ Deno.test('full OAuth flow', async t => {
         assertArrayIncludes(result, [ office ]);
     });
 
-    await t.step('user OAuth flow', async () => {
+    await t.step('non-existent session invalidation', async () =>
+        assertEquals(await db.invalidateSession(crypto.randomUUID()), null));
+
+    await t.step('pending session invalidation', async () => {
         const { id, nonce, expiration } = await db.generatePendingSession();
+        assert(validate(id));
+        assertEquals(nonce.length, 64);
+        assert(new Date < expiration);
+
+        assert(!(await db.checkValidSession(id)));
+        assertEquals(await db.getUserFromSession(id), null);
+        assertEquals(await db.getPermissionsFromSession(id, office), null);
+
+        const result = await db.invalidateSession(id);
+        assert(result !== null);
+        assertEquals(result.data, { nonce, expiration });
+    });
+
+    const access_token = 'access-token';
+    const { id, nonce, expiration } = await db.generatePendingSession();
+    await t.step('user OAuth flow', async () => {
         assert(validate(id));
         assertEquals(nonce.length, 64);
         assert(new Date < expiration);
@@ -57,13 +76,23 @@ Deno.test('full OAuth flow', async t => {
             id,
             user_id: USER.id,
             expiration,
-            access_token: 'access-token',
+            access_token,
         });
         assertEquals(old, { nonce, expiration });
 
         assert(await db.checkValidSession(id));
         assertEquals(await db.getUserFromSession(id), USER);
         assertEquals(await db.getPermissionsFromSession(id, office), 0);
+    });
+
+    await t.step('valid session invalidation', async () => {
+        const result = await db.invalidateSession(id);
+        assert(result !== null);
+        assertEquals(result.data, {
+            user_id: USER.id,
+            expiration,
+            access_token,
+        });
     });
 
     db.release();
