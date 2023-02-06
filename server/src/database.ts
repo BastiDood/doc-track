@@ -4,7 +4,6 @@ import { Pool, PoolClient } from 'postgres';
 
 import type { Document } from './model/db/document.ts';
 import type { PushSubscription } from './model/db/subscription.ts';
-import { Session, SessionSchema } from './model/db/session.ts';
 
 import { type Barcode, BarcodeSchema } from './model/db/barcode.ts';
 import { type Batch, BatchSchema } from './model/db/batch.ts';
@@ -12,8 +11,9 @@ import { type Category, CategorySchema } from './model/db/category.ts';
 import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
 import { type Office, OfficeSchema } from './model/db/office.ts';
 import { type Pending, PendingSchema } from './model/db/pending.ts';
-import { type User, UserSchema } from './model/db/user.ts';
+import { type Session, SessionSchema } from './model/db/session.ts';
 import { type Staff, StaffSchema } from './model/db/staff.ts';
+import { type User, UserSchema } from './model/db/user.ts';
 
 export interface InvalidatedPending {
     valid: false;
