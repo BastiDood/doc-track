@@ -6,6 +6,21 @@ import { Pool } from 'postgres';
 import { Database } from '../../database.ts';
 import { type Invitation, InvitationSchema } from '../../model/db/invitation.ts';
 
+/**
+ * Revokes a pre-existing email invitation in the office.
+ *
+ * # Inputs
+ * - Requires a valid session ID of a system operator.
+ * - Accepts the user's current `office` context as a query parameter.
+ * - Accepts the `office` and `email` of the {@linkcode Invitation} to revoke.
+ *
+ * # Outputs
+ * - `200` => return JSON body containing `permission` and `creation` of the deleted {@linkcode Invitation}
+ * - `400` => office query parameter or request body is unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `404` => requested {@linkcode Invitation} is non-existent
+ */
 export async function handleRevokeInvitation(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
