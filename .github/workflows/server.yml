@@ -18,7 +18,9 @@ jobs:
       - name: Setup Repository
         uses: actions/checkout@v3
       - name: Install PostgreSQL Client
-        run: sudo apt-get install -y postgresql-client
+        run: |
+          sudo apt update
+          sudo apt-get install -y postgresql-client
       # https://github.com/actions/runner-images/blob/8361bb299ba9290b70b6ed8bf337456714c6516d/images/linux/Ubuntu2204-Readme.md#postgresql
       - name: Startup Built-in PostgreSQL Server
         run: |
