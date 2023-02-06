@@ -77,9 +77,9 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
         });
 
         if (offices === null)
-        info(`[Callback] Returning user ${idToken.sub} logged in`);
+            info(`[Callback] Returning user ${idToken.sub} logged in`);
         else
-        info(`[Callback] New user joined offices ${offices}`);
+            info(`[Callback] New user joined offices ${offices}`);
 
         // Upgrade the pending session
         const { nonce } = await db.upgradeSession({

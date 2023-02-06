@@ -15,39 +15,25 @@ import { Category, CategorySchema } from '../../model/db/category.ts';
  *
  * # Outputs
  * - `200` => return {@linkcode Response} containing {@linkcode Category[]} as JSON body
- * - `400` => `office` parameter is absent or otherwise malformed.
  * - `401` => session ID is absent, expired, or otherwise malformed
  */
-export async function handleGetAllCategories(pool: Pool, req: Request, params: URLSearchParams) {
+export async function handleGetAllCategories(pool: Pool, req: Request) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Category] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
     }
 
-    const office = params.get('office');
-    if (!office) {
-        error('[Category] Absent office parameter');
-        return new Response(null, { status: Status.BadRequest });
-    }
-
-    const oid = parseInt(office, 10);
-    if (isNaN(oid)) {
-        error('[Category] Malformed office parameter');
-        return new Response(null, { status: Status.BadRequest });
-    }
-
     const db = await Database.fromPool(pool);
     try {
-        const permissions = await db.getPermissionsFromSession(sid, oid);
-        if (permissions === null) {
-            error(`[Category] Invalid session ${sid}`);
-            return new Response(null, { status: Status.Unauthorized });
+        if (await db.checkValidSession(sid)) {
+            const categories: Category[] = await db.getAllCategories();
+            info('[Category] Fetched all categories');
+            return new Response(JSON.stringify(categories));
         }
 
-        const categories: Category[] = await db.getAllCategories();
-        info('[Category] Fetched all categories');
-        return new Response(JSON.stringify(categories));
+        error(`[Category] Invalid session ${sid}`);
+        return new Response(null, { status: Status.Unauthorized });
     } finally {
         db.release();
     }

@@ -15,7 +15,7 @@ export function handleGet(pool: Pool, req: Request) {
     switch (pathname) {
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
-        case '/api/categories': return handleGetAllCategories(pool, req, searchParams);
+        case '/api/categories': return handleGetAllCategories(pool, req);
         default: return new Response(null, { status: Status.NotFound });
     }
 }

@@ -44,7 +44,6 @@ Deno.test('full OAuth flow', async t => {
         assertEquals(nonce.length, 64);
         assert(new Date < expiration);
 
-
         assert(!(await db.checkValidSession(id)));
         assertEquals(await db.getUserFromSession(id), null);
         assertEquals(await db.getPermissionsFromSession(id, office), null);

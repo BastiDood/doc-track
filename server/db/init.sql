@@ -63,7 +63,7 @@ CREATE TABLE staff(
 CREATE TABLE batch(
     id SERIAL NOT NULL,
     generator GoogleUserId,
-    office SMALLINT NOT NULL ,
+    office SMALLINT NOT NULL,
     creation TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id),
     FOREIGN KEY (generator, office) REFERENCES staff (user_id, office)
