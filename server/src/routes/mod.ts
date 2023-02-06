@@ -7,7 +7,7 @@ import {
     handleRenameCategory,
     handleDeleteCategory,
 } from './api/category.ts';
-import { handleCreateOffice } from './api/office.ts';
+import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin } from './auth/mod.ts';
 
@@ -35,6 +35,7 @@ export function handlePut(pool: Pool, req: Request) {
     const { pathname } = new URL(req.url);
     switch (pathname) {
         case '/api/category': return handleRenameCategory(pool, req);
+        case '/api/office': return handleUpdateOffice(pool, req);
         default: return new Response(null, { status: Status.NotFound });
     }
 }
