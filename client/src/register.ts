@@ -10,7 +10,7 @@ async function getSubscription(manager: PushManager): Promise<PushSubscription> 
     });
 
     const body = JSON.stringify(sub.toJSON());
-    const response = await fetch(process.env.SUBSCRIBE_URL, { method: 'POST', body });
+    const response = await fetch('/api/subscribe', { method: 'POST', body });
     if (response.status !== 201) throw new Error('failed to submit subscription');
 
     // TODO: Prompt user that they have been successfully registered.
