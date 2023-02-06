@@ -8,6 +8,7 @@ import {
     handleDeleteCategory,
 } from './api/category.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
+import { handleRevokeInvitation } from './api/invite.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 
@@ -41,9 +42,10 @@ export function handlePut(pool: Pool, req: Request) {
 }
 
 export function handleDelete(pool: Pool, req: Request) {
-    const { pathname } = new URL(req.url);
+    const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/category': return handleDeleteCategory(pool, req);
+        case '/api/invite': return handleRevokeInvitation(pool, req, searchParams);
         case '/auth/logout': return handleLogout(pool, req);
         default: return new Response(null, { status: Status.NotFound });
     }
