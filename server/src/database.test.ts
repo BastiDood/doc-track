@@ -30,13 +30,36 @@ Deno.test('full OAuth flow', async t => {
         assert(await db.updateOffice({ id: office, name: 'Hello' }));
     });
 
-    await t.step('invite user to an office', async () => {
+    await t.step('successfully revoke invites from the system', async () => {
+        const email = 'world@up.edu.ph';
+        const permission = 0;
+        const creation = await db.upsertInvitation({
+            office,
+            email,
+            permission,
+        });
+        assert(new Date > creation);
+
+        const result = await db.revokeInvitation(office, email);
+        assert(result !== null);
+        assertEquals(result, { permission, creation });
+    });
+
+    await t.step('invite user to an office', async t => {
         const creation = await db.upsertInvitation({
             office,
             email: USER.email,
             permission: 0,
         });
         assert(new Date > creation);
+
+        await t.step('invalid revocation of invites', async () => {
+            // Non-existent office, but valid email
+            assertEquals(await db.revokeInvitation(0, USER.email), null);
+
+            // Non-existent email, but valid office
+            assertEquals(await db.revokeInvitation(office, 'user@example.com'), null);
+        });
 
         const result = await db.insertInvitedUser(USER);
         assert(result !== null);

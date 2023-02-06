@@ -102,13 +102,23 @@ export class Database {
 
     /** Upserts a user to the invite list and returns the creation date. */
     async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation']> {
-        const { rows: [ first, ...rest ] } = await this.#client.queryObject`
-            INSERT INTO invitation (office,email,permission)
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`INSERT INTO invitation (office,email,permission)
                 VALUES (${office},${email},${permission})
                 ON CONFLICT (office,email) DO UPDATE SET permission = ${permission}, creation = DEFAULT
                 RETURNING creation`;
         assert(rest.length === 0);
         return InvitationSchema.pick({ creation: true }).parse(first).creation;
+    }
+
+    /** Removes an email from an office's list of invited users. */
+    async revokeInvitation(office: Invitation['office'], email: Invitation['email']): Promise<Omit<Invitation, 'office' | 'email'> | null> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`DELETE FROM invitation WHERE office = ${office} AND email = ${email} RETURNING permission,creation`;
+        assert(rest.length === 0);
+        return first === undefined
+            ? null
+            : InvitationSchema.omit({ office: true, email: true }).parse(first);
     }
 
     /**
