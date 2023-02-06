@@ -4,7 +4,7 @@ import { error, info } from 'log';
 import { Pool } from 'postgres';
 
 import { Database } from '../../database.ts';
-import { Category, CategorySchema } from '../../model/db/category.ts';
+import { type Category, CategorySchema } from '../../model/db/category.ts';
 
 /**
  * Retrieves a list of all the categories in the system.
@@ -28,7 +28,7 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
     try {
         if (await db.checkValidSession(sid)) {
             const categories: Category[] = await db.getAllCategories();
-            info('[Category] Fetched all categories');
+            info(`[Category] Fetched all categories for session ${sid}`);
             return new Response(JSON.stringify(categories));
         }
 
@@ -44,7 +44,7 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the name of the new category as plaintext from the {@linkcode Request} body.
+ * - Accepts the name of the new {@linkcode Category} as plaintext from the {@linkcode Request} body.
  *
  * # Outputs
  * - `201` => return {@linkcode Response} containing the ID `number` of the new category
@@ -62,7 +62,7 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
     // TODO: validate whether this is a legal category name
     const category = await req.text();
     if (!category) {
-        error('[Category] Empty category name');
+        error(`[Category] Session ${sid} failed to create category with empty name`);
         return new Response(null, { status: Status.BadRequest });
     }
 
@@ -70,7 +70,7 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
     try {
         const user = await db.getUserFromSession(sid);
         if (user === null) {
-            error(`[Category] Invalid session`);
+            error(`[Category] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
 
@@ -88,7 +88,7 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the name of the new category as plaintext from the {@linkcode Request} body.
+ * - Accepts the name of the new {@linkcode Category} as plaintext from the {@linkcode Request} body.
  *
  * # Outputs
  * - `204` => {@linkcode Category} successfully renamed
@@ -137,7 +137,7 @@ export async function handleRenameCategory(pool: Pool, req: Request) {
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the to-be-deleted category ID in the {@linkcode Response} body.
+ * - Accepts the to-be-deleted {@linkcode Category} ID in the {@linkcode Response} body.
  *
  * # Outputs
  * - `200` => returns the deleted category name as plaintext in the {@linkcode Response} body
