@@ -7,7 +7,7 @@
         "init": "initdb -D data -U postgres -W",
         "schema": "psql -U postgres -W -f db/init.sql -1",
         "db": "postgres -D data",
-        "start": "deno run --allow-env --allow-net src/main.ts",
+        "start": "deno run --allow-env --allow-net --allow-read src/main.ts",
         "test": "deno test --allow-env --allow-net"
     },
     "fmt": {
@@ -19,16 +19,17 @@
         }
     },
     "imports": {
-        "@static": "../client/dist/parcel-manifest.json",
         "asserts": "https://deno.land/std@0.177.0/testing/asserts.ts",
         "base64url": "https://deno.land/std@0.177.0/encoding/base64url.ts",
         "cookie": "https://deno.land/std@0.177.0/http/cookie.ts",
+        "content-type": "https://deno.land/std@0.177.0/media_types/content_type.ts",
         "hex": "https://deno.land/std@0.177.0/encoding/hex.ts",
         "http": "https://deno.land/std@0.177.0/http/http_status.ts",
-        "itertools": "https://deno.land/x/itertools@v1.1.0/builtins.ts",
         "log": "https://deno.land/std@0.177.0/log/mod.ts",
-        "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
+        "posix": "https://deno.land/std@0.177.0/path/posix.ts",
         "uuid": "https://deno.land/std@0.177.0/uuid/v4.ts",
+        "itertools": "https://deno.land/x/itertools@v1.1.0/builtins.ts",
+        "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
         "zod": "https://deno.land/x/zod@v3.20.2/mod.ts"
     }
 }
