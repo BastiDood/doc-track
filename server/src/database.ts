@@ -170,15 +170,13 @@ export class Database {
      * This allows the use case where an admin requires a forced generation of new batches for printing.
      */
     async generateBatch({ office, generator }: Pick<Batch, 'office' | 'generator'>): Promise<Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] }> {
-        // TODO: Add Tests
-
         const transaction = this.#client.createTransaction('batch');
         await transaction.begin();
 
         // TODO: Check User Permissions
 
         const { rows: [ first, ...rest ] } = await transaction
-            .queryObject`INSERT INTO batch (office,generator) VALUES (${generator},${office}) RETURNING id,creation`;
+            .queryObject`INSERT INTO batch (office,generator) VALUES (${office},${generator}) RETURNING id,creation`;
         assert(rest.length === 0);
 
         const { id, creation } = BatchSchema.omit({ office: true, generator: true }).parse(first);
@@ -200,17 +198,16 @@ export class Database {
     async getBarcodesOfCurrentBatch(): Promise<MinBatch> {
         // TODO: Add Tests
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`SELECT MIN(b.batch),coalesce(array_agg(b.code AS codes),'{}')
-                FROM barcode AS b LEFT JOIN document AS d ON b.code = d.id
+            .queryObject`SELECT MIN(b.batch),coalesce(array_agg(b.code),'{}') AS codes
+                FROM barcode b LEFT JOIN document d ON b.code = d.id
                 WHERE d.id IS NULL
                 GROUP BY b.batch`;
         assert(rest.length === 0);
         return MinBatchSchema.parse(first);
     }
 
-    /** Assigns a barcode to a newly uploaded document. If the barcode has already been reserved, return `false`. */
+    /** Assigns a {@linkcode Barcode} to a newly uploaded {@linkcode Document}. If the barcode has already been reserved, return `false`. */
     async assignBarcodeToDocument({ id, category, title }: Document): Promise<boolean> {
-        // TODO: Add Tests
         // TODO: Do Actual Document Upload
         const { rowCount } = await this.#client
             .queryObject`INSERT INTO document (id,category,title) VALUES (${id},${category},${title}) ON CONFLICT DO NOTHING`;
@@ -225,11 +222,14 @@ export class Database {
      * # Assumption
      * The user has sufficient permissions to add a new system-wide category.
      */
-    async createCategory(name: Category['name']): Promise<Category['id']> {
+    async createCategory(name: Category['name']): Promise<Category['id'] | null> {
+        // TODO: Add Tests for Duplicate Entries
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`INSERT INTO category (name) VALUES (${name}) RETURNING id`;
+            .queryObject`INSERT INTO category (name) VALUES (${name}) ON CONFLICT DO NOTHING RETURNING id`;
         assert(rest.length === 0);
-        return CategorySchema.pick({ id: true }).parse(first).id;
+        return first === undefined
+            ? null
+            : CategorySchema.pick({ id: true }).parse(first).id;
     }
 
     /** Gets a list of all the categories in the system. */

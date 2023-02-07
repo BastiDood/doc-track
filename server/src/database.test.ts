@@ -1,4 +1,5 @@
 import { assert, assertArrayIncludes, assertEquals } from 'asserts';
+import { encode } from 'base64url';
 import { Pool } from 'postgres';
 import { validate } from 'uuid';
 
@@ -16,13 +17,6 @@ const options = {
 Deno.test('full OAuth flow', async t => {
     const pool = new Pool(options, 1, false);
     const db = await Database.fromPool(pool);
-
-    const USER = {
-        id: crypto.randomUUID(),
-        name: 'Hello World',
-        email: 'hello@up.edu.ph',
-        permission: 0,
-    };
 
     const office = await db.createOffice('Test');
     await t.step('update office information', async () => {
@@ -44,6 +38,13 @@ Deno.test('full OAuth flow', async t => {
         assert(result !== null);
         assertEquals(result, { permission, creation });
     });
+
+    const USER = {
+        id: crypto.randomUUID(),
+        name: 'Hello World',
+        email: 'hello@up.edu.ph',
+        permission: 0,
+    };
 
     await t.step('invite user to an office', async t => {
         const creation = await db.upsertInvitation({
@@ -118,6 +119,41 @@ Deno.test('full OAuth flow', async t => {
         });
     });
 
+    await t.step('category tests', async () => {
+        const first = 'Leave of Absence';
+        const id = await db.createCategory(first);
+        assert(id !== null);
+        assertEquals(await db.getAllCategories(), [ { id, name: first } ]);
+
+        const second = 'Request for Drop';
+        assert(await db.renameCategory({ id, name: second }));
+        assertEquals(await db.getAllCategories(), [ { id, name: second } ]);
+        assertEquals(await db.deleteCategory(id), second);
+    });
+
+    const { id: batch, codes } = await db.generateBatch({ office, generator: USER.id });
+    await t.step('batch generation', () => {
+        assert(Number.isSafeInteger(batch));
+        assert(batch > 0);
+        assertEquals(codes.length, 10);
+        // TODO: Test if we are indeed the minimum batch
+    });
+
+    await t.step('document creation', async () => {
+        const [ chosen, ...others ] = codes;
+        assert(chosen);
+        assertEquals(others.length, 9);
+
+        // Randomly generate a category for uniqueness
+        const random = encode(crypto.getRandomValues(new Uint8Array(15)));
+        assertEquals(random.length, 20);
+
+        const category = await db.createCategory(random);
+        assert(category !== null);
+        assert(await db.assignBarcodeToDocument({ id: chosen, category, title: 'DocTrack Team' }));
+        // TODO: Test if we are indeed the minimum batch
+    });
+
     db.release();
     await pool.end();
 });
@@ -128,17 +164,6 @@ Deno.test('database notifications', async t => {
 
     const user1 = 'https://example.com?user=1';
     const user2 = 'https://example.com?user=2';
-
-    await t.step('category tests', async () => {
-        const first = 'Leave of Absence';
-        const id = await db.createCategory(first);
-        assertEquals(await db.getAllCategories(), [ { id, name: first } ]);
-
-        const second = 'Request for Drop';
-        assert(await db.renameCategory({ id, name: second }));
-        assertEquals(await db.getAllCategories(), [ { id, name: second } ]);
-        assertEquals(await db.deleteCategory(id), second);
-    });
 
     // TODO: add documents
 
