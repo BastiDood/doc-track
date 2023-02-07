@@ -1,3 +1,12 @@
+<script>
+    import { register } from './register';
+    const ready = register();
+</script>
+
 <main>
-    Hello World
+    {#await ready}
+        Waiting for service worker...
+    {:then}
+        Hello world!
+    {/await}
 </main>

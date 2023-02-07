@@ -1,4 +1,4 @@
-import { assert } from './assert';
+import { assert } from '../assert';
 import { manifest, version } from '@parcel/service-worker';
 
 async function handleInstall() {
