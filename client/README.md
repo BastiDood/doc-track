@@ -12,7 +12,6 @@ The front-end is powered by the [Svelte] framework, written in [TypeScript], and
 
 **Name** | **Description** | **Required**
 -------- | --------------- | :----------:
-`SUBSCRIBE_URL` | Absolute path to which the front-end will send all subscription requests. | &#x2714;
 `VAPID_PUB_KEY` | [Vapid public key][vapid] which will be used to subscribe to the [Web Push API]. | &#x2714;
 
 [vapid]: https://blog.mozilla.org/services/2016/08/23/sending-vapid-identified-webpush-notifications-via-mozillas-push-service/
@@ -27,7 +26,6 @@ The front-end is powered by the [Svelte] framework, written in [TypeScript], and
 pnpm dlx web-push generate-vapid-keys
 
 # Set up environment variables.
-SUBSCRIBE_URL=
 VAPID_PUB_KEY=
 
 # Install all production and development dependencies.
@@ -35,7 +33,7 @@ VAPID_PUB_KEY=
 # the front-end application.
 pnpm install
 
-# Start the development server. By default,
-# Parcel binds to `http://localhost:1234`.
-pnpm start
+# Build the static assets to `/dist`. To open the file,
+# run the back-end server and navigate to the pages.
+pnpm build
 ```

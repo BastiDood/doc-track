@@ -4,10 +4,7 @@
     "source": [
         "src/pages/index.html"
     ],
-    "scripts": {
-        "start": "parcel",
-        "build": "parcel build"
-    },
+    "scripts": { "build": "parcel build" },
     "devDependencies": {
         "@parcel/config-default": "^2.8.3",
         "@parcel/core": "^2.8.3",
