@@ -1,10 +1,18 @@
-import { assert } from '../assert';
 import { manifest, version } from '@parcel/service-worker';
 
+import { assert } from '../assert';
+
 async function handleInstall() {
+    const INDEX = '/index.html';
+    const files = manifest.map(path => {
+        if (!path.endsWith(INDEX)) return path;
+        return path.slice(0, -INDEX.length) || '/';
+    });
+    console.log(files);
+
     // Pre-cache all the new assets
     const cache = await caches.open(version);
-    return cache.addAll(manifest);
+    return cache.addAll(files);
 }
 
 function* deleteAll(keys: Iterable<string>) {

@@ -9,7 +9,7 @@ specifiers:
   '@plasmohq/parcel-transformer-svelte3': ^0.4.2
   '@types/serviceworker': ^0.0.60
   parcel: ^2.8.3
-  parcel-reporter-bundle-manifest: ^1.0.0
+  path-browserify: ^1.0.1
   svelte: ^3.55.1
   svelte-preprocess: ^5.0.1
   typescript: ^4.9.5
@@ -17,6 +17,7 @@ specifiers:
 
 dependencies:
   '@parcel/service-worker': 2.8.3
+  path-browserify: 1.0.1
 
 devDependencies:
   '@parcel/config-default': 2.8.3_@parcel+core@2.8.3
@@ -26,7 +27,6 @@ devDependencies:
   '@plasmohq/parcel-transformer-svelte3': 0.4.2
   '@types/serviceworker': 0.0.60
   parcel: 2.8.3
-  parcel-reporter-bundle-manifest: 1.0.0_n7hwcw2lcyotwlejnbbvj4b6da
   svelte: 3.55.1
   svelte-preprocess: 5.0.1_4x7phaipmicbaooxtnresslofa
   typescript: 4.9.5
@@ -1599,18 +1599,6 @@ packages:
     resolution: {integrity: sha512-EHQ/jk4/a9hLupIKxTfUsQRej1Yd/0QLQs3vGvIqg5ZtCYSzNhkzHoZc7Zf4e4kUlDaC3Uw8Q/1opOLNN2OKRQ==}
     dev: true
 
-  /parcel-reporter-bundle-manifest/1.0.0_n7hwcw2lcyotwlejnbbvj4b6da:
-    resolution: {integrity: sha512-/fQDwYWT9LsXRddNikci9Jox6bJdKnfGKpnVd4++1TRUYRLXvFVGQjyGZg8Gsu/JQN6psST8ilRmpg61yN37pQ==}
-    engines: {node: '>= 12.0.0', parcel: ^2.0.0}
-    peerDependencies:
-      parcel: ^2.0.0
-    dependencies:
-      '@parcel/plugin': 2.8.3_@parcel+core@2.8.3
-      parcel: 2.8.3
-    transitivePeerDependencies:
-      - '@parcel/core'
-    dev: true
-
   /parcel/2.8.3:
     resolution: {integrity: sha512-5rMBpbNE72g6jZvkdR5gS2nyhwIXaJy8i65osOqs/+5b7zgf3eMKgjSsDrv6bhz3gzifsba6MBJiZdBckl+vnA==}
     engines: {node: '>= 12.0.0'}
@@ -1666,6 +1654,10 @@ packages:
       no-case: 3.0.4
       tslib: 2.5.0
     dev: true
+
+  /path-browserify/1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
+    dev: false
 
   /path-is-absolute/1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
