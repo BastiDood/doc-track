@@ -1,6 +1,8 @@
+import { assert } from 'asserts';
 import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
+import { serveListener } from 'server';
 
 import { env } from './env.ts';
 import {
@@ -30,18 +32,10 @@ function handle(req: Request) {
     }
 }
 
-info('[Server] Initialized');
-for await (const conn of Deno.listen({ port: env.PORT })) {
-    const { rid, remoteAddr, localAddr } = conn;
-    if (remoteAddr.transport !== 'tcp' || localAddr.transport !== 'tcp')
-        continue;
+const listener = Deno.listen({ port: env.PORT });
+assert(listener.addr.transport === 'tcp');
+info(`[Server] Initialized at ${listener.addr.hostname}:${listener.addr.port}`);
 
-    info(`[Connection ${rid}] ${remoteAddr.hostname}:${remoteAddr.port} => ${localAddr.hostname}:${localAddr.port}`);
-    for await (const { request, respondWith } of Deno.serveHttp(conn)) {
-        info(`[HTTP] ${request.method} ${request.url}`);
-        await respondWith(handle(request));
-    }
-}
-
+await serveListener(listener, handle);
 await pool.end();
 info('[Server] Closed');
