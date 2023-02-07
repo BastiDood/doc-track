@@ -24,8 +24,8 @@ export async function handleGet(pool: Pool, req: Request) {
         case '/auth/callback': return handleCallback(pool, req, searchParams);
         case '/': {
             const path = '../client/dist' + join(pathname, 'index.html');
-            const file = await Deno.open(path);
-            return new Response(file.readable, {
+            const { readable } = await Deno.open(path);
+            return new Response(readable, {
                 headers: { 'Content-Type': 'text/html; charset=utf-8' },
             });
         }
@@ -41,9 +41,9 @@ export async function handleGet(pool: Pool, req: Request) {
 
     const path = '../client/dist' + pathname;
     try {
-        const file = await Deno.open(path);
+        const { readable } = await Deno.open(path);
         info(`[GET] Read static file ${path}`);
-        return new Response(file.readable, { headers: { 'Content-Type': mime } });
+        return new Response(readable, { headers: { 'Content-Type': mime } });
     } catch (err) {
         assertInstanceOf(err, Deno.errors.NotFound);
         error(`[GET] ${pathname} not found`);
