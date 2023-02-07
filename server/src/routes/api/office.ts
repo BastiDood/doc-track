@@ -43,7 +43,10 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
         // TODO: check global permissions
         const office = await db.createOffice(name);
         info(`[Office] User ${user.id} ${user.name} <${user.email}> created new office ${office} "${name}"`);
-        return new Response(office.toString(), { status: Status.Created });
+        return new Response(office.toString(), {
+            headers: { 'Content-Type': 'application/json' },
+            status: Status.Created,
+        });
     } finally {
         db.release();
     }
@@ -71,7 +74,7 @@ export async function handleUpdateOffice(pool: Pool, req: Request) {
 
     const result = OfficeSchema.safeParse(await req.json());
     if (!result.success) {
-        error(`[Office] Session ${sid} failed to update office`);
+        error(`[Office] Session ${sid} provided malformed input`);
         return new Response(null, { status: Status.BadRequest });
     }
 
@@ -87,11 +90,11 @@ export async function handleUpdateOffice(pool: Pool, req: Request) {
         const office: Office = result.data;
         if (await db.updateOffice(office)) {
             info(`[Office] User ${user.id} ${user.name} <${user.email}> updated office ${office.id} to "${office.name}"`);
-            return new Response(office.toString(), { status: Status.NoContent });
+            return new Response(null, { status: Status.NoContent });
         }
 
         error(`[Office] User ${user.id} ${user.name} <${user.email}> attempted to update non-existent office ${office.id} to "${office.name}"`);
-        return new Response(office.toString(), { status: Status.NotFound });
+        return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();
     }

@@ -63,7 +63,10 @@ export async function handleRevokeInvitation(pool: Pool, req: Request, params: U
         }
 
         info(`[Invite] Session ${sid} revoked invitation <${email}> from office ${office}`);
-        return new Response(JSON.stringify(revokeResult), { status: Status.OK });
+        return new Response(JSON.stringify(revokeResult), {
+            headers: { 'Content-Type': 'application/json' },
+            status: Status.OK,
+        });
     } finally {
         db.release();
     }

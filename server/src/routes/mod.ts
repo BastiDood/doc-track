@@ -19,14 +19,16 @@ import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 export async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
-        case '/': {
-            const path = '../client/dist' + join(pathname, 'index.html');
-            const file = await Deno.open(path);
-            return new Response(file.readable);
-        }
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
+        case '/': {
+            const path = '../client/dist' + join(pathname, 'index.html');
+            const file = await Deno.open(path);
+            return new Response(file.readable, {
+                headers: { 'Content-Type': 'text/html; charset=utf-8' },
+            });
+        }
         default: break;
 
     }

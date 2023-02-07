@@ -29,7 +29,9 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
         if (await db.checkValidSession(sid)) {
             const categories: Category[] = await db.getAllCategories();
             info(`[Category] Fetched all categories for session ${sid}`);
-            return new Response(JSON.stringify(categories));
+            return new Response(JSON.stringify(categories), {
+                headers: { 'Content-Type': 'application/json' },
+            });
         }
 
         error(`[Category] Invalid session ${sid}`);
@@ -77,7 +79,10 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
         // TODO: check global permissions
         const id = await db.createCategory(category);
         info(`[Category] User ${user.id} ${user.name} <${user.email}> added new category ${id} "${category}"`);
-        return new Response(id.toString(), { status: Status.Created });
+        return new Response(id.toString(), {
+            headers: { 'Content-Type': 'application/json' },
+            status: Status.Created,
+        });
     } finally {
         db.release();
     }
@@ -171,7 +176,9 @@ export async function handleDeleteCategory(pool: Pool, req: Request) {
         const name = await db.deleteCategory(id);
         if (name) {
             info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${id} "${name}"`);
-            return new Response(name);
+            return new Response(name, {
+                headers: { 'Content-Type': 'text/plain' },
+            });
         }
 
         error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${id}`);
