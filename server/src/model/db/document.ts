@@ -1,14 +1,13 @@
 import { z } from 'zod';
 
+import { BarcodeId } from './barcode.ts';
 import { CategoryId } from './category.ts';
-
-export const DocumentId = z.string().uuid();
 
 // NOTE: File BLOB is notably excluded from here.
 export const DocumentSchema = z.object({
-    id: DocumentId,
-    title: z.string().min(1).max(40),
+    id: BarcodeId,
     category: CategoryId,
+    title: z.string().min(1).max(40),
 });
 
 export type Document = z.infer<typeof DocumentSchema>;

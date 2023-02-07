@@ -15,12 +15,12 @@ import { type Session, SessionSchema } from './model/db/session.ts';
 import { type Staff, StaffSchema } from './model/db/staff.ts';
 import { type User, UserSchema } from './model/db/user.ts';
 
-export interface InvalidatedPending {
+type InvalidatedPending = {
     valid: false;
     data: Omit<Pending, 'id'>;
 }
 
-export interface InvalidatedSession {
+type InvalidatedSession = {
     valid: true;
     data: Omit<Session, 'id'>;
 }
@@ -157,19 +157,23 @@ export class Database {
         return invites.map(i => i.office);
     }
 
-    /** Blindly creates a new batch of barcodes. */
-    async generateBatch(user: Batch['generator'], office: Batch['office']): Promise<Pick<Batch, 'id' | 'creation'> & { codes: Barcode['code'][] }> {
+    /**
+     * Blindly creates a new batch of barcodes. No validation of previous batches is performed.
+     * This allows the use case where an admin requires a forced generation of new batches for printing.
+     */
+    async generateBatch({ office, generator }: Pick<Batch, 'office' | 'generator'>): Promise<Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] }> {
         // TODO: Add Tests
 
         const transaction = this.#client.createTransaction('batch');
         await transaction.begin();
 
         // TODO: Check User Permissions
-        // TODO: Check Previous Batches
-        const { rows: [ first, ...rest ] } = await transaction.queryObject`INSERT INTO batch (generator,office) VALUES (${user},${office}) RETURNING id,creation`;
+
+        const { rows: [ first, ...rest ] } = await transaction
+            .queryObject`INSERT INTO batch (office,generator) VALUES (${generator},${office}) RETURNING id,creation`;
         assert(rest.length === 0);
 
-        const { id, creation } = BatchSchema.pick({ id: true, creation: true }).parse(first);
+        const { id, creation } = BatchSchema.omit({ office: true, generator: true }).parse(first);
 
         // TODO: Let the Operator decide how many barcodes are pre-allocated per batch.
         const codes: Barcode['code'][] = [];
@@ -182,6 +186,19 @@ export class Database {
 
         await transaction.commit();
         return { id, creation, codes };
+    }
+
+    /** Assigns a barcode to a newly uploaded document. If the barcode has already been reserved, return `false`. */
+    async assignBarcodeToDocument({ id, category, title }: Document): Promise<boolean> {
+        // TODO: Add Tests
+        // TODO: Do Actual Document Upload
+        const { rowCount } = await this.#client
+            .queryObject`INSERT INTO document (id,category,title) VALUES (${id},${category},${title}) ON CONFLICT DO NOTHING`;
+        switch (rowCount) {
+            case 0: return false;
+            case 1: return true;
+            default: unreachable();
+        }
     }
 
     /**
