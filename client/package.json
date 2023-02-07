@@ -1,9 +1,7 @@
 {
     "name": "client",
     "version": "0.1.0",
-    "source": [
-        "src/pages/index.html"
-    ],
+    "source": [ "src/pages/index.html" ],
     "scripts": { "build": "parcel build" },
     "devDependencies": {
         "@parcel/config-default": "^2.8.3",

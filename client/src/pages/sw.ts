@@ -8,7 +8,6 @@ async function handleInstall() {
         if (!path.endsWith(INDEX)) return path;
         return path.slice(0, -INDEX.length) || '/';
     });
-    console.log(files);
 
     // Pre-cache all the new assets
     const cache = await caches.open(version);
