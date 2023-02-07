@@ -1,12 +1,13 @@
 import { assert, unreachable } from 'asserts';
 import { range } from 'itertools';
 import { Pool, PoolClient } from 'postgres';
+import { z } from 'zod';
 
 import type { Document } from './model/db/document.ts';
 import type { PushSubscription } from './model/db/subscription.ts';
 
-import { type Barcode, BarcodeSchema } from './model/db/barcode.ts';
-import { type Batch, BatchSchema } from './model/db/batch.ts';
+import { type Barcode, BarcodeSchema, BarcodeId } from './model/db/barcode.ts';
+import { type Batch, BatchSchema, BatchId } from './model/db/batch.ts';
 import { type Category, CategorySchema } from './model/db/category.ts';
 import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
 import { type Office, OfficeSchema } from './model/db/office.ts';
@@ -24,6 +25,13 @@ type InvalidatedSession = {
     valid: true;
     data: Omit<Session, 'id'>;
 }
+
+const MinBatchSchema = z.object({
+    batch: BatchId,
+    codes: BarcodeId.array(),
+});
+
+type MinBatch = z.infer<typeof MinBatchSchema>;
 
 export class Database {
     #client: PoolClient;
@@ -186,6 +194,18 @@ export class Database {
 
         await transaction.commit();
         return { id, creation, codes };
+    }
+
+    /** Returns a list of oldest available {@linkcode Barcode} IDs. */
+    async getBarcodesOfCurrentBatch(): Promise<MinBatch> {
+        // TODO: Add Tests
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`SELECT MIN(b.batch),coalesce(array_agg(b.code AS codes),'{}')
+                FROM barcode AS b LEFT JOIN document AS d ON b.code = d.id
+                WHERE d.id IS NULL
+                GROUP BY b.batch`;
+        assert(rest.length === 0);
+        return MinBatchSchema.parse(first);
     }
 
     /** Assigns a barcode to a newly uploaded document. If the barcode has already been reserved, return `false`. */
