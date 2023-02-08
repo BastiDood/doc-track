@@ -31,6 +31,6 @@
         "uuid": "https://deno.land/std@0.177.0/uuid/v4.ts",
         "itertools": "https://deno.land/x/itertools@v1.1.0/builtins.ts",
         "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
-        "zod": "https://deno.land/x/zod@v3.20.2/mod.ts"
+        "zod": "https://deno.land/x/zod@v3.20.3/mod.ts"
     }
 }
