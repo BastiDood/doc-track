@@ -290,14 +290,12 @@ export class Database {
         const { rows: [ first, ...rest ], deleted } = await this.#deleteOrElseDeprecateCategory(id);
         assert(rest.length === 0);
 
-        // TODO: Add Tests for Deprecation Path
         if (first === undefined) return null;
         const { name } = CategorySchema.pick({ name: true }).parse(first);
         return { name, deleted };
     }
 
     async activateCategory(id: Category['id']): Promise<Category['name'] | null> {
-        // TODO: Add Tests for Deprecation Path
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`UPDATE category SET active = TRUE WHERE id = ${id} RETURNING name`;
         assertStrictEquals(rest.length, 0);

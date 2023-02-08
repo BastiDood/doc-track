@@ -1,4 +1,4 @@
-import { assert, assertArrayIncludes, assertEquals, assertStrictEquals } from 'asserts';
+import { assert, assertArrayIncludes, assertEquals, assertStrictEquals, equal } from 'asserts';
 import { encode } from 'base64url';
 import { Pool } from 'postgres';
 import { validate } from 'uuid';
@@ -147,19 +147,36 @@ Deno.test('full OAuth flow', async t => {
         // TODO: Test if we are indeed the minimum batch
     });
 
+    // Randomly generate a category for uniqueness
+    const random = encode(crypto.getRandomValues(new Uint8Array(15)));
+    assertStrictEquals(random.length, 20);
+
+    const category = await db.createCategory(random);
+    assert(category !== null);
+
     await t.step('document creation', async () => {
         const [ chosen, ...others ] = codes;
         assert(chosen);
         assertStrictEquals(others.length, 9);
 
-        // Randomly generate a category for uniqueness
-        const random = encode(crypto.getRandomValues(new Uint8Array(15)));
-        assertStrictEquals(random.length, 20);
-
-        const category = await db.createCategory(random);
-        assert(category !== null);
         assert(await db.assignBarcodeToDocument({ id: chosen, category, title: 'DocTrack Team' }));
         // TODO: Test if we are indeed the minimum batch
+    });
+
+    await t.step('category deprecation and activation', async () => {
+        // Deprecation
+        const result = await db.deleteCategory(category);
+        assert(result !== null);
+        assertEquals(result, { name: random, deleted: false });
+
+        // Not in any of the active categories
+        const active = await db.getActiveCategories();
+        assert(!active.some(cat => equal(cat, { id: category, name: random })));
+
+        // Activation
+        const activation = await db.activateCategory(category);
+        assertEquals(activation, random);
+        assertArrayIncludes(await db.getActiveCategories(), [ { id: category, name: random } ]);
     });
 
     db.release();
