@@ -120,17 +120,23 @@ Deno.test('full OAuth flow', async t => {
     });
 
     await t.step('category tests', async () => {
+        assertEquals(await db.activateCategory(0), null);
         assertEquals(await db.deleteCategory(0), null);
+
         const first = 'Leave of Absence';
         const id = await db.createCategory(first);
         assert(id !== null);
+        assertEquals(await db.activateCategory(id), first);
         assertArrayIncludes(await db.getActiveCategories(), [ { id, name: first } ]);
 
         const second = 'Request for Drop';
         assert(await db.renameCategory({ id, name: second }));
+        assertEquals(await db.activateCategory(id), second);
         assertArrayIncludes(await db.getActiveCategories(), [ { id, name: second } ]);
         assertEquals(await db.deleteCategory(id), { name: second, deleted: true });
-        assertEquals(await db.deleteCategory(0), null);
+
+        assertEquals(await db.activateCategory(id), null);
+        assertEquals(await db.deleteCategory(id), null);
     });
 
     const { id: batch, codes } = await db.generateBatch({ office, generator: USER.id });

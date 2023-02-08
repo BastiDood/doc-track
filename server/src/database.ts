@@ -1,4 +1,4 @@
-import { assert, assertInstanceOf, unreachable } from 'asserts';
+import { assert, assertStrictEquals, assertInstanceOf, unreachable } from 'asserts';
 import { range } from 'itertools';
 import { Pool, PoolClient, PostgresError } from 'postgres';
 import { z } from 'zod';
@@ -278,10 +278,20 @@ export class Database {
         const { rows: [ first, ...rest ], deleted } = await this.#deleteOrElseDeprecateCategory(id);
         assert(rest.length === 0);
 
-        // TODO: Test Deprecation Path
+        // TODO: Add Tests for Deprecation Path
         if (first === undefined) return null;
         const { name } = CategorySchema.pick({ name: true }).parse(first);
         return { name, deleted };
+    }
+
+    async activateCategory(id: Category['id']): Promise<Category['name'] | null> {
+        // TODO: Add Tests for Deprecation Path
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`UPDATE category SET active = TRUE WHERE id = ${id} RETURNING name`;
+        assertStrictEquals(rest.length, 0);
+        return first === undefined
+            ? null
+            : CategorySchema.pick({ name: true }).parse(first).name;
     }
 
     /** Register a push subscription to be used later for notifying a user. */
