@@ -1,4 +1,4 @@
-import { assert, assertArrayIncludes, assertEquals } from 'asserts';
+import { assert, assertArrayIncludes, assertEquals, assertStrictEquals } from 'asserts';
 import { encode } from 'base64url';
 import { Pool } from 'postgres';
 import { validate } from 'uuid';
@@ -56,10 +56,10 @@ Deno.test('full OAuth flow', async t => {
 
         await t.step('invalid revocation of invites', async () => {
             // Non-existent office, but valid email
-            assertEquals(await db.revokeInvitation(0, USER.email), null);
+            assertStrictEquals(await db.revokeInvitation(0, USER.email), null);
 
             // Non-existent email, but valid office
-            assertEquals(await db.revokeInvitation(office, 'user@example.com'), null);
+            assertStrictEquals(await db.revokeInvitation(office, 'user@example.com'), null);
         });
 
         const result = await db.insertInvitedUser(USER);
@@ -68,17 +68,17 @@ Deno.test('full OAuth flow', async t => {
     });
 
     await t.step('non-existent session invalidation', async () =>
-        assertEquals(await db.invalidateSession(crypto.randomUUID()), null));
+        assertStrictEquals(await db.invalidateSession(crypto.randomUUID()), null));
 
     await t.step('pending session invalidation', async () => {
         const { id, nonce, expiration } = await db.generatePendingSession();
         assert(validate(id));
-        assertEquals(nonce.length, 64);
+        assertStrictEquals(nonce.length, 64);
         assert(new Date < expiration);
 
         assert(!(await db.checkValidSession(id)));
-        assertEquals(await db.getUserFromSession(id), null);
-        assertEquals(await db.getPermissionsFromSession(id, office), null);
+        assertStrictEquals(await db.getUserFromSession(id), null);
+        assertStrictEquals(await db.getPermissionsFromSession(id, office), null);
 
         const result = await db.invalidateSession(id);
         assert(result !== null);
@@ -89,12 +89,12 @@ Deno.test('full OAuth flow', async t => {
     const { id, nonce, expiration } = await db.generatePendingSession();
     await t.step('user OAuth flow', async () => {
         assert(validate(id));
-        assertEquals(nonce.length, 64);
+        assertStrictEquals(nonce.length, 64);
         assert(new Date < expiration);
 
         assert(!(await db.checkValidSession(id)));
-        assertEquals(await db.getUserFromSession(id), null);
-        assertEquals(await db.getPermissionsFromSession(id, office), null);
+        assertStrictEquals(await db.getUserFromSession(id), null);
+        assertStrictEquals(await db.getPermissionsFromSession(id, office), null);
 
         const old = await db.upgradeSession({
             id,
@@ -106,7 +106,7 @@ Deno.test('full OAuth flow', async t => {
 
         assert(await db.checkValidSession(id));
         assertEquals(await db.getUserFromSession(id), USER);
-        assertEquals(await db.getPermissionsFromSession(id, office), 0);
+        assertStrictEquals(await db.getPermissionsFromSession(id, office), 0);
     });
 
     await t.step('valid session invalidation', async () => {
@@ -120,8 +120,8 @@ Deno.test('full OAuth flow', async t => {
     });
 
     await t.step('category tests', async () => {
-        assertEquals(await db.activateCategory(0), null);
-        assertEquals(await db.deleteCategory(0), null);
+        assertStrictEquals(await db.activateCategory(0), null);
+        assertStrictEquals(await db.deleteCategory(0), null);
 
         const first = 'Leave of Absence';
         const id = await db.createCategory(first);
@@ -135,26 +135,26 @@ Deno.test('full OAuth flow', async t => {
         assertArrayIncludes(await db.getActiveCategories(), [ { id, name: second } ]);
         assertEquals(await db.deleteCategory(id), { name: second, deleted: true });
 
-        assertEquals(await db.activateCategory(id), null);
-        assertEquals(await db.deleteCategory(id), null);
+        assertStrictEquals(await db.activateCategory(id), null);
+        assertStrictEquals(await db.deleteCategory(id), null);
     });
 
     const { id: batch, codes } = await db.generateBatch({ office, generator: USER.id });
     await t.step('batch generation', () => {
         assert(Number.isSafeInteger(batch));
         assert(batch > 0);
-        assertEquals(codes.length, 10);
+        assertStrictEquals(codes.length, 10);
         // TODO: Test if we are indeed the minimum batch
     });
 
     await t.step('document creation', async () => {
         const [ chosen, ...others ] = codes;
         assert(chosen);
-        assertEquals(others.length, 9);
+        assertStrictEquals(others.length, 9);
 
         // Randomly generate a category for uniqueness
         const random = encode(crypto.getRandomValues(new Uint8Array(15)));
-        assertEquals(random.length, 20);
+        assertStrictEquals(random.length, 20);
 
         const category = await db.createCategory(random);
         assert(category !== null);

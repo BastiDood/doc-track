@@ -71,13 +71,13 @@ export class Database {
 
         const { rows: [ first, ...rest ] } = await transaction
             .queryObject`DELETE FROM pending WHERE id = ${id} RETURNING nonce,expiration`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
         const old = PendingSchema.omit({ id: true }).parse(first);
 
         const { rowCount } = await transaction.queryArray`
             INSERT INTO session (id,user_id,expiration,access_token)
                 VALUES (${id},${user_id},${expiration.toISOString()},${access_token})`;
-        assert(rowCount === 1);
+        assertStrictEquals(rowCount, 1);
 
         await transaction.commit();
         return old;
@@ -89,10 +89,10 @@ export class Database {
         await transaction.begin();
         const { rows: [ pendingFirst, ...pendingRest ] } = await transaction
             .queryObject`DELETE FROM pending WHERE id = ${sid} RETURNING nonce,expiration`;
-        assert(pendingRest.length === 0);
+        assertStrictEquals(pendingRest.length, 0);
         const { rows: [ sessionFirst, ...sessionRest ] } = await transaction
             .queryObject`DELETE FROM session WHERE id = ${sid} RETURNING user_id,expiration,access_token`;
-        assert(sessionRest.length === 0);
+        assertStrictEquals(sessionRest.length, 0);
         await transaction.commit();
 
         const pending = PendingSchema.omit({ id: true }).optional().parse(pendingFirst);
@@ -115,7 +115,7 @@ export class Database {
                 VALUES (${office},${email},${permission})
                 ON CONFLICT (office,email) DO UPDATE SET permission = ${permission}, creation = DEFAULT
                 RETURNING creation`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
         return InvitationSchema.pick({ creation: true }).parse(first).creation;
     }
 
@@ -123,7 +123,7 @@ export class Database {
     async revokeInvitation(office: Invitation['office'], email: Invitation['email']): Promise<Omit<Invitation, 'office' | 'email'> | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`DELETE FROM invitation WHERE office = ${office} AND email = ${email} RETURNING permission,creation`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
             : InvitationSchema.omit({ office: true, email: true }).parse(first);
@@ -177,7 +177,7 @@ export class Database {
 
         const { rows: [ first, ...rest ] } = await transaction
             .queryObject`INSERT INTO batch (office,generator) VALUES (${office},${generator}) RETURNING id,creation`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
 
         const { id, creation } = BatchSchema.omit({ office: true, generator: true }).parse(first);
 
@@ -186,7 +186,7 @@ export class Database {
         for (const _ of range(10)) {
             const { rows: [ first, ...rest ] } = await transaction
                 .queryObject`INSERT INTO barcode (batch) VALUES (${id}) RETURNING code`;
-            assert(rest.length === 0);
+            assertStrictEquals(rest.length, 0);
             codes.push(BarcodeSchema.pick({ code: true }).parse(first).code);
         }
 
@@ -202,7 +202,7 @@ export class Database {
                 FROM barcode b LEFT JOIN document d ON b.code = d.id
                 WHERE d.id IS NULL
                 GROUP BY b.batch`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
         return MinBatchSchema.parse(first);
     }
 
@@ -226,7 +226,7 @@ export class Database {
         // TODO: Add Tests for Duplicate Entries
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO category (name) VALUES (${name}) ON CONFLICT DO NOTHING RETURNING id`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
             : CategorySchema.pick({ id: true }).parse(first).id;
@@ -304,7 +304,7 @@ export class Database {
             .queryArray`INSERT INTO subscription (endpoint,expiration,auth,p256dh)
                 VALUES (${endpoint},${expires},${auth},${p256dh})
                 ON CONFLICT (endpoint) DO UPDATE SET expiration = ${expires}`;
-        assert(rowCount === 1);
+        assertStrictEquals(rowCount, 1);
     }
 
     /** Hooks a subscription to a valid document. Returns `false` if already added previously. */
@@ -323,7 +323,7 @@ export class Database {
     async getUserFromSession(sid: Session['id']): Promise<User | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`SELECT u.* FROM session AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.id = ${sid} LIMIT 1`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
             : UserSchema.parse(first);
@@ -333,7 +333,7 @@ export class Database {
     async getPermissionsFromSession(sid: Session['id'], office: Office['id']): Promise<Staff['permission'] | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`SELECT permission FROM session INNER JOIN staff USING (user_id) WHERE session.id = ${sid} AND staff.office = ${office} LIMIT 1`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
             : StaffSchema.pick({ permission: true }).parse(first).permission;
@@ -343,7 +343,7 @@ export class Database {
     async createOffice(name: Office['name']): Promise<Office['id']> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO office (name) VALUES (${name}) RETURNING id`;
-        assert(rest.length === 0);
+        assertStrictEquals(rest.length, 0);
         return OfficeSchema.pick({ id: true }).parse(first).id;
     }
 
