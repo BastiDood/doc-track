@@ -41,8 +41,10 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      - name: Check Type Constraints
+      - name: Check Type Constraints for Main Application
         run: deno check src/main.ts
+      - name: Run Linter
+        run: deno lint
       - name: Run Tests
         run: deno task test
         env:
