@@ -1,3 +1,5 @@
+import { assert } from '../assert';
+
 async function getSubscription(manager: PushManager): Promise<PushSubscription> {
     const maybeSub = await manager.getSubscription();
     if (maybeSub !== null) return maybeSub;
@@ -7,9 +9,27 @@ async function getSubscription(manager: PushManager): Promise<PushSubscription> 
         userVisibleOnly: true,
     });
 
-    const body = JSON.stringify(sub.toJSON());
-    const response = await fetch('/api/subscribe', { method: 'POST', body });
-    if (response.status !== 201) throw new Error('failed to submit subscription');
+    const { endpoint, expirationTime, keys } = sub.toJSON();
+    assert(endpoint);
+    assert(keys);
+
+    const { auth, p256dh } = keys;
+    assert(auth);
+    assert(p256dh);
+
+    const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({
+            endpoint,
+            expiration: expirationTime ?? null,
+            auth,
+            p256dh,
+        }),
+    });
+
+    if (response.status !== 201)
+        throw new Error('failed to submit subscription');
+
     return sub;
 }
 
