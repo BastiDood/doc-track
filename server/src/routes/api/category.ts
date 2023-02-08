@@ -192,3 +192,55 @@ export async function handleDeleteCategory(pool: Pool, req: Request) {
         db.release();
     }
 }
+
+/**
+ * Reactivates an existing system-wide {@linkcode Category}.
+ *
+ * # Inputs
+ * - Requires a valid session ID of a system operator.
+ * - Accepts the to-be-activated {@linkcode Category} ID via the `id` query parameter.
+ *
+ * # Outputs
+ * - `200` => returns the {@linkcode Category} name as plaintext
+ * - `400` => {@linkcode Category} ID is not an integer
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `404` => {@linkcode Category} ID does not exist
+ */
+export async function handleActivateCategory(pool: Pool, req: Request, params: URLSearchParams) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Category] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    const input = params.get('id');
+    const id = input === null ? NaN : parseInt(input);
+    if (isNaN(id)) {
+        error(`[Category] Invalid input from session ${sid}`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const user = await db.getUserFromSession(sid);
+        if (user === null) {
+            error(`[Category] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        // TODO: check global permissions
+        const name = await db.activateCategory(id);
+        if (name) {
+            info(`[Category] User ${user.id} ${user.name} <${user.email}> activated category ${id} "${name}"`);
+            return new Response(name, {
+                headers: { 'Content-Type': 'text/plain' },
+            });
+        }
+
+        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${id}`);
+        return new Response(null, { status: Status.NotFound });
+    } finally {
+        db.release();
+    }
+}
