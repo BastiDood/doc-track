@@ -1,12 +1,10 @@
 import { z } from 'zod';
 
-import { BatchId } from './batch.ts';
-
-export const BarcodeId = z.string().uuid();
+import { BatchSchema } from './batch.ts';
 
 export const BarcodeSchema = z.object({
-    code: BarcodeId,
-    batch: BatchId,
+    code: z.string().uuid(),
+    batch: BatchSchema.shape.id,
 });
 
 export type Barcode = z.infer<typeof BarcodeSchema>;

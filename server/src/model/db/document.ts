@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-import { BarcodeId } from './barcode.ts';
-import { CategoryId } from './category.ts';
+import { BarcodeSchema } from './barcode.ts';
+import { CategorySchema } from './category.ts';
 
 // NOTE: File BLOB is notably excluded from here.
 export const DocumentSchema = z.object({
-    id: BarcodeId,
-    category: CategoryId,
+    id: BarcodeSchema.shape.code,
+    category: CategorySchema.shape.id,
     title: z.string().min(1).max(40),
 });
 

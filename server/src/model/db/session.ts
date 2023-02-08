@@ -1,12 +1,11 @@
 import { z } from 'zod';
 
+import { PendingSchema } from './pending.ts';
 import { AccessToken } from '../oauth/google.ts';
 import { GoogleUserId } from '../oauth/openid.ts';
 
-export const SessionId = z.string().min(1);
-
 export const SessionSchema = z.object({
-    id: SessionId,
+    id: PendingSchema.shape.id,
     user_id: GoogleUserId,
     expiration: z.coerce.date(),
     access_token: AccessToken,

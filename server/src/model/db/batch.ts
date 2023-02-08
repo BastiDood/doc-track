@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
-import { OfficeId } from './office.ts';
+import { OfficeSchema } from './office.ts';
 import { GoogleUserId } from '../oauth/openid.ts';
 
 export const BatchId = z.number().int();
 
 export const BatchSchema = z.object({
-    id: BatchId,
+    id: z.number().int().positive(),
     generator: GoogleUserId,
-    office: OfficeId,
+    office: OfficeSchema.shape.id,
     creation: z.coerce.date(),
 });
 

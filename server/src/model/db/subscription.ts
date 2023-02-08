@@ -1,10 +1,8 @@
 import { decode } from 'base64url';
 import { z } from 'zod';
 
-export const PushSubscriptionId = z.string().url();
-
 export const PushSubscriptionSchema = z.object({
-	endpoint: PushSubscriptionId,
+	endpoint: z.string().url(),
 	expirationTime: z.coerce.date(),
     auth: z.instanceof(Uint8Array),
     p256dh: z.instanceof(Uint8Array).refine(bytes => bytes.length === 64),

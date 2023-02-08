@@ -1,9 +1,7 @@
 import { z } from 'zod';
 
-export const PendingId = z.string().uuid();
-
 export const PendingSchema = z.object({
-    id: PendingId,
+    id: z.string().uuid(),
     // Convert the hex format to byte array
     // @see https://www.postgresql.org/docs/current/datatype-binary.html
     nonce: z.instanceof(Uint8Array).refine(bytes => bytes.length === 64),

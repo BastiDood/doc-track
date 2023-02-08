@@ -6,7 +6,7 @@ import { z } from 'zod';
 import type { Document } from './model/db/document.ts';
 import type { PushSubscription } from './model/db/subscription.ts';
 
-import { type Barcode, BarcodeSchema, BarcodeId } from './model/db/barcode.ts';
+import { type Barcode, BarcodeSchema } from './model/db/barcode.ts';
 import { type Batch, BatchSchema, BatchId } from './model/db/batch.ts';
 import { type Category, CategorySchema } from './model/db/category.ts';
 import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
@@ -28,7 +28,7 @@ type InvalidatedSession = {
 
 const MinBatchSchema = z.object({
     batch: BatchId,
-    codes: BarcodeId.array(),
+    codes: BarcodeSchema.shape.code.array(),
 });
 
 type MinBatch = z.infer<typeof MinBatchSchema>;

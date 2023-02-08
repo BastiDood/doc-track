@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 import { Email, Permission } from './common.ts';
-import { OfficeId } from './office.ts';
+import { OfficeSchema } from './office.ts';
 
 export const InvitationSchema = z.object({
-    office: OfficeId,
+    office: OfficeSchema.shape.id,
     email: Email,
     permission: Permission,
     creation: z.coerce.date(),
