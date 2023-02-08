@@ -179,10 +179,10 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
         }
 
         // TODO: check global permissions
-        const name = await db.deleteCategory(id);
-        if (name) {
-            info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${id} "${name}"`);
-            return new Response(JSON.stringify(name), {
+        const result = await db.deleteCategory(id);
+        if (result) {
+            info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${id} "${result}"`);
+            return new Response(JSON.stringify(result), {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
