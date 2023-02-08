@@ -33,7 +33,7 @@ const MinBatchSchema = z.object({
 
 export type MinBatch = z.infer<typeof MinBatchSchema>;
 
-type GeneratedBatch = Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] };
+export type GeneratedBatch = Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] };
 
 export class Database {
     #client: PoolClient;

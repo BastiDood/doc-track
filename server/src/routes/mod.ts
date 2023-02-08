@@ -5,7 +5,7 @@ import { error, info } from 'log';
 import { Pool } from 'postgres';
 import { join, extname } from 'posix';
 
-import { handleGetEarliestAvailableBatch } from './api/batch.ts';
+import { handleGetEarliestAvailableBatch, handleGenerateBatch } from './api/batch.ts';
 import {
     handleGetAllCategories,
     handleCreateCategory,
@@ -57,8 +57,9 @@ export async function handleGet(pool: Pool, req: Request) {
 }
 
 export function handlePost(pool: Pool, req: Request) {
-    const { pathname } = new URL(req.url);
+    const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
+        case '/api/batch': return handleGenerateBatch(pool, req, searchParams);
         case '/api/category': return handleCreateCategory(pool, req);
         case '/api/subscribe': return handleSubscribe(pool, req);
         case '/api/office': return handleCreateOffice(pool, req);
