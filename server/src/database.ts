@@ -1,6 +1,6 @@
-import { assert, unreachable } from 'asserts';
+import { assert, assertInstanceOf, unreachable } from 'asserts';
 import { range } from 'itertools';
-import { Pool, PoolClient } from 'postgres';
+import { Pool, PoolClient, PostgresError } from 'postgres';
 import { z } from 'zod';
 
 import type { Document } from './model/db/document.ts';
@@ -232,10 +232,10 @@ export class Database {
             : CategorySchema.pick({ id: true }).parse(first).id;
     }
 
-    /** Gets a list of all the categories in the system. */
-    async getAllCategories(): Promise<Category[]> {
-        const { rows } = await this.#client.queryObject('SELECT id,name FROM category');
-        return CategorySchema.array().parse(rows);
+    /** Gets a list of all the active categories in the system. */
+    async getActiveCategories(): Promise<Pick<Category, 'id' | 'name'>[]> {
+        const { rows } = await this.#client.queryObject('SELECT id,name FROM category WHERE active');
+        return CategorySchema.pick({ id: true, name: true }).array().parse(rows);
     }
 
     /**
@@ -244,7 +244,7 @@ export class Database {
      * # Assumption
      * The user has sufficient permissions to add a new system-wide category.
      */
-    async renameCategory({ id, name }: Category): Promise<boolean> {
+    async renameCategory({ id, name }: Pick<Category, 'id' | 'name'>): Promise<boolean> {
         const { rowCount } = await this.#client
             .queryObject`UPDATE category SET name = ${name} WHERE id = ${id}`;
         switch (rowCount) {
@@ -254,17 +254,34 @@ export class Database {
         }
     }
 
+    async #deleteOrElseDeprecateCategory(id: Category['id']): Promise<{ deleted: boolean, rows: unknown[] }> {
+        try {
+            const { rows } = await this.#client
+                .queryObject`DELETE FROM category WHERE id = ${id} RETURNING name`;
+            return { rows, deleted: true };
+        } catch (err) {
+            assertInstanceOf(err, PostgresError);
+            const { rows } = await this.#client
+                .queryObject`UPDATE category SET active = FALSE WHERE id = ${id} RETURNING name`;
+            return { rows, deleted: false };
+        }
+    }
+
     /**
+     * Deletes a {@linkcode Category} if there are no documents referencing it.
+     * Otherwise, it is internally marked as "deprecated".
+     *
      * # Assumption
      * The user has sufficient permissions to add a new system-wide category.
      */
-    async deleteCategory(id: Category['id']): Promise<Category['name'] | null> {
-        const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`DELETE FROM category WHERE id = ${id} RETURNING name`;
+    async deleteCategory(id: Category['id']): Promise<{ name: Category['name'], deleted: boolean } | null> {
+        const { rows: [ first, ...rest ], deleted } = await this.#deleteOrElseDeprecateCategory(id);
         assert(rest.length === 0);
-        return first === undefined
-            ? null
-            : CategorySchema.pick({ name: true }).parse(first).name;
+
+        // TODO: Test Deprecation Path
+        if (first === undefined) return null;
+        const { name } = CategorySchema.pick({ name: true }).parse(first);
+        return { name, deleted };
     }
 
     /** Register a push subscription to be used later for notifying a user. */

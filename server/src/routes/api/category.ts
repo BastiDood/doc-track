@@ -27,7 +27,7 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
     const db = await Database.fromPool(pool);
     try {
         if (await db.checkValidSession(sid)) {
-            const categories: Category[] = await db.getAllCategories();
+            const categories: Pick<Category, 'id' | 'name'>[] = await db.getActiveCategories();
             info(`[Category] Fetched all categories for session ${sid}`);
             return new Response(JSON.stringify(categories), {
                 headers: { 'Content-Type': 'application/json' },
