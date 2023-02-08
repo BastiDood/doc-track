@@ -33,6 +33,8 @@ const MinBatchSchema = z.object({
 
 type MinBatch = z.infer<typeof MinBatchSchema>;
 
+type GeneratedBatch = Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] };
+
 export class Database {
     #client: PoolClient;
 
@@ -149,7 +151,7 @@ export class Database {
         }
 
         // Check the invite list first
-        assert(rowCount === 0);
+        assertStrictEquals(rowCount, 0);
         const { rows } = await transaction
             .queryObject`DELETE FROM invitation WHERE email = ${email} RETURNING office,permission`;
         const invites = InvitationSchema.pick({ office: true, permission: true }).array().parse(rows);
@@ -165,11 +167,21 @@ export class Database {
         return invites.map(i => i.office);
     }
 
+    /** Adds a pre-existing user to the staff of an office. */
+    async upsertUserToStaff({ user_id, office, permission }: Staff) {
+        // TODO: Add Tests
+        const { rowCount } = await this.#client
+            .queryArray`INSERT INTO staff (user_id,office,permission)
+                VALUES (${user_id},${office},${permission})
+                ON CONFLICT (user_id,office) DO UPDATE SET permission = ${permission}`;
+        assertStrictEquals(rowCount, 1);
+    }
+
     /**
      * Blindly creates a new batch of barcodes. No validation of previous batches is performed.
      * This allows the use case where an admin requires a forced generation of new batches for printing.
      */
-    async generateBatch({ office, generator }: Pick<Batch, 'office' | 'generator'>): Promise<Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] }> {
+    async generateBatch({ office, generator }: Pick<Batch, 'office' | 'generator'>): Promise<GeneratedBatch> {
         const transaction = this.#client.createTransaction('batch');
         await transaction.begin();
 
