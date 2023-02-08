@@ -15,6 +15,7 @@ import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleRevokeInvitation } from './api/invite.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
+import { handleVapidPublicKey } from './vapid/public.ts';
 
 export async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
@@ -22,6 +23,7 @@ export async function handleGet(pool: Pool, req: Request) {
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
+        case '/vapid': return handleVapidPublicKey();
         case '/': {
             const path = '../client/dist' + join(pathname, 'index.html');
             const { readable } = await Deno.open(path);
