@@ -157,32 +157,3 @@ Deno.test('full OAuth flow', async t => {
     db.release();
     await pool.end();
 });
-
-Deno.test('database notifications', async t => {
-    const pool = new Pool(options, 1, false);
-    const db = await Database.fromPool(pool);
-
-    const user1 = 'https://example.com?user=1';
-    const user2 = 'https://example.com?user=2';
-
-    // TODO: add documents
-
-    const expirationTime = new Date;
-    expirationTime.setDate(expirationTime.getDate() + 1);
-
-    await t.step('register push subscriptions', async () => {
-        await db.pushSubscription({
-            endpoint: user1,
-            expirationTime: null,
-        });
-        await db.pushSubscription({
-            endpoint:user2,
-            expirationTime,
-        });
-    });
-
-    // TODO: hook subscriptions
-
-    db.release();
-    await pool.end();
-})

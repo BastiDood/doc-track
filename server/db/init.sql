@@ -101,6 +101,8 @@ CREATE TABLE snapshot(
 CREATE TABLE subscription(
     endpoint Endpoint,
     expiration Expiration,
+    auth BYTEA NOT NULL,
+    p256dh BYTEA NOT NULL,
     PRIMARY KEY (endpoint)
 );
 

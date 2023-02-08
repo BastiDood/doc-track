@@ -268,11 +268,15 @@ export class Database {
     }
 
     /** Register a push subscription to be used later for notifying a user. */
-    async pushSubscription({ endpoint, expirationTime }: PushSubscription) {
+    async pushSubscription({ endpoint, expirationTime, auth, p256dh }: PushSubscription) {
+        // TODO: Add Tests
+        // TODO: Convert keys to bit strings
         // TODO: Add Tests with Document Bindings
         const expires = expirationTime?.toISOString() || 'infinity';
         const { rowCount } = await this.#client
-            .queryArray`INSERT INTO subscription (endpoint,expiration) VALUES (${endpoint},${expires}) ON CONFLICT (endpoint) DO UPDATE SET expiration = ${expires}`;
+            .queryArray`INSERT INTO subscription (endpoint,expiration,auth,p256dh)
+                VALUES (${endpoint},${expires},${auth},${p256dh})
+                ON CONFLICT (endpoint) DO UPDATE SET expiration = ${expires}`;
         assert(rowCount === 1);
     }
 
