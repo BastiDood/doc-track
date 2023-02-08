@@ -11,7 +11,7 @@ import { type Invitation, InvitationSchema } from '../../model/db/invitation.ts'
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the user's current `office` context as a query parameter.
+ * - Accepts the user's current {@linkcode Office} ID via the `office` query parameter.
  * - Accepts the `office` and `email` of the {@linkcode Invitation} to revoke.
  *
  * # Outputs

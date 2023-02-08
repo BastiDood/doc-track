@@ -147,23 +147,24 @@ export async function handleRenameCategory(pool: Pool, req: Request) {
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the to-be-deleted {@linkcode Category} ID in the {@linkcode Response} body.
+ * - Accepts the to-be-deleted {@linkcode Category} ID via the `id` query parameter.
  *
  * # Outputs
- * - `200` => returns JSON in the {@linkcode Resposne} body indicating the {@linkcode Category} `name` and whether it was `deleted`
+ * - `200` => returns JSON in the {@linkcode Response} body indicating the {@linkcode Category} `name` and whether it was `deleted`
  * - `400` => {@linkcode Category} ID is not an integer
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => {@linkcode Category} ID does not exist
  */
-export async function handleDeleteCategory(pool: Pool, req: Request) {
+export async function handleDeleteCategory(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Category] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
     }
 
-    const id = parseInt(await req.text(), 10);
+    const input = params.get('id');
+    const id = input === null ? NaN : parseInt(input);
     if (isNaN(id)) {
         error('[Category] Malformed category ID');
         return new Response(null, { status: Status.BadRequest });
