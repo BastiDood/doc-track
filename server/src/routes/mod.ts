@@ -10,6 +10,7 @@ import {
     handleCreateCategory,
     handleRenameCategory,
     handleDeleteCategory,
+    handleActivateCategory,
 } from './api/category.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleRevokeInvitation } from './api/invite.ts';
@@ -65,6 +66,16 @@ export function handlePost(pool: Pool, req: Request) {
     }
 }
 
+export function handlePatch(pool: Pool, req: Request) {
+    const { pathname, searchParams } = new URL(req.url);
+    switch (pathname) {
+        case '/api/category': return handleActivateCategory(pool, req, searchParams);
+        default:
+            error(`[PATCH] ${pathname} not found`);
+            return new Response(null, { status: Status.NotFound });
+    }
+}
+
 export function handlePut(pool: Pool, req: Request) {
     const { pathname } = new URL(req.url);
     switch (pathname) {
@@ -79,7 +90,7 @@ export function handlePut(pool: Pool, req: Request) {
 export function handleDelete(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
-        case '/api/category': return handleDeleteCategory(pool, req);
+        case '/api/category': return handleDeleteCategory(pool, req, searchParams);
         case '/api/invite': return handleRevokeInvitation(pool, req, searchParams);
         case '/auth/logout': return handleLogout(pool, req);
         default:
