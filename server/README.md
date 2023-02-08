@@ -21,6 +21,7 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 `PG_PASSWORD` | Provided password when logging into [PostgreSQL]. | &#x274c; |
 `PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `postgres`
 `PG_POOL` | Maximum number of pooled connections reserved by the [PostgreSQL] client. | &#x274c; | `4`
+`VAPID_PUB_KEY` | [Vapid public key][vapid] which will be used to interact with the [Web Push API]. | &#x2714; |
 `VAPID_PRV_KEY` | [Vapid private key][vapid] which will be used to subscribe to the [Web Push API]. | &#x2714; |
 
 [vapid]: https://blog.mozilla.org/services/2016/08/23/sending-vapid-identified-webpush-notifications-via-mozillas-push-service/
@@ -48,8 +49,8 @@ In a separate terminal, run the following script to start the Deno server proper
 deno task schema
 
 # If you have not yet run this command before, place the
-# private key into the `VAPID_PRV_KEY` environment variable.
-# Otherwise, skip this step.
+# public and private keys into the `VAPID_PUB_KEY` and the
+# `VAPID_PRV_KEY` environment variables, respectively.
 pnpm dlx web-push generate-vapid-keys
 
 # Set up (example) environment variables.
@@ -63,6 +64,7 @@ PG_DATABASE=postgres
 PG_PASSWORD=
 PG_USER=postgres
 PG_PORT=5432
+VAPID_PUB_KEY=
 VAPID_PRV_KEY=
 
 # Starts the server at `0.0.0.0:3000`.

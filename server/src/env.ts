@@ -1,4 +1,5 @@
 import { assert } from 'asserts';
+import { decode } from 'base64url';
 
 const PORT = Deno.env.get('PORT');
 assert(PORT);
@@ -27,6 +28,9 @@ const PG_USER = Deno.env.get('PG_USER') || 'postgres';
 
 const PG_POOL = Deno.env.get('PG_POOL');
 
+const VAPID_PUB_KEY = Deno.env.get('VAPID_PUB_KEY');
+assert(VAPID_PUB_KEY);
+
 const VAPID_PRV_KEY = Deno.env.get('VAPID_PRV_KEY');
 assert(VAPID_PRV_KEY);
 
@@ -42,5 +46,6 @@ export const env = {
     PG_PORT: PG_PORT ? parseInt(PG_PORT, 10) : 5432,
     PG_USER,
     PG_POOL: PG_POOL ? parseInt(PG_POOL, 10) : 4,
-    VAPID_PRV_KEY,
+    VAPID_PUB_KEY: decode(VAPID_PUB_KEY),
+    VAPID_PRV_KEY: decode(VAPID_PRV_KEY),
 };
