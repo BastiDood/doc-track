@@ -32,6 +32,9 @@ function route(method: string) {
     }
 }
 
+const controller = new AbortController()
+Deno.addSignalListener('SIGINT', () => controller.abort());
+
 const listener = Deno.listen({ port: env.PORT });
 assert(listener.addr.transport === 'tcp');
 info(`[Server] Initialized at ${listener.addr.hostname}:${listener.addr.port}`);
@@ -41,7 +44,7 @@ await serveListener(listener, req => {
     if (handler !== null) return handler(pool, req);
     error(`[${req.method}] Unsupported`);
     return new Response(null, { status: Status.NotImplemented });
-});
+}, { signal: controller.signal });
 
 await pool.end();
 info('[Server] Closed');
