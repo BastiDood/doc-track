@@ -56,5 +56,5 @@ jobs:
           PG_USER: 'runner'
           PG_PASSWORD: 'runner'
           PG_POOL: 1
-          VAPID_PRV_KEY: 'vapid-pub-key'
+          VAPID_PUB_KEY: 'vapid-pub-key'
           VAPID_PRV_KEY: 'vapid-prv-key'
