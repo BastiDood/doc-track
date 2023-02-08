@@ -50,7 +50,7 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
  *
  * # Outputs
  * - `201` => return {@linkcode Response} containing the ID `number` of the new category
- * - `400` => category name is unacceptable
+ * - `400` => category name is duplicated or otherwise unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  */
@@ -78,6 +78,11 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
 
         // TODO: check global permissions
         const id = await db.createCategory(category);
+        if (id === null) {
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to create duplicate category "${category}"`);
+            return new Response(null, { status: Status.BadRequest });
+        }
+
         info(`[Category] User ${user.id} ${user.name} <${user.email}> added new category ${id} "${category}"`);
         return new Response(id.toString(), {
             headers: { 'Content-Type': 'application/json' },
