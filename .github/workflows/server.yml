@@ -14,6 +14,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
     steps:
       - name: Setup Repository
         uses: actions/checkout@v3
@@ -33,13 +36,13 @@ jobs:
           # Then allocate a database for it.
           sudo -u postgres createdb -O runner doctrack
       - name: Setup PostgreSQL Database
-        run: PGPASSWORD=runner psql -f server/db/init.sql -1 doctrack
+        run: PGPASSWORD=runner psql -f db/init.sql -1 doctrack
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
       - name: Run Tests
-        run: deno task --cwd server test
+        run: deno task test
         env:
           # Many of these are just dummy values.
           PORT: 3000
