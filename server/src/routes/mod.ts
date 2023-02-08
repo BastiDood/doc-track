@@ -5,6 +5,7 @@ import { error, info } from 'log';
 import { Pool } from 'postgres';
 import { join, extname } from 'posix';
 
+import { handleGetEarliestAvailableBatch } from './api/batch.ts';
 import {
     handleGetAllCategories,
     handleCreateCategory,
@@ -12,8 +13,8 @@ import {
     handleDeleteCategory,
     handleActivateCategory,
 } from './api/category.ts';
-import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleRevokeInvitation } from './api/invite.ts';
+import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 import { handleVapidPublicKey } from './vapid/public.ts';
@@ -21,6 +22,7 @@ import { handleVapidPublicKey } from './vapid/public.ts';
 export async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
+        case '/api/batch': return handleGetEarliestAvailableBatch(pool, req);
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);

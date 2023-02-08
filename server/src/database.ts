@@ -31,7 +31,7 @@ const MinBatchSchema = z.object({
     codes: BarcodeSchema.shape.code.array(),
 });
 
-type MinBatch = z.infer<typeof MinBatchSchema>;
+export type MinBatch = z.infer<typeof MinBatchSchema>;
 
 type GeneratedBatch = Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] };
 
