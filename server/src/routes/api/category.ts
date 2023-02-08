@@ -150,7 +150,7 @@ export async function handleRenameCategory(pool: Pool, req: Request) {
  * - Accepts the to-be-deleted {@linkcode Category} ID in the {@linkcode Response} body.
  *
  * # Outputs
- * - `200` => returns the deleted category name as plaintext in the {@linkcode Response} body
+ * - `200` => returns JSON in the {@linkcode Resposne} body indicating the {@linkcode Category} `name` and whether it was `deleted`
  * - `400` => {@linkcode Category} ID is not an integer
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
@@ -181,8 +181,8 @@ export async function handleDeleteCategory(pool: Pool, req: Request) {
         const name = await db.deleteCategory(id);
         if (name) {
             info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${id} "${name}"`);
-            return new Response(name, {
-                headers: { 'Content-Type': 'text/plain' },
+            return new Response(JSON.stringify(name), {
+                headers: { 'Content-Type': 'application/json' },
             });
         }
 
