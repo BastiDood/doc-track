@@ -207,7 +207,7 @@ export class Database {
     }
 
     /** Returns a list of oldest available {@linkcode Barcode} IDs. */
-    async getBarcodesOfCurrentBatch(): Promise<MinBatch> {
+    async getEarliestAvailableBatch(): Promise<MinBatch | null> {
         // TODO: Add Tests
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`SELECT MIN(b.batch),coalesce(array_agg(b.code),'{}') AS codes
@@ -215,7 +215,9 @@ export class Database {
                 WHERE d.id IS NULL
                 GROUP BY b.batch`;
         assertStrictEquals(rest.length, 0);
-        return MinBatchSchema.parse(first);
+        return first === undefined
+            ? null
+            : MinBatchSchema.parse(first);
     }
 
     /** Assigns a {@linkcode Barcode} to a newly uploaded {@linkcode Document}. If the barcode has already been reserved, return `false`. */
