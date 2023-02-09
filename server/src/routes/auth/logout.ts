@@ -1,4 +1,4 @@
-import { getCookies } from 'cookie';
+import { getCookies, setCookie } from 'cookie';
 import { Status } from 'http';
 import { error, info, warning } from 'log';
 import { Pool } from 'postgres';
@@ -13,6 +13,14 @@ export async function handleLogout(pool: Pool, req: Request) {
         error('[Logout] Attempted to log out without session');
         return new Response(null, { headers, status: Status.Found });
     }
+
+    setCookie(headers, {
+        name: 'sid',
+        value: sid,
+        expires: new Date(0),
+        httpOnly: true,
+        sameSite: 'Lax',
+    });
 
     const db = await Database.fromPool(pool);
     try {
