@@ -32,7 +32,7 @@ function route(method: string) {
     }
 }
 
-const controller = new AbortController()
+const controller = new AbortController();
 Deno.addSignalListener('SIGINT', () => controller.abort());
 
 const listener = Deno.listen({ port: env.PORT });
