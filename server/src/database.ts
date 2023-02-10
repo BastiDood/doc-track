@@ -1,6 +1,6 @@
-import { assert, assertStrictEquals, assertInstanceOf, unreachable } from 'asserts';
+import { assert, assertStrictEquals, unreachable } from 'asserts';
 import { range } from 'itertools';
-import { Pool, PoolClient, PostgresError } from 'postgres';
+import { Pool, PoolClient } from 'postgres';
 import { z } from 'zod';
 
 import type { Document } from './model/db/document.ts';
@@ -268,20 +268,6 @@ export class Database {
         }
     }
 
-    async #deleteOrElseDeprecateCategory(id: Category['id']): Promise<{ deleted: boolean, rows: unknown[] }> {
-        try {
-            const { rows } = await this.#client
-                .queryObject`DELETE FROM category WHERE id = ${id} RETURNING name`;
-            return { rows, deleted: true };
-        } catch (err) {
-            assertInstanceOf(err, PostgresError);
-            assertStrictEquals(err.fields.code, '23503'); // foreign_key_violation
-            const { rows } = await this.#client
-                .queryObject`UPDATE category SET active = FALSE WHERE id = ${id} RETURNING name`;
-            return { rows, deleted: false };
-        }
-    }
-
     /**
      * Deletes a {@linkcode Category} if there are no documents referencing it.
      * Otherwise, it is internally marked as "deprecated".
@@ -289,13 +275,13 @@ export class Database {
      * # Assumption
      * The user has sufficient permissions to add a new system-wide category.
      */
-    async deleteCategory(id: Category['id']): Promise<{ name: Category['name'], deleted: boolean } | null> {
-        const { rows: [ first, ...rest ], deleted } = await this.#deleteOrElseDeprecateCategory(id);
-        assert(rest.length === 0);
-
-        if (first === undefined) return null;
-        const { name } = CategorySchema.pick({ name: true }).parse(first);
-        return { name, deleted };
+    async deleteCategory(id: Category['id']): Promise<boolean | null> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`SELECT delete_or_else_deprecate_category(${id}) AS result`;
+        assertStrictEquals(rest.length, 0);
+        return first === undefined
+            ? null
+            : z.object({ result: z.boolean().nullable() }).parse(first).result;
     }
 
     async activateCategory(id: Category['id']): Promise<Category['name'] | null> {

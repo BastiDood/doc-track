@@ -150,7 +150,8 @@ export async function handleRenameCategory(pool: Pool, req: Request) {
  * - Accepts the to-be-deleted {@linkcode Category} ID via the `id` query parameter.
  *
  * # Outputs
- * - `200` => returns JSON in the {@linkcode Response} body indicating the {@linkcode Category} `name` and whether it was `deleted`
+ * - `202` => successful deletion
+ * - `204` => successful deprecation (i.e., not permanently deleted)
  * - `400` => {@linkcode Category} ID is not an integer
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
@@ -180,15 +181,13 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
 
         // TODO: check global permissions
         const result = await db.deleteCategory(id);
-        if (result) {
-            info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${id} "${result}"`);
-            return new Response(JSON.stringify(result), {
-                headers: { 'Content-Type': 'application/json' },
-            });
+        if (result === null) {
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${id}`);
+            return new Response(null, { status: Status.NotFound });
         }
 
-        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${id}`);
-        return new Response(null, { status: Status.NotFound });
+        info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${id} "${result}"`);
+        return new Response(null, { status: result ? Status.NoContent : Status.Accepted });
     } finally {
         db.release();
     }

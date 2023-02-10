@@ -131,7 +131,7 @@ Deno.test('full OAuth flow', async t => {
         assert(await db.renameCategory({ id, name: second }));
         assertEquals(await db.activateCategory(id), second);
         assertArrayIncludes(await db.getActiveCategories(), [ { id, name: second } ]);
-        assertEquals(await db.deleteCategory(id), { name: second, deleted: true });
+        assert(await db.deleteCategory(id));
 
         assertStrictEquals(await db.activateCategory(id), null);
         assertStrictEquals(await db.deleteCategory(id), null);
@@ -146,8 +146,8 @@ Deno.test('full OAuth flow', async t => {
     });
 
     // Randomly generate a category for uniqueness
-    const random = encode(crypto.getRandomValues(new Uint8Array(15)));
-    assertStrictEquals(random.length, 20);
+    const random = encode(crypto.getRandomValues(new Uint8Array(14)));
+    assertStrictEquals(random.length, 19);
 
     const category = await db.createCategory(random);
     assert(category !== null);
@@ -164,8 +164,7 @@ Deno.test('full OAuth flow', async t => {
     await t.step('category deprecation and activation', async () => {
         // Deprecation
         const result = await db.deleteCategory(category);
-        assert(result !== null);
-        assertEquals(result, { name: random, deleted: false });
+        assertStrictEquals(result, false);
 
         // Not in any of the active categories
         const active = await db.getActiveCategories();

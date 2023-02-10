@@ -120,3 +120,18 @@ CREATE TABLE invitation(
     creation TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (office, email)
 );
+
+CREATE TYPE CategoryDeprecation AS (name VARCHAR(20), deleted BOOLEAN);
+
+CREATE FUNCTION delete_or_else_deprecate_category(category_id category.id%TYPE) RETURNS BOOLEAN AS $$
+    DECLARE
+        deleted BOOLEAN;
+    BEGIN
+        DELETE FROM category WHERE id = category_id RETURNING TRUE INTO deleted;
+        RETURN deleted;
+    EXCEPTION
+        WHEN foreign_key_violation THEN
+            UPDATE category SET active = FALSE WHERE id = category_id RETURNING FALSE INTO deleted;
+            RETURN deleted;
+    END;
+$$ LANGUAGE plpgsql;
