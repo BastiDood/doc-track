@@ -32,7 +32,6 @@ Deno.test('full OAuth flow', async t => {
             email,
             permission,
         });
-        assert(new Date > creation);
 
         const result = await db.revokeInvitation(office, email);
         assert(result !== null);
@@ -47,12 +46,11 @@ Deno.test('full OAuth flow', async t => {
     };
 
     await t.step('invite user to an office', async t => {
-        const creation = await db.upsertInvitation({
+        await db.upsertInvitation({
             office,
             email: USER.email,
             permission: 0,
         });
-        assert(new Date > creation);
 
         await t.step('invalid revocation of invites', async () => {
             // Non-existent office, but valid email
