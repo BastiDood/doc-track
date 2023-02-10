@@ -275,6 +275,7 @@ export class Database {
             return { rows, deleted: true };
         } catch (err) {
             assertInstanceOf(err, PostgresError);
+            assertStrictEquals(parseInt(err.fields.code, 10), 23503); // foreign_key_violation
             const { rows } = await this.#client
                 .queryObject`UPDATE category SET active = FALSE WHERE id = ${id} RETURNING name`;
             return { rows, deleted: false };
