@@ -181,13 +181,13 @@ export class Database {
 
     /**
      * Deletes a {@linkcode Staff} if there are no batches referencing it.
-     * Otherwise, it is internally marked as "retired".
+     * Otherwise, it is internally marked as "retired" (i.e., all permissions
+     * will be revoked).
      *
-     * # Assumption
-     * The user has sufficient permissions to add a new system-wide category.
+     * @returns `true` if successfully deleted
      */
-    async deleteStaff(uid: Staff['user_id'], oid: Staff['office']): Promise<boolean | null> {
-        // TODO: Add Tests
+    async removeStaff(uid: Staff['user_id'], oid: Staff['office']): Promise<boolean | null> {
+        // TODO: Add Tests for Deletion Case
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`SELECT delete_or_else_retire_staff(${uid},${oid}) AS result`;
         assertStrictEquals(rest.length, 0);

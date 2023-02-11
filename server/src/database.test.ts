@@ -42,17 +42,29 @@ Deno.test('full OAuth flow', async t => {
         id: crypto.randomUUID(),
         name: 'Hello World',
         email: 'hello@up.edu.ph',
-        permission: 0,
+        permission: 1,
     };
 
+    await t.step('invalid retirement of staff', async () => {
+        // Non-existent office, but valid user
+        assertStrictEquals(await db.removeStaff(USER.id, 0), null);
+
+        // Non-existent user, but valid office
+        assertStrictEquals(await db.removeStaff(crypto.randomUUID(), office), null);
+    });
+
     await t.step('invite user to an office', async t => {
-        await db.upsertInvitation({
+        const invite = {
             office,
             email: USER.email,
-            permission: 0,
-        });
+            permission: USER.permission,
+        };
+        const creation = await db.upsertInvitation(invite);
 
         await t.step('invalid revocation of invites', async () => {
+            // Non-existent office and email
+            assertStrictEquals(await db.revokeInvitation(0, 'user@example.com'), null);
+
             // Non-existent office, but valid email
             assertStrictEquals(await db.revokeInvitation(0, USER.email), null);
 
@@ -60,6 +72,30 @@ Deno.test('full OAuth flow', async t => {
             assertStrictEquals(await db.revokeInvitation(office, 'user@example.com'), null);
         });
 
+        await t.step('retirement of non-existent staff', async () => {
+            // Example UUID of non-existent user
+            const badUser = crypto.randomUUID();
+
+            // Non-existent office and user
+            assertStrictEquals(await db.removeStaff(badUser, 0), null);
+
+            // Non-existent office, but valid user
+            assertStrictEquals(await db.removeStaff(USER.id, 0), null);
+
+            // Non-existent user, but valid office
+            assertStrictEquals(await db.removeStaff(badUser, office), null);
+
+            // Valid user and office
+            assertStrictEquals(await db.removeStaff(USER.id, office), null);
+        });
+
+        await t.step('valid revocation', async () =>
+            assertEquals(await db.revokeInvitation(office, USER.email), {
+                creation,
+                permission: USER.permission,
+            }));
+
+        await db.upsertInvitation(invite);
         const result = await db.insertInvitedUser(USER);
         assert(result !== null);
         assertArrayIncludes(result, [ office ]);
@@ -104,17 +140,7 @@ Deno.test('full OAuth flow', async t => {
 
         assert(await db.checkValidSession(id));
         assertEquals(await db.getUserFromSession(id), USER);
-        assertStrictEquals(await db.getPermissionsFromSession(id, office), 0);
-    });
-
-    await t.step('valid session invalidation', async () => {
-        const result = await db.invalidateSession(id);
-        assert(result !== null);
-        assertEquals(result.data, {
-            user_id: USER.id,
-            expiration,
-            access_token,
-        });
+        assertStrictEquals(await db.getPermissionsFromSession(id, office), USER.permission);
     });
 
     await t.step('category tests', async () => {
@@ -143,6 +169,24 @@ Deno.test('full OAuth flow', async t => {
         assert(batch > 0);
         assertStrictEquals(codes.length, 10);
         // TODO: Test if we are indeed the minimum batch
+    });
+
+    await t.step('valid retirement of staff (no deletion)', async () => {
+        // Previous step created a batch that references the user,
+        // so we expect that the user will simply lose permissions
+        // rather than being completely deleted from the office.
+        assertStrictEquals(await db.removeStaff(USER.id, office), false)
+        assertStrictEquals(await db.getPermissionsFromSession(id, office), 0);
+    });
+
+    await t.step('valid session invalidation', async () => {
+        const result = await db.invalidateSession(id);
+        assert(result !== null);
+        assertEquals(result.data, {
+            user_id: USER.id,
+            expiration,
+            access_token,
+        });
     });
 
     // Randomly generate a category for uniqueness

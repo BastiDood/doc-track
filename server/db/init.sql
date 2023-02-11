@@ -144,7 +144,7 @@ CREATE FUNCTION delete_or_else_retire_staff(uid staff.user_id%TYPE, oid staff.of
         RETURN deleted;
     EXCEPTION
         WHEN foreign_key_violation THEN
-            UPDATE staff SET permission = 0 WHERE user_id = uid AND office = oid RETURNING FALSE INTO deleted;
+            UPDATE staff SET permission = B'0' WHERE user_id = uid AND office = oid RETURNING FALSE INTO deleted;
             RETURN deleted;
     END;
 $$ LANGUAGE plpgsql;
