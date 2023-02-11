@@ -35,6 +35,8 @@ export type MinBatch = z.infer<typeof MinBatchSchema>;
 
 export type GeneratedBatch = Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] };
 
+const DeprecationSchema = z.object({ result: z.boolean().nullable() });
+
 export class Database {
     #client: PoolClient;
 
@@ -178,6 +180,33 @@ export class Database {
     }
 
     /**
+     * Deletes a {@linkcode Staff} if there are no batches referencing it.
+     * Otherwise, it is internally marked as "retired".
+     *
+     * # Assumption
+     * The user has sufficient permissions to add a new system-wide category.
+     */
+    async deleteStaff(uid: Staff['user_id'], oid: Staff['office']): Promise<boolean | null> {
+        // TODO: Add Tests
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`SELECT delete_or_else_retire_staff(${uid},${oid}) AS result`;
+        assertStrictEquals(rest.length, 0);
+        return first === undefined
+            ? null
+            : DeprecationSchema.parse(first).result;
+    }
+
+    /** Reactivates a {@linkcode Staff} member (regardless of whether or not they were previously retired). */
+    async activateStaff(uid: Staff['user_id'], oid: Staff['office']): Promise<Staff['permission'] | null> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`UPDATE staff SET active = DEFAULT WHERE user_id = ${uid} AND office = ${oid} RETURNING permission`;
+        assertStrictEquals(rest.length, 0);
+        return first === undefined
+            ? null
+            : StaffSchema.pick({ permission: true }).parse(first).permission;
+    }
+
+    /**
      * Blindly creates a new batch of barcodes. No validation of previous batches is performed.
      * This allows the use case where an admin requires a forced generation of new batches for printing.
      */
@@ -281,7 +310,7 @@ export class Database {
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
-            : z.object({ result: z.boolean().nullable() }).parse(first).result;
+            : DeprecationSchema.parse(first).result;
     }
 
     async activateCategory(id: Category['id']): Promise<Category['name'] | null> {

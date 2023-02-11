@@ -57,6 +57,7 @@ CREATE TABLE staff(
     user_id GoogleUserId REFERENCES users (id),
     office SMALLINT NOT NULL REFERENCES office (id),
     permission Permission,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY (user_id, office)
 );
 
@@ -132,6 +133,19 @@ CREATE FUNCTION delete_or_else_deprecate_category(category_id category.id%TYPE) 
     EXCEPTION
         WHEN foreign_key_violation THEN
             UPDATE category SET active = FALSE WHERE id = category_id RETURNING FALSE INTO deleted;
+            RETURN deleted;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION delete_or_else_retire_staff(uid staff.user_id%TYPE, oid staff.office%TYPE) RETURNS BOOLEAN AS $$
+    DECLARE
+        deleted BOOLEAN;
+    BEGIN
+        DELETE FROM staff WHERE user_id = uid AND office = oid RETURNING TRUE INTO deleted;
+        RETURN deleted;
+    EXCEPTION
+        WHEN foreign_key_violation THEN
+            UPDATE staff SET active = FALSE WHERE user_id = uid AND office = oid RETURNING FALSE INTO deleted;
             RETURN deleted;
     END;
 $$ LANGUAGE plpgsql;
