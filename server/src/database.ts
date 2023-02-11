@@ -196,16 +196,6 @@ export class Database {
             : DeprecationSchema.parse(first).result;
     }
 
-    /** Reactivates a {@linkcode Staff} member (regardless of whether or not they were previously retired). */
-    async activateStaff(uid: Staff['user_id'], oid: Staff['office']): Promise<Staff['permission'] | null> {
-        const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`UPDATE staff SET active = DEFAULT WHERE user_id = ${uid} AND office = ${oid} RETURNING permission`;
-        assertStrictEquals(rest.length, 0);
-        return first === undefined
-            ? null
-            : StaffSchema.pick({ permission: true }).parse(first).permission;
-    }
-
     /**
      * Blindly creates a new batch of barcodes. No validation of previous batches is performed.
      * This allows the use case where an admin requires a forced generation of new batches for printing.
