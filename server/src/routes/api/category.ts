@@ -150,8 +150,8 @@ export async function handleRenameCategory(pool: Pool, req: Request) {
  * - Accepts the to-be-deleted {@linkcode Category} ID via the `id` query parameter.
  *
  * # Outputs
- * - `202` => successful deletion
- * - `204` => successful deprecation (i.e., not permanently deleted)
+ * - `202` => successful deprecation (i.e., not permanently deleted)
+ * - `204` => successful deletion
  * - `400` => {@linkcode Category} ID is not an integer
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions

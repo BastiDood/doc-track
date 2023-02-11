@@ -18,6 +18,7 @@ import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 import { handleVapidPublicKey } from './vapid/public.ts';
+import { handleRemoveStaff } from './api/staff.ts';
 
 export async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
@@ -95,6 +96,7 @@ export function handleDelete(pool: Pool, req: Request) {
     switch (pathname) {
         case '/api/category': return handleDeleteCategory(pool, req, searchParams);
         case '/api/invite': return handleRevokeInvitation(pool, req, searchParams);
+        case '/api/staff': return handleRemoveStaff(pool, req, searchParams);
         case '/auth/logout': return handleLogout(pool, req);
         default:
             error(`[DELETE] ${pathname} not found`);
