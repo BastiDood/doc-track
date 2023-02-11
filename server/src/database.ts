@@ -313,9 +313,10 @@ export class Database {
             : DeprecationSchema.parse(first).result;
     }
 
+    /** Reactivates a {@linkcode Category}. */
     async activateCategory(id: Category['id']): Promise<Category['name'] | null> {
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`UPDATE category SET active = TRUE WHERE id = ${id} RETURNING name`;
+            .queryObject`UPDATE category SET active = DEFAULT WHERE id = ${id} RETURNING name`;
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
