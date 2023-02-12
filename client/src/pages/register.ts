@@ -12,27 +12,7 @@ async function getSubscription(manager: PushManager): Promise<PushSubscription> 
         userVisibleOnly: true,
     });
 
-    const { endpoint, expirationTime, keys } = sub.toJSON();
-    assert(endpoint);
-    assert(keys);
-
-    const { auth, p256dh } = keys;
-    assert(auth);
-    assert(p256dh);
-
-    const subResponse = await fetch('/api/subscribe', {
-        method: 'POST',
-        body: JSON.stringify({
-            endpoint,
-            expiration: expirationTime ?? null,
-            auth,
-            p256dh,
-        }),
-    });
-
-    if (subResponse.status !== 201)
-        throw new Error('failed to submit subscription');
-
+    assert(await Vapid.sendSubscription(sub.toJSON()));
     return sub;
 }
 
