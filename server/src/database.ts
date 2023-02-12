@@ -4,7 +4,7 @@ import { Pool, PoolClient } from 'postgres';
 import { z } from 'zod';
 
 import type { Document } from './model/db/document.ts';
-import type { PushSubscription } from './model/db/subscription.ts';
+import type { PushSubscription, PushSubscriptionJson } from './model/db/subscription.ts';
 
 import { type Barcode, BarcodeSchema } from './model/db/barcode.ts';
 import { type Batch, BatchSchema, BatchId } from './model/db/batch.ts';
@@ -337,11 +337,11 @@ export class Database {
     }
 
     /** Register a push subscription to be used later for notifying a user. */
-    async pushSubscription({ endpoint, expirationTime, auth, p256dh }: PushSubscription) {
+    async pushSubscription({ endpoint, expiration, auth, p256dh }: PushSubscriptionJson) {
         // TODO: Add Tests
         // TODO: Convert keys to bit strings
         // TODO: Add Tests with Document Bindings
-        const expires = expirationTime?.toISOString() || 'infinity';
+        const expires = expiration?.toISOString() || 'infinity';
         const { rowCount } = await this.#client
             .queryArray`INSERT INTO subscription (endpoint,expiration,auth,p256dh)
                 VALUES (${endpoint},${expires},${auth},${p256dh})

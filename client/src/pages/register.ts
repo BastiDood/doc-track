@@ -1,12 +1,12 @@
+import { Vapid } from '../api/vapid';
 import { assert } from '../assert';
 
 async function getSubscription(manager: PushManager): Promise<PushSubscription> {
     const maybeSub = await manager.getSubscription();
     if (maybeSub !== null) return maybeSub;
 
-    const pubResponse = await fetch('/vapid');
-    assert(pubResponse.ok);
-    const applicationServerKey = await pubResponse.arrayBuffer();
+    const applicationServerKey = await Vapid.getVapidPublicKey();
+    assert(applicationServerKey !== null);
     const sub = await manager.subscribe({
         applicationServerKey,
         userVisibleOnly: true,
