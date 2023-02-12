@@ -18,9 +18,15 @@ Deno.test('full OAuth flow', async t => {
     const pool = new Pool(options, 1, false);
     const db = await Database.fromPool(pool);
 
+    await t.step('setting unknown user and staff permissions', async () => {
+        const bad = crypto.randomUUID();
+        assert(!await db.setUserPermissions(bad, 1));
+        assert(!await db.setStaffPermissions(bad, 0, 1));
+    });
+
     const office = await db.createOffice('Test');
     await t.step('update office information', async () => {
-        assert(!(await db.updateOffice({ id: 0, name: 'Hello' })));
+        assert(!await db.updateOffice({ id: 0, name: 'Hello' }));
         assert(await db.updateOffice({ id: office, name: 'Hello' }));
     });
 
@@ -95,10 +101,12 @@ Deno.test('full OAuth flow', async t => {
                 permission: USER.permission,
             }));
 
-        await db.upsertInvitation(invite);
-        const result = await db.insertInvitedUser(USER);
-        assert(result !== null);
-        assertArrayIncludes(result, [ office ]);
+        await t.step('invite acceptance', async () => {
+            await db.upsertInvitation(invite);
+            const result = await db.insertInvitedUser(USER);
+            assert(result !== null);
+            assertArrayIncludes(result, [ office ]);
+        });
     });
 
     await t.step('non-existent session invalidation', async () =>
@@ -141,6 +149,15 @@ Deno.test('full OAuth flow', async t => {
         assert(await db.checkValidSession(id));
         assertEquals(await db.getUserFromSession(id), USER);
         assertStrictEquals(await db.getPermissionsFromSession(id, office), USER.permission);
+    });
+
+    await t.step('setting user and staff permissions', async () => {
+        assert(await db.setUserPermissions(USER.id, 0b111));
+        assert(await db.setStaffPermissions(USER.id, office, 0b011));
+
+        const user = await db.getUserFromSession(id);
+        assertStrictEquals(user?.permission, 0b111);
+        assertStrictEquals(await db.getPermissionsFromSession(id, office), 0b011);
     });
 
     await t.step('category tests', async () => {
