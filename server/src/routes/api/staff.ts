@@ -29,7 +29,7 @@ export async function handleRemoveStaff(pool: Pool, req: Request, params: URLSea
     }
 
     const input = params.get('office');
-    const oid = input ? parseInt(input) : NaN;
+    const oid = input ? parseInt(input, 10) : NaN;
     if (isNaN(oid)) {
         error(`[Staff] Session ${sid} provided invalid office ID`);
         return new Response(null, { status: Status.BadRequest });

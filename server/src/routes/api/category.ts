@@ -165,7 +165,7 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
     }
 
     const input = params.get('id');
-    const id = input === null ? NaN : parseInt(input);
+    const id = input === null ? NaN : parseInt(input, 10);
     if (isNaN(id)) {
         error('[Category] Malformed category ID');
         return new Response(null, { status: Status.BadRequest });
@@ -215,7 +215,7 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
     }
 
     const input = params.get('id');
-    const id = input === null ? NaN : parseInt(input);
+    const id = input === null ? NaN : parseInt(input, 10);
     if (isNaN(id)) {
         error(`[Category] Invalid input from session ${sid}`);
         return new Response(null, { status: Status.BadRequest });
