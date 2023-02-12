@@ -113,14 +113,18 @@ export class Database {
     }
 
     /** Upserts a user to the invite list and returns the creation date. */
-    async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation']> {
+    async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation'] | null> {
+        // TODO: Check if user is already in the system
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO invitation (office,email,permission)
-                VALUES (${office},${email},${permission})
+                SELECT * FROM (SELECT ${office}::SMALLINT,${email},${permission}::Permission) AS data
+                    WHERE NOT EXISTS (SELECT 1 FROM users AS u WHERE u.email = ${email}) LIMIT 1
                 ON CONFLICT (office,email) DO UPDATE SET permission = ${permission}, creation = DEFAULT
                 RETURNING creation`;
         assertStrictEquals(rest.length, 0);
-        return InvitationSchema.pick({ creation: true }).parse(first).creation;
+        return first === undefined
+            ? null
+            : InvitationSchema.pick({ creation: true }).parse(first).creation;
     }
 
     /** Removes an email from an office's list of invited users. */

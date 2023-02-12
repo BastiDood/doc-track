@@ -38,16 +38,21 @@ Deno.test('full OAuth flow', async t => {
             email,
             permission,
         });
+        assert(creation !== null);
 
         const result = await db.revokeInvitation(office, email);
         assert(result !== null);
         assertEquals(result, { permission, creation });
     });
 
+    // Randomly generate an email for uniqueness
+    const randomEmail = encode(crypto.getRandomValues(new Uint8Array(6)));
+    assertStrictEquals(randomEmail.length, 8);
+
     const USER = {
         id: crypto.randomUUID(),
         name: 'Hello World',
-        email: 'hello@up.edu.ph',
+        email: `${randomEmail}@up.edu.ph`,
         picture: 'https://cdn.google.com/hello.png',
         permission: 1,
     };
@@ -67,6 +72,7 @@ Deno.test('full OAuth flow', async t => {
             permission: USER.permission,
         };
         const creation = await db.upsertInvitation(invite);
+        assert(creation !== null);
 
         await t.step('invalid revocation of invites', async () => {
             // Non-existent office and email
@@ -103,10 +109,17 @@ Deno.test('full OAuth flow', async t => {
             }));
 
         await t.step('invite acceptance', async () => {
-            await db.upsertInvitation(invite);
+            const creation = await db.upsertInvitation(invite);
+            assert(creation !== null);
+
             const result = await db.insertInvitedUser(USER);
             assert(result !== null);
             assertArrayIncludes(result, [ office ]);
+            assertStrictEquals(await db.upsertInvitation({
+                office,
+                email: USER.email,
+                permission: USER.permission,
+            }), null);
         });
     });
 
@@ -208,10 +221,10 @@ Deno.test('full OAuth flow', async t => {
     });
 
     // Randomly generate a category for uniqueness
-    const random = encode(crypto.getRandomValues(new Uint8Array(14)));
-    assertStrictEquals(random.length, 19);
+    const randomCategory = encode(crypto.getRandomValues(new Uint8Array(14)));
+    assertStrictEquals(randomCategory.length, 19);
 
-    const category = await db.createCategory(random);
+    const category = await db.createCategory(randomCategory);
     assert(category !== null);
 
     await t.step('document creation', async () => {
@@ -230,12 +243,12 @@ Deno.test('full OAuth flow', async t => {
 
         // Not in any of the active categories
         const active = await db.getActiveCategories();
-        assert(!active.some(cat => equal(cat, { id: category, name: random })));
+        assert(!active.some(cat => equal(cat, { id: category, name: randomCategory })));
 
         // Activation
         const activation = await db.activateCategory(category);
-        assertEquals(activation, random);
-        assertArrayIncludes(await db.getActiveCategories(), [ { id: category, name: random } ]);
+        assertEquals(activation, randomCategory);
+        assertArrayIncludes(await db.getActiveCategories(), [ { id: category, name: randomCategory } ]);
     });
 
     db.release();
