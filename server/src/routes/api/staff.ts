@@ -56,7 +56,7 @@ export async function handleSetStaffPermissions(pool: Pool, req: Request, params
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: Check permissions
+        // TODO: Check permissions and escalation prevention
         if (await db.setStaffPermissions(user, oid, setPerms)) {
             info(`[Category] Session ${sid} set the staff permissions of user ${user} in office ${oid} as ${setPerms}`);
             return new Response(null, { status: Status.NoContent });

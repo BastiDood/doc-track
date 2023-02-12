@@ -75,15 +75,15 @@ export async function handleGenerateBatch(pool: Pool, req: Request, params: URLS
 
     const db = await Database.fromPool(pool);
     try {
-        const user = await db.getUserFromSession(sid);
-        if (user === null) {
+        const admin = await db.getUserFromSession(sid);
+        if (admin === null) {
             error(`[Batch] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
 
         // TODO: Check Permissions
-        const batch: GeneratedBatch = await db.generateBatch({ office, generator: user.id });
-        info(`[Batch] User ${user.id} ${user.name} <${user.email}> generated new batch ${batch.id} of ${batch.codes.length} barcodes`);
+        const batch: GeneratedBatch = await db.generateBatch({ office, generator: admin.id });
+        info(`[Batch] User ${admin.id} ${admin.name} <${admin.email}> generated new batch ${batch.id} of ${batch.codes.length} barcodes`);
         return new Response(JSON.stringify(batch), {
             headers: { 'Content-Type': 'application/json' },
             status: Status.Created,

@@ -223,8 +223,8 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
 
     const db = await Database.fromPool(pool);
     try {
-        const user = await db.getUserFromSession(sid);
-        if (user === null) {
+        const operator = await db.getUserFromSession(sid);
+        if (operator === null) {
             error(`[Category] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
@@ -232,13 +232,13 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
         // TODO: check global permissions
         const name = await db.activateCategory(id);
         if (name) {
-            info(`[Category] User ${user.id} ${user.name} <${user.email}> activated category ${id} "${name}"`);
+            info(`[Category] User ${operator.id} ${operator.name} <${operator.email}> activated category ${id} "${name}"`);
             return new Response(name, {
                 headers: { 'Content-Type': 'text/plain' },
             });
         }
 
-        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${id}`);
+        error(`[Category] User ${operator.id} ${operator.name} <${operator.email}> attempted to delete non-existent category ${id}`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();

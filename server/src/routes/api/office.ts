@@ -34,15 +34,15 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
 
     const db = await Database.fromPool(pool);
     try {
-        const user = await db.getUserFromSession(sid);
-        if (user === null) {
+        const operator = await db.getUserFromSession(sid);
+        if (operator === null) {
             error(`[Office] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
 
         // TODO: check global permissions
         const office = await db.createOffice(name);
-        info(`[Office] User ${user.id} ${user.name} <${user.email}> created new office ${office} "${name}"`);
+        info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> created new office ${office} "${name}"`);
         return new Response(office.toString(), {
             headers: { 'Content-Type': 'application/json' },
             status: Status.Created,
@@ -80,8 +80,8 @@ export async function handleUpdateOffice(pool: Pool, req: Request) {
 
     const db = await Database.fromPool(pool);
     try {
-        const user = await db.getUserFromSession(sid);
-        if (user === null) {
+        const operator = await db.getUserFromSession(sid);
+        if (operator === null) {
             error(`[Office] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
@@ -89,11 +89,11 @@ export async function handleUpdateOffice(pool: Pool, req: Request) {
         // TODO: check global permissions
         const office: Office = result.data;
         if (await db.updateOffice(office)) {
-            info(`[Office] User ${user.id} ${user.name} <${user.email}> updated office ${office.id} to "${office.name}"`);
+            info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> updated office ${office.id} to "${office.name}"`);
             return new Response(null, { status: Status.NoContent });
         }
 
-        error(`[Office] User ${user.id} ${user.name} <${user.email}> attempted to update non-existent office ${office.id} to "${office.name}"`);
+        error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> attempted to update non-existent office ${office.id} to "${office.name}"`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();
