@@ -18,7 +18,8 @@ import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe } from './api/subscribe.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 import { handleVapidPublicKey } from './vapid/public.ts';
-import { handleRemoveStaff } from './api/staff.ts';
+import { handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
+import { handleSetUserPermissions } from './api/user.ts';
 
 export async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
@@ -74,6 +75,8 @@ export function handlePatch(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/category': return handleActivateCategory(pool, req, searchParams);
+        case '/api/staff': return handleSetStaffPermissions(pool, req, searchParams);
+        case '/api/user': return handleSetUserPermissions(pool, req, searchParams);
         default:
             error(`[PATCH] ${pathname} not found`);
             return new Response(null, { status: Status.NotFound });
