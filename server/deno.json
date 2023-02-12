@@ -5,10 +5,11 @@
     },
     "tasks": {
         "init": "initdb -D data -U postgres -W",
-        "schema": "psql -U postgres -W -f db/init.sql -1",
         "db": "postgres -D data",
-        "start": "deno run --allow-env --allow-net --allow-read src/main.ts",
-        "test": "deno test --allow-env --allow-net"
+        "template": "psql -U postgres -W -f db/init.sql -1 template1",
+        "create": "createdb -U postgres -W doctrack",
+        "test": "deno test --allow-env --allow-net",
+        "start": "deno run --allow-env --allow-net --allow-read src/main.ts"
     },
     "fmt": {
         "options": {

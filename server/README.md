@@ -19,7 +19,7 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 `PG_PORT` | Port number of the [PostgreSQL] instance. | &#x274c; | `5432`
 `PG_USER` | Provided username when logging into [PostgreSQL]. | &#x274c; | `postgres`
 `PG_PASSWORD` | Provided password when logging into [PostgreSQL]. | &#x274c; |
-`PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `postgres`
+`PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `doctrack`
 `PG_POOL` | Maximum number of pooled connections reserved by the [PostgreSQL] client. | &#x274c; | `4`
 `VAPID_PUB_KEY` | [Vapid public key][vapid] which will be used to interact with the [Web Push API]. | &#x2714; |
 `VAPID_PRV_KEY` | [Vapid private key][vapid] which will be used to subscribe to the [Web Push API]. | &#x2714; |
@@ -45,8 +45,13 @@ deno task db
 In a separate terminal, run the following script to start the Deno server proper.
 
 ```bash
-# Run the SQL initialization script.
-deno task schema
+# Set up the database template.
+deno task template
+
+# Clone the previous template into a new database named `doctrack`. We may re-run
+# this command whenever # we want to restore to a blank # state of the database so
+# that we # don't have to keep re-initializingthe database.
+deno task create
 
 # If you have not yet run this command before, place the
 # public and private keys into the `VAPID_PUB_KEY` and the
@@ -60,7 +65,7 @@ GOOGLE_SECRET=
 OAUTH_REDIRECT=http://localhost:3000/auth/callback
 HOSTED_GSUITE_DOMAIN=up.edu.ph
 PG_HOSTNAME=127.0.0.1
-PG_DATABASE=postgres
+PG_DATABASE=doctrack
 PG_PASSWORD=
 PG_USER=postgres
 PG_PORT=5432
