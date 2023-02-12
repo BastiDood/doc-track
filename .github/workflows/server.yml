@@ -54,7 +54,6 @@ jobs:
           GOOGLE_SECRET: 'google-secret'
           OAUTH_REDIRECT: 'http://127.0.0.1:3000/auth/callback'
           HOSTED_GSUITE_DOMAIN: 'up.edu.ph'
-          PG_DATABASE: 'doctrack'
           PG_USER: 'runner'
           PG_PASSWORD: 'runner'
           PG_POOL: 1
