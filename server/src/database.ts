@@ -138,32 +138,37 @@ export class Database {
      * case `null` is returned). Otherwise, we delete all of the invites of the specified user
      * and return an array of the office IDs to which the user is invited.
      */
-    async insertInvitedUser({ id, name, email, permission }: User): Promise<Office['id'][] | null> {
+    async insertInvitedUser({ id, name, email, picture, permission }: User): Promise<Office['id'][] | null> {
         const transaction = this.#client.createTransaction('registration', { isolation_level: 'serializable' });
         await transaction.begin();
 
-        const { rowCount } = await transaction
-            .queryArray`UPDATE users SET name = ${name}, email = ${email}, permission = ${permission} WHERE id = ${id}`;
-        assert(rowCount !== undefined);
+        const updateResult = await transaction
+            .queryArray`UPDATE users SET name = ${name}, email = ${email}, picture = ${picture}, permission = ${permission} WHERE id = ${id}`;
+        assert(updateResult.rowCount !== undefined);
 
         // User already exists
-        if (rowCount === 1) {
+        if (updateResult.rowCount === 1) {
             await transaction.commit();
             return null;
         }
 
         // Check the invite list first
-        assertStrictEquals(rowCount, 0);
+        assertStrictEquals(updateResult.rowCount, 0);
         const { rows } = await transaction
             .queryObject`DELETE FROM invitation WHERE email = ${email} RETURNING office,permission`;
         const invites = InvitationSchema.pick({ office: true, permission: true }).array().parse(rows);
 
         // Add the user into the system
-        await transaction.queryArray`INSERT INTO users (id,name,email,permission) VALUES (${id},${name},${email},${permission})`;
+        const insertResult = await transaction
+            .queryArray`INSERT INTO users (id,name,email,picture,permission) VALUES (${id},${name},${email},${picture},${permission})`;
+        assertStrictEquals(insertResult.rowCount, 1);
 
         // Add the user to all the offices (if any)
-        for (const { office, permission } of invites)
-            await transaction.queryArray`INSERT INTO staff (user_id,office,permission) VALUES (${id},${office},${permission})`;
+        for (const { office, permission } of invites) {
+            const staffResult = await transaction
+                .queryArray`INSERT INTO staff (user_id,office,permission) VALUES (${id},${office},${permission})`;
+            assertStrictEquals(staffResult.rowCount, 1);
+        }
 
         await transaction.commit();
         return invites.map(i => i.office);

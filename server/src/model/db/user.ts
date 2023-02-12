@@ -7,6 +7,7 @@ export const UserSchema = z.object({
     id: GoogleUserId,
     name: z.string().max(40).default(''),
     email: Email,
+    picture: z.string().url(),
     permission: Permission,
 });
 

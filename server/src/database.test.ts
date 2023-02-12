@@ -48,6 +48,7 @@ Deno.test('full OAuth flow', async t => {
         id: crypto.randomUUID(),
         name: 'Hello World',
         email: 'hello@up.edu.ph',
+        picture: 'https://cdn.google.com/hello.png',
         permission: 1,
     };
 

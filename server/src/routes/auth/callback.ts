@@ -73,6 +73,7 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             id: idToken.sub,
             name: idToken.name,
             email: idToken.email,
+            picture: idToken.picture,
             permission: 0,
         });
 

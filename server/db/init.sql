@@ -25,6 +25,7 @@ CREATE TABLE users(
     id GoogleUserId,
     name VARCHAR(40) NOT NULL,
     email VARCHAR(20) NOT NULL,
+    picture VARCHAR(256) NOT NULL,
     permission Permission,
     PRIMARY KEY (id)
 );
