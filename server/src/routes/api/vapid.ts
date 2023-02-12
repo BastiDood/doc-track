@@ -2,7 +2,14 @@ import { Status } from 'http';
 import { Pool } from 'postgres';
 
 import { Database } from '../../database.ts';
+import { env } from '../../env.ts';
 import { PushSubscriptionJsonSchema } from '../../model/db/subscription.ts';
+
+export function handleVapidPublicKey() {
+    return new Response(env.VAPID_PUB_KEY, {
+        headers: { 'Content-Type': 'application/octet-stream' },
+    });
+}
 
 export async function handleSubscribe(pool: Pool, req: Request) {
     // FIXME: Add CSRF tokens and nonces to mitigate replay attacks.

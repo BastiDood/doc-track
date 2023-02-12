@@ -15,9 +15,8 @@ import {
 } from './api/category.ts';
 import { handleRevokeInvitation } from './api/invite.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
-import { handleSubscribe } from './api/subscribe.ts';
+import { handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
-import { handleVapidPublicKey } from './vapid/public.ts';
 import { handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
 import { handleSetUserPermissions } from './api/user.ts';
 
@@ -26,9 +25,9 @@ export async function handleGet(pool: Pool, req: Request) {
     switch (pathname) {
         case '/api/batch': return handleGetEarliestAvailableBatch(pool, req);
         case '/api/categories': return handleGetAllCategories(pool, req);
+        case '/api/vapid': return handleVapidPublicKey();
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
-        case '/vapid': return handleVapidPublicKey();
         case '/': {
             const path = '../client/dist' + join(pathname, 'index.html');
             const { readable } = await Deno.open(path);
@@ -63,8 +62,8 @@ export function handlePost(pool: Pool, req: Request) {
     switch (pathname) {
         case '/api/batch': return handleGenerateBatch(pool, req, searchParams);
         case '/api/category': return handleCreateCategory(pool, req);
-        case '/api/subscribe': return handleSubscribe(pool, req);
         case '/api/office': return handleCreateOffice(pool, req);
+        case '/api/vapid': return handleSubscribe(pool, req);
         default:
             error(`[POST] ${pathname} not found`);
             return new Response(null, { status: Status.NotFound });
