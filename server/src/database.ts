@@ -169,16 +169,6 @@ export class Database {
         return invites.map(i => i.office);
     }
 
-    /** Adds a pre-existing user to the staff of an office. */
-    async upsertUserToStaff({ user_id, office, permission }: Staff) {
-        // TODO: Add Tests
-        const { rowCount } = await this.#client
-            .queryArray`INSERT INTO staff (user_id,office,permission)
-                VALUES (${user_id},${office},${permission})
-                ON CONFLICT (user_id,office) DO UPDATE SET permission = ${permission}`;
-        assertStrictEquals(rowCount, 1);
-    }
-
     /**
      * Deletes a {@linkcode Staff} if there are no batches referencing it.
      * Otherwise, it is internally marked as "retired" (i.e., all permissions
@@ -194,6 +184,30 @@ export class Database {
         return first === undefined
             ? null
             : DeprecationSchema.parse(first).result;
+    }
+
+    /** Sets the office-local permissions of a {@linkcode User}. */
+    async setStaffPermissions(uid: Staff['user_id'], oid: Staff['office'], perms: Staff['permission']): Promise<boolean> {
+        // TODO: Check if valid permissions
+        const { rowCount } = await this.#client
+            .queryArray`UPDATE staff SET permission = ${perms.toString(2)} WHERE user_id = ${uid} AND office = ${oid}`;
+        switch (rowCount) {
+            case 0: return false;
+            case 1: return true;
+            default: unreachable();
+        }
+    }
+
+    /** Sets the system-global permissions of a {@linkcode User}. */
+    async setUserPermissions(id: User['id'], perms: User['permission']): Promise<boolean> {
+        // TODO: Check if valid permissions
+        const { rowCount } = await this.#client
+            .queryArray`UPDATE users SET permission = ${perms.toString(2)} WHERE id = ${id}`;
+        switch (rowCount) {
+            case 0: return false;
+            case 1: return true;
+            default: unreachable();
+        }
     }
 
     /**
