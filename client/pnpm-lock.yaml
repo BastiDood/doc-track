@@ -9,15 +9,15 @@ specifiers:
   '@plasmohq/parcel-transformer-svelte3': ^0.4.2
   '@types/serviceworker': ^0.0.60
   parcel: ^2.8.3
-  path-browserify: ^1.0.1
   svelte: ^3.55.1
   svelte-preprocess: ^5.0.1
   typescript: ^4.9.5
   typescript-svelte-plugin: ^0.3.14
+  zod: ^3.20.6
 
 dependencies:
   '@parcel/service-worker': 2.8.3
-  path-browserify: 1.0.1
+  zod: 3.20.6
 
 devDependencies:
   '@parcel/config-default': 2.8.3_@parcel+core@2.8.3
@@ -1655,10 +1655,6 @@ packages:
       tslib: 2.5.0
     dev: true
 
-  /path-browserify/1.0.1:
-    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
-    dev: false
-
   /path-is-absolute/1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
     engines: {node: '>=0.10.0'}
@@ -1974,3 +1970,7 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
     dev: true
+
+  /zod/3.20.6:
+    resolution: {integrity: sha512-oyu0m54SGCtzh6EClBVqDDlAYRz4jrVtKwQ7ZnsEmMI9HnzuZFj8QFwAY1M5uniIYACdGvv0PBWPF2kO0aNofA==}
+    dev: false

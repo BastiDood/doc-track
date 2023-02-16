@@ -1,5 +1,5 @@
-import { Vapid } from '../api/vapid';
 import { assert } from '../assert';
+import { Vapid } from '../api/vapid';
 
 async function getSubscription(manager: PushManager): Promise<PushSubscription> {
     const maybeSub = await manager.getSubscription();

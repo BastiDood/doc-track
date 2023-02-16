@@ -98,7 +98,7 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the name of the new {@linkcode Category} as plaintext from the {@linkcode Request} body.
+ * - Accepts the upserted {@linkcode Category} as JSON from the {@linkcode Request} body.
  *
  * # Outputs
  * - `204` => {@linkcode Category} successfully renamed

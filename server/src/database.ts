@@ -265,6 +265,7 @@ export class Database {
     /** Assigns a {@linkcode Barcode} to a newly uploaded {@linkcode Document}. If the barcode has already been reserved, return `false`. */
     async assignBarcodeToDocument({ id, category, title }: Document): Promise<boolean> {
         // TODO: Do Actual Document Upload
+        // TODO: Insert the first snapshot
         const { rowCount } = await this.#client
             .queryObject`INSERT INTO document (id,category,title) VALUES (${id},${category},${title}) ON CONFLICT DO NOTHING`;
         switch (rowCount) {
