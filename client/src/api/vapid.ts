@@ -1,12 +1,18 @@
+import { OK, CREATED } from 'http-status';
+
 import { assert } from '../assert';
+import { UnexpectedStatusCode } from './error';
 
 export namespace Vapid {
-    export async function getVapidPublicKey(): Promise<ArrayBuffer | null> {
+    /** @returns VAPID public key of the server as raw bytes */
+    export async function getVapidPublicKey(): Promise<ArrayBuffer> {
         const res = await fetch('/api/vapid', { headers: { 'Accept': 'application/octet-stream' } });
-        return res.status === 200 ? res.arrayBuffer() : null;
+        if (res.status === OK) return res.arrayBuffer();
+        throw new UnexpectedStatusCode;
     }
 
-    export async function sendSubscription({ endpoint, expirationTime, keys }: PushSubscriptionJSON): Promise<boolean> {
+    /** Registers a push subscription to the server (for later use). */
+    export async function sendSubscription({ endpoint, expirationTime, keys }: PushSubscriptionJSON) {
         const auth = keys?.auth;
         assert(auth);
 
@@ -23,6 +29,8 @@ export namespace Vapid {
                 p256dh,
             }),
         });
-        return res.status === 201;
+
+        if (res.status === CREATED) return;
+        throw new UnexpectedStatusCode;
     }
 }

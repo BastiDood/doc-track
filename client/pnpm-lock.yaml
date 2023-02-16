@@ -8,6 +8,7 @@ specifiers:
   '@parcel/transformer-webmanifest': ^2.8.3
   '@plasmohq/parcel-transformer-svelte3': ^0.4.2
   '@types/serviceworker': ^0.0.60
+  http-status: ^1.6.2
   parcel: ^2.8.3
   svelte: ^3.55.1
   svelte-preprocess: ^5.0.1
@@ -17,6 +18,7 @@ specifiers:
 
 dependencies:
   '@parcel/service-worker': 2.8.3
+  http-status: 1.6.2
   zod: 3.20.6
 
 devDependencies:
@@ -1306,6 +1308,11 @@ packages:
       domutils: 2.8.0
       entities: 3.0.1
     dev: true
+
+  /http-status/1.6.2:
+    resolution: {integrity: sha512-oUExvfNckrpTpDazph7kNG8sQi5au3BeTo0idaZFXEhTaJKu7GNJCLHI0rYY2wljm548MSTM+Ljj/c6anqu2zQ==}
+    engines: {node: '>= 0.4.0'}
+    dev: false
 
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}

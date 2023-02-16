@@ -1,5 +1,21 @@
+import {
+    OK,
+    CREATED,
+    ACCEPTED,
+    NO_CONTENT,
+    BAD_REQUEST,
+    NOT_FOUND,
+    UNAUTHORIZED,
+    FORBIDDEN
+} from 'http-status';
 import { z } from 'zod';
-import { InsufficientPermissions, InvalidInput, InvalidSession, UnexpectedStatusCode } from './error';
+
+import {
+    InsufficientPermissions,
+    InvalidInput,
+    InvalidSession,
+    UnexpectedStatusCode
+} from './error';
 
 export namespace Category {
     export const Schema = z.object({
@@ -20,8 +36,8 @@ export namespace Category {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case 200: return Schema.array().parse(await res.json());
-            case 401: throw new InvalidSession;
+            case OK: return Schema.array().parse(await res.json());
+            case UNAUTHORIZED: throw new InvalidSession;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -41,10 +57,10 @@ export namespace Category {
             },
         });
         switch (res.status) {
-            case 201: return Schema.shape.id.parse(JSON.parse(await res.json()));
-            case 401: throw new InvalidSession;
-            case 400: throw new InvalidInput;
-            case 403: throw new InsufficientPermissions;
+            case CREATED: return Schema.shape.id.parse(JSON.parse(await res.json()));
+            case BAD_REQUEST: throw new InvalidInput;
+            case UNAUTHORIZED: throw new InvalidSession;
+            case FORBIDDEN: throw new InsufficientPermissions;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -64,11 +80,11 @@ export namespace Category {
             },
         });
         switch (res.status) {
-            case 204: return true;
-            case 404: return false;
-            case 401: throw new InvalidSession;
-            case 400: throw new InvalidInput;
-            case 403: throw new InsufficientPermissions;
+            case NO_CONTENT: return true;
+            case NOT_FOUND: return false;
+            case BAD_REQUEST: throw new InvalidInput;
+            case UNAUTHORIZED: throw new InvalidSession;
+            case FORBIDDEN: throw new InsufficientPermissions;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -86,12 +102,12 @@ export namespace Category {
             credentials: 'same-origin',
         });
         switch (res.status) {
-            case 202: return false;
-            case 204: return true;
-            case 404: return null;
-            case 401: throw new InvalidSession;
-            case 400: throw new InvalidInput;
-            case 403: throw new InsufficientPermissions;
+            case ACCEPTED: return false;
+            case NO_CONTENT: return true;
+            case NOT_FOUND: return null;
+            case BAD_REQUEST: throw new InvalidInput;
+            case UNAUTHORIZED: throw new InvalidSession;
+            case FORBIDDEN: throw new InsufficientPermissions;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -109,11 +125,11 @@ export namespace Category {
             headers: { 'Accept': 'text/plain' },
         });
         switch (res.status) {
-            case 200: return res.text();
-            case 404: return null;
-            case 400: throw new InvalidInput;
-            case 401: throw new InvalidSession;
-            case 403: throw new InsufficientPermissions;
+            case OK: return res.text();
+            case NOT_FOUND: return null;
+            case BAD_REQUEST: throw new InvalidInput;
+            case UNAUTHORIZED: throw new InvalidSession;
+            case FORBIDDEN: throw new InsufficientPermissions;
             default: throw new UnexpectedStatusCode;
         }
     }
