@@ -96,8 +96,7 @@ export namespace Category {
      * @returns `null` if {@linkcode Category} ID does not exist
      */
     export async function remove(id: Category['id']): Promise<boolean | null> {
-        const params = new URLSearchParams({ id: id.toString() });
-        const res = await fetch('/api/category?' + params.toString(), {
+        const res = await fetch(`/api/category?id=${id}`, {
             method: 'DELETE',
             credentials: 'same-origin',
         });
@@ -118,8 +117,7 @@ export namespace Category {
      * @returns `null` if {@linkcode Category} ID does not exist
      */
     export async function activate(id: Category['id']): Promise<Category['name'] | null> {
-        const params = new URLSearchParams({ id: id.toString() });
-        const res = await fetch('/api/category?' + params.toString(), {
+        const res = await fetch(`/api/category?id=${id}`, {
             method: 'PATCH',
             credentials: 'same-origin',
             headers: { 'Accept': 'text/plain' },
