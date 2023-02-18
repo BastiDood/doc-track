@@ -7,7 +7,12 @@ import type { Document } from '~model/document.ts';
 import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
 
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
-import { type Batch, BatchSchema } from '~model/batch.ts';
+import {
+    type Batch,
+    type GeneratedBatch, type MinBatch,
+    BatchSchema,
+    MinBatchSchema
+} from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
 import { type Invitation, InvitationSchema } from '~model/invitation.ts';
 import { type Office, OfficeSchema } from '~model/office.ts';
@@ -25,15 +30,6 @@ type InvalidatedSession = {
     valid: true;
     data: Omit<Session, 'id'>;
 }
-
-const MinBatchSchema = z.object({
-    batch: BatchSchema.shape.id,
-    codes: BarcodeSchema.shape.code.array(),
-});
-
-export type MinBatch = z.infer<typeof MinBatchSchema>;
-
-export type GeneratedBatch = Omit<Batch, 'office' | 'generator'> & { codes: Barcode['code'][] };
 
 const DeprecationSchema = z.object({ result: z.boolean().nullable() });
 

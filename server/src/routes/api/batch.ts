@@ -3,7 +3,9 @@ import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
 
-import { type GeneratedBatch, type MinBatch, Database } from '../../database.ts';
+import type { GeneratedBatch, MinBatch } from '~model/batch.ts';
+
+import { Database } from '../../database.ts';
 
 /**
  * Gets the earliest available batch of barcodes (relative to an office).
