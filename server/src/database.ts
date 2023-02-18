@@ -105,7 +105,6 @@ export class Database {
 
     /** Upserts a user to the invite list and returns the creation date. */
     async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation'] | null> {
-        // TODO: Check if user is already in the system
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO invitation (office,email,permission)
                 SELECT * FROM (SELECT ${office}::SMALLINT,${email},${permission}::Permission) AS data

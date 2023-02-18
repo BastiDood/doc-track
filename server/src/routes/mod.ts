@@ -14,7 +14,7 @@ import {
     handleDeleteCategory,
     handleActivateCategory,
 } from './api/category.ts';
-import { handleRevokeInvitation } from './api/invite.ts';
+import { handleAddInvitation, handleRevokeInvitation } from './api/invite.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
@@ -86,9 +86,10 @@ export function handlePatch(pool: Pool, req: Request) {
 }
 
 export function handlePut(pool: Pool, req: Request) {
-    const { pathname } = new URL(req.url);
+    const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/category': return handleRenameCategory(pool, req);
+        case '/api/invite': return handleAddInvitation(pool, req, searchParams);
         case '/api/office': return handleUpdateOffice(pool, req);
         default:
             error(`[PUT] ${pathname} not found`);
