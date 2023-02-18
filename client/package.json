@@ -12,12 +12,12 @@
         "@parcel/core": "^2.8.3",
         "@parcel/packager-raw-url": "^2.8.3",
         "@parcel/transformer-webmanifest": "^2.8.3",
-        "@plasmohq/parcel-transformer-svelte3": "^0.4.2",
+        "@plasmohq/parcel-transformer-svelte3": "^0.4.3",
         "@types/serviceworker": "^0.0.60",
         "parcel": "^2.8.3",
         "svelte": "^3.55.1",
         "svelte-preprocess": "^5.0.1",
-        "typescript": "^4.9.5",
+        "typescript": "5.0.0-dev.20230218",
         "typescript-svelte-plugin": "^0.3.14"
     },
     "dependencies": {

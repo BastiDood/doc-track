@@ -6,13 +6,13 @@ specifiers:
   '@parcel/packager-raw-url': ^2.8.3
   '@parcel/service-worker': ^2.8.3
   '@parcel/transformer-webmanifest': ^2.8.3
-  '@plasmohq/parcel-transformer-svelte3': ^0.4.2
+  '@plasmohq/parcel-transformer-svelte3': ^0.4.3
   '@types/serviceworker': ^0.0.60
   http-status: ^1.6.2
   parcel: ^2.8.3
   svelte: ^3.55.1
   svelte-preprocess: ^5.0.1
-  typescript: ^4.9.5
+  typescript: 5.0.0-dev.20230218
   typescript-svelte-plugin: ^0.3.14
   zod: ^3.20.6
 
@@ -26,13 +26,13 @@ devDependencies:
   '@parcel/core': 2.8.3
   '@parcel/packager-raw-url': 2.8.3_@parcel+core@2.8.3
   '@parcel/transformer-webmanifest': 2.8.3_@parcel+core@2.8.3
-  '@plasmohq/parcel-transformer-svelte3': 0.4.2
+  '@plasmohq/parcel-transformer-svelte3': 0.4.3
   '@types/serviceworker': 0.0.60
   parcel: 2.8.3
   svelte: 3.55.1
-  svelte-preprocess: 5.0.1_4x7phaipmicbaooxtnresslofa
-  typescript: 4.9.5
-  typescript-svelte-plugin: 0.3.14_4x7phaipmicbaooxtnresslofa
+  svelte-preprocess: 5.0.1_jsdakhspyr4xaj5sq3rg4lm2nq
+  typescript: 5.0.0-dev.20230218
+  typescript-svelte-plugin: 0.3.14_jsdakhspyr4xaj5sq3rg4lm2nq
 
 packages:
 
@@ -422,7 +422,7 @@ packages:
       '@parcel/source-map': 2.1.1
       '@parcel/utils': 2.8.3
       browserslist: 4.21.5
-      lightningcss: 1.18.0
+      lightningcss: 1.19.0
       nullthrows: 1.1.1
     transitivePeerDependencies:
       - '@parcel/core'
@@ -482,7 +482,7 @@ packages:
       '@parcel/source-map': 2.1.1
       '@parcel/utils': 2.8.3
       nullthrows: 1.1.1
-      terser: 5.16.3
+      terser: 5.16.4
     transitivePeerDependencies:
       - '@parcel/core'
     dev: true
@@ -697,7 +697,7 @@ packages:
       '@parcel/source-map': 2.1.1
       '@parcel/utils': 2.8.3
       browserslist: 4.21.5
-      lightningcss: 1.18.0
+      lightningcss: 1.19.0
       nullthrows: 1.1.1
     transitivePeerDependencies:
       - '@parcel/core'
@@ -907,8 +907,8 @@ packages:
       nullthrows: 1.1.1
     dev: true
 
-  /@plasmohq/parcel-transformer-svelte3/0.4.2:
-    resolution: {integrity: sha512-C+3LeuXe9kAblOtrpuiEIY8rbODR1p/C3zEks4MFogiYpLjwvp0LCmxxSdKj/uPyjftlRISWzvYFRKV8MRSYGA==}
+  /@plasmohq/parcel-transformer-svelte3/0.4.3:
+    resolution: {integrity: sha512-xBCYMouDLZS20tolA4BAtmfX4RoKvX14yx+ry+Vj78j7DgrD1lz4afKbFdjXsAPMMRnsZMrkiD0dHX3sxiIzew==}
     engines: {parcel: '>= 2.7.0'}
     dependencies:
       '@parcel/core': 2.8.3
@@ -929,8 +929,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /@types/node/18.11.19:
-    resolution: {integrity: sha512-YUgMWAQBWLObABqrvx8qKO1enAvBUdjZOAWQ5grBAkp5LQv45jBvYKZ3oFS9iKRCQyFjqw6iuEa1vmFqtxYLZw==}
+  /@types/node/18.14.0:
+    resolution: {integrity: sha512-5EWrvLmglK+imbCJY0+INViFWUHg1AHel1sq4ZVSfdcNqGy9Edv3UB9IIzzg+xPaUcAgZYcfVs2fBcwDeZzU0A==}
     dev: true
 
   /@types/parse-json/4.0.0:
@@ -944,7 +944,7 @@ packages:
   /@types/sass/1.43.1:
     resolution: {integrity: sha512-BPdoIt1lfJ6B7rw35ncdwBZrAssjcwzI5LByIrYs+tpXlj/CAkuVdRsgZDdP4lq5EjyWzwxZCqAoFyHKFwp32g==}
     dependencies:
-      '@types/node': 18.11.19
+      '@types/node': 18.14.0
     dev: true
 
   /@types/serviceworker/0.0.60:
@@ -1008,8 +1008,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001450
-      electron-to-chromium: 1.4.286
+      caniuse-lite: 1.0.30001456
+      electron-to-chromium: 1.4.302
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
     dev: true
@@ -1027,8 +1027,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite/1.0.30001450:
-    resolution: {integrity: sha512-qMBmvmQmFXaSxexkjjfMvD5rnDL0+m+dUMZKoDYsGG8iZN29RuYh9eRoMvKsT6uMAWlyUUGDEQGJJYjzCIO9ew==}
+  /caniuse-lite/1.0.30001456:
+    resolution: {integrity: sha512-XFHJY5dUgmpMV25UqaD4kVq2LsiaU5rS8fb0f17pCoXQiQslzmFgnfOxfvo1bTpTqf7dwG/N/05CnLCnOEKmzA==}
     dev: true
 
   /chalk/2.4.2:
@@ -1184,8 +1184,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /electron-to-chromium/1.4.286:
-    resolution: {integrity: sha512-Vp3CVhmYpgf4iXNKAucoQUDcCrBQX3XLBtwgFqP9BUXuucgvAV9zWp1kYU7LL9j4++s9O+12cb3wMtN4SJy6UQ==}
+  /electron-to-chromium/1.4.302:
+    resolution: {integrity: sha512-Uk7C+7aPBryUR1Fwvk9VmipBcN9fVsqBO57jV2ZjTm+IZ6BMNqu7EDVEg2HxCNufk6QcWlFsBkhQyQroB2VWKw==}
     dev: true
 
   /entities/2.2.0:
@@ -1372,8 +1372,8 @@ packages:
     hasBin: true
     dev: true
 
-  /lightningcss-darwin-arm64/1.18.0:
-    resolution: {integrity: sha512-OqjydwtiNPgdH1ByIjA1YzqvDG/OMR6L3LPN6wRl1729LB0y4Mik7L06kmZaTb+pvUHr+NmDd2KCwnlrQ4zO3w==}
+  /lightningcss-darwin-arm64/1.19.0:
+    resolution: {integrity: sha512-wIJmFtYX0rXHsXHSr4+sC5clwblEMji7HHQ4Ub1/CznVRxtCFha6JIt5JZaNf8vQrfdZnBxLLC6R8pC818jXqg==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [darwin]
@@ -1381,8 +1381,8 @@ packages:
     dev: true
     optional: true
 
-  /lightningcss-darwin-x64/1.18.0:
-    resolution: {integrity: sha512-mNiuPHj89/JHZmJMp+5H8EZSt6EL5DZRWJ31O6k3DrLLnRIQjXuXdDdN8kP7LoIkeWI5xvyD60CsReJm+YWYAw==}
+  /lightningcss-darwin-x64/1.19.0:
+    resolution: {integrity: sha512-Lif1wD6P4poaw9c/4Uh2z+gmrWhw/HtXFoeZ3bEsv6Ia4tt8rOJBdkfVaUJ6VXmpKHALve+iTyP2+50xY1wKPw==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [darwin]
@@ -1390,8 +1390,8 @@ packages:
     dev: true
     optional: true
 
-  /lightningcss-linux-arm-gnueabihf/1.18.0:
-    resolution: {integrity: sha512-S+25JjI6601HiAVoTDXW6SqH+E94a+FHA7WQqseyNHunOgVWKcAkNEc2LJvVxgwTq6z41sDIb9/M3Z9wa9lk4A==}
+  /lightningcss-linux-arm-gnueabihf/1.19.0:
+    resolution: {integrity: sha512-P15VXY5682mTXaiDtbnLYQflc8BYb774j2R84FgDLJTN6Qp0ZjWEFyN1SPqyfTj2B2TFjRHRUvQSSZ7qN4Weig==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm]
     os: [linux]
@@ -1399,8 +1399,8 @@ packages:
     dev: true
     optional: true
 
-  /lightningcss-linux-arm64-gnu/1.18.0:
-    resolution: {integrity: sha512-JSqh4+21dCgBecIQUet35dtE4PhhSEMyqe3y0ZNQrAJQ5kyUPSQHiw81WXnPJcOSTTpG0TyMLiC8K//+BsFGQA==}
+  /lightningcss-linux-arm64-gnu/1.19.0:
+    resolution: {integrity: sha512-zwXRjWqpev8wqO0sv0M1aM1PpjHz6RVIsBcxKszIG83Befuh4yNysjgHVplF9RTU7eozGe3Ts7r6we1+Qkqsww==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
@@ -1408,8 +1408,8 @@ packages:
     dev: true
     optional: true
 
-  /lightningcss-linux-arm64-musl/1.18.0:
-    resolution: {integrity: sha512-2FWHa8iUhShnZnqhn2wfIcK5adJat9hAAaX7etNsoXJymlliDIOFuBQEsba2KBAZSM4QqfQtvRdR7m8i0I7ybQ==}
+  /lightningcss-linux-arm64-musl/1.19.0:
+    resolution: {integrity: sha512-vSCKO7SDnZaFN9zEloKSZM5/kC5gbzUjoJQ43BvUpyTFUX7ACs/mDfl2Eq6fdz2+uWhUh7vf92c4EaaP4udEtA==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
@@ -1417,8 +1417,8 @@ packages:
     dev: true
     optional: true
 
-  /lightningcss-linux-x64-gnu/1.18.0:
-    resolution: {integrity: sha512-plCPGQJtDZHcLVKVRLnQVF2XRsIC32WvuJhQ7fJ7F6BV98b/VZX0OlX05qUaOESD9dCDHjYSfxsgcvOKgCWh7A==}
+  /lightningcss-linux-x64-gnu/1.19.0:
+    resolution: {integrity: sha512-0AFQKvVzXf9byrXUq9z0anMGLdZJS+XSDqidyijI5njIwj6MdbvX2UZK/c4FfNmeRa2N/8ngTffoIuOUit5eIQ==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
@@ -1426,8 +1426,8 @@ packages:
     dev: true
     optional: true
 
-  /lightningcss-linux-x64-musl/1.18.0:
-    resolution: {integrity: sha512-na+BGtVU6fpZvOHKhnlA0XHeibkT3/46nj6vLluG3kzdJYoBKU6dIl7DSOk++8jv4ybZyFJ0aOFMMSc8g2h58A==}
+  /lightningcss-linux-x64-musl/1.19.0:
+    resolution: {integrity: sha512-SJoM8CLPt6ECCgSuWe+g0qo8dqQYVcPiW2s19dxkmSI5+Uu1GIRzyKA0b7QqmEXolA+oSJhQqCmJpzjY4CuZAg==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
@@ -1435,8 +1435,8 @@ packages:
     dev: true
     optional: true
 
-  /lightningcss-win32-x64-msvc/1.18.0:
-    resolution: {integrity: sha512-5qeAH4RMNy2yMNEl7e5TI6upt/7xD2ZpHWH4RkT8iJ7/6POS5mjHbXWUO9Q1hhDhqkdzGa76uAdMzEouIeCyNw==}
+  /lightningcss-win32-x64-msvc/1.19.0:
+    resolution: {integrity: sha512-C+VuUTeSUOAaBZZOPT7Etn/agx/MatzJzGRkeV+zEABmPuntv1zihncsi+AyGmjkkzq3wVedEy7h0/4S84mUtg==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [win32]
@@ -1444,20 +1444,20 @@ packages:
     dev: true
     optional: true
 
-  /lightningcss/1.18.0:
-    resolution: {integrity: sha512-uk10tNxi5fhZqU93vtYiQgx/8a9f0Kvtj5AXIm+VlOXY+t/DWDmCZWJEkZJmmALgvbS6aAW8or+Kq85eJ6TDTw==}
+  /lightningcss/1.19.0:
+    resolution: {integrity: sha512-yV5UR7og+Og7lQC+70DA7a8ta1uiOPnWPJfxa0wnxylev5qfo4P+4iMpzWAdYWOca4jdNQZii+bDL/l+4hUXIA==}
     engines: {node: '>= 12.0.0'}
     dependencies:
       detect-libc: 1.0.3
     optionalDependencies:
-      lightningcss-darwin-arm64: 1.18.0
-      lightningcss-darwin-x64: 1.18.0
-      lightningcss-linux-arm-gnueabihf: 1.18.0
-      lightningcss-linux-arm64-gnu: 1.18.0
-      lightningcss-linux-arm64-musl: 1.18.0
-      lightningcss-linux-x64-gnu: 1.18.0
-      lightningcss-linux-x64-musl: 1.18.0
-      lightningcss-win32-x64-msvc: 1.18.0
+      lightningcss-darwin-arm64: 1.19.0
+      lightningcss-darwin-x64: 1.19.0
+      lightningcss-linux-arm-gnueabihf: 1.19.0
+      lightningcss-linux-arm64-gnu: 1.19.0
+      lightningcss-linux-arm64-musl: 1.19.0
+      lightningcss-linux-x64-gnu: 1.19.0
+      lightningcss-linux-x64-musl: 1.19.0
+      lightningcss-win32-x64-msvc: 1.19.0
     dev: true
 
   /lines-and-columns/1.2.4:
@@ -1518,15 +1518,15 @@ packages:
       brace-expansion: 1.1.11
     dev: true
 
-  /minimist/1.2.7:
-    resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
+  /minimist/1.2.8:
+    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
     dev: true
 
   /mkdirp/0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
     hasBin: true
     dependencies:
-      minimist: 1.2.7
+      minimist: 1.2.8
     dev: true
 
   /msgpackr-extract/3.0.0:
@@ -1763,7 +1763,7 @@ packages:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.14
       buffer-crc32: 0.2.13
-      minimist: 1.2.7
+      minimist: 1.2.8
       sander: 0.5.1
     dev: true
 
@@ -1810,7 +1810,7 @@ packages:
       has-flag: 4.0.0
     dev: true
 
-  /svelte-preprocess/5.0.1_4x7phaipmicbaooxtnresslofa:
+  /svelte-preprocess/5.0.1_jsdakhspyr4xaj5sq3rg4lm2nq:
     resolution: {integrity: sha512-0HXyhCoc9rsW4zGOgtInylC6qj259E1hpFnJMJWTf+aIfeqh4O/QHT31KT2hvPEqQfdjmqBR/kO2JDkkciBLrQ==}
     engines: {node: '>= 14.10.0'}
     requiresBuild: true
@@ -1855,7 +1855,7 @@ packages:
       sorcery: 0.11.0
       strip-indent: 3.0.0
       svelte: 3.55.1
-      typescript: 4.9.5
+      typescript: 5.0.0-dev.20230218
     dev: true
 
   /svelte/3.55.1:
@@ -1863,7 +1863,7 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /svelte2tsx/0.6.1_4x7phaipmicbaooxtnresslofa:
+  /svelte2tsx/0.6.1_jsdakhspyr4xaj5sq3rg4lm2nq:
     resolution: {integrity: sha512-O/1+5UyChfmhp1/GUv8b8iveTrn6eZwHxEXc+rw7LMKRidr9KHk5w/EiliLjDUwHa2VA6CoEty+CQylROVU4Sw==}
     peerDependencies:
       svelte: ^3.55
@@ -1872,7 +1872,7 @@ packages:
       dedent-js: 1.0.1
       pascal-case: 3.1.2
       svelte: 3.55.1
-      typescript: 4.9.5
+      typescript: 5.0.0-dev.20230218
     dev: true
 
   /svgo/2.8.0:
@@ -1894,8 +1894,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /terser/5.16.3:
-    resolution: {integrity: sha512-v8wWLaS/xt3nE9dgKEWhNUFP6q4kngO5B8eYFUuebsu7Dw/UNAnpUod6UHo04jSSkv8TzKHjZDSd7EXdDQAl8Q==}
+  /terser/5.16.4:
+    resolution: {integrity: sha512-5yEGuZ3DZradbogeYQ1NaGz7rXVBDWujWlx1PT8efXO6Txn+eWbfKqB2bTDVmFXmePFkoLU6XI8UektMIEA0ug==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -1925,18 +1925,18 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /typescript-svelte-plugin/0.3.14_4x7phaipmicbaooxtnresslofa:
+  /typescript-svelte-plugin/0.3.14_jsdakhspyr4xaj5sq3rg4lm2nq:
     resolution: {integrity: sha512-8/Rl0+fUyk1y6E7jREUS5sO5XcUg8m9z3eV/wmMHhEbBcy4S9jB8Mrc7h5zCIfD2CCkdVXdL47ayJnEtKBwc2Q==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.14
-      svelte2tsx: 0.6.1_4x7phaipmicbaooxtnresslofa
+      svelte2tsx: 0.6.1_jsdakhspyr4xaj5sq3rg4lm2nq
     transitivePeerDependencies:
       - svelte
       - typescript
     dev: true
 
-  /typescript/4.9.5:
-    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
+  /typescript/5.0.0-dev.20230218:
+    resolution: {integrity: sha512-SCUCUbzAQ9Nvl+V4qBLh1z6cWYDt6uM8gywhmrQrYdpbrZss3L8MBhZy1CfZFe6K1ApsbW0cBT8HVoTC0/WkEg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
