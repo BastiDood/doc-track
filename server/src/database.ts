@@ -3,18 +3,18 @@ import { range } from 'itertools';
 import { Pool, PoolClient } from 'postgres';
 import { z } from 'zod';
 
-import type { Document } from './model/db/document.ts';
-import type { PushSubscription, PushSubscriptionJson } from './model/db/subscription.ts';
+import type { Document } from '~model/document.ts';
+import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
 
-import { type Barcode, BarcodeSchema } from './model/db/barcode.ts';
-import { type Batch, BatchSchema } from './model/db/batch.ts';
-import { type Category, CategorySchema } from './model/db/category.ts';
-import { type Invitation, InvitationSchema } from './model/db/invitation.ts';
-import { type Office, OfficeSchema } from './model/db/office.ts';
-import { type Pending, PendingSchema } from './model/db/pending.ts';
-import { type Session, SessionSchema } from './model/db/session.ts';
-import { type Staff, StaffSchema } from './model/db/staff.ts';
-import { type User, UserSchema } from './model/db/user.ts';
+import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
+import { type Batch, BatchSchema } from '~model/batch.ts';
+import { type Category, CategorySchema } from '~model/category.ts';
+import { type Invitation, InvitationSchema } from '~model/invitation.ts';
+import { type Office, OfficeSchema } from '~model/office.ts';
+import { type Pending, PendingSchema } from '~model/pending.ts';
+import { type Session, SessionSchema } from '~model/session.ts';
+import { type Staff, StaffSchema } from '~model/staff.ts';
+import { type User, UserSchema } from '~model/user.ts';
 
 type InvalidatedPending = {
     valid: false;
@@ -69,7 +69,7 @@ export class Database {
     }
 
     /** Upgrades a pending session into a valid session. Returns the now-invalidated pending session details. */
-    async upgradeSession({ id, user_id, expiration, access_token }: Session): Promise<Omit<Pending, 'id'>> {
+    async upgradeSession({ id, user_id, expiration }: Session): Promise<Omit<Pending, 'id'>> {
         const transaction = this.#client.createTransaction('upgrade', { isolation_level: 'serializable' });
         await transaction.begin();
 
@@ -78,9 +78,8 @@ export class Database {
         assertStrictEquals(rest.length, 0);
         const old = PendingSchema.omit({ id: true }).parse(first);
 
-        const { rowCount } = await transaction.queryArray`
-            INSERT INTO session (id,user_id,expiration,access_token)
-                VALUES (${id},${user_id},${expiration.toISOString()},${access_token})`;
+        const { rowCount } = await transaction
+            .queryArray`INSERT INTO session (id,user_id,expiration) VALUES (${id},${user_id},${expiration.toISOString()})`;
         assertStrictEquals(rowCount, 1);
 
         await transaction.commit();
@@ -95,7 +94,7 @@ export class Database {
             .queryObject`DELETE FROM pending WHERE id = ${sid} RETURNING nonce,expiration`;
         assertStrictEquals(pendingRest.length, 0);
         const { rows: [ sessionFirst, ...sessionRest ] } = await transaction
-            .queryObject`DELETE FROM session WHERE id = ${sid} RETURNING user_id,expiration,access_token`;
+            .queryObject`DELETE FROM session WHERE id = ${sid} RETURNING user_id,expiration`;
         assertStrictEquals(sessionRest.length, 0);
         await transaction.commit();
 

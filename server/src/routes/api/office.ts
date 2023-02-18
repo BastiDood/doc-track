@@ -3,7 +3,7 @@ import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
 
-import { type Office, OfficeSchema } from '../../model/db/office.ts';
+import { type Office, OfficeSchema } from '~model/office.ts';
 
 import { Database } from '../../database.ts';
 

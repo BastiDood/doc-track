@@ -61,7 +61,7 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
 
         const json = await response.json();
         console.log(json);
-        const { access_token, id_token } = TokenResponseSchema.parse(json);
+        const { id_token } = TokenResponseSchema.parse(json);
         const idToken = await parseJwt(id_token);
 
         assert(idToken.exp > new Date);
@@ -87,7 +87,6 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             id: sid,
             user_id: idToken.sub,
             expiration: idToken.exp,
-            access_token,
         });
         assertEquals(nonce, decode(idToken.nonce));
 

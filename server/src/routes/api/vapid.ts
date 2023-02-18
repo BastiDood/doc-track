@@ -1,9 +1,10 @@
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
+import { PushSubscriptionJsonSchema } from '~model/subscription.ts';
+
 import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
-import { PushSubscriptionJsonSchema } from '../../model/db/subscription.ts';
 
 export function handleVapidPublicKey() {
     return new Response(env.VAPID_PUB_KEY, {

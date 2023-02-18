@@ -141,7 +141,6 @@ Deno.test('full OAuth flow', async t => {
         assertEquals(result.data, { nonce, expiration });
     });
 
-    const access_token = 'access-token';
     const { id, nonce, expiration } = await db.generatePendingSession();
     await t.step('user OAuth flow', async () => {
         assert(validate(id));
@@ -156,7 +155,6 @@ Deno.test('full OAuth flow', async t => {
             id,
             user_id: USER.id,
             expiration,
-            access_token,
         });
         assertEquals(old, { nonce, expiration });
 
@@ -216,7 +214,6 @@ Deno.test('full OAuth flow', async t => {
         assertEquals(result.data, {
             user_id: USER.id,
             expiration,
-            access_token,
         });
     });
 

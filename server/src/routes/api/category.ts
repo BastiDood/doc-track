@@ -3,8 +3,9 @@ import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
 
+import { type Category, CategorySchema } from '~model/category.ts';
+
 import { Database } from '../../database.ts';
-import { type Category, CategorySchema } from '../../model/db/category.ts';
 
 /**
  * Retrieves a list of all the categories in the system.

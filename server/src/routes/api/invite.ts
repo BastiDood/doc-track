@@ -3,8 +3,9 @@ import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
 
+import { type Invitation, InvitationSchema } from '~model/invitation.ts';
+
 import { Database } from '../../database.ts';
-import { type Invitation, InvitationSchema } from '../../model/db/invitation.ts';
 
 /**
  * Revokes a pre-existing email invitation in the office.

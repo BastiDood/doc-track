@@ -2,15 +2,12 @@ import { z } from 'zod';
 
 // https://developers.google.com/identity/protocols/oauth2#size
 export const AuthorizationCode = z.string().min(1).max(256);
-export const AccessToken = z.string().min(1).max(2048);
 
 const OAUTH_SCOPES = [ 'openid', 'https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email' ];
 export const OAUTH_SCOPE_STRING = OAUTH_SCOPES.join(' ');
 export const OAUTH_TOKEN_TYPE = 'Bearer';
 
 export const TokenResponseSchema = z.object({
-    // Access token to the Google APIs.
-    access_token: AccessToken,
     // JSON Web Token token containing the user's ID token.
     id_token: z.string().min(1),
     // Always set to `OAUTH_SCOPE` for now.
