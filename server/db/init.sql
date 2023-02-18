@@ -6,7 +6,6 @@ CREATE EXTENSION pgcrypto;
 -- Refresh Token:      512
 CREATE DOMAIN GoogleUserId AS VARCHAR(255) NOT NULL;
 CREATE DOMAIN AuthorizationCode AS VARCHAR(256) NOT NULL;
-CREATE DOMAIN AccessToken AS VARCHAR(2048) NOT NULL;
 
 -- Expiration Times
 CREATE DOMAIN Expiration AS TIMESTAMPTZ NOT NULL CHECK(VALUE > NOW());
@@ -43,7 +42,6 @@ CREATE TABLE session(
     id UUID NOT NULL,
     user_id GoogleuserId REFERENCES users (id),
     expiration Expiration,
-    access_token AccessToken,
     PRIMARY KEY (id)
 );
 
