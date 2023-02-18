@@ -1,13 +1,18 @@
 import {
+    OK,
     CREATED,
     BAD_REQUEST,
     UNAUTHORIZED,
-    FORBIDDEN
+    FORBIDDEN,
+    NOT_FOUND,
 } from 'http-status';
-import { z } from 'zod';
 
-import { BarcodeSchema } from '~model/barcode.ts';
-import { BatchSchema } from '~model/batch.ts';
+import {
+    type GeneratedBatch,
+    type MinBatch,
+    GeneratedBatchSchema,
+    MinBatchSchema
+} from '~model/batch.ts';
 
 import type { Office } from '~model/office.ts';
 
@@ -19,11 +24,19 @@ import {
 } from './error.ts';
 
 export namespace Batch {
-    export const GeneratedBatchSchema = BatchSchema
-        .omit({ office: true, generator: true })
-        .and(z.object({ codes: BarcodeSchema.shape.code.array() }));
-
-    export type GeneratedBatch = z.infer<typeof GeneratedBatchSchema>;
+    export async function getEarliestBatch(office: Office['id']): Promise<MinBatch | null> {
+        const res = await fetch(`/api/batch?office=${office}`, {
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json' },
+        });
+        switch (res.status) {
+            case OK: return MinBatchSchema.parse(await res.json());
+            case NOT_FOUND: return null;
+            case BAD_REQUEST: throw new InvalidInput;
+            case UNAUTHORIZED: throw new InvalidSession;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
 
     export async function generate(office: Office['id']): Promise<GeneratedBatch> {
         const res = await fetch(`/api/batch?office=${office}`, {
