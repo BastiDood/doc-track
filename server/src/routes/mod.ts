@@ -27,7 +27,7 @@ info(`[Static] file server hosted at ${STATIC_ROOT}`);
 export async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
-        case '/api/batch': return handleGetEarliestAvailableBatch(pool, req);
+        case '/api/batch': return handleGetEarliestAvailableBatch(pool, req, searchParams);
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/api/vapid': return handleVapidPublicKey();
         case '/auth/login': return handleLogin(pool, req);

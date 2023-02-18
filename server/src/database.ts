@@ -247,14 +247,16 @@ export class Database {
         return { id, creation, codes };
     }
 
-    /** Returns a list of oldest available {@linkcode Barcode} IDs. */
-    async getEarliestAvailableBatch(): Promise<MinBatch | null> {
+    /** Returns a list of earliest available {@linkcode Batch} of {@linkcode Barcode} IDs (relative to an {@linkcode Office}). */
+    async getEarliestAvailableBatch(id: Office['id']): Promise<MinBatch | null> {
         // TODO: Add Tests
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`SELECT MIN(b.batch),coalesce(array_agg(b.code),'{}') AS codes
-                FROM barcode b LEFT JOIN document d ON b.code = d.id
-                WHERE d.id IS NULL
-                GROUP BY b.batch`;
+                FROM barcode bar
+                    LEFT JOIN batch bat ON bar.batch = bat.id
+                    LEFT JOIN document doc ON bar.code = doc.id
+                WHERE doc.id IS NULL AND bat.office = ${id}
+                GROUP BY bar.batch`;
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null

@@ -6,21 +6,30 @@ import { Pool } from 'postgres';
 import { type GeneratedBatch, type MinBatch, Database } from '../../database.ts';
 
 /**
- * Gets the earliest available batch of barcodes.
+ * Gets the earliest available batch of barcodes (relative to an office).
  *
  * # Inputs
  * - Requires a valid session ID.
+ * - Accepts the ID of the office from which the batch originated via the `office` query parameter.
  *
  * # Outputs
  * - `200` => returns a {@linkcode MinBatch} as JSON in the {@linkcode Response} body
+ * - `400` => office ID is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `404` => no batches have been generated yet
  */
-export async function handleGetEarliestAvailableBatch(pool: Pool, req: Request) {
+export async function handleGetEarliestAvailableBatch(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Batch] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
+    }
+
+    const input = params.get('office');
+    const oid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(oid)) {
+        error(`[Batch] Session ${sid} provided an empty office query argument`);
+        return new Response(null, { status: Status.BadRequest });
     }
 
     const db = await Database.fromPool(pool);
@@ -31,7 +40,7 @@ export async function handleGetEarliestAvailableBatch(pool: Pool, req: Request) 
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        const result: MinBatch | null = await db.getEarliestAvailableBatch();
+        const result: MinBatch | null = await db.getEarliestAvailableBatch(oid);
         if (result === null) {
             error(`[Batch] No batches available yet for session ${sid}`);
             return new Response(null, { status: Status.NotFound });
