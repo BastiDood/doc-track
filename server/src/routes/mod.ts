@@ -3,7 +3,8 @@ import { contentType } from 'content-type';
 import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
-import { join, extname } from 'posix';
+import { resolve, join } from 'path';
+import { extname } from 'posix';
 
 import { handleGetEarliestAvailableBatch, handleGenerateBatch } from './api/batch.ts';
 import {
@@ -20,6 +21,9 @@ import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 import { handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
 import { handleSetUserPermissions } from './api/user.ts';
 
+const STATIC_ROOT = resolve(Deno.cwd(), '../client/dist');
+info(`[Static] file server hosted at ${STATIC_ROOT}`);
+
 export async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
@@ -29,8 +33,7 @@ export async function handleGet(pool: Pool, req: Request) {
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
         case '/': {
-            const path = '../client/dist' + join(pathname, 'index.html');
-            const { readable } = await Deno.open(path);
+            const { readable } = await Deno.open(STATIC_ROOT + pathname + 'index.html');
             return new Response(readable, {
                 headers: { 'Content-Type': 'text/html; charset=utf-8' },
             });
@@ -45,7 +48,7 @@ export async function handleGet(pool: Pool, req: Request) {
         return new Response(null, { status: Status.NotFound });
     }
 
-    const path = '../client/dist' + pathname;
+    const path = join(STATIC_ROOT, pathname);
     try {
         const { readable } = await Deno.open(path);
         info(`[GET] Read static file ${path}`);
