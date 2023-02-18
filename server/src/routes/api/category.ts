@@ -3,7 +3,7 @@ import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
 
-import { type Category, CategorySchema } from '~model/category.ts';
+import type { Category } from '~model/category.ts';
 
 import { Database } from '../../database.ts';
 
@@ -99,26 +99,34 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the upserted {@linkcode Category} as JSON from the {@linkcode Request} body.
+ * - Accepts the target {@linkcode Category} ID via the `id` query parameter.
+ * - Accepts the new {@linkcode Category} name as plaintext from the {@linkcode Request} body.
  *
  * # Outputs
  * - `204` => {@linkcode Category} successfully renamed
- * - `400` => {@linkcode Category} name is unacceptable
+ * - `400` => {@linkcode Category} ID or name is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => {@linkcode Category} ID does not exist
  */
-export async function handleRenameCategory(pool: Pool, req: Request) {
+export async function handleRenameCategory(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Category] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
     }
 
+    const input = params.get('id');
+    const id = input ? parseInt(input, 10) : NaN;
+    if (isNaN(id)) {
+        error(`[Category] Session ${sid} provided an empty target office ID`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
     // TODO: validate whether this is a legal category name
-    const result = CategorySchema.safeParse(await req.json());
-    if (!result.success) {
-        error('[Category] Invalid category schema');
+    const name = await req.text();
+    if (!name) {
+        error(`[Category] Session ${sid} provided an invalid category schema`);
         return new Response(null, { status: Status.BadRequest });
     }
 
@@ -131,12 +139,12 @@ export async function handleRenameCategory(pool: Pool, req: Request) {
         }
 
         // TODO: check global permissions
-        if (await db.renameCategory(result.data)) {
-            info(`[Category] User ${user.id} ${user.name} <${user.email}> renamed category ${result.data.id} to "${result.data.name}"`);
+        if (await db.renameCategory({ id, name })) {
+            info(`[Category] User ${user.id} ${user.name} <${user.email}> renamed category ${id} to "${name}"`);
             return new Response(null, { status: Status.NoContent });
         }
 
-        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to rename non-existent category ${result.data.id} to "${result.data.name}"`);
+        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to rename non-existent category ${id} to "${name}"`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();
@@ -166,7 +174,7 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
     }
 
     const input = params.get('id');
-    const id = input === null ? NaN : parseInt(input, 10);
+    const id = input ? parseInt(input, 10) : NaN;
     if (isNaN(id)) {
         error('[Category] Malformed category ID');
         return new Response(null, { status: Status.BadRequest });
@@ -216,7 +224,7 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
     }
 
     const input = params.get('id');
-    const id = input === null ? NaN : parseInt(input, 10);
+    const id = input ? parseInt(input, 10) : NaN;
     if (isNaN(id)) {
         error(`[Category] Invalid input from session ${sid}`);
         return new Response(null, { status: Status.BadRequest });
