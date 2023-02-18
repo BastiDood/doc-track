@@ -49,8 +49,8 @@ In a separate terminal, run the following script to start the Deno server proper
 deno task template
 
 # Clone the previous template into a new database named `doctrack`. We may re-run
-# this command whenever # we want to restore to a blank # state of the database so
-# that we # don't have to keep re-initializingthe database.
+# this command whenever # we want to restore to a blank state of the database so
+# that we don't have to keep re-initializingthe database.
 deno task create
 
 # If you have not yet run this command before, place the
