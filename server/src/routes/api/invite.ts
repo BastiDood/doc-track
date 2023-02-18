@@ -23,7 +23,7 @@ import { Database } from '../../database.ts';
  * - `403` => session has insufficient permissions
  * - `409` => `email` already exists for some valid user
  */
-export async function handleAddInvite(pool: Pool, req: Request, params: URLSearchParams) {
+export async function handleAddInvitation(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Invite] Absent session ID');
@@ -31,7 +31,7 @@ export async function handleAddInvite(pool: Pool, req: Request, params: URLSearc
     }
 
     const input = params.get('office');
-    const office = input ? parseInt(input) : NaN;
+    const office = input ? parseInt(input, 10) : NaN;
     if (isNaN(office)) {
         error(`[Invite] Empty office name in the query for session ${sid}`);
         return new Response(null, { status: Status.BadRequest });
@@ -91,15 +91,10 @@ export async function handleRevokeInvitation(pool: Pool, req: Request, params: U
         return new Response(null, { status: Status.Unauthorized });
     }
 
-    const office = params.get('office');
-    if (!office) {
-        error(`[Invite] Empty office name in the query for session ${sid}`);
-        return new Response(null, { status: Status.BadRequest });
-    }
-
-    const oid = parseInt(office, 10);
+    const input = params.get('office');
+    const oid = input ? parseInt(input, 10) : NaN;
     if (isNaN(oid)) {
-        error(`[Invite] Malformed office name in the query for session ${sid}`);
+        error(`[Invite] Empty office name in the query for session ${sid}`);
         return new Response(null, { status: Status.BadRequest });
     }
 

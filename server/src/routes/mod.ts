@@ -88,7 +88,7 @@ export function handlePatch(pool: Pool, req: Request) {
 export function handlePut(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
-        case '/api/category': return handleRenameCategory(pool, req);
+        case '/api/category': return handleRenameCategory(pool, req, searchParams);
         case '/api/invite': return handleAddInvitation(pool, req, searchParams);
         case '/api/office': return handleUpdateOffice(pool, req);
         default:
