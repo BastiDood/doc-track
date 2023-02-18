@@ -3,7 +3,7 @@ import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
 
-import type { GeneratedBatch, MinBatch } from '~model/batch.ts';
+import type { GeneratedBatch, MinBatch } from '~model/api.ts';
 
 import { Database } from '../../database.ts';
 

@@ -6,13 +6,9 @@ import { z } from 'zod';
 import type { Document } from '~model/document.ts';
 import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
 
+import { type GeneratedBatch, type MinBatch, MinBatchSchema } from '~model/api.ts';
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
-import {
-    type Batch,
-    type GeneratedBatch, type MinBatch,
-    BatchSchema,
-    MinBatchSchema
-} from '~model/batch.ts';
+import { type Batch, BatchSchema, } from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
 import { type Invitation, InvitationSchema } from '~model/invitation.ts';
 import { type Office, OfficeSchema } from '~model/office.ts';
