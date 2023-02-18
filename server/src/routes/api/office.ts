@@ -3,8 +3,6 @@ import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
 
-import { type Office, OfficeSchema } from '~model/office.ts';
-
 import { Database } from '../../database.ts';
 
 /**
@@ -12,11 +10,11 @@ import { Database } from '../../database.ts';
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the name of the new {@linkcode Office} as plaintext from the {@linkcode Request} body.
+ * - Accepts the name of the new name as plaintext from the {@linkcode Request} body.
  *
  * # Outputs
- * - `201` => returns the ID of the successfully created {@linkcode Office}
- * - `400` => provided {@linkcode Office} name is unacceptable
+ * - `201` => returns the ID of the successfully created office
+ * - `400` => provided office name is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  */
 export async function handleCreateOffice(pool: Pool, req: Request) {
@@ -57,7 +55,8 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the updated {@linkcode Office} details as JSON from the {@linkcode Request} body.
+ * - Accepts the target {@linkcode Office} ID via the `id` query parameter.
+ * - Accepts the updated {@linkcode Office} name as plaintext via the {@linkcode Request} body.
  *
  * # Outputs
  * - `204` => {@linkcode Office} successfully updated
@@ -65,16 +64,23 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `404` => requested {@linkcode Office} is non-existent
  */
-export async function handleUpdateOffice(pool: Pool, req: Request) {
+export async function handleUpdateOffice(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Office] Absent session');
         return new Response(null, { status: Status.Unauthorized });
     }
 
-    const result = OfficeSchema.safeParse(await req.json());
-    if (!result.success) {
+    const input = params.get('id');
+    const id = input ? parseInt(input, 10) : NaN;
+    if (isNaN(id)) {
         error(`[Office] Session ${sid} provided malformed input`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const name = await req.text();
+    if (!name) {
+        error(`[Office] Session ${sid} failed to create office with empty name`);
         return new Response(null, { status: Status.BadRequest });
     }
 
@@ -87,13 +93,12 @@ export async function handleUpdateOffice(pool: Pool, req: Request) {
         }
 
         // TODO: check global permissions
-        const office: Office = result.data;
-        if (await db.updateOffice(office)) {
-            info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> updated office ${office.id} to "${office.name}"`);
+        if (await db.updateOffice({ id, name })) {
+            info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> updated office ${id} to "${name}"`);
             return new Response(null, { status: Status.NoContent });
         }
 
-        error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> attempted to update non-existent office ${office.id} to "${office.name}"`);
+        error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> attempted to update non-existent office ${id} to "${name}"`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();

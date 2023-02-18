@@ -90,7 +90,7 @@ export function handlePut(pool: Pool, req: Request) {
     switch (pathname) {
         case '/api/category': return handleRenameCategory(pool, req, searchParams);
         case '/api/invite': return handleAddInvitation(pool, req, searchParams);
-        case '/api/office': return handleUpdateOffice(pool, req);
+        case '/api/office': return handleUpdateOffice(pool, req, searchParams);
         default:
             error(`[PUT] ${pathname} not found`);
             return new Response(null, { status: Status.NotFound });
