@@ -1,5 +1,5 @@
 <script>
-    import { register } from './register';
+    import { register } from './register.ts';
     const ready = register();
 </script>
 

@@ -7,5 +7,6 @@
         "isolatedModules": true,
         "moduleResolution": "bundler",
         "strict": true,
+        "rootDir": "src"
     }
 }

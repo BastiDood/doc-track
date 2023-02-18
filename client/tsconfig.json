@@ -1,11 +1,15 @@
 {
     "compilerOptions": {
+        "allowImportingTsExtensions": true,
         "target": "ES2020",
         "module": "ES2020",
         "isolatedModules": true,
         "moduleResolution": "node16",
         "strict": true,
-        "types": ["serviceworker"],
-        "plugins": [{ "name": "typescript-svelte-plugin" }]
-    }
+        "paths": { "~model/*": [ "../model/src/*" ] },
+        "rootDir": "src",
+        "types": [ "serviceworker" ],
+        "plugins": [ { "name": "typescript-svelte-plugin" } ]
+    },
+    "references": [ { "path": "../model" } ]
 }

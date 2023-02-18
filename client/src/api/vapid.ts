@@ -1,7 +1,7 @@
 import { OK, CREATED } from 'http-status';
 
-import { assert } from '../assert';
-import { UnexpectedStatusCode } from './error';
+import { UnexpectedStatusCode } from './error.ts';
+import { assert } from '../assert.ts';
 
 export namespace Vapid {
     /** @returns VAPID public key of the server as raw bytes */

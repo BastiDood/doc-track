@@ -1,6 +1,6 @@
 import { manifest, version } from '@parcel/service-worker';
 
-import { assert } from '../assert';
+import { assert } from '../assert.ts';
 
 async function handleInstall() {
     const INDEX = '/index.html';
