@@ -12,7 +12,7 @@ specifiers:
   parcel: ^2.8.3
   svelte: ^3.55.1
   svelte-preprocess: ^5.0.1
-  typescript: 5.0.0-dev.20230218
+  typescript: ^4.9.5
   typescript-svelte-plugin: ^0.3.14
   zod: ^3.20.6
 
@@ -30,9 +30,9 @@ devDependencies:
   '@types/serviceworker': 0.0.60
   parcel: 2.8.3
   svelte: 3.55.1
-  svelte-preprocess: 5.0.1_jsdakhspyr4xaj5sq3rg4lm2nq
-  typescript: 5.0.0-dev.20230218
-  typescript-svelte-plugin: 0.3.14_jsdakhspyr4xaj5sq3rg4lm2nq
+  svelte-preprocess: 5.0.1_4x7phaipmicbaooxtnresslofa
+  typescript: 4.9.5
+  typescript-svelte-plugin: 0.3.14_4x7phaipmicbaooxtnresslofa
 
 packages:
 
@@ -1810,7 +1810,7 @@ packages:
       has-flag: 4.0.0
     dev: true
 
-  /svelte-preprocess/5.0.1_jsdakhspyr4xaj5sq3rg4lm2nq:
+  /svelte-preprocess/5.0.1_4x7phaipmicbaooxtnresslofa:
     resolution: {integrity: sha512-0HXyhCoc9rsW4zGOgtInylC6qj259E1hpFnJMJWTf+aIfeqh4O/QHT31KT2hvPEqQfdjmqBR/kO2JDkkciBLrQ==}
     engines: {node: '>= 14.10.0'}
     requiresBuild: true
@@ -1855,7 +1855,7 @@ packages:
       sorcery: 0.11.0
       strip-indent: 3.0.0
       svelte: 3.55.1
-      typescript: 5.0.0-dev.20230218
+      typescript: 4.9.5
     dev: true
 
   /svelte/3.55.1:
@@ -1863,7 +1863,7 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /svelte2tsx/0.6.1_jsdakhspyr4xaj5sq3rg4lm2nq:
+  /svelte2tsx/0.6.1_4x7phaipmicbaooxtnresslofa:
     resolution: {integrity: sha512-O/1+5UyChfmhp1/GUv8b8iveTrn6eZwHxEXc+rw7LMKRidr9KHk5w/EiliLjDUwHa2VA6CoEty+CQylROVU4Sw==}
     peerDependencies:
       svelte: ^3.55
@@ -1872,7 +1872,7 @@ packages:
       dedent-js: 1.0.1
       pascal-case: 3.1.2
       svelte: 3.55.1
-      typescript: 5.0.0-dev.20230218
+      typescript: 4.9.5
     dev: true
 
   /svgo/2.8.0:
@@ -1925,18 +1925,18 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /typescript-svelte-plugin/0.3.14_jsdakhspyr4xaj5sq3rg4lm2nq:
+  /typescript-svelte-plugin/0.3.14_4x7phaipmicbaooxtnresslofa:
     resolution: {integrity: sha512-8/Rl0+fUyk1y6E7jREUS5sO5XcUg8m9z3eV/wmMHhEbBcy4S9jB8Mrc7h5zCIfD2CCkdVXdL47ayJnEtKBwc2Q==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.14
-      svelte2tsx: 0.6.1_jsdakhspyr4xaj5sq3rg4lm2nq
+      svelte2tsx: 0.6.1_4x7phaipmicbaooxtnresslofa
     transitivePeerDependencies:
       - svelte
       - typescript
     dev: true
 
-  /typescript/5.0.0-dev.20230218:
-    resolution: {integrity: sha512-SCUCUbzAQ9Nvl+V4qBLh1z6cWYDt6uM8gywhmrQrYdpbrZss3L8MBhZy1CfZFe6K1ApsbW0cBT8HVoTC0/WkEg==}
+  /typescript/4.9.5:
+    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
