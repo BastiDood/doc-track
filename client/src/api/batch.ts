@@ -12,8 +12,7 @@ import {
     type MinBatch,
     GeneratedBatchSchema,
     MinBatchSchema
-} from '~model/batch.ts';
-
+} from '~model/api.ts';
 import type { Office } from '~model/office.ts';
 
 import {
