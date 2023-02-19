@@ -1,6 +1,7 @@
 import { getCookies } from 'cookie';
 import { Status } from 'http';
 import { error, info } from 'log';
+import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
 import { Database } from '../../database.ts';
@@ -20,6 +21,7 @@ import { Database } from '../../database.ts';
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => staff member does not exist
+ * - `406` => content negotiation failed
  */
 export async function handleSetStaffPermissions(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
@@ -40,6 +42,18 @@ export async function handleSetStaffPermissions(pool: Pool, req: Request, params
     if (isNaN(setPerms)) {
         error(`[Staff] Session ${sid} provided invalid office ID`);
         return new Response(null, { status: Status.BadRequest });
+    }
+
+    const ct = req.headers.get('Content-Type');
+    if (!ct) {
+        error(`[Staff] Empty content type for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const [ mime, _ ] = parseMediaType(ct);
+    if (mime !== 'text/plain') {
+        error(`[Staff] Bad content type ${mime} from session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const user = await req.text();
@@ -84,6 +98,7 @@ export async function handleSetStaffPermissions(pool: Pool, req: Request, params
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => staff member does not exist
+ * - `406` => content negotiation failed
  */
 export async function handleRemoveStaff(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
@@ -97,6 +112,18 @@ export async function handleRemoveStaff(pool: Pool, req: Request, params: URLSea
     if (isNaN(oid)) {
         error(`[Staff] Session ${sid} provided invalid office ID`);
         return new Response(null, { status: Status.BadRequest });
+    }
+
+    const ct = req.headers.get('Content-Type');
+    if (!ct) {
+        error(`[Staff] Empty content type for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const [ mime, _ ] = parseMediaType(ct);
+    if (mime !== 'text/plain') {
+        error(`[Staff] Bad content type ${mime} from session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const user = await req.text();

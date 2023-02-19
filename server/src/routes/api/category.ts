@@ -1,6 +1,8 @@
 import { getCookies } from 'cookie';
+import { parseMediaType } from 'parse-media-type';
 import { Status } from 'http';
 import { error, info } from 'log';
+import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
 import type { Category } from '~model/category.ts';
@@ -17,12 +19,18 @@ import { Database } from '../../database.ts';
  * # Outputs
  * - `200` => return {@linkcode Response} containing {@linkcode Category[]} as JSON body
  * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `406` => content negotiation failed
  */
 export async function handleGetAllCategories(pool: Pool, req: Request) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Category] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Category] Response content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const db = await Database.fromPool(pool);
@@ -54,12 +62,30 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
  * - `400` => category name is duplicated or otherwise unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
+ * - `406` => content negotiation failed
  */
 export async function handleCreateCategory(pool: Pool, req: Request) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Category] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Category] Response content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const ct = req.headers.get('Content-Type');
+    if (!ct) {
+        error(`[Category] No content type from session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const [ mime, _ ] = parseMediaType(ct)
+    if (mime !== 'text/plain') {
+        error(`[Category] Bad media type ${mime} from session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     // TODO: validate whether this is a legal category name
@@ -108,6 +134,7 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => {@linkcode Category} ID does not exist
+ * - `406` => content negotiation failed
  */
 export async function handleRenameCategory(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
@@ -121,6 +148,18 @@ export async function handleRenameCategory(pool: Pool, req: Request, params: URL
     if (isNaN(id)) {
         error(`[Category] Session ${sid} provided an empty target office ID`);
         return new Response(null, { status: Status.BadRequest });
+    }
+
+    const ct = req.headers.get('Content-Type');
+    if (ct !== 'text/plain') {
+        error(`[Category] Response content negotiation failed for ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const [ mime, _ ] = parseMediaType(ct)
+    if (mime !== 'text/plain') {
+        error(`[Category] Bad media type ${mime} from session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     // TODO: validate whether this is a legal category name
@@ -165,6 +204,7 @@ export async function handleRenameCategory(pool: Pool, req: Request, params: URL
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => {@linkcode Category} ID does not exist
+ * - `406` => content negotiation failed
  */
 export async function handleDeleteCategory(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
@@ -215,12 +255,18 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => {@linkcode Category} ID does not exist
+ * - `406` => content negotiation failed
  */
 export async function handleActivateCategory(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Category] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'text/plain') === undefined) {
+        error(`[Category] Response content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const input = params.get('id');
@@ -242,9 +288,7 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
         const name = await db.activateCategory(id);
         if (name) {
             info(`[Category] User ${operator.id} ${operator.name} <${operator.email}> activated category ${id} "${name}"`);
-            return new Response(name, {
-                headers: { 'Content-Type': 'text/plain' },
-            });
+            return new Response(name, { headers: { 'Content-Type': 'text/plain' } });
         }
 
         error(`[Category] User ${operator.id} ${operator.name} <${operator.email}> attempted to delete non-existent category ${id}`);

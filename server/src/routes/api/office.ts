@@ -1,6 +1,8 @@
 import { getCookies } from 'cookie';
 import { Status } from 'http';
 import { error, info } from 'log';
+import { accepts } from 'negotiation';
+import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
 import { Database } from '../../database.ts';
@@ -16,12 +18,30 @@ import { Database } from '../../database.ts';
  * - `201` => returns the ID of the successfully created office
  * - `400` => provided office name is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `406` => content negotiation failed
  */
 export async function handleCreateOffice(pool: Pool, req: Request) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Office] Absent session');
         return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Office] Response content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const ct = req.headers.get('Content-Type');
+    if (!ct) {
+        error(`[Office] Empty content type for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const [ mime, _ ] = parseMediaType(ct);
+    if (mime !== 'text/plain') {
+        error(`[Office] Bad content type ${mime} from session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const name = await req.text();
@@ -63,6 +83,7 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
  * - `400` => provided {@linkcode Office} is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `404` => requested {@linkcode Office} is non-existent
+ * - `406` => content negotiation failed
  */
 export async function handleUpdateOffice(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
@@ -76,6 +97,18 @@ export async function handleUpdateOffice(pool: Pool, req: Request, params: URLSe
     if (isNaN(id)) {
         error(`[Office] Session ${sid} provided malformed input`);
         return new Response(null, { status: Status.BadRequest });
+    }
+
+    const ct = req.headers.get('Content-Type');
+    if (!ct) {
+        error(`[Office] Empty content type for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const [ mime, _ ] = parseMediaType(ct);
+    if (mime !== 'text/plain') {
+        error(`[Office] Bad content type ${mime} from session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const name = await req.text();

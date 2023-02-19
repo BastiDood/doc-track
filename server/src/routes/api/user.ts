@@ -1,6 +1,7 @@
 import { getCookies } from 'cookie';
 import { Status } from 'http';
 import { error, info } from 'log';
+import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
 import { Database } from '../../database.ts';
@@ -19,6 +20,7 @@ import { Database } from '../../database.ts';
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => user does not exist
+ * - `406` => content negotiation failed
  */
 export async function handleSetUserPermissions(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
@@ -32,6 +34,18 @@ export async function handleSetUserPermissions(pool: Pool, req: Request, params:
     if (isNaN(setPerms)) {
         error(`[User] Session ${sid} provided invalid office ID`);
         return new Response(null, { status: Status.BadRequest });
+    }
+
+    const ct = req.headers.get('Content-Type');
+    if (!ct) {
+        error(`[User] Empty content type for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const [ mime, _ ] = parseMediaType(ct);
+    if (mime !== 'text/plain') {
+        error(`[User] Bad content type ${mime} from session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const user = await req.text();

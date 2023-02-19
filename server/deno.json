@@ -28,6 +28,8 @@
         "hex": "https://deno.land/std@0.177.0/encoding/hex.ts",
         "http": "https://deno.land/std@0.177.0/http/http_status.ts",
         "log": "https://deno.land/std@0.177.0/log/mod.ts",
+        "negotiation": "https://deno.land/std@0.177.0/http/negotiation.ts",
+        "parse-media-type": "https://deno.land/std@0.177.0/media_types/parse_media_type.ts",
         "path": "https://deno.land/std@0.177.0/path/mod.ts",
         "posix": "https://deno.land/std@0.177.0/path/posix.ts",
         "server": "https://deno.land/std@0.177.0/http/server.ts",

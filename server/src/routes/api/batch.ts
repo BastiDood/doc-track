@@ -1,6 +1,7 @@
 import { getCookies } from 'cookie';
 import { Status } from 'http';
 import { error, info } from 'log';
+import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
 import type { GeneratedBatch, MinBatch } from '~model/api.ts';
@@ -19,12 +20,18 @@ import { Database } from '../../database.ts';
  * - `400` => office ID is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `404` => no batches have been generated yet
+ * - `406` => content negotiation failed
  */
 export async function handleGetEarliestAvailableBatch(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Batch] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Batch] Response content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const input = params.get('office');
@@ -69,12 +76,18 @@ export async function handleGetEarliestAvailableBatch(pool: Pool, req: Request, 
  * - `400` => query argument `office` is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient local permissions
+ * - `406` => content negotiation failed
  */
 export async function handleGenerateBatch(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Batch] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Batch] Response content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const input = params.get('office');
