@@ -12,12 +12,13 @@ import { Database } from '../../database.ts';
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts the name of the new name as plaintext from the {@linkcode Request} body.
+ * - Accepts the `name` of the new office as plaintext from the {@linkcode Request} body.
  *
  * # Outputs
  * - `201` => returns the ID of the successfully created office
  * - `400` => provided office name is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => user is not a system operator
  * - `406` => content negotiation failed
  */
 export async function handleCreateOffice(pool: Pool, req: Request) {
@@ -82,6 +83,7 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
  * - `204` => {@linkcode Office} successfully updated
  * - `400` => provided {@linkcode Office} is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => user is not a system operator
  * - `404` => requested {@linkcode Office} is non-existent
  * - `406` => content negotiation failed
  */
