@@ -2,11 +2,12 @@ import {
     OK,
     CREATED,
     ACCEPTED,
-    NO_CONTENT,
     BAD_REQUEST,
-    NOT_FOUND,
+    NO_CONTENT,
     UNAUTHORIZED,
-    FORBIDDEN
+    FORBIDDEN,
+    NOT_FOUND,
+    NOT_ACCEPTABLE,
 } from 'http-status';
 
 import { type Category as CategoryType, CategorySchema } from '~model/category.ts';
@@ -15,6 +16,7 @@ import {
     InsufficientPermissions,
     InvalidInput,
     InvalidSession,
+    BadContentNegotiation,
     UnexpectedStatusCode
 } from './error.ts';
 
@@ -31,6 +33,7 @@ export namespace Category {
         switch (res.status) {
             case OK: return CategorySchema.array().parse(await res.json());
             case UNAUTHORIZED: throw new InvalidSession;
+            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -54,6 +57,7 @@ export namespace Category {
             case BAD_REQUEST: throw new InvalidInput;
             case UNAUTHORIZED: throw new InvalidSession;
             case FORBIDDEN: throw new InsufficientPermissions;
+            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -78,6 +82,7 @@ export namespace Category {
             case BAD_REQUEST: throw new InvalidInput;
             case UNAUTHORIZED: throw new InvalidSession;
             case FORBIDDEN: throw new InsufficientPermissions;
+            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }

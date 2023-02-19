@@ -5,6 +5,7 @@ import {
     UNAUTHORIZED,
     FORBIDDEN,
     NOT_FOUND,
+    NOT_ACCEPTABLE,
 } from 'http-status';
 
 import {
@@ -19,6 +20,7 @@ import {
     InsufficientPermissions,
     InvalidInput,
     InvalidSession,
+    BadContentNegotiation,
     UnexpectedStatusCode
 } from './error.ts';
 
@@ -33,6 +35,7 @@ export namespace Batch {
             case NOT_FOUND: return null;
             case BAD_REQUEST: throw new InvalidInput;
             case UNAUTHORIZED: throw new InvalidSession;
+            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -48,6 +51,7 @@ export namespace Batch {
             case BAD_REQUEST: throw new InvalidInput;
             case UNAUTHORIZED: throw new InvalidSession;
             case FORBIDDEN: throw new InsufficientPermissions;
+            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }

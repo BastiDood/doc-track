@@ -16,6 +16,12 @@ export class InvalidSession extends Error {
     }
 }
 
+export class BadContentNegotiation extends Error {
+    constructor() {
+        super('content negotiation failed');
+    }
+}
+
 export class UnexpectedStatusCode extends Error {
     constructor() {
         super('unexpected status code');
