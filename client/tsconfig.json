@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "allowImportingTsExtensions": true,
         "target": "ES2020",
         "module": "ES2020",
         "isolatedModules": true,
