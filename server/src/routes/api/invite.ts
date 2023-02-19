@@ -18,7 +18,7 @@ import { Database } from '../../database.ts';
  * - Accepts the `email` and `permission` via JSON in the {@linkcode Request} body.
  *
  * # Outputs
- * - `200` => return JSON body containing `permission` and `creation` of the deleted {@linkcode Invitation}
+ * - `200` => returns the plaintext `creation` (in milliseconds) of the added {@linkcode Invitation}
  * - `400` => office query parameter or request body is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
@@ -94,7 +94,7 @@ export async function handleAddInvitation(pool: Pool, req: Request, params: URLS
  * # Inputs
  * - Requires a valid session ID of an office administrator.
  * - Accepts the user's current {@linkcode Office} ID via the `office` query parameter.
- * - Accepts the `office` and `email` of the {@linkcode Invitation} to revoke as JSON in the {@linkcode Request} body.
+ * - Accepts the `email` of the {@linkcode Invitation} to revoke as plaintext in the {@linkcode Request} body.
  *
  * # Outputs
  * - `200` => return JSON body containing `permission` and `creation` of the deleted {@linkcode Invitation}
@@ -130,14 +130,14 @@ export async function handleRevokeInvitation(pool: Pool, req: Request, params: U
     }
 
     const [ mime, _ ] = parseMediaType(ct);
-    if (mime !== 'application/json') {
+    if (mime !== 'text/plain') {
         error(`[Invite] Bad content type ${mime} for session ${sid}`);
         return new Response(null, { status: Status.NotAcceptable });
     }
 
-    const inputResult = InvitationSchema.pick({ office: true, email: true }).safeParse(await req.json());
-    if (!inputResult.success) {
-        error(`[Invite] Session ${sid} provided malformed input in the body`);
+    const email = await req.text();
+    if (!email) {
+        error(`[Invite] Session ${sid} provided malformed email in the body`);
         return new Response(null, { status: Status.BadRequest });
     }
 
@@ -150,14 +150,13 @@ export async function handleRevokeInvitation(pool: Pool, req: Request, params: U
         }
 
         // TODO: check local permissions
-        const { office, email }: Pick<Invitation, 'office' | 'email'> = inputResult.data;
-        const revokeResult = await db.revokeInvitation(office, email);
+        const revokeResult = await db.revokeInvitation(oid, email);
         if (revokeResult === null) {
-            error(`[Invite] Session ${sid} attempted to revoke non-existent invitation <${email}> from office ${office}`);
+            error(`[Invite] Session ${sid} attempted to revoke non-existent invitation <${email}> from office ${oid}`);
             return new Response(null, { status: Status.NotFound });
         }
 
-        info(`[Invite] Session ${sid} revoked invitation <${email}> from office ${office}`);
+        info(`[Invite] Session ${sid} revoked invitation <${email}> from office ${oid}`);
         return new Response(JSON.stringify(revokeResult), {
             headers: { 'Content-Type': 'application/json' },
             status: Status.OK,
