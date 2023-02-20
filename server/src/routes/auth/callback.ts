@@ -83,12 +83,12 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             info(`[Callback] New user joined offices ${offices}`);
 
         // Upgrade the pending session
-        const { nonce } = await db.upgradeSession({
+        const session = await db.upgradeSession({
             id: sid,
             user_id: idToken.sub,
             expiration: idToken.exp,
         });
-        assertEquals(nonce, decode(idToken.nonce));
+        assertEquals(session?.nonce, decode(idToken.nonce));
 
         // Set the new session cookie
         const headers = new Headers({ Location: '/dashboard' });

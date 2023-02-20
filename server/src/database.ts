@@ -68,15 +68,19 @@ export class Database {
     }
 
     /** Upgrades a pending session into a valid session. Returns the now-invalidated pending session details. */
-    async upgradeSession({ id, user_id, expiration }: Session): Promise<Omit<Pending, 'id'>> {
+    async upgradeSession({ id, user_id, expiration }: Session): Promise<Omit<Pending, 'id'> | null> {
         const transaction = this.#client.createTransaction('upgrade', { isolation_level: 'serializable' });
         await transaction.begin();
 
         const { rows: [ first, ...rest ] } = await transaction
             .queryObject`DELETE FROM pending WHERE id = ${id} RETURNING nonce,expiration`;
         assertStrictEquals(rest.length, 0);
-        const old = PendingSchema.omit({ id: true }).parse(first);
+        if (first === undefined) {
+            await transaction.rollback();
+            return null;
+        }
 
+        const old = PendingSchema.pick({ nonce: true, expiration: true }).parse(first);
         const { rowCount } = await transaction
             .queryArray`INSERT INTO session (id,user_id,expiration) VALUES (${id},${user_id},${expiration.toISOString()})`;
         assertStrictEquals(rowCount, 1);
