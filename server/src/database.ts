@@ -1,6 +1,6 @@
-import { assert, assertStrictEquals, unreachable } from 'asserts';
+import { assert, assertEquals, assertInstanceOf, assertStrictEquals, unreachable } from 'asserts';
 import { range } from 'itertools';
-import { Pool, PoolClient } from 'postgres';
+import { Pool, PoolClient, PostgresError } from 'postgres';
 import { z } from 'zod';
 
 import type { Document } from '~model/document.ts';
@@ -14,6 +14,7 @@ import { type Invitation, InvitationSchema } from '~model/invitation.ts';
 import { type Office, OfficeSchema } from '~model/office.ts';
 import { type Pending, PendingSchema } from '~model/pending.ts';
 import { type Session, SessionSchema } from '~model/session.ts';
+import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
 import { type Staff, StaffSchema } from '~model/staff.ts';
 import { type User, UserSchema } from '~model/user.ts';
 
@@ -28,6 +29,12 @@ type InvalidatedSession = {
 }
 
 const DeprecationSchema = z.object({ result: z.boolean().nullable() });
+
+export enum InsertSnapshotError {
+    DocumentNotFound,
+    EvaluatorNotFound,
+    InvalidStatus,
+}
 
 export class Database {
     #client: PoolClient;
@@ -264,6 +271,36 @@ export class Database {
             case 0: return false;
             case 1: return true;
             default: unreachable();
+        }
+    }
+
+    async insertSnapshot({ doc, target, evaluator, status, remark }: Omit<Snapshot, 'creation'>): Promise<Snapshot['creation'] | InsertSnapshotError> {
+        // TODO: Add tests
+        try {
+            const { rows: [ first, ...rest ] } = await this.#client
+                .queryArray`INSERT INTO snapshot (doc,target,evaluator,status,remark)
+                    VALUES (${doc},${target},${evaluator},${status},${remark}) RETURNING creation`;
+            assertStrictEquals(rest.length, 0);
+            return SnapshotSchema.pick({ creation: true }).parse(first).creation;
+        } catch (err) {
+            // Lint is ignored due to false positive.
+            assertInstanceOf(err, PostgresError);
+            const { fields: { code, column } } = err;
+            switch (code) {
+                // deno-lint-ignore no-fallthrough
+                case '23503':
+                    // foreign_key_violation
+                    switch (column) {
+                        case 'doc': return InsertSnapshotError.DocumentNotFound;
+                        case 'evaluator': return InsertSnapshotError.EvaluatorNotFound;
+                        default: unreachable();
+                    }
+                case '23514':
+                    // check_violation
+                    assertEquals(column, 'status');
+                    return InsertSnapshotError.InvalidStatus; 
+                default: unreachable();
+            }
         }
     }
 
