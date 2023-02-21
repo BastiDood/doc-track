@@ -5,10 +5,10 @@ import { OfficeSchema } from './office.ts';
 import { UserSchema } from './user.ts';
 
 export enum Status {
-    Register,
-    Send,
-    Receive,
-    Terminate,
+    Register = 'Register',
+    Send = 'Send',
+    Receive = 'Receive',
+    Terminate = 'Terminate',
 }
 
 export const SnapshotSchema = z.object({
@@ -17,7 +17,7 @@ export const SnapshotSchema = z.object({
     evaluator: UserSchema.shape.id,
     status: z.nativeEnum(Status),
     remark: z.string().min(1).max(32),
-    target: OfficeSchema.shape.id,
+    target: OfficeSchema.shape.id.nullable(),
 });
 
 export type Snapshot = z.infer<typeof SnapshotSchema>;
