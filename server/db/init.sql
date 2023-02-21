@@ -89,11 +89,11 @@ CREATE TABLE document(
 );
 
 CREATE TABLE snapshot(
-    creation TIMESTAMPTZ DEFAULT NOW(),
+    creation TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     doc UUID NOT NULL REFERENCES document (id),
-    target SMALLINT REFERENCES office (id) CHECK((status = 'Send' AND target IS NOT NULL) OR (status != 'Send' AND target IS NULL)),
     evaluator GoogleUserId NOT NULL REFERENCES users (id),
-    status DocStatus NOT NULL,
+    target SMALLINT REFERENCES office (id) DEFAULT NULL CHECK((status = 'Send' AND target IS NOT NULL) OR (status != 'Send' AND target IS NULL)),
+    status DocStatus NOT NULL DEFAULT 'Register',
     remark VARCHAR(32) NOT NULL,
     PRIMARY KEY (creation, doc)
 );
