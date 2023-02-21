@@ -91,7 +91,7 @@ CREATE TABLE document(
 CREATE TABLE snapshot(
     creation TIMESTAMPTZ DEFAULT NOW(),
     doc UUID NOT NULL REFERENCES document (id),
-    target SMALLINT REFERENCES office (id) CHECK((status = 'Send' AND target IS NOT NULL) OR (target IS NULL)),
+    target SMALLINT REFERENCES office (id) CHECK((status = 'Send' AND target IS NOT NULL) OR (status != 'Send' AND target IS NULL)),
     evaluator GoogleUserId NOT NULL REFERENCES users (id),
     status DocStatus NOT NULL,
     remark VARCHAR(32) NOT NULL,

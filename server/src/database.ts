@@ -283,27 +283,27 @@ export class Database {
         // TODO: Add tests
         try {
             const { rows: [ first, ...rest ] } = await this.#client
-                .queryArray`INSERT INTO snapshot (doc,target,evaluator,status,remark)
+                .queryObject`INSERT INTO snapshot (doc,target,evaluator,status,remark)
                     VALUES (${doc},${target},${evaluator},${status},${remark}) RETURNING creation`;
             assertStrictEquals(rest.length, 0);
             return SnapshotSchema.pick({ creation: true }).parse(first).creation;
         } catch (err) {
             // Lint is ignored due to false positive.
             assertInstanceOf(err, PostgresError);
-            const { fields: { code, column } } = err;
+            const { fields: { code, constraint } } = err;
             switch (code) {
                 // deno-lint-ignore no-fallthrough
                 case '23503':
                     // foreign_key_violation
-                    switch (column) {
-                        case 'doc': return InsertSnapshotError.DocumentNotFound;
-                        case 'target': return InsertSnapshotError.TargetNotFound;
-                        case 'evaluator': return InsertSnapshotError.EvaluatorNotFound;
+                    switch (constraint) {
+                        case 'snapshot_doc_fkey': return InsertSnapshotError.DocumentNotFound;
+                        case 'snapshot_target_fkey': return InsertSnapshotError.TargetNotFound;
+                        case 'snapshot_evaluator_fkey': return InsertSnapshotError.EvaluatorNotFound;
                         default: unreachable();
                     }
                 case '23514':
                     // check_violation
-                    assertEquals(column, 'status');
+                    assertEquals(constraint, 'snapshot_check');
                     return InsertSnapshotError.InvalidStatus; 
                 default: unreachable();
             }
