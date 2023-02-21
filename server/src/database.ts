@@ -33,6 +33,7 @@ const DeprecationSchema = z.object({ result: z.boolean().nullable() });
 export enum InsertSnapshotError {
     DocumentNotFound,
     EvaluatorNotFound,
+    TargetNotFound,
     InvalidStatus,
 }
 
@@ -296,6 +297,7 @@ export class Database {
                     // foreign_key_violation
                     switch (column) {
                         case 'doc': return InsertSnapshotError.DocumentNotFound;
+                        case 'target': return InsertSnapshotError.TargetNotFound;
                         case 'evaluator': return InsertSnapshotError.EvaluatorNotFound;
                         default: unreachable();
                     }
