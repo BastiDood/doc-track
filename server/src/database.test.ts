@@ -13,7 +13,7 @@ import { validate } from 'uuid';
 
 import { Status } from '~model/snapshot.ts';
 
-import { Database, InsertSnapshotError } from './database.ts';
+import { BarcodeAssignmentError, Database, InsertSnapshotError } from './database.ts';
 import { env } from './env.ts';
 
 const options = {
@@ -238,9 +238,27 @@ Deno.test('full OAuth flow', async t => {
     assert(chosen);
     assertStrictEquals(others.length, 9);
 
-    await t.step('document creation', async () => 
+    await t.step('document creation', async () => {
         // TODO: Test if we are indeed the minimum batch
-        assert(await db.assignBarcodeToDocument({ id: chosen, category, title: 'DocTrack Team' })));
+        const doc = { id: chosen, category, title: 'DocTrack Team' };
+        const snap = { evaluator: USER.id, remark: 'Hello' };
+        const uuid = crypto.randomUUID();
+
+        // Non-existent barcode
+        assertEquals(await db.assignBarcodeToDocument({ ...doc, id: uuid }, snap), BarcodeAssignmentError.BarcodeNotFound);
+
+        // Non-existent category
+        assertEquals(await db.assignBarcodeToDocument({ ...doc, category: 0 }, snap), BarcodeAssignmentError.CategoryNotFound);
+
+        // Non-existent evaluator
+        assertEquals(await db.assignBarcodeToDocument(doc, { ...snap, evaluator: uuid }), BarcodeAssignmentError.EvaluatorNotFound);
+
+        // Successful assignment
+        assertInstanceOf(await db.assignBarcodeToDocument(doc, snap), Date);
+
+        // Use already assigned barcode
+        assertEquals(await db.assignBarcodeToDocument(doc, snap), BarcodeAssignmentError.AlreadyAssigned);
+    });
 
     await t.step('snapshot insertion', async () => {
         // Valid snapshot

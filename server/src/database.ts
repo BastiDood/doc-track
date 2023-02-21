@@ -37,6 +37,13 @@ export enum InsertSnapshotError {
     InvalidStatus,
 }
 
+export enum BarcodeAssignmentError {
+    AlreadyAssigned,
+    BarcodeNotFound,
+    CategoryNotFound,
+    EvaluatorNotFound,
+}
+
 export class Database {
     #client: PoolClient;
 
@@ -274,26 +281,34 @@ export class Database {
     async assignBarcodeToDocument(
         { id, category, title }: Document,
         { evaluator, remark }: Pick<Snapshot, 'evaluator' | 'remark'>,
-    ): Promise<Snapshot['creation'] | null> {
+    ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
         // TODO: Do Actual Document Upload
-        const transaction = this.#client.createTransaction('assign');
-        await transaction.begin();
-        const { rowCount } = await transaction.queryObject`INSERT INTO document (id,category,title)
-            VALUES (${id},${category},${title}) ON CONFLICT DO NOTHING`;
-        switch (rowCount) {
-            case 0:
-                await transaction.commit();
-                return null;
-            case 1: break;
-            default: unreachable();
+        try {
+            const { rows: [ first, ...rest ] } = await this.#client
+                .queryObject`WITH results AS (INSERT INTO document (id,category,title) VALUES (${id},${category},${title}) RETURNING id)
+                    INSERT INTO snapshot (doc,evaluator,remark) VALUES ((SELECT id from results),${evaluator},${remark}) RETURNING creation`;
+            assertStrictEquals(rest.length, 0);
+            return SnapshotSchema.pick({ creation: true }).parse(first).creation;
+        } catch (err) {
+            assertInstanceOf(err, PostgresError);
+            const { fields: { code, constraint } } = err;
+            switch (code) {
+                case '23505':
+                    assertEquals(constraint, 'document_pkey');
+                    return BarcodeAssignmentError.AlreadyAssigned;
+                case '23503':
+                    switch (constraint) {
+                        case 'document_id_fkey': return BarcodeAssignmentError.BarcodeNotFound;
+                        case 'document_category_fkey': return BarcodeAssignmentError.CategoryNotFound;
+                        case 'snapshot_evaluator_fkey': return BarcodeAssignmentError.EvaluatorNotFound;
+                        default: break;
+                    }
+                // falls through
+                default:
+                    console.log(code);
+                    unreachable();
+            }
         }
-
-        const { rows: [ first, ...rest ] } = await transaction
-            .queryObject`INSERT INTO snapshot (doc,evaluator,remark) VALUES (${id},${evaluator},${remark}) RETURNING creation`;
-        assertStrictEquals(rest.length, 0);
-        const { creation } = SnapshotSchema.pick({ creation: true }).parse(first);
-        await transaction.commit();
-        return creation;
     }
 
     async insertSnapshot({ doc, target, evaluator, status, remark }: Omit<Snapshot, 'creation'>): Promise<Snapshot['creation'] | InsertSnapshotError> {
