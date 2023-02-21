@@ -1,4 +1,12 @@
-import { assert, assertArrayIncludes, assertEquals, assertInstanceOf, assertStrictEquals, equal } from 'asserts';
+import {
+    assert,
+    assertArrayIncludes,
+    assertEquals,
+    assertFalse,
+    assertInstanceOf,
+    assertStrictEquals,
+    equal,
+} from 'asserts';
 import { encode } from 'base64url';
 import { Pool } from 'postgres';
 import { validate } from 'uuid';
@@ -22,13 +30,13 @@ Deno.test('full OAuth flow', async t => {
 
     await t.step('setting unknown user and staff permissions', async () => {
         const bad = crypto.randomUUID();
-        assert(!await db.setUserPermissions(bad, 1));
-        assert(!await db.setStaffPermissions(bad, 0, 1));
+        assertFalse(await db.setUserPermissions(bad, 1));
+        assertFalse(await db.setStaffPermissions(bad, 0, 1));
     });
 
     const office = await db.createOffice('Test');
     await t.step('update office information', async () => {
-        assert(!await db.updateOffice({ id: 0, name: 'Hello' }));
+        assertFalse(await db.updateOffice({ id: 0, name: 'Hello' }));
         assert(await db.updateOffice({ id: office, name: 'Hello' }));
     });
 
@@ -134,7 +142,7 @@ Deno.test('full OAuth flow', async t => {
         assertStrictEquals(nonce.length, 64);
         assert(new Date < expiration);
 
-        assert(!(await db.checkValidSession(id)));
+        assertFalse(await db.checkValidSession(id));
         assertStrictEquals(await db.getUserFromSession(id), null);
         assertStrictEquals(await db.getPermissionsFromSession(id, office), null);
 
@@ -149,7 +157,7 @@ Deno.test('full OAuth flow', async t => {
         assertStrictEquals(nonce.length, 64);
         assert(new Date < expiration);
 
-        assert(!(await db.checkValidSession(id)));
+        assertFalse(await db.checkValidSession(id));
         assertStrictEquals(await db.getUserFromSession(id), null);
         assertStrictEquals(await db.getPermissionsFromSession(id, office), null);
 
@@ -272,7 +280,7 @@ Deno.test('full OAuth flow', async t => {
 
         // Not in any of the active categories
         const active = await db.getActiveCategories();
-        assert(!active.some(cat => equal(cat, { id: category, name: randomCategory })));
+        assertFalse(active.some(cat => equal(cat, { id: category, name: randomCategory })));
 
         // Activation
         const activation = await db.activateCategory(category);
