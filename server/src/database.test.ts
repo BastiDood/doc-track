@@ -1,9 +1,11 @@
-import { assert, assertArrayIncludes, assertEquals, assertStrictEquals, equal } from 'asserts';
+import { assert, assertArrayIncludes, assertEquals, assertInstanceOf, assertStrictEquals, equal } from 'asserts';
 import { encode } from 'base64url';
 import { Pool } from 'postgres';
 import { validate } from 'uuid';
 
-import { Database } from './database.ts';
+import { Status } from '~model/snapshot.ts';
+
+import { Database, InsertSnapshotError } from './database.ts';
 import { env } from './env.ts';
 
 const options = {
@@ -224,13 +226,43 @@ Deno.test('full OAuth flow', async t => {
     const category = await db.createCategory(randomCategory);
     assert(category !== null);
 
-    await t.step('document creation', async () => {
-        const [ chosen, ...others ] = codes;
-        assert(chosen);
-        assertStrictEquals(others.length, 9);
+    const [ chosen, ...others ] = codes;
+    assert(chosen);
+    assertStrictEquals(others.length, 9);
 
-        assert(await db.assignBarcodeToDocument({ id: chosen, category, title: 'DocTrack Team' }));
+    await t.step('document creation', async () => 
         // TODO: Test if we are indeed the minimum batch
+        assert(await db.assignBarcodeToDocument({ id: chosen, category, title: 'DocTrack Team' })));
+
+    await t.step('snapshot insertion', async () => {
+        // Valid snapshot
+        const snapshot = {
+            doc: chosen,
+            target: office,
+            evaluator: USER.id,
+            status: Status.Send,
+            remark: 'Hello world!',
+        };
+
+        // Non-existent document
+        assertEquals(await db.insertSnapshot({ ...snapshot, doc: crypto.randomUUID() }), InsertSnapshotError.DocumentNotFound);
+
+        // Non-existent target
+        assertEquals(await db.insertSnapshot({ ...snapshot, target: 0 }), InsertSnapshotError.TargetNotFound);
+
+        // Non-existent evaluator
+        assertEquals(await db.insertSnapshot({ ...snapshot, evaluator: 'non-existent-user-id' }), InsertSnapshotError.EvaluatorNotFound);
+
+        // Non-`Send` status with null target
+        assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Send, target: null }), InsertSnapshotError.InvalidStatus);
+
+        // `Send` status with non-null target
+        assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Register }), InsertSnapshotError.InvalidStatus);
+        assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Receive }), InsertSnapshotError.InvalidStatus);
+        assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Terminate }), InsertSnapshotError.InvalidStatus);
+
+        // Valid document
+        assertInstanceOf(await db.insertSnapshot(snapshot), Date);
     });
 
     await t.step('category deprecation and activation', async () => {
