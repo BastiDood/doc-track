@@ -13,7 +13,7 @@ specifiers:
   svelte: ^3.55.1
   svelte-preprocess: ^5.0.1
   typescript: ^4.9.5
-  typescript-svelte-plugin: ^0.3.14
+  typescript-svelte-plugin: ^0.3.15
   zod: ^3.20.6
 
 dependencies:
@@ -32,7 +32,7 @@ devDependencies:
   svelte: 3.55.1
   svelte-preprocess: 5.0.1_4x7phaipmicbaooxtnresslofa
   typescript: 4.9.5
-  typescript-svelte-plugin: 0.3.14_4x7phaipmicbaooxtnresslofa
+  typescript-svelte-plugin: 0.3.15_4x7phaipmicbaooxtnresslofa
 
 packages:
 
@@ -482,7 +482,7 @@ packages:
       '@parcel/source-map': 2.1.1
       '@parcel/utils': 2.8.3
       nullthrows: 1.1.1
-      terser: 5.16.4
+      terser: 5.16.5
     transitivePeerDependencies:
       - '@parcel/core'
     dev: true
@@ -929,8 +929,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /@types/node/18.14.0:
-    resolution: {integrity: sha512-5EWrvLmglK+imbCJY0+INViFWUHg1AHel1sq4ZVSfdcNqGy9Edv3UB9IIzzg+xPaUcAgZYcfVs2fBcwDeZzU0A==}
+  /@types/node/18.14.1:
+    resolution: {integrity: sha512-QH+37Qds3E0eDlReeboBxfHbX9omAcBCXEzswCu6jySP642jiM3cYSIkU/REqwhCUqXdonHFuBfJDiAJxMNhaQ==}
     dev: true
 
   /@types/parse-json/4.0.0:
@@ -944,7 +944,7 @@ packages:
   /@types/sass/1.43.1:
     resolution: {integrity: sha512-BPdoIt1lfJ6B7rw35ncdwBZrAssjcwzI5LByIrYs+tpXlj/CAkuVdRsgZDdP4lq5EjyWzwxZCqAoFyHKFwp32g==}
     dependencies:
-      '@types/node': 18.14.0
+      '@types/node': 18.14.1
     dev: true
 
   /@types/serviceworker/0.0.60:
@@ -1008,8 +1008,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001456
-      electron-to-chromium: 1.4.302
+      caniuse-lite: 1.0.30001457
+      electron-to-chromium: 1.4.310
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
     dev: true
@@ -1027,8 +1027,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite/1.0.30001456:
-    resolution: {integrity: sha512-XFHJY5dUgmpMV25UqaD4kVq2LsiaU5rS8fb0f17pCoXQiQslzmFgnfOxfvo1bTpTqf7dwG/N/05CnLCnOEKmzA==}
+  /caniuse-lite/1.0.30001457:
+    resolution: {integrity: sha512-SDIV6bgE1aVbK6XyxdURbUE89zY7+k1BBBaOwYwkNCglXlel/E7mELiHC64HQ+W0xSKlqWhV9Wh7iHxUjMs4fA==}
     dev: true
 
   /chalk/2.4.2:
@@ -1184,8 +1184,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /electron-to-chromium/1.4.302:
-    resolution: {integrity: sha512-Uk7C+7aPBryUR1Fwvk9VmipBcN9fVsqBO57jV2ZjTm+IZ6BMNqu7EDVEg2HxCNufk6QcWlFsBkhQyQroB2VWKw==}
+  /electron-to-chromium/1.4.310:
+    resolution: {integrity: sha512-/xlATgfwkm5uDDwLw5nt/MNEf7c1oazLURMZLy39vOioGYyYzLWIDT8fZMJak6qTiAJ7udFTy7JG7ziyjNutiA==}
     dev: true
 
   /entities/2.2.0:
@@ -1863,8 +1863,8 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /svelte2tsx/0.6.1_4x7phaipmicbaooxtnresslofa:
-    resolution: {integrity: sha512-O/1+5UyChfmhp1/GUv8b8iveTrn6eZwHxEXc+rw7LMKRidr9KHk5w/EiliLjDUwHa2VA6CoEty+CQylROVU4Sw==}
+  /svelte2tsx/0.6.2_4x7phaipmicbaooxtnresslofa:
+    resolution: {integrity: sha512-0ircYY2/jMOfistf+iq8fVHERnu1i90nku56c78+btC8svyafsc3OjOV37LDEOV7buqYY1Rv/uy03eMxhopH2Q==}
     peerDependencies:
       svelte: ^3.55
       typescript: ^4.9.4
@@ -1894,8 +1894,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /terser/5.16.4:
-    resolution: {integrity: sha512-5yEGuZ3DZradbogeYQ1NaGz7rXVBDWujWlx1PT8efXO6Txn+eWbfKqB2bTDVmFXmePFkoLU6XI8UektMIEA0ug==}
+  /terser/5.16.5:
+    resolution: {integrity: sha512-qcwfg4+RZa3YvlFh0qjifnzBHjKGNbtDo9yivMqMFDy9Q6FSaQWSB/j1xKhsoUFJIqDOM3TsN6D5xbrMrFcHbg==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -1925,11 +1925,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /typescript-svelte-plugin/0.3.14_4x7phaipmicbaooxtnresslofa:
-    resolution: {integrity: sha512-8/Rl0+fUyk1y6E7jREUS5sO5XcUg8m9z3eV/wmMHhEbBcy4S9jB8Mrc7h5zCIfD2CCkdVXdL47ayJnEtKBwc2Q==}
+  /typescript-svelte-plugin/0.3.15_4x7phaipmicbaooxtnresslofa:
+    resolution: {integrity: sha512-Hp0qVZDLjm1b1XRSNeXy62m6LWTkQYDxEjgiANo8y3kvJTu2RIrJpAdBUijV3uQncnMB3vMqxgz1mmfOsiMwJw==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.14
-      svelte2tsx: 0.6.1_4x7phaipmicbaooxtnresslofa
+      svelte2tsx: 0.6.2_4x7phaipmicbaooxtnresslofa
     transitivePeerDependencies:
       - svelte
       - typescript
