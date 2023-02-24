@@ -11,9 +11,10 @@ import { encode } from 'base64url';
 import { Pool } from 'postgres';
 import { validate } from 'uuid';
 
+import { InsertSnapshotError } from '~model/api.ts';
 import { Status } from '~model/snapshot.ts';
 
-import { BarcodeAssignmentError, Database, InsertSnapshotError } from './database.ts';
+import { BarcodeAssignmentError, Database } from './database.ts';
 import { env } from './env.ts';
 
 const options = {
