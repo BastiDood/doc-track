@@ -6,7 +6,12 @@ import { z } from 'zod';
 import type { Document } from '~model/document.ts';
 import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
 
-import { type GeneratedBatch, type MinBatch, MinBatchSchema } from '~model/api.ts';
+import {
+    type GeneratedBatch,
+    type MinBatch,
+    InsertSnapshotError,
+    MinBatchSchema
+} from '~model/api.ts';
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
@@ -29,13 +34,6 @@ type InvalidatedSession = {
 }
 
 const DeprecationSchema = z.object({ result: z.boolean().nullable() });
-
-export enum InsertSnapshotError {
-    DocumentNotFound,
-    EvaluatorNotFound,
-    TargetNotFound,
-    InvalidStatus,
-}
 
 export enum BarcodeAssignmentError {
     AlreadyAssigned,

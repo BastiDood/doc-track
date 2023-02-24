@@ -18,6 +18,7 @@ import { handleAddInvitation, handleRevokeInvitation } from './api/invite.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
+import { handleInsertSnapshot } from './api/snapshot.ts';
 import { handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
 import { handleSetUserPermissions } from './api/user.ts';
 
@@ -66,6 +67,7 @@ export function handlePost(pool: Pool, req: Request) {
         case '/api/batch': return handleGenerateBatch(pool, req, searchParams);
         case '/api/category': return handleCreateCategory(pool, req);
         case '/api/office': return handleCreateOffice(pool, req);
+        case '/api/snapshot': return handleInsertSnapshot(pool, req, searchParams);
         case '/api/vapid': return handleSubscribe(pool, req);
         default:
             error(`[POST] ${pathname} not found`);

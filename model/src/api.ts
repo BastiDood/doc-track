@@ -15,3 +15,10 @@ export const GeneratedBatchSchema = BatchSchema
     .and(z.object({ codes: BarcodeSchema.shape.code.array() }))
 
 export type GeneratedBatch = z.infer<typeof GeneratedBatchSchema>;
+
+export enum InsertSnapshotError {
+    DocumentNotFound,
+    EvaluatorNotFound,
+    TargetNotFound,
+    InvalidStatus,
+}
