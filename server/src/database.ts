@@ -312,7 +312,6 @@ export class Database {
     }
 
     async insertSnapshot({ doc, target, evaluator, status, remark }: Omit<Snapshot, 'creation'>): Promise<Snapshot['creation'] | InsertSnapshotError> {
-        // TODO: Add tests
         try {
             const { rows: [ first, ...rest ] } = await this.#client
                 .queryObject`INSERT INTO snapshot (doc,target,evaluator,status,remark)
