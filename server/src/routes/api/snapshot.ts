@@ -65,24 +65,24 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
 
     const db = await Database.fromPool(pool);
     try {
-        const user = await db.getUserFromSession(sid);
-        if (user === null) {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
             error(`[Snapshot] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
 
         // TODO: check local permissions
         // FIXME: make sure that we don't insert a new `Register` type
-        const snap: Snapshot['creation'] | InsertSnapshotError = await db.insertSnapshot({ ...result.data, evaluator: user.id });
+        const snap: Snapshot['creation'] | InsertSnapshotError = await db.insertSnapshot({ ...result.data, evaluator: staff.user_id });
         if (snap instanceof Date) {
-            info(`[Snapshot] Session ${sid} inserted ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target}`);
+            info(`[Snapshot] User ${staff.user_id} inserted ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target}`);
             return new Response(snap.getUTCMilliseconds().toString(), {
                 status: Status.Created,
                 headers: { 'Content-Type': 'application/json' },
             });
         }
 
-        error(`[Snapshot] Session ${sid} could not insert ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target} because error ${snap}`);
+        error(`[Snapshot] User ${staff.user_id} could not insert ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target} because error ${snap}`);
         return new Response(snap.toString(), {
             status: Status.Conflict,
             headers: { 'Content-Type': 'application/json' },
