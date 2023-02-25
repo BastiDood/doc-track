@@ -145,7 +145,7 @@ Deno.test('full OAuth flow', async t => {
 
         assertFalse(await db.checkValidSession(id));
         assertStrictEquals(await db.getUserFromSession(id), null);
-        assertStrictEquals(await db.getPermissionsFromSession(id, office), null);
+        assertStrictEquals(await db.getStaffFromSession(id, office), null);
 
         const result = await db.invalidateSession(id);
         assert(result !== null);
@@ -160,7 +160,7 @@ Deno.test('full OAuth flow', async t => {
 
         assertFalse(await db.checkValidSession(id));
         assertStrictEquals(await db.getUserFromSession(id), null);
-        assertStrictEquals(await db.getPermissionsFromSession(id, office), null);
+        assertStrictEquals(await db.getStaffFromSession(id, office), null);
 
         const old = await db.upgradeSession({
             id,
@@ -171,7 +171,10 @@ Deno.test('full OAuth flow', async t => {
 
         assert(await db.checkValidSession(id));
         assertEquals(await db.getUserFromSession(id), USER);
-        assertStrictEquals(await db.getPermissionsFromSession(id, office), USER.permission);
+        assertEquals(await db.getStaffFromSession(id, office), {
+            user_id: USER.id,
+            permission: USER.permission,
+        });
     });
 
     await t.step('setting user and staff permissions', async () => {
@@ -180,7 +183,10 @@ Deno.test('full OAuth flow', async t => {
 
         const user = await db.getUserFromSession(id);
         assertStrictEquals(user?.permission, 0b111);
-        assertStrictEquals(await db.getPermissionsFromSession(id, office), 0b011);
+        assertEquals(await db.getStaffFromSession(id, office), {
+            user_id: USER.id,
+            permission: 0b011,
+        });
     });
 
     await t.step('category tests', async () => {
@@ -216,7 +222,10 @@ Deno.test('full OAuth flow', async t => {
         // so we expect that the user will simply lose permissions
         // rather than being completely deleted from the office.
         assertStrictEquals(await db.removeStaff(USER.id, office), false)
-        assertStrictEquals(await db.getPermissionsFromSession(id, office), 0);
+        assertEquals(await db.getStaffFromSession(id, office), {
+            user_id: USER.id,
+            permission: 0,
+        });
     });
 
     await t.step('valid session invalidation', async () => {

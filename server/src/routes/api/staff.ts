@@ -64,8 +64,8 @@ export async function handleSetStaffPermissions(pool: Pool, req: Request, params
 
     const db = await Database.fromPool(pool);
     try {
-        const permissions = await db.getPermissionsFromSession(sid, oid);
-        if (permissions === null) {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
             error(`[Staff] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
@@ -134,8 +134,8 @@ export async function handleRemoveStaff(pool: Pool, req: Request, params: URLSea
 
     const db = await Database.fromPool(pool);
     try {
-        const permissions = await db.getPermissionsFromSession(sid, oid);
-        if (permissions === null) {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
             error(`[Staff] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }

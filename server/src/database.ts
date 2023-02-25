@@ -437,13 +437,14 @@ export class Database {
     }
 
     /** Returns the local permissions of the session in the provided office. */
-    async getPermissionsFromSession(sid: Session['id'], office: Office['id']): Promise<Staff['permission'] | null> {
+    async getStaffFromSession(sid: Session['id'], oid: Office['id']): Promise<Pick<Staff, 'user_id' | 'permission'> | null> {
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`SELECT permission FROM session INNER JOIN staff USING (user_id) WHERE session.id = ${sid} AND staff.office = ${office} LIMIT 1`;
+            .queryObject`SELECT user_id,permission FROM session INNER JOIN staff USING (user_id)
+                WHERE session.id = ${sid} AND staff.office = ${oid} LIMIT 1`;
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
-            : StaffSchema.pick({ permission: true }).parse(first).permission;
+            : StaffSchema.pick({ user_id: true, permission: true }).parse(first);
     }
 
     /** Adds a new office to the system. */

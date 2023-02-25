@@ -64,8 +64,8 @@ export async function handleAddInvitation(pool: Pool, req: Request, params: URLS
 
     const db = await Database.fromPool(pool);
     try {
-        const permissions = await db.getPermissionsFromSession(sid, office);
-        if (permissions === null) {
+        const staff = await db.getStaffFromSession(sid, office);
+        if (staff === null) {
             error(`[Invite] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
@@ -143,8 +143,8 @@ export async function handleRevokeInvitation(pool: Pool, req: Request, params: U
 
     const db = await Database.fromPool(pool);
     try {
-        const permissions = await db.getPermissionsFromSession(sid, oid);
-        if (permissions === null) {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
             error(`[Invite] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
