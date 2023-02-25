@@ -22,3 +22,14 @@ export enum InsertSnapshotError {
     TargetNotFound,
     InvalidStatus,
 }
+
+export const InsertSnapshotErrorSchema = z.nativeEnum(InsertSnapshotError);
+
+export enum BarcodeAssignmentError {
+    AlreadyAssigned,
+    BarcodeNotFound,
+    CategoryNotFound,
+    EvaluatorNotFound,
+}
+
+export const BarcodeAssignmentErrorSchema = z.nativeEnum(BarcodeAssignmentError);

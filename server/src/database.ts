@@ -9,6 +9,7 @@ import type { PushSubscription, PushSubscriptionJson } from '~model/subscription
 import {
     type GeneratedBatch,
     type MinBatch,
+    BarcodeAssignmentError,
     InsertSnapshotError,
     MinBatchSchema
 } from '~model/api.ts';
@@ -34,13 +35,6 @@ type InvalidatedSession = {
 }
 
 const DeprecationSchema = z.object({ result: z.boolean().nullable() });
-
-export enum BarcodeAssignmentError {
-    AlreadyAssigned,
-    BarcodeNotFound,
-    CategoryNotFound,
-    EvaluatorNotFound,
-}
 
 export class Database {
     #client: PoolClient;

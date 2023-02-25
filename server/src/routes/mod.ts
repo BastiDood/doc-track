@@ -14,6 +14,7 @@ import {
     handleDeleteCategory,
     handleActivateCategory,
 } from './api/category.ts';
+import { handleCreateDocument } from './api/document.ts';
 import { handleAddInvitation, handleRevokeInvitation } from './api/invite.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
@@ -66,6 +67,7 @@ export function handlePost(pool: Pool, req: Request) {
     switch (pathname) {
         case '/api/batch': return handleGenerateBatch(pool, req, searchParams);
         case '/api/category': return handleCreateCategory(pool, req);
+        case '/api/document': return handleCreateDocument(pool, req, searchParams);
         case '/api/office': return handleCreateOffice(pool, req);
         case '/api/snapshot': return handleInsertSnapshot(pool, req, searchParams);
         case '/api/vapid': return handleSubscribe(pool, req);
