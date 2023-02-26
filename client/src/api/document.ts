@@ -13,9 +13,11 @@ import type { Office } from '~model/office.ts';
 
 import {
     type BarcodeAssignmentError,
+    type InboxEntry,
     type PaperTrail,
     BarcodeAssignmentErrorSchema,
-    PaperTrailSchema
+    InboxEntrySchema,
+    PaperTrailSchema,
 } from '~model/api.ts';
 import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
 
@@ -45,6 +47,21 @@ export namespace Document {
         switch (res.status) {
             case CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
             case CONFLICT: return BarcodeAssignmentErrorSchema.parse(await res.json());
+            case BAD_REQUEST: throw new InvalidInput;
+            case UNAUTHORIZED: throw new InvalidSession;
+            case FORBIDDEN: throw new InsufficientPermissions;
+            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
+
+    export async function getInbox(oid: Office['id']): Promise<InboxEntry[]> {
+        const res = await fetch(`/api/inbox?office=${oid}`, {
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json' },
+        });
+        switch (res.status) {
+            case OK: return InboxEntrySchema.array().parse(await res.json());
             case BAD_REQUEST: throw new InvalidInput;
             case UNAUTHORIZED: throw new InvalidSession;
             case FORBIDDEN: throw new InsufficientPermissions;
