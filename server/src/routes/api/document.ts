@@ -5,7 +5,7 @@ import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
-import type { BarcodeAssignmentError, PaperTrail } from '~model/api.ts';
+import type { BarcodeAssignmentError, InboxEntry, PaperTrail } from '~model/api.ts';
 
 import { DocumentSchema } from '~model/document.ts';
 import { SnapshotSchema } from '~model/snapshot.ts';
@@ -91,6 +91,58 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
         error(`[Document] User ${staff.user_id} failed to assign barcode ${doc.id} to document "${doc.title}" because code ${barcodeResult}`);
         return new Response(barcodeResult.toString(), {
             status: Status.Conflict,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } finally {
+        db.release();
+    }
+}
+
+/**
+ * Gets the inbox of the current office.
+ *
+ * # Inputs
+ * - Requires a valid session ID.
+ * - Accepts the target office ID via the `office` query parameter.
+ *
+ * # Outputs
+ * - `200` => returns array of {@linkcode InboxEntry} as JSON in the {@linkcode Response} body
+ * - `400` => provided office ID or document information is unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `406` => content negotiation failed
+ */
+export async function handleGetInbox(pool: Pool, req: Request, params: URLSearchParams) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Document] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    const office = params.get('office');
+    const oid = office ? parseInt(office, 10) : NaN;
+    if (isNaN(oid)) {
+        error(`[Document] Session ${sid} provided invalid office ID`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Document] Content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
+            error(`[Document] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        // TODO: check local permissions
+        const inbox: InboxEntry[] = await db.getInbox(oid);
+        info(`[Document] Session ${sid} retrieved the inbox for office ${oid}`);
+        return new Response(JSON.stringify(inbox), {
             headers: { 'Content-Type': 'application/json' },
         });
     } finally {

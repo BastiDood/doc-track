@@ -14,7 +14,7 @@ import {
     handleDeleteCategory,
     handleActivateCategory,
 } from './api/category.ts';
-import { handleCreateDocument, handleGetPaperTrail } from './api/document.ts';
+import { handleCreateDocument, handleGetInbox, handleGetPaperTrail } from './api/document.ts';
 import { handleAddInvitation, handleRevokeInvitation } from './api/invite.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
@@ -32,6 +32,7 @@ export async function handleGet(pool: Pool, req: Request) {
         case '/api/batch': return handleGetEarliestAvailableBatch(pool, req, searchParams);
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/api/document': return handleGetPaperTrail(pool, req, searchParams);
+        case '/api/inbox': return handleGetInbox(pool, req, searchParams);
         case '/api/vapid': return handleVapidPublicKey();
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
