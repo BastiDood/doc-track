@@ -11,7 +11,12 @@ import {
 import type { Document as DocumentType } from '~model/document.ts';
 import type { Office } from '~model/office.ts';
 
-import { type BarcodeAssignmentError, BarcodeAssignmentErrorSchema, PaperTrailSchema } from '~model/api.ts';
+import {
+    type BarcodeAssignmentError,
+    type PaperTrail,
+    BarcodeAssignmentErrorSchema,
+    PaperTrailSchema
+} from '~model/api.ts';
 import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
 
 import {
@@ -48,7 +53,7 @@ export namespace Document {
         }
     }
 
-    export async function getPaperTrail(doc: DocumentType['id']) {
+    export async function getPaperTrail(doc: DocumentType['id']): Promise<PaperTrail[]> {
         const res = await fetch(`/api/document?doc=${doc}`, {
             headers: { 'Content-Type': 'application/json' },
         });
