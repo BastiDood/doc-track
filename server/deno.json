@@ -23,6 +23,7 @@
         "~model/": "../model/src/",
         "asserts": "https://deno.land/std@0.178.0/testing/asserts.ts",
         "base64url": "https://deno.land/std@0.178.0/encoding/base64url.ts",
+        "bytes": "https://deno.land/std@0.178.0/bytes/equals.ts",
         "cookie": "https://deno.land/std@0.178.0/http/cookie.ts",
         "content-type": "https://deno.land/std@0.178.0/media_types/content_type.ts",
         "hex": "https://deno.land/std@0.178.0/encoding/hex.ts",

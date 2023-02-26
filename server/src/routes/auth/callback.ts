@@ -1,7 +1,7 @@
-import { assert, assertEquals } from 'asserts';
 import { decode } from 'base64url';
+import { equals } from 'bytes';
 import { getCookies, setCookie } from 'cookie';
-import { error, info, warning } from 'log';
+import { critical, error, info, warning } from 'log';
 import { Status } from 'http';
 import { Pool } from 'postgres';
 
@@ -23,7 +23,6 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
     }
 
     const db = await Database.fromPool(pool);
-
     try {
         // Redirect to dashboard if already logged in
         if (await db.checkValidSession(sid)) {
@@ -36,7 +35,6 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
 
         // Validate the `state` argument
         const state = params.get('state');
-        assert(state);
         if (state != await hashUuid(sid)) {
             error('[Callback] State parameter does not match');
             return new Response(null, { status: Status.Forbidden });
@@ -56,19 +54,29 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body,
         });
-        assert(response.ok);
-        info('[Callback] Fetched ID token from Google');
 
+        if (!response.ok) {
+            critical(`[Callback] Google token endpoint returned status ${response.status}`);
+            return new Response(null, { status: Status.InternalServerError });
+        }
+
+        info('[Callback] Fetched ID token from Google');
         const json = await response.json();
-        console.log(json);
         const { id_token } = TokenResponseSchema.parse(json);
         const idToken = await parseJwt(id_token);
 
-        assert(idToken.exp > new Date);
-        assert(idToken.email_verified);
-        info('[Callback] Successfully parsed ID token from Google');
+        if (idToken.exp <= new Date) {
+            critical(`[Callback] Google token endpoint returned already expired token on ${idToken.exp.toUTCString()}`);
+            return new Response(null, { status: Status.InternalServerError });
+        }
 
-        // TODO: return offices to the user
+        if (!idToken.email_verified) {
+            critical(`[Callback] Google token endpoint returned unverified email ${idToken.email}`);
+            return new Response(null, { status: Status.InternalServerError });
+        }
+
+        // TODO: somehow return offices to the user
+        info('[Callback] Successfully parsed ID token from Google');
         const offices = await db.insertInvitedUser({
             id: idToken.sub,
             name: idToken.name,
@@ -88,7 +96,16 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             user_id: idToken.sub,
             expiration: idToken.exp,
         });
-        assertEquals(session?.nonce, decode(idToken.nonce));
+
+        if (session === null) {
+            critical(`[Callback] Pending session ${sid} cannot be upgraded`);
+            return new Response(null, { status: Status.InternalServerError });
+        }
+
+        if (!equals(session.nonce, decode(idToken.nonce))) {
+            critical(`[Callback] Session ${sid} nonce ${session.nonce} does not match with ID token nonce ${idToken.nonce}`);
+            return new Response(null, { status: Status.InternalServerError });
+        }
 
         // Set the new session cookie
         const headers = new Headers({ Location: '/dashboard' });
