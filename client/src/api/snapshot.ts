@@ -26,6 +26,7 @@ export namespace Snapshot {
         info: Omit<SnapshotType, 'creation' | 'evaluator'>,
     ): Promise<SnapshotType['creation'] | InsertSnapshotError> {
         const res = await fetch(`/api/snapshot?office=${oid}`, {
+            credentials: 'same-origin',
             method: 'POST',
             body: JSON.stringify(info),
             headers: {

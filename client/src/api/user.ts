@@ -20,8 +20,8 @@ import {
 export namespace User {
     export async function setPermission({ id, permission }: Pick<UserType, 'id' | 'permission'>): Promise<boolean> {
         const res = await fetch(`/api/user?perms=${permission}`, {
-            method: 'PATCH',
             credentials: 'same-origin',
+            method: 'PATCH',
             body: id,
             headers: { 'Content-Type': 'text/plain' },
         });

@@ -29,6 +29,7 @@ export namespace Document {
         remark: Snapshot['remark'],
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
         const res = await fetch(`/api/document?office=${oid}`, {
+            credentials: 'same-origin',
             method: 'POST',
             body: JSON.stringify({ ...doc, remark }),
             headers: {

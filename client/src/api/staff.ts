@@ -21,8 +21,8 @@ import {
 export namespace Staff {
     export async function setPermission({ office, user_id, permission }: Omit<StaffType, 'active'>): Promise<boolean> {
         const res = await fetch(`/api/staff?office=${office}&perms=${permission}`, {
-            method: 'PATCH',
             credentials: 'same-origin',
+            method: 'PATCH',
             body: user_id,
             headers: { 'Content-Type': 'text/plain' },
         });
@@ -39,8 +39,8 @@ export namespace Staff {
 
     export async function remove({ office, user_id }: Pick<StaffType, 'office' | 'user_id'>): Promise<boolean | null> {
         const res = await fetch(`/api/staff?office=${office}`, {
-            method: 'DELETE',
             credentials: 'same-origin',
+            method: 'DELETE',
             body: user_id,
             headers: { 'Content-Type': 'text/plain' },
         });

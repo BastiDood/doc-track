@@ -21,8 +21,8 @@ import {
 export namespace Invite {
     export async function add({ email, office, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation'] | null> {
         const res = await fetch(`/api/invite?office=${office}`, {
-            method: 'PUT',
             credentials: 'same-origin',
+            method: 'PUT',
             body: JSON.stringify({ email, permission }),
             headers: {
                 'Accept': 'application/json',
@@ -42,8 +42,8 @@ export namespace Invite {
 
     export async function revoke({ office, email }: Pick<Invitation, 'office' | 'email'>): Promise<Omit<Invitation, 'office' | 'email'> | null> {
         const res = await fetch(`/api/invite?office=${office}`, {
-            method: 'DELETE',
             credentials: 'same-origin',
+            method: 'DELETE',
             body: email,
             headers: {
                 'Accept': 'application/json',

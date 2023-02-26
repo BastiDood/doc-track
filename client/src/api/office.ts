@@ -21,8 +21,8 @@ import {
 export namespace Office {
     export async function create(name: OfficeType['name']): Promise<OfficeType['id']> {
         const res = await fetch('/api/office', {
-            method: 'POST',
             credentials: 'same-origin',
+            method: 'POST',
             body: name,
             headers: {
                 'Accept': 'application/json',
@@ -41,8 +41,8 @@ export namespace Office {
 
     export async function update({ id, name }: OfficeType): Promise<boolean> {
         const res = await fetch(`/api/office?id=${id}`, {
-            method: 'PUT',
             credentials: 'same-origin',
+            method: 'PUT',
             body: name,
             headers: { 'Content-Type': 'text/plain' },
         });
