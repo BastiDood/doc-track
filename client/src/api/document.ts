@@ -72,7 +72,7 @@ export namespace Document {
 
     export async function getPaperTrail(doc: DocumentType['id']): Promise<PaperTrail[]> {
         const res = await fetch(`/api/document?doc=${doc}`, {
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
             case OK: return PaperTrailSchema.array().parse(await res.json());
