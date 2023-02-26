@@ -2,6 +2,10 @@ import { z } from 'zod';
 
 import { BarcodeSchema } from './barcode.ts';
 import { BatchSchema } from './batch.ts';
+import { CategorySchema } from './category.ts';
+import { DocumentSchema } from './document.ts';
+import { SnapshotSchema } from './snapshot.ts';
+import { UserSchema } from './user.ts';
 
 export const MinBatchSchema = z.object({
     batch: BatchSchema.shape.id,
@@ -33,3 +37,11 @@ export enum BarcodeAssignmentError {
 }
 
 export const BarcodeAssignmentErrorSchema = z.nativeEnum(BarcodeAssignmentError);
+
+export const PaperTrailSchema = SnapshotSchema
+    .pick({ creation: true, status: true, target: true, remark: true })
+    .extend({ category: CategorySchema.shape.name })
+    .and(DocumentSchema.pick({ title: true }))
+    .and(UserSchema.pick({ name: true, email: true, picture: true }));
+
+export type PaperTrail = z.infer<typeof PaperTrailSchema>;

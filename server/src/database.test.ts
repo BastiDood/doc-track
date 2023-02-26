@@ -247,10 +247,10 @@ Deno.test('full OAuth flow', async t => {
     const [ chosen, ...others ] = codes;
     assert(chosen);
     assertStrictEquals(others.length, 9);
+    const doc = { id: chosen, category, title: 'DocTrack Team' };
 
     await t.step('document creation', async () => {
         // TODO: Test if we are indeed the minimum batch
-        const doc = { id: chosen, category, title: 'DocTrack Team' };
         const snap = { evaluator: USER.id, remark: 'Hello' };
         const uuid = crypto.randomUUID();
 
@@ -264,7 +264,21 @@ Deno.test('full OAuth flow', async t => {
         assertEquals(await db.assignBarcodeToDocument(doc, { ...snap, evaluator: uuid }), BarcodeAssignmentError.EvaluatorNotFound);
 
         // Successful assignment
-        assertInstanceOf(await db.assignBarcodeToDocument(doc, snap), Date);
+        const creation = await db.assignBarcodeToDocument(doc, snap);
+        assertInstanceOf(creation, Date);
+
+        // Paper trail should contain one snapshot
+        assertEquals(await db.getPaperTrail(doc.id), [{
+            status: Status.Register,
+            creation,
+            category: randomCategory,
+            remark: snap.remark,
+            target: null,
+            name: USER.name,
+            email: USER.email,
+            picture: USER.picture,
+            title: doc.title,
+        }]);
 
         // Use already assigned barcode
         assertEquals(await db.assignBarcodeToDocument(doc, snap), BarcodeAssignmentError.AlreadyAssigned);
@@ -298,7 +312,22 @@ Deno.test('full OAuth flow', async t => {
         assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Terminate }), InsertSnapshotError.InvalidStatus);
 
         // Valid document
-        assertInstanceOf(await db.insertSnapshot(snapshot), Date);
+        const creation = await db.insertSnapshot(snapshot);
+        assertInstanceOf(creation, Date);
+
+        // Verify latest item in the paper trail
+        const trail = await db.getPaperTrail(chosen);
+        assertEquals(trail.at(-1), {
+            status: Status.Send,
+            creation,
+            category: randomCategory,
+            remark: snapshot.remark,
+            target: office,
+            name: USER.name,
+            email: USER.email,
+            picture: USER.picture,
+            title: doc.title,
+        });
     });
 
     await t.step('category deprecation and activation', async () => {

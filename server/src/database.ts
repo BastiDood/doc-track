@@ -9,9 +9,11 @@ import type { PushSubscription, PushSubscriptionJson } from '~model/subscription
 import {
     type GeneratedBatch,
     type MinBatch,
+    type PaperTrail,
     BarcodeAssignmentError,
     InsertSnapshotError,
-    MinBatchSchema
+    MinBatchSchema,
+    PaperTrailSchema,
 } from '~model/api.ts';
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
@@ -331,6 +333,17 @@ export class Database {
                 default: unreachable();
             }
         }
+    }
+
+    async getPaperTrail(doc: Document['id']): Promise<PaperTrail[]> {
+        const { rows } = await this.#client
+            .queryObject`SELECT s.creation,s.status,s.target,s.remark,d.title,c.name AS category,u.name,u.email,u.picture
+                FROM snapshot AS s
+                    INNER JOIN users AS u ON s.evaluator = u.id
+                    INNER JOIN document AS d ON s.doc = d.id
+                    INNER JOIN category AS c ON d.category = c.id
+                WHERE s.doc = ${doc} ORDER BY s.creation ASC`;
+        return PaperTrailSchema.array().parse(rows);
     }
 
     /**
