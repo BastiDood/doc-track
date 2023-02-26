@@ -5,7 +5,7 @@ import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
-import type { BarcodeAssignmentError } from '~model/api.ts';
+import type { BarcodeAssignmentError, PaperTrail } from '~model/api.ts';
 
 import { DocumentSchema } from '~model/document.ts';
 import { SnapshotSchema } from '~model/snapshot.ts';
@@ -92,6 +92,41 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
         return new Response(barcodeResult.toString(), {
             status: Status.Conflict,
             headers: { 'Content-Type': 'application/json' },
+        });
+    } finally {
+        db.release();
+    }
+}
+
+/**
+ * Creates a new document by assigning it an available barcode.
+ *
+ * # Inputs
+ * - Accepts the document ID via the `doc` query parameter.
+ *
+ * # Outputs
+ * - `200` => returns {@linkcode PaperTrail} array as JSON in the {@linkcode Response} body
+ * - `400` => provided document ID is not a valid UUID
+ * - `406` => content negotiation failed
+ */
+export async function handleGetPaperTrail(pool: Pool, req: Request, params: URLSearchParams) {
+    const input = params.get('doc');
+    const result = DocumentSchema.shape.id.safeParse(input);
+    if (!result.success) {
+        error(`[Document] Bad document ID ${input} encountered`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Document] Content negotiation failed for paper trail`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const trail: PaperTrail[] = await db.getPaperTrail(result.data);
+        return new Response(JSON.stringify(trail), {
+            headers: { 'Content-Type': 'application/json' }
         });
     } finally {
         db.release();
