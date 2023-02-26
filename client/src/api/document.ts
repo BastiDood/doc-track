@@ -1,4 +1,5 @@
 import {
+    OK,
     CREATED,
     BAD_REQUEST,
     UNAUTHORIZED,
@@ -10,7 +11,7 @@ import {
 import type { Document as DocumentType } from '~model/document.ts';
 import type { Office } from '~model/office.ts';
 
-import { type BarcodeAssignmentError, BarcodeAssignmentErrorSchema } from '~model/api.ts';
+import { type BarcodeAssignmentError, BarcodeAssignmentErrorSchema, PaperTrailSchema } from '~model/api.ts';
 import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
 
 import {
@@ -41,6 +42,18 @@ export namespace Document {
             case BAD_REQUEST: throw new InvalidInput;
             case UNAUTHORIZED: throw new InvalidSession;
             case FORBIDDEN: throw new InsufficientPermissions;
+            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
+
+    export async function getPaperTrail(doc: DocumentType['id']) {
+        const res = await fetch(`/api/document?doc=${doc}`, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        switch (res.status) {
+            case OK: return PaperTrailSchema.array().parse(await res.json());
+            case BAD_REQUEST: throw new InvalidInput;
             case NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
