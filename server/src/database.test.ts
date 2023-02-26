@@ -35,6 +35,11 @@ Deno.test('full OAuth flow', async t => {
         assertFalse(await db.setStaffPermissions(bad, 0, 1));
     });
 
+    await t.step('invalid inbox', async () => {
+        const inbox = await db.getInbox(0);
+        assertStrictEquals(inbox.length, 0);
+    });
+
     const office = await db.createOffice('Test');
     await t.step('update office information', async () => {
         assertFalse(await db.updateOffice({ id: 0, name: 'Hello' }));
@@ -284,7 +289,7 @@ Deno.test('full OAuth flow', async t => {
         assertEquals(await db.assignBarcodeToDocument(doc, snap), BarcodeAssignmentError.AlreadyAssigned);
     });
 
-    await t.step('snapshot insertion', async () => {
+    await t.step('snapshot insertion', async t => {
         // Valid snapshot
         const snapshot = {
             doc: chosen,
@@ -294,39 +299,52 @@ Deno.test('full OAuth flow', async t => {
             remark: 'Hello world!',
         };
 
-        // Non-existent document
-        assertEquals(await db.insertSnapshot({ ...snapshot, doc: crypto.randomUUID() }), InsertSnapshotError.DocumentNotFound);
+        await t.step('bad snapshots', async () => {
+            // Non-existent document
+            assertEquals(await db.insertSnapshot({ ...snapshot, doc: crypto.randomUUID() }), InsertSnapshotError.DocumentNotFound);
 
-        // Non-existent target
-        assertEquals(await db.insertSnapshot({ ...snapshot, target: 0 }), InsertSnapshotError.TargetNotFound);
+            // Non-existent target
+            assertEquals(await db.insertSnapshot({ ...snapshot, target: 0 }), InsertSnapshotError.TargetNotFound);
 
-        // Non-existent evaluator
-        assertEquals(await db.insertSnapshot({ ...snapshot, evaluator: 'non-existent-user-id' }), InsertSnapshotError.EvaluatorNotFound);
+            // Non-existent evaluator
+            assertEquals(await db.insertSnapshot({ ...snapshot, evaluator: 'non-existent-user-id' }), InsertSnapshotError.EvaluatorNotFound);
 
-        // Non-`Send` status with null target
-        assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Send, target: null }), InsertSnapshotError.InvalidStatus);
+            // Non-`Send` status with null target
+            assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Send, target: null }), InsertSnapshotError.InvalidStatus);
 
-        // `Send` status with non-null target
-        assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Register }), InsertSnapshotError.InvalidStatus);
-        assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Receive }), InsertSnapshotError.InvalidStatus);
-        assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Terminate }), InsertSnapshotError.InvalidStatus);
+            // `Send` status with non-null target
+            assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Register }), InsertSnapshotError.InvalidStatus);
+            assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Receive }), InsertSnapshotError.InvalidStatus);
+            assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Terminate }), InsertSnapshotError.InvalidStatus);
+        });
 
         // Valid document
         const creation = await db.insertSnapshot(snapshot);
         assertInstanceOf(creation, Date);
 
-        // Verify latest item in the paper trail
-        const trail = await db.getPaperTrail(chosen);
-        assertEquals(trail.at(-1), {
-            status: Status.Send,
-            creation,
-            category: randomCategory,
-            remark: snapshot.remark,
-            target: office,
-            name: USER.name,
-            email: USER.email,
-            picture: USER.picture,
-            title: doc.title,
+        await t.step('view latest snapshot in paper trail', async () => {
+            const trail = await db.getPaperTrail(chosen);
+            assertEquals(trail.at(-1), {
+                status: Status.Send,
+                creation,
+                category: randomCategory,
+                remark: snapshot.remark,
+                target: office,
+                name: USER.name,
+                email: USER.email,
+                picture: USER.picture,
+                title: doc.title,
+            });
+        })
+
+        await t.step('verify that the inbox only contains one document with the latest snapshot', async () => {
+            const inbox = await db.getInbox(office);
+            assertEquals(inbox, [{
+                creation,
+                category: randomCategory,
+                doc: doc.id,
+                title: doc.title,
+            }]);
         });
     });
 

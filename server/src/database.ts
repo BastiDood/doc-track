@@ -8,9 +8,11 @@ import type { PushSubscription, PushSubscriptionJson } from '~model/subscription
 
 import {
     type GeneratedBatch,
+    type InboxEntry,
     type MinBatch,
     type PaperTrail,
     BarcodeAssignmentError,
+    InboxEntrySchema,
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
@@ -344,6 +346,17 @@ export class Database {
                     INNER JOIN category AS c ON d.category = c.id
                 WHERE s.doc = ${doc} ORDER BY s.creation ASC`;
         return PaperTrailSchema.array().parse(rows);
+    }
+
+    async getInbox(oid: Office['id']): Promise<InboxEntry[]> {
+        const { rows } = await this.#client
+            .queryObject`
+                WITH snaps AS (SELECT doc,MAX(creation) AS creation FROM snapshot WHERE target = ${oid} GROUP BY doc)
+                SELECT s.doc,s.creation,d.title,c.name AS category FROM snaps AS s
+                    INNER JOIN document AS d ON s.doc = d.id
+                    INNER JOIN category AS c ON d.category = c.id
+                ORDER BY s.creation DESC`;
+        return InboxEntrySchema.array().parse(rows);
     }
 
     /**

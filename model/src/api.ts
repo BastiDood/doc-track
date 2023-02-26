@@ -45,3 +45,13 @@ export const PaperTrailSchema = SnapshotSchema
     .and(UserSchema.pick({ name: true, email: true, picture: true }));
 
 export type PaperTrail = z.infer<typeof PaperTrailSchema>;
+
+export const InboxEntrySchema = SnapshotSchema
+    .pick({ creation: true })
+    .extend({
+        doc: DocumentSchema.shape.id,
+        category: CategorySchema.shape.name,
+    })
+    .and(DocumentSchema.pick({ title: true }));
+
+export type InboxEntry = z.infer<typeof InboxEntrySchema>;
