@@ -12,7 +12,6 @@ specifiers:
   parcel: ^2.8.3
   svelte: ^3.55.1
   svelte-preprocess: ^5.0.1
-  svelte-preprocess-import-assets: ^0.2.6
   typescript: ^4.9.5
   typescript-svelte-plugin: ^0.3.15
   zod: ^3.20.6
@@ -32,7 +31,6 @@ devDependencies:
   parcel: 2.8.3
   svelte: 3.55.1
   svelte-preprocess: 5.0.1_4x7phaipmicbaooxtnresslofa
-  svelte-preprocess-import-assets: 0.2.6_svelte@3.55.1
   typescript: 4.9.5
   typescript-svelte-plugin: 0.3.15_4x7phaipmicbaooxtnresslofa
 
@@ -1497,13 +1495,6 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /magic-string/0.30.0:
-    resolution: {integrity: sha512-LA+31JYDJLs82r2ScLrlz1GjSgu66ZV518eyWT+S8VhyQn/JL0u9MeBOvQMGYiPk1DBiSN9DDMOcXvigJZaViQ==}
-    engines: {node: '>=12'}
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.14
-    dev: true
-
   /mdn-data/2.0.14:
     resolution: {integrity: sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==}
     dev: true
@@ -1817,24 +1808,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       has-flag: 4.0.0
-    dev: true
-
-  /svelte-parse-markup/0.1.1_svelte@3.55.1:
-    resolution: {integrity: sha512-xCBSldaZdwi0u0ANASVCUFynCaV8z5D6sQOnzPcYSEoD9dd40MLzOKMBVmuTf/LUuPvc+cUvF132MnwdG7mDig==}
-    peerDependencies:
-      svelte: ^3.0.0
-    dependencies:
-      svelte: 3.55.1
-    dev: true
-
-  /svelte-preprocess-import-assets/0.2.6_svelte@3.55.1:
-    resolution: {integrity: sha512-EPDlgnDimFEelh1kMExX95vlwEuAMg5Bh/LxfPhGhxIzp5QalNXorzWbJutqFfs+3sLyzhJCWNcyFMjL5VortQ==}
-    peerDependencies:
-      svelte: ^3.37.0
-    dependencies:
-      magic-string: 0.30.0
-      svelte: 3.55.1
-      svelte-parse-markup: 0.1.1_svelte@3.55.1
     dev: true
 
   /svelte-preprocess/5.0.1_4x7phaipmicbaooxtnresslofa:
