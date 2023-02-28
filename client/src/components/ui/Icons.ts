@@ -1,8 +1,4 @@
-export interface Icon {
-    box: number; 
-    name: string;
-    svg: string;
-}
+import { Icon } from "../types.ts"
 
 export let iconsList: Array<Icon> = [
     {

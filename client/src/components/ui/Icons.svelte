@@ -1,13 +1,16 @@
 <script lang="ts">
-    import { iconsList, Icon } from "./Icons.ts";
+    import { iconsList } from "./Icons.ts";
+    import { IconColor, Icon } from "../types.ts";
+    
     export let name: string;
-    export let color: "default" | "primary" | "faded" = "default";
+    export let color: IconColor = IconColor.Default;
     export let width: string = "1rem";
     export let height: string = "1rem";
 
     
     let showIcon = iconsList.find((e:Icon) => e.name === name);
 </script>
+
 {#if showIcon}
     <svg class="{$$props.class} {color}" {width} {height} viewBox = "0 0 {showIcon.box} {showIcon.box}">{@html showIcon.svg}</svg>
 {:else}
