@@ -1,2 +1,9 @@
 const sveltePreprocess = require('svelte-preprocess');
-module.exports = { preprocess: sveltePreprocess() };
+const importAssets = require('svelte-preprocess-import-assets');
+
+module.exports = {
+    preprocess: [
+        sveltePreprocess(),
+        importAssets,
+    ],
+};
