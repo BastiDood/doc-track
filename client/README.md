@@ -20,3 +20,6 @@ pnpm install
 # run the back-end server and navigate to the pages.
 pnpm build
 ```
+
+# Copying
+Available at `COPYING.md`.
