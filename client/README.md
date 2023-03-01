@@ -21,5 +21,5 @@ pnpm install
 pnpm build
 ```
 
-##Copying
+# Copying
 Available at COPYING.MD
