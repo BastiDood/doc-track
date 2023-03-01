@@ -12,7 +12,7 @@ import {
     type GeneratedBatch,
     type MinBatch,
     GeneratedBatchSchema,
-    MinBatchSchema
+    MinBatchSchema,
 } from '~model/api.ts';
 import type { Office } from '~model/office.ts';
 
@@ -21,7 +21,7 @@ import {
     InvalidInput,
     InvalidSession,
     BadContentNegotiation,
-    UnexpectedStatusCode
+    UnexpectedStatusCode,
 } from './error.ts';
 
 export namespace Batch {
