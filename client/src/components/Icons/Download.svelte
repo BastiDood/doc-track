@@ -1,13 +1,13 @@
 <script lang="ts">
-    import './icon-styles.css'
-    import { IconColor} from '../types.ts';
+    import './icon-styles.css';
+    import { IconColor, IconSize } from '../types.ts';
     
     export let color: IconColor = IconColor.Default;
-    export let width: string = '1rem';
+    export let width: string = IconSize.Normal;
     export let alt:string = '';
-    export let height: string = '1rem';
+    export let height: string = IconSize.Normal;
 
-    /**Replace the next lines to generate an icon.*/
+    // Replace the next lines to generate an icon.
 	const iconUrl = new URL("../../assets/download.svg", import.meta.url);
 </script>
 
