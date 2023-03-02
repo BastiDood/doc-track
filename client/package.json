@@ -6,7 +6,8 @@
         "src/pages/index.html"
     ],
     "scripts": {
-        "build": "parcel build"
+        "build": "parcel build",
+        "watch": "parcel watch"
     },
     "devDependencies": {
         "@parcel/config-default": "^2.8.3",
