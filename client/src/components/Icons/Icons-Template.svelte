@@ -7,7 +7,7 @@
     export let alt:string = '';
     export let height: string = '1rem';
 
-    /**Replace the next lines to generate an icon.*/
+    // Replace the next lines to generate an icon.
     const iconUrl = new URL('../../assets/document-blank.svg', import.meta.url);
 
 </script>
