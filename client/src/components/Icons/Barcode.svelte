@@ -7,8 +7,8 @@
     export let alt:string = "";
     export let height: string = "1rem";
 
-    const iconUrl = new URL("../../assets/document-blank.svg", import.meta.url);
-
+    /**Replace the next lines to generate an icon.*/
+	const iconUrl = new URL("../../assets/barcode.svg", import.meta.url);
 </script>
 
 <img class="{color}" {width} {height} {alt} src="{iconUrl.pathname}" on:click on:keydown/>
