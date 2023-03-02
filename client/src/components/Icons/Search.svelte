@@ -2,13 +2,13 @@
     import './icon-styles.css';
     import { IconColor, IconSize } from '../types.ts';
     
-    export let color: IconColor = IconColor.Default;
-    export let width: string = IconSize.Normal;
-    export let alt:string = '';
-    export let height: string = IconSize.Normal;
+    export let color = IconColor.Default;
+    export let width = IconSize.Normal;
+    export let alt = '';
+    export let height = IconSize.Normal;
 
     // Replace the next lines to generate an icon.
-	const iconUrl = new URL("../../assets/search.svg", import.meta.url);
+	const iconUrl = new URL('../../assets/search.svg', import.meta.url);
 </script>
 
 <img class="{color}" {width} {height} {alt} src="{iconUrl.pathname}" on:click on:keydown/>
