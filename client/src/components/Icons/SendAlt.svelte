@@ -11,4 +11,4 @@
 	const iconUrl = new URL('../../assets/send-alt.svg', import.meta.url);
 </script>
 
-<img class="{color}" {width} {height} {alt} src="{iconUrl.pathname}" on:click on:keydown/>
+<img class="{color}" {width} {height} {alt} src="{iconUrl.pathname}" on:click on:keydown />
