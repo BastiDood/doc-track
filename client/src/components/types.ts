@@ -15,3 +15,9 @@ export enum IconSize {
     Medium = "1.25rem",
     Large = "1.5rem"
 }
+
+export enum ButtonType {
+    Primary = 'primary',
+    Secondary = 'secondary',
+    Danger = 'danger'
+}
