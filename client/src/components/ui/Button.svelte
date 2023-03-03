@@ -1,10 +1,10 @@
 <script lang="ts">
   import { ButtonType } from "../types.ts";
-  let type: ButtonType = ButtonType.Danger;
+  export let type: ButtonType = ButtonType.Primary;
 </script>
 
 <button class:primary={type === ButtonType.Primary} class:secondary={type === ButtonType.Secondary} class:danger={type === ButtonType.Danger}>
-  <slot>My Button</slot>
+  <slot></slot>
 </button>
 
 <style>
@@ -12,6 +12,7 @@
     margin: 5px;
     padding: 10px;
     border-radius: 10px;
+    border: 0;
     color: white;
   }
 
