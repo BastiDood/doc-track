@@ -8,8 +8,7 @@
     export let height = IconSize.Normal;
 
     // Replace the next lines to generate an icon.
-    const iconUrl = new URL('../../assets/document-blank.svg', import.meta.url);
-
+	const iconUrl = new URL('../../assets/download.svg', import.meta.url);
 </script>
 
 <img class="{color}" {width} {height} {alt} src="{iconUrl.pathname}" on:click on:keydown />
