@@ -3,7 +3,11 @@
   export let type: ButtonType = ButtonType.Primary;
 </script>
 
-<button class:primary={type === ButtonType.Primary} class:secondary={type === ButtonType.Secondary} class:danger={type === ButtonType.Danger}>
+<button 
+  class:primary={type === ButtonType.Primary} 
+  class:secondary={type === ButtonType.Secondary} 
+  class:danger={type === ButtonType.Danger} 
+  on:click>
   <slot></slot>
 </button>
 
