@@ -9,7 +9,6 @@
         "moduleResolution": "bundler",
         "strict": true,
         "paths": { "~model/*": [ "../model/src/*" ] },
-        "rootDir": "src",
         "types": [ "serviceworker" ],
         "plugins": [ { "name": "typescript-svelte-plugin" } ]
     },

@@ -1,6 +1,17 @@
 export default [
     {
         extends: 'eslint:recommended',
+        languageOptions: {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+        },
+        plugins: [ 'svelte3' ],
+        overrides: [
+            {
+                files: ['*.svelte'],
+                processor: 'svelte3/svelte3',
+            }
+        ],
         rules: {
             // Linting Rules
             'no-constant-binary-expression': 'error',
