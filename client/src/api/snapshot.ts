@@ -17,7 +17,7 @@ import {
     InvalidInput,
     InvalidSession,
     BadContentNegotiation,
-    UnexpectedStatusCode
+    UnexpectedStatusCode,
 } from './error.ts';
 
 export namespace Snapshot {
