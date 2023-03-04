@@ -10,6 +10,8 @@ module.exports = {
     parserOptions: {
         project: [ 'tsconfig.json' ],
         extraFileExtensions: [ '.svelte' ],
+        // https://github.com/typescript-eslint/typescript-eslint/issues/2094
+        EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true,
     },
     plugins: [
         'svelte3',
