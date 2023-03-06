@@ -11,7 +11,8 @@ CREATE DOMAIN AuthorizationCode AS VARCHAR(256) NOT NULL;
 CREATE DOMAIN Expiration AS TIMESTAMPTZ NOT NULL CHECK(VALUE > NOW());
 
 -- Permission Bits
-CREATE DOMAIN Permission AS BIT VARYING(3) NOT NULL;
+CREATE DOMAIN LocalPermission AS BIT VARYING(12) NOT NULL;
+CREATE DOMAIN GlobalPermission AS BIT VARYING(8) NOT NULL;
 
 -- Push Subscription Endpoint
 CREATE DOMAIN Endpoint AS VARCHAR(50) NOT NULL;
@@ -25,7 +26,7 @@ CREATE TABLE users(
     name VARCHAR(40) NOT NULL,
     email VARCHAR(32) UNIQUE NOT NULL,
     picture VARCHAR(256) NOT NULL,
-    permission Permission,
+    permission GlobalPermission,
     PRIMARY KEY (id)
 );
 
@@ -55,7 +56,7 @@ CREATE TABLE office(
 CREATE TABLE staff(
     user_id GoogleUserId REFERENCES users (id),
     office SMALLINT NOT NULL REFERENCES office (id),
-    permission Permission,
+    permission LocalPermission,
     PRIMARY KEY (user_id, office)
 );
 
@@ -115,7 +116,7 @@ CREATE TABLE notification(
 CREATE TABLE invitation(
     office SMALLSERIAL NOT NULL REFERENCES office (id),
     email VARCHAR(20) NOT NULL,
-    permission Permission NOT NULL,
+    permission LocalPermission NOT NULL,
     creation TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (office, email)
 );
