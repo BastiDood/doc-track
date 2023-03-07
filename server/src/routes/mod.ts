@@ -20,6 +20,7 @@ import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 import { handleInsertSnapshot } from './api/snapshot.ts';
+import { handleGetUserFromSession } from './api/session.ts';
 import { handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
 import { handleSetUserPermissions } from './api/user.ts';
 
@@ -33,6 +34,7 @@ export async function handleGet(pool: Pool, req: Request) {
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/api/document': return handleGetPaperTrail(pool, req, searchParams);
         case '/api/inbox': return handleGetInbox(pool, req, searchParams);
+        case '/api/session': return handleGetUserFromSession(pool, req);
         case '/api/vapid': return handleVapidPublicKey();
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
