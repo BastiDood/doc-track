@@ -5,21 +5,20 @@ export interface Icon {
 }
 
 export enum IconColor {
-    Default = 'default', 
-    Primary = 'primary',
-    Faded = 'faded',
+    Default = "default", 
+    Primary = "primary",
+    Faded = "faded",
 }
 
 export enum IconSize {
-    Normal = '1rem',
-    Medium = '1.25rem',
-    Large = '1.5rem',
+    Normal = "20px",
+    Medium = "10px",
+    Large = "15px",
 }
 
 export enum ButtonType {
     Primary = 'primary',
     Secondary = 'secondary',
-<<<<<<< HEAD
     Danger = 'danger',
 }
 
@@ -27,9 +26,6 @@ export enum InputType {
     Text = 'text',
     Password = 'password',
     Number = 'number',
-}
-=======
-    Danger = 'danger'
 }
 
 export enum RowType {
@@ -39,4 +35,3 @@ export enum RowType {
     Person = "person",
     Invite = "invite",
 }
->>>>>>> 10b34dc (feat: added RowTypes in types.ts)
