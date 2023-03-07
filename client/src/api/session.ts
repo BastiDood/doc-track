@@ -1,7 +1,6 @@
 import { OK, UNAUTHORIZED, NOT_ACCEPTABLE } from 'http-status';
 
-import { UserSchema } from '~model/user.ts';
-import type { Session as SessionType } from '~model/session.ts';
+import { type User, UserSchema } from '~model/user.ts';
 
 import {
     InvalidSession,
@@ -10,7 +9,7 @@ import {
 } from './error.ts';
 
 export namespace Session {
-    export async function getUser(): Promise<SessionType['user']> {
+    export async function getUser(): Promise<User> {
         const res = await fetch('/api/session', {
             credentials: 'same-origin',
             headers: { 'Accept': 'application/json' },
