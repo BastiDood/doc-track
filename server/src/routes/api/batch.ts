@@ -98,23 +98,27 @@ export async function handleGenerateBatch(pool: Pool, req: Request, params: URLS
     }
 
     const input = params.get('office');
-    const office = input ? parseInt(input, 10) : NaN;
-    if (isNaN(office)) {
+    const oid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(oid)) {
         error(`[Batch] Invalid input from session ${sid}`);
         return new Response(null, { status: Status.BadRequest });
     }
 
     const db = await Database.fromPool(pool);
     try {
-        const admin = await db.getUserFromSession(sid);
+        const admin = await db.getStaffFromSession(sid, oid);
         if (admin === null) {
             error(`[Batch] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: Check Permissions
-        const batch: GeneratedBatch = await db.generateBatch({ office, generator: admin.id });
-        info(`[Batch] User ${admin.id} ${admin.name} <${admin.email}> generated new batch ${batch.id} of ${batch.codes.length} barcodes`);
+        if ((admin.permission & Local.GenerateBatch) === 0) {
+            error(`[Batch] User ${admin.user_id} cannot generate new batch of barcodes`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const batch: GeneratedBatch = await db.generateBatch({ office: oid, generator: admin.user_id });
+        info(`[Batch] User ${admin.user_id} generated new batch ${batch.id} of ${batch.codes.length} barcodes`);
         return new Response(JSON.stringify(batch), {
             headers: { 'Content-Type': 'application/json' },
             status: Status.Created,
