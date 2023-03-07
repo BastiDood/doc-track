@@ -147,14 +147,18 @@ export async function handleRemoveStaff(pool: Pool, req: Request, params: URLSea
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: Check permissions
+        if ((staff.permission & Local.RemoveStaff) === 0) {
+            error(`[Category] User ${staff.user_id} cannot retire staff member with user ID ${user} in office ${oid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         const result = await db.removeStaff(user, oid);
         if (result === null) {
-            error(`[Staff] Session ${sid} attempted to retire staff member with non-existent user ${user} or office ${oid}`);
+            error(`[Staff] User ${staff.user_id} attempted to retire staff member with non-existent user ${user} or office ${oid}`);
             return new Response(null, { status: Status.NotFound });
         }
 
-        info(`[Category] Session ${sid} retired staff member with user ${user} and office ${oid}`);
+        info(`[Category] User ${staff.user_id} retired staff member with user ${user} and office ${oid}`);
         return new Response(null, { status: result ? Status.NoContent : Status.Accepted });
     } finally {
         db.release();
