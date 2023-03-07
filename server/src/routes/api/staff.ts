@@ -4,6 +4,8 @@ import { error, info } from 'log';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
+import { Local } from '~model/permission.ts';
+
 import { Database } from '../../database.ts';
 
 /**
@@ -70,13 +72,18 @@ export async function handleSetStaffPermissions(pool: Pool, req: Request, params
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: Check permissions and escalation prevention
+        if ((staff.permission & Local.UpdateStaff) === 0) {
+            error(`[Category] User ${staff.user_id} cannot set the staff permissions of user ${user} in office ${oid} as ${setPerms}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        // FIXME: Prevent permission escalation
         if (await db.setStaffPermissions(user, oid, setPerms)) {
-            info(`[Category] Session ${sid} set the staff permissions of user ${user} in office ${oid} as ${setPerms}`);
+            info(`[Category] User ${staff.user_id} set the staff permissions of user ${user} in office ${oid} as ${setPerms}`);
             return new Response(null, { status: Status.NoContent });
         }
 
-        error(`[Staff] Session ${sid} attempted to set the staff permissions of non-existent user ${user} in office ${oid} as ${setPerms}`);
+        error(`[Staff] User ${staff.user_id} attempted to set the staff permissions of non-existent user ${user} in office ${oid} as ${setPerms}`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();
