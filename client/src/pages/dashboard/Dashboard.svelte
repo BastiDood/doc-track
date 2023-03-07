@@ -1,10 +1,9 @@
 <script lang="ts">
     import { register } from '../register.ts';
     import { Session } from '../../api/session.ts';
-    const ready = register();
 </script>
 <main>
-    {#await ready}
+    {#await register()}
         Waiting for service worker...
     {:then}
         {#await Session.getUser()}

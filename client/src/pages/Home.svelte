@@ -1,10 +1,9 @@
 <script>
     import { register } from './register.ts';
-    const ready = register();
 </script>
 
 <main>
-    {#await ready}
+    {#await register()}
         Waiting for service worker...
     {:then}
         Hello world!
