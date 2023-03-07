@@ -149,8 +149,8 @@ export async function handleRenameCategory(pool: Pool, req: Request, params: URL
     }
 
     const input = params.get('id');
-    const id = input ? parseInt(input, 10) : NaN;
-    if (isNaN(id)) {
+    const cid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(cid)) {
         error(`[Category] Session ${sid} provided an empty target office ID`);
         return new Response(null, { status: Status.BadRequest });
     }
@@ -182,13 +182,17 @@ export async function handleRenameCategory(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
-        if (await db.renameCategory({ id, name })) {
-            info(`[Category] User ${user.id} ${user.name} <${user.email}> renamed category ${id} to "${name}"`);
+        if ((user.permission & Global.UpdateCategory) === 0) {
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> cannot rename category ${cid} to "${name}"`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        if (await db.renameCategory({ id: cid, name })) {
+            info(`[Category] User ${user.id} ${user.name} <${user.email}> renamed category ${cid} to "${name}"`);
             return new Response(null, { status: Status.NoContent });
         }
 
-        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to rename non-existent category ${id} to "${name}"`);
+        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to rename non-existent category ${cid} to "${name}"`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();
