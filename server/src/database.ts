@@ -122,7 +122,7 @@ export class Database {
     async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation'] | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO invitation (office,email,permission)
-                SELECT * FROM (SELECT ${office}::SMALLINT,${email},${permission}::Permission) AS data
+                SELECT * FROM (SELECT ${office}::SMALLINT,${email},${permission}::LocalPermission) AS data
                     WHERE NOT EXISTS (SELECT 1 FROM users AS u WHERE u.email = ${email}) LIMIT 1
                 ON CONFLICT (office,email) DO UPDATE SET permission = ${permission}, creation = DEFAULT
                 RETURNING creation`;

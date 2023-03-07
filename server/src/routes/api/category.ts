@@ -6,6 +6,7 @@ import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
 import type { Category } from '~model/category.ts';
+import { Global } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
 
@@ -103,7 +104,11 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
+        if ((user.permission & Global.CreateCategory) === 0) {
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> cannot create new category "${category}"`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         const id = await db.createCategory(category);
         if (id === null) {
             error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to create duplicate category "${category}"`);
@@ -144,8 +149,8 @@ export async function handleRenameCategory(pool: Pool, req: Request, params: URL
     }
 
     const input = params.get('id');
-    const id = input ? parseInt(input, 10) : NaN;
-    if (isNaN(id)) {
+    const cid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(cid)) {
         error(`[Category] Session ${sid} provided an empty target office ID`);
         return new Response(null, { status: Status.BadRequest });
     }
@@ -177,13 +182,17 @@ export async function handleRenameCategory(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
-        if (await db.renameCategory({ id, name })) {
-            info(`[Category] User ${user.id} ${user.name} <${user.email}> renamed category ${id} to "${name}"`);
+        if ((user.permission & Global.UpdateCategory) === 0) {
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> cannot rename category ${cid} to "${name}"`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        if (await db.renameCategory({ id: cid, name })) {
+            info(`[Category] User ${user.id} ${user.name} <${user.email}> renamed category ${cid} to "${name}"`);
             return new Response(null, { status: Status.NoContent });
         }
 
-        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to rename non-existent category ${id} to "${name}"`);
+        error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to rename non-existent category ${cid} to "${name}"`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();
@@ -214,8 +223,8 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
     }
 
     const input = params.get('id');
-    const id = input ? parseInt(input, 10) : NaN;
-    if (isNaN(id)) {
+    const cid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(cid)) {
         error('[Category] Malformed category ID');
         return new Response(null, { status: Status.BadRequest });
     }
@@ -228,14 +237,18 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
-        const result = await db.deleteCategory(id);
+        if ((user.permission & Global.DeleteCategory) === 0) {
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> cannot delete category ${cid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const result = await db.deleteCategory(cid);
         if (result === null) {
-            error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${id}`);
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${cid}`);
             return new Response(null, { status: Status.NotFound });
         }
 
-        info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${id} "${result}"`);
+        info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${cid} "${result}"`);
         return new Response(null, { status: result ? Status.NoContent : Status.Accepted });
     } finally {
         db.release();
@@ -270,8 +283,8 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
     }
 
     const input = params.get('id');
-    const id = input ? parseInt(input, 10) : NaN;
-    if (isNaN(id)) {
+    const cid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(cid)) {
         error(`[Category] Invalid input from session ${sid}`);
         return new Response(null, { status: Status.BadRequest });
     }
@@ -284,14 +297,18 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
-        const name = await db.activateCategory(id);
+        if ((operator.permission & Global.ActivateCategory) === 0) {
+            error(`[Category] User ${operator.id} ${operator.name} <${operator.email}> cannot activate category ${cid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const name = await db.activateCategory(cid);
         if (name) {
-            info(`[Category] User ${operator.id} ${operator.name} <${operator.email}> activated category ${id} "${name}"`);
+            info(`[Category] User ${operator.id} ${operator.name} <${operator.email}> activated category ${cid} "${name}"`);
             return new Response(name, { headers: { 'Content-Type': 'text/plain' } });
         }
 
-        error(`[Category] User ${operator.id} ${operator.name} <${operator.email}> attempted to delete non-existent category ${id}`);
+        error(`[Category] User ${operator.id} ${operator.name} <${operator.email}> attempted to delete non-existent category ${cid}`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();

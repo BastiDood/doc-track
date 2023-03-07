@@ -22,6 +22,6 @@ export enum Global {
     CreateCategory = 8,
     UpdateCategory = 16,
     DeleteCategory = 32,
-    ReactivateCategory = 64,
+    ActivateCategory = 64,
     ViewMetrics = 128,
 }

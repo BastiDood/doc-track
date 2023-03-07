@@ -5,6 +5,8 @@ import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
+import { Global } from '~model/permission.ts';
+
 import { Database } from '../../database.ts';
 
 /**
@@ -59,7 +61,11 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
+        if ((operator.permission & Global.CreateOffice) === 0) {
+            error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> cannot create new office "${name}"`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         const office = await db.createOffice(name);
         info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> created new office ${office} "${name}"`);
         return new Response(office.toString(), {
@@ -95,8 +101,8 @@ export async function handleUpdateOffice(pool: Pool, req: Request, params: URLSe
     }
 
     const input = params.get('id');
-    const id = input ? parseInt(input, 10) : NaN;
-    if (isNaN(id)) {
+    const oid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(oid)) {
         error(`[Office] Session ${sid} provided malformed input`);
         return new Response(null, { status: Status.BadRequest });
     }
@@ -127,13 +133,17 @@ export async function handleUpdateOffice(pool: Pool, req: Request, params: URLSe
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
-        if (await db.updateOffice({ id, name })) {
-            info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> updated office ${id} to "${name}"`);
+        if ((operator.permission & Global.UpdateOffice) === 0) {
+            error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> cannot update office ${oid} to "${name}"`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        if (await db.updateOffice({ id: oid, name })) {
+            info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> updated office ${oid} to "${name}"`);
             return new Response(null, { status: Status.NoContent });
         }
 
-        error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> attempted to update non-existent office ${id} to "${name}"`);
+        error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> attempted to update non-existent office ${oid} to "${name}"`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();

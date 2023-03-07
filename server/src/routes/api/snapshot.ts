@@ -6,6 +6,7 @@ import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
 import type { InsertSnapshotError } from '~model/api.ts';
+import { Local } from '~model/permission.ts';
 import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
 
 import { Database } from '../../database.ts';
@@ -71,7 +72,11 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check local permissions
+        if ((staff.permission & Local.InsertSnapshot) === 0) {
+            error(`[Snapshot] User ${staff.user_id} cannot insert ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         // FIXME: make sure that we don't insert a new `Register` type
         const snap: Snapshot['creation'] | InsertSnapshotError = await db.insertSnapshot({ ...result.data, evaluator: staff.user_id });
         if (snap instanceof Date) {

@@ -4,6 +4,8 @@ import { error, info } from 'log';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
+import { Global } from '~model/permission.ts';
+
 import { Database } from '../../database.ts';
 
 /**
@@ -62,7 +64,12 @@ export async function handleSetUserPermissions(pool: Pool, req: Request, params:
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: Check permissions and escalation prevention
+        if ((admin.permission & Global.UpdateUser) === 0) {
+            error(`[User] User ${admin.id} ${admin.name} <${admin.email}> cannot set the staff permissions of user ${user} as ${setPerms}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        // FIXME: Prevent escalation prevention
         if (await db.setUserPermissions(user, setPerms)) {
             info(`[User] User ${admin.id} ${admin.name} <${admin.email}> set the staff permissions of user ${user} as ${setPerms}`);
             return new Response(null, { status: Status.NoContent });
