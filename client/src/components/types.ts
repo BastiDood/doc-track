@@ -21,3 +21,11 @@ export enum ButtonType {
     Secondary = 'secondary',
     Danger = 'danger'
 }
+
+export enum RowType {
+    Default = "default",
+    Inbox = "inbox",
+    Outbox = "outbox",
+    Person = "person",
+    Invite = "invite",
+}
