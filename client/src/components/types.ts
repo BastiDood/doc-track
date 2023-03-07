@@ -5,15 +5,15 @@ export interface Icon {
 }
 
 export enum IconColor {
-    Default = "default", 
-    Primary = "primary",
-    Faded = "faded",
+    Default = 'default', 
+    Primary = 'primary',
+    Faded = 'faded',
 }
 
 export enum IconSize {
-    Normal = "20px",
-    Medium = "10px",
-    Large = "15px",
+    Normal = '20px',
+    Medium = '10px',
+    Large = '15px',
 }
 
 export enum ButtonType {
@@ -32,8 +32,9 @@ export enum RowType {
     AcceptDocument,
     Inbox,
     Invite,
-    Person
+    Person,
 }
+
 export interface RowEvent {
     type: RowType;
     data: Object;

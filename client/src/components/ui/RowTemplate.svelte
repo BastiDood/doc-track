@@ -1,42 +1,52 @@
 <script lang="ts">
     import './row-element.css';
+
     import { createEventDispatcher } from 'svelte';
+
     import DocumentBlank from '../Icons/DocumentBlank.svelte';
     import OverflowMenuVertical from '../Icons/OverflowMenuVertical.svelte';
 
-
-    let showActionIcons: boolean = false;
     const dispatch = createEventDispatcher();
+    let showActionIcons = false;
+
+    function toggleOn() {
+        showActionIcons = true;
+    }
+
+    function toggleOff() {
+        showActionIcons = false;
+    }
 </script>
 
 <div 
     class="parentContainer" 
-    on:mouseenter={() => showActionIcons = true} 
-    on:focus={() => showActionIcons = true} 
-    on:mouseleave={() => showActionIcons = false}
+    on:mouseenter={toggleOn} 
+    on:focus={toggleOn} 
+    on:mouseleave={toggleOff}
 >
-    
-    <div class="itemIcon"     
-    on:click
-    on:keydown>
+    <div
+        class="itemIcon"     
+        on:click
+        on:keydown
+    >
         <slot name="displayIcon">
             <DocumentBlank/>
         </slot>
     </div>
-    <div class="itemText"
-    on:click
-    on:keydown
+    <div
+        class="itemText"
+        on:click
+        on:keydown
     >
         <slot>
             Default slot Text.
         </slot>
     </div>
     <div class="actionIcon">
-        {#if (showActionIcons)}
+        {#if showActionIcons}
             <slot name="actionIcons">
             </slot>
         {/if}
-        
         <OverflowMenuVertical on:click={() => dispatch('overflowclick')}/>
     </div>
 </div>
