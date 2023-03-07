@@ -6,6 +6,7 @@ import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
 import type { BarcodeAssignmentError, InboxEntry, PaperTrail } from '~model/api.ts';
+import { Local } from '~model/permission.ts';
 
 import { DocumentSchema } from '~model/document.ts';
 import { SnapshotSchema } from '~model/snapshot.ts';
@@ -73,8 +74,12 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check local permissions
         const { remark, ...doc } = inputResult.data;
+        if ((staff.permission & Local.CreateDocument) === 0) {
+            error(`[Document] User ${staff.user_id} cannot assign barcode ${doc.id} to document "${doc.title}"`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         const barcodeResult: Date | BarcodeAssignmentError = await db.assignBarcodeToDocument(doc, {
             remark,
             evaluator: staff.user_id,
