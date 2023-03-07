@@ -1,9 +1,9 @@
 <script lang="ts">
     import RowTemplate from "./RowTemplate.svelte";
-    import DocumentImport from "../Icons/DocumentImport.svelte";
-    import Checkmark from "../Icons/Checkmark.svelte";
-    import Close from "../Icons/Close.svelte";
-    import Camera from "../Icons/Camera.svelte";
+    import DocumentImport from "../icons/DocumentImport.svelte";
+    import Checkmark from "../icons/Checkmark.svelte";
+    import Close from "../icons/Close.svelte";
+    import Camera from "../icons/Camera.svelte";
 
     import { createEventDispatcher } from 'svelte';
 
@@ -24,11 +24,11 @@
     
     <div slot="actionIcons">
         <Checkmark
-        on:click = {() => dispatch('acceptDocument', {id,})} />
+            on:click = {() => dispatch('acceptDocument', {id,})} />
         <Close
-        on:click = {() => dispatch('declineDocument', {id})} />
+            on:click = {() => dispatch('declineDocument', {id})} />
         <Camera
-        on:click = {() => dispatch('toggleCamera', {id})}/>
+            on:click = {() => dispatch('toggleCamera', {id})}/>
 
     </div>
 
