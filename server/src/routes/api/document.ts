@@ -144,9 +144,13 @@ export async function handleGetInbox(pool: Pool, req: Request, params: URLSearch
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check local permissions
+        if ((staff.permission & Local.ViewInbox) === 0) {
+            error(`[Document] User ${staff.user_id} cannot retrieve the inbox for office ${oid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         const inbox: InboxEntry[] = await db.getInbox(oid);
-        info(`[Document] Session ${sid} retrieved the inbox for office ${oid}`);
+        info(`[Document] User ${staff.user_id} retrieved the inbox for office ${oid}`);
         return new Response(JSON.stringify(inbox), {
             headers: { 'Content-Type': 'application/json' },
         });
