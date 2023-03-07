@@ -283,8 +283,8 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
     }
 
     const input = params.get('id');
-    const id = input ? parseInt(input, 10) : NaN;
-    if (isNaN(id)) {
+    const cid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(cid)) {
         error(`[Category] Invalid input from session ${sid}`);
         return new Response(null, { status: Status.BadRequest });
     }
@@ -297,14 +297,18 @@ export async function handleActivateCategory(pool: Pool, req: Request, params: U
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
-        const name = await db.activateCategory(id);
+        if ((operator.permission & Global.ActivateCategory) === 0) {
+            error(`[Category] User ${operator.id} ${operator.name} <${operator.email}> cannot activate category ${cid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const name = await db.activateCategory(cid);
         if (name) {
-            info(`[Category] User ${operator.id} ${operator.name} <${operator.email}> activated category ${id} "${name}"`);
+            info(`[Category] User ${operator.id} ${operator.name} <${operator.email}> activated category ${cid} "${name}"`);
             return new Response(name, { headers: { 'Content-Type': 'text/plain' } });
         }
 
-        error(`[Category] User ${operator.id} ${operator.name} <${operator.email}> attempted to delete non-existent category ${id}`);
+        error(`[Category] User ${operator.id} ${operator.name} <${operator.email}> attempted to delete non-existent category ${cid}`);
         return new Response(null, { status: Status.NotFound });
     } finally {
         db.release();
