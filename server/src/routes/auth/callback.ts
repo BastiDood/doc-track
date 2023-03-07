@@ -117,7 +117,6 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             httpOnly: true,
             sameSite: 'Lax',
         });
-        console.log(headers.get('Set-Cookie'));
         return new Response(null, {
             headers,
             status: Status.Found,

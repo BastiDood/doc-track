@@ -67,7 +67,6 @@ export async function handleLogin(pool: Pool, req: Request) {
             httpOnly: true,
             sameSite: 'Lax',
         });
-        console.log(headers.get('Set-Cookie'));
         return new Response(null, {
             headers,
             status: Status.Found,
