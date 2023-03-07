@@ -1,4 +1,3 @@
-import App from './App.svelte';
-
-const app = new App({ target: document.body });
+import Home from './Home.svelte';
+const app = new Home({ target: document.body });
 export default app;

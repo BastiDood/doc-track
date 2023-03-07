@@ -38,8 +38,9 @@ export async function handleGet(pool: Pool, req: Request) {
         case '/api/vapid': return handleVapidPublicKey();
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);
-        case '/': {
-            const { readable } = await Deno.open(STATIC_ROOT + pathname + 'index.html');
+        case '/':
+        case '/dashboard': {
+            const { readable } = await Deno.open(STATIC_ROOT + pathname + '/index.html');
             return new Response(readable, {
                 headers: { 'Content-Type': 'text/html; charset=utf-8' },
             });
