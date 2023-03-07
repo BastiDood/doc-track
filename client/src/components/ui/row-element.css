@@ -1,0 +1,18 @@
+.parentContainer {
+    display: flex;
+    border-style: solid;
+}
+
+.itemIcon {
+    flex: 1 1 10%;
+}
+
+.itemText {
+    flex: 8 1 70%;
+}
+
+.actionIcon {
+    display: inline-flex;
+    justify-content: flex-end;
+    flex: 3 2 20%;
+}
