@@ -223,8 +223,8 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
     }
 
     const input = params.get('id');
-    const id = input ? parseInt(input, 10) : NaN;
-    if (isNaN(id)) {
+    const cid = input ? parseInt(input, 10) : NaN;
+    if (isNaN(cid)) {
         error('[Category] Malformed category ID');
         return new Response(null, { status: Status.BadRequest });
     }
@@ -237,14 +237,18 @@ export async function handleDeleteCategory(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
-        const result = await db.deleteCategory(id);
+        if ((user.permission & Global.DeleteCategory) === 0) {
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> cannot delete category ${cid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const result = await db.deleteCategory(cid);
         if (result === null) {
-            error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${id}`);
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to delete non-existent category ${cid}`);
             return new Response(null, { status: Status.NotFound });
         }
 
-        info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${id} "${result}"`);
+        info(`[Category] User ${user.id} ${user.name} <${user.email}> deleted category ${cid} "${result}"`);
         return new Response(null, { status: result ? Status.NoContent : Status.Accepted });
     } finally {
         db.release();
