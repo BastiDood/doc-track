@@ -110,12 +110,14 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
         // Set the new session cookie
         const headers = new Headers({ Location: '/dashboard' });
         setCookie(headers, {
+            path: '/',
             name: 'sid',
             value: sid,
             expires: idToken.exp,
             httpOnly: true,
             sameSite: 'Lax',
         });
+        console.log(headers.get('Set-Cookie'));
         return new Response(null, {
             headers,
             status: Status.Found,
