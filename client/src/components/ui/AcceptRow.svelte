@@ -6,6 +6,7 @@
     import Camera from "../icons/Camera.svelte";
 
     import { createEventDispatcher } from 'svelte';
+    import { RowEvent, RowType } from "../types.ts";
 
     export let id: string;
     export let category: number;
@@ -13,10 +14,14 @@
 
     const dispatch = createEventDispatcher();
 
+    const rowEvent: RowEvent = {
+        type: RowType.AcceptDocument,
+        data: {id}
+    }
 </script>
 
 <RowTemplate
-    on:overflowclick = {() => dispatch('overflowclick', {id})}
+    on:overflowclick = {() => dispatch('overflowclick', rowEvent)}
     on:click = {(e) => console.log(e)}
 >
     <DocumentImport slot="displayIcon"/>
@@ -24,11 +29,11 @@
     
     <div slot="actionIcons">
         <Checkmark
-            on:click = {() => dispatch('acceptDocument', {id,})} />
+            on:click = {() => dispatch('acceptDocument', rowEvent)} />
         <Close
-            on:click = {() => dispatch('declineDocument', {id})} />
+            on:click = {() => dispatch('declineDocument', rowEvent)} />
         <Camera
-            on:click = {() => dispatch('toggleCamera', {id})}/>
+            on:click = {() => dispatch('toggleCamera', rowEvent)}/>
 
     </div>
 

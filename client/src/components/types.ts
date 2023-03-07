@@ -29,9 +29,12 @@ export enum InputType {
 }
 
 export enum RowType {
-    Default = "default",
-    Inbox = "inbox",
-    Outbox = "outbox",
-    Person = "person",
-    Invite = "invite",
+    AcceptDocument,
+    Inbox,
+    Invite,
+    Person
+}
+export interface RowEvent {
+    type: RowType;
+    data: Object;
 }
