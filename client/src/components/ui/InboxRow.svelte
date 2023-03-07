@@ -1,8 +1,8 @@
 <script lang="ts">
     import RowTemplate from "./RowTemplate.svelte.js";
-    import DocumentBlank from "../Icons/DocumentBlank.svelte";
-    import SendAlt from "../Icons/SendAlt.svelte";
-    import CheckboxIndeterminateFilled from "../Icons/CheckboxIndeterminateFilled.svelte";
+    import DocumentBlank from "../icons/DocumentBlank.svelte";
+    import SendAlt from "../icons/SendAlt.svelte";
+    import CheckboxIndeterminateFilled from "../icons/CheckboxIndeterminateFilled.svelte";
 
     import { createEventDispatcher } from 'svelte';
 
@@ -23,9 +23,9 @@
     
     <div slot="actionIcons">
         <SendAlt
-        on:click = {() => dispatch('sendDocument', {id})} />
+            on:click = {() => dispatch('sendDocument', {id})} />
         <CheckboxIndeterminateFilled
-        on:click = {() => dispatch('terminateDocument', {id})} />
+            on:click = {() => dispatch('terminateDocument', {id})} />
     </div>
 
 </RowTemplate>
