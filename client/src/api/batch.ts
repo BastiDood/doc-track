@@ -35,6 +35,7 @@ export namespace Batch {
             case NOT_FOUND: return null;
             case BAD_REQUEST: throw new InvalidInput;
             case UNAUTHORIZED: throw new InvalidSession;
+            case FORBIDDEN: throw new InsufficientPermissions;
             case NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }

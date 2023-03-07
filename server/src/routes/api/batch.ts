@@ -5,6 +5,7 @@ import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
 import type { GeneratedBatch, MinBatch } from '~model/api.ts';
+import { Local } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
 
@@ -19,6 +20,7 @@ import { Database } from '../../database.ts';
  * - `200` => returns a {@linkcode MinBatch} as JSON in the {@linkcode Response} body
  * - `400` => office ID is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => insufficient permissions
  * - `404` => no batches have been generated yet
  * - `406` => content negotiation failed
  */
@@ -43,10 +45,15 @@ export async function handleGetEarliestAvailableBatch(pool: Pool, req: Request, 
 
     const db = await Database.fromPool(pool);
     try {
-        const valid = await db.checkValidSession(sid);
-        if (!valid) {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
             error(`[Batch] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((staff.permission & Local.ViewBatch) === 0) {
+            error(`[Batch] Session ${sid} cannot view earliest batch`);
+            return new Response(null, { status: Status.Forbidden });
         }
 
         const result: MinBatch | null = await db.getEarliestAvailableBatch(oid);
@@ -55,7 +62,7 @@ export async function handleGetEarliestAvailableBatch(pool: Pool, req: Request, 
             return new Response(null, { status: Status.NotFound });
         }
 
-        info(`[Batch] Session ${sid} requested a list of ${result.codes.length} barcodes from batch ${result.batch}`);
+        info(`[Batch] User ${staff.user_id} requested a list of ${result.codes.length} barcodes from batch ${result.batch}`);
         return new Response(JSON.stringify(result), {
             headers: { 'Content-Type': 'application/json' },
         });
