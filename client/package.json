@@ -3,7 +3,8 @@
     "version": "0.1.0",
     "type": "module",
     "source": [
-        "src/pages/index.html"
+        "src/pages/index.html",
+        "src/pages/dashboard/index.html"
     ],
     "scripts": {
         "build": "parcel build",
