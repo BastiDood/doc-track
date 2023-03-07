@@ -19,6 +19,7 @@ export enum IconSize {
 export enum ButtonType {
     Primary = 'primary',
     Secondary = 'secondary',
+<<<<<<< HEAD
     Danger = 'danger',
 }
 
@@ -27,3 +28,15 @@ export enum InputType {
     Password = 'password',
     Number = 'number',
 }
+=======
+    Danger = 'danger'
+}
+
+export enum RowType {
+    Default = "default",
+    Inbox = "inbox",
+    Outbox = "outbox",
+    Person = "person",
+    Invite = "invite",
+}
+>>>>>>> 10b34dc (feat: added RowTypes in types.ts)
