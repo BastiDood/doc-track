@@ -40,7 +40,7 @@ export async function handleGet(pool: Pool, req: Request) {
         case '/auth/callback': return handleCallback(pool, req, searchParams);
         case '/':
         case '/dashboard': {
-            const { readable } = await Deno.open(STATIC_ROOT + pathname + 'index.html');
+            const { readable } = await Deno.open(STATIC_ROOT + pathname + '/index.html');
             return new Response(readable, {
                 headers: { 'Content-Type': 'text/html; charset=utf-8' },
             });
