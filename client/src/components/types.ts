@@ -21,3 +21,14 @@ export enum ButtonType {
     Secondary = 'secondary',
     Danger = 'danger',
 }
+
+export enum RowType {
+    AcceptDocument,
+    Inbox,
+    Invite,
+    Person
+}
+export interface RowEvent {
+    type: RowType;
+    data: Object;
+}

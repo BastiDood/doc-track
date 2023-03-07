@@ -5,7 +5,7 @@
     import Close from "../icons/Close.svelte";
 
     import { createEventDispatcher } from 'svelte';
-    import { IconSize } from '../types.ts';
+    import { IconSize, RowEvent, RowType } from '../types.ts';
 
     export let pictureSize = IconSize.Normal;
     // From user.ts
@@ -20,12 +20,17 @@
     export let local_permission: number;
     export let active: boolean;
     
+    const rowEvent: RowEvent = {
+        type: RowType.Person,
+        data: {id}
+    }
+
     const dispatch = createEventDispatcher();
 
 </script>
 
 <RowTemplate
-    on:overflowclick = {() => dispatch('overflowclick', {id})}
+    on:overflowclick = {() => dispatch('overflowclick', rowEvent)}
     on:click = {(e) => console.log(e)}
 >
     <img width={pictureSize} height={pictureSize} src={picture} alt={name} slot="displayIcon">
@@ -33,11 +38,11 @@
     {name} ID: {id} Email: {email} Office: {office} Global Perms: {global_permission} Local Perms: {local_permission}
     <div slot="actionIcons">
         <Search
-            on:click = {() => dispatch('showUserInfo', {id})} />
+            on:click = {() => dispatch('showUserInfo', rowEvent)} />
         <Edit 
-            on:click = {() => dispatch('editUser', {id})} />
+            on:click = {() => dispatch('editUser', rowEvent)} />
         <Close 
-            on:click = {() => dispatch('removeUser', {id})} />
+            on:click = {() => dispatch('removeUser', rowEvent)} />
     </div>
 
 </RowTemplate>
