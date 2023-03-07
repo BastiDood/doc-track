@@ -6,6 +6,7 @@ import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
 import type { Category } from '~model/category.ts';
+import { Global } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
 
@@ -103,7 +104,11 @@ export async function handleCreateCategory(pool: Pool, req: Request) {
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
+        if ((user.permission & Global.CreateCategory) === 0) {
+            error(`[Category] User ${user.id} ${user.name} <${user.email}> cannot create new category "${category}"`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         const id = await db.createCategory(category);
         if (id === null) {
             error(`[Category] User ${user.id} ${user.name} <${user.email}> attempted to create duplicate category "${category}"`);
