@@ -1,9 +1,8 @@
 <script lang="ts">
-    import RowTemplate from "./RowTemplate.svelte";
-    import DocumentImport from "../Icons/DocumentImport.svelte";
-    import Checkmark from "../Icons/Checkmark.svelte";
-    import Close from "../Icons/Close.svelte";
-    import Camera from "../Icons/Camera.svelte";
+    import RowTemplate from "./RowTemplate.svelte.js";
+    import DocumentBlank from "../Icons/DocumentBlank.svelte";
+    import SendAlt from "../Icons/SendAlt.svelte";
+    import CheckboxIndeterminateFilled from "../Icons/CheckboxIndeterminateFilled.svelte";
 
     import { createEventDispatcher } from 'svelte';
 
@@ -19,17 +18,14 @@
     on:overflowclick = {() => dispatch('overflowclick', {id})}
     on:click = {(e) => console.log(e)}
 >
-    <DocumentImport slot="displayIcon"/>
+    <DocumentBlank slot="displayIcon"/>
     {title} ID: {id} Category: {category}
     
     <div slot="actionIcons">
-        <Checkmark
-        on:click = {() => dispatch('acceptDocument', {id})} />
-        <Close
-        on:click = {() => dispatch('declineDocument', {id})} />
-        <Camera
-        on:click = {() => dispatch('toggleCamera', {id})}/>
-
+        <SendAlt
+        on:click = {() => dispatch('sendDocument', {id})} />
+        <CheckboxIndeterminateFilled
+        on:click = {() => dispatch('terminateDocument', {id})} />
     </div>
 
 </RowTemplate>
