@@ -154,14 +154,18 @@ export async function handleRevokeInvitation(pool: Pool, req: Request, params: U
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check local permissions
+        if ((staff.permission & Local.RevokeInvite) === 0) {
+            error(`[Invite] User ${staff.user_id} cannot revoke existing email <${email}> to office ${oid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         const revokeResult = await db.revokeInvitation(oid, email);
         if (revokeResult === null) {
-            error(`[Invite] Session ${sid} attempted to revoke non-existent invitation <${email}> from office ${oid}`);
+            error(`[Invite] User ${staff.user_id} attempted to revoke non-existent invitation <${email}> from office ${oid}`);
             return new Response(null, { status: Status.NotFound });
         }
 
-        info(`[Invite] Session ${sid} revoked invitation <${email}> from office ${oid}`);
+        info(`[Invite] User ${staff.user_id} revoked invitation <${email}> from office ${oid}`);
         return new Response(JSON.stringify(revokeResult), {
             headers: { 'Content-Type': 'application/json' },
             status: Status.OK,
