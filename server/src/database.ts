@@ -139,7 +139,10 @@ export class Database {
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
-            : InvitationSchema.omit({ office: true, email: true }).parse(first);
+            : InvitationSchema
+                .omit({ office: true, email: true })
+                .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
+                .parse(first);
     }
 
     /**
@@ -165,7 +168,10 @@ export class Database {
         assertStrictEquals(updateResult.rowCount, 0);
         const { rows } = await transaction
             .queryObject`DELETE FROM invitation WHERE email = ${email} RETURNING office,permission`;
-        const invites = InvitationSchema.pick({ office: true, permission: true }).array().parse(rows);
+        const invites = InvitationSchema
+            .pick({ office: true, permission: true })
+            .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
+            .array().parse(rows);
 
         // Add the user into the system
         const insertResult = await transaction
@@ -453,7 +459,9 @@ export class Database {
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
-            : UserSchema.parse(first);
+            : UserSchema
+                .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
+                .parse(first);
     }
 
     /** Returns the local permissions of the session in the provided office. */
@@ -464,7 +472,10 @@ export class Database {
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
-            : StaffSchema.pick({ user_id: true, permission: true }).parse(first);
+            : StaffSchema
+                .pick({ user_id: true, permission: true })
+                .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
+                .parse(first);
     }
 
     /** Adds a new office to the system. */

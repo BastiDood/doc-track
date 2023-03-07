@@ -46,6 +46,7 @@ self.addEventListener('activate', evt => {
 
 self.addEventListener('fetch', evt => {
     assert(evt instanceof FetchEvent);
+    if (evt.request.redirect === 'manual') return;
     evt.respondWith(handleFetch(evt.request));
 }, { passive: true });
 

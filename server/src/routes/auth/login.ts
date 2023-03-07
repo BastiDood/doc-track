@@ -1,7 +1,7 @@
 import { encode } from 'base64url';
 import { getCookies, setCookie } from 'cookie';
 import { Status } from 'http';
-import { debug, warning } from 'log';
+import { info, warning } from 'log';
 import { Pool } from 'postgres';
 
 import { hashUuid } from './util.ts';
@@ -30,19 +30,19 @@ export async function handleLogin(pool: Pool, req: Request) {
     try {
         if (sid) {
             if (await db.checkValidSession(sid)) {
-                debug(`[Login ${sid}] Redirected to dashboard.`);
+                info(`[Login] Redirected session ${sid} to dashboard`);
                 return new Response(null, {
                     headers: { Location: '/dashboard' },
                     status: Status.Found,
                 });
             }
-            warning(`[Login ${sid}] Already existing pending session`);
+            warning(`[Login] Already existing pending session ${sid}`);
         }
 
         // Otherwise generate the new session
         const { id, nonce, expiration } = await db.generatePendingSession();
         const encodedNonce = encode(nonce);
-        debug(`[Login ${id}] Generated new pending session with nonce ${encodedNonce}`);
+        info(`[Login ${id}] Generated new pending session with nonce ${encodedNonce}`);
 
         // Build the OAuth 2.0 redirection parameters
         const params = new URLSearchParams({
@@ -60,6 +60,7 @@ export async function handleLogin(pool: Pool, req: Request) {
         // Generate the response headers
         const headers = new Headers({ Location: `${DISCOVERY.authorization_endpoint}?${params}` });
         setCookie(headers, {
+            path: '/',
             name: 'sid',
             value: id,
             expires: expiration,
