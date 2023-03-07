@@ -5,6 +5,8 @@ import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
+import { Global } from '~model/permission.ts';
+
 import { Database } from '../../database.ts';
 
 /**
@@ -59,7 +61,11 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        // TODO: check global permissions
+        if ((operator.permission & Global.CreateOffice) === 0) {
+            error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> cannot create new office "${name}"`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
         const office = await db.createOffice(name);
         info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> created new office ${office} "${name}"`);
         return new Response(office.toString(), {
