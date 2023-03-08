@@ -9,8 +9,14 @@
     {#await register()}
         Waiting for service worker...
     {:then}
-        <div style="text-align: center">
+        <div>
             <a href="/auth/login"><Button type={ButtonType.Primary}>Login with Google</Button></a>
         </div>
     {/await}
 </main>
+
+<style>
+    div {
+        margin: 0 auto;
+    }
+</style>
