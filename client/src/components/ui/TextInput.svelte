@@ -7,7 +7,7 @@
 </script>
 
 <label for={name}><slot></slot></label>
-<input type={type} placeholder={placeholder} id={name} class='{isRoundedBorder ? 'round-border' : ''}'/>
+<input type={type} placeholder={placeholder} id={name} class:round-border={isRoundedBorder} />
 
 <style>
   input {
