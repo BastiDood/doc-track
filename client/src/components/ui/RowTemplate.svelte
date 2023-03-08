@@ -31,7 +31,7 @@
         on:keydown
     >
         <slot name="displayIcon">
-            <DocumentBlank size={iconSize}/>
+            <DocumentBlank size={iconSize} />
         </slot>
     </div>
     <div
@@ -48,6 +48,6 @@
             <slot name="actionIcons">
             </slot>
         {/if}
-        <OverflowMenuVertical size={iconSize} on:click={() => dispatch('overflowclick')}/>
+        <OverflowMenuVertical size={iconSize} on:click={() => dispatch('overflowclick')} />
     </div>
 </div>
