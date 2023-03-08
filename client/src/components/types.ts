@@ -21,3 +21,9 @@ export enum ButtonType {
     Secondary = 'secondary',
     Danger = 'danger'
 }
+
+export enum InputType {
+    Text = 'text',
+    Password = 'password',
+    Number = 'number'
+}
