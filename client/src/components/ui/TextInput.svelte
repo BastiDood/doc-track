@@ -1,6 +1,6 @@
 <script lang="ts">
   import { InputType } from '../types.ts';
-  export let type: InputType = InputType.Primary;
+  export let type = InputType.Primary;
   export let placeholder = '';
   export let name: string;
   export let isRoundedBorder = true;
