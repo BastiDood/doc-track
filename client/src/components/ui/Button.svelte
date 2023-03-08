@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { ButtonType } from '../types.ts';
+  import { ButtonType } from "../types.ts";
+  import './button.css'
   export let type: ButtonType = ButtonType.Primary;
+  console.log(type);
 </script>
 
 <button 
-  class:primary={type === ButtonType.Primary} 
-  class:secondary={type === ButtonType.Secondary} 
-  class:danger={type === ButtonType.Danger} 
+  class={type}
   on:click>
-  <slot></slot>
+  <slot>{type}</slot>
 </button>
 
 <style>
@@ -21,16 +21,7 @@
     color: white;
   }
 
-  .primary {
-    background-color: #4040f2;
+  button:hover {
+    filter:contrast(1.5);
   }
-
-  .secondary {
-    background-color: #0d0d54;
-  }
-
-  .danger {
-    background-color: #ca1717;
-  }
-  
 </style>
