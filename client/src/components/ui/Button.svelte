@@ -21,6 +21,6 @@
   }
 
   button:hover {
-    filter:contrast(1.5);
+    filter: contrast(1.5);
   }
 </style>
