@@ -29,7 +29,7 @@
     };
 </script>
 
-<RowTemplate iconSize={iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
+<RowTemplate {iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
     <img class={iconSize} src={picture} alt={name} slot="displayIcon">
     {name} ID: {id} Email: {email} Office: {office} Global Perms: {globalPermission} Local Perms: {localPermission}
     <div slot="actionIcons">

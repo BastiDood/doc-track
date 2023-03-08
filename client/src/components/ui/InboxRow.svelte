@@ -20,7 +20,7 @@
     };
 </script>
 
-<RowTemplate iconSize={iconSize} on:overflowclick={() => dispatch('overflowclick', rowEvent)}>
+<RowTemplate {iconSize} on:overflowclick={() => dispatch('overflowclick', rowEvent)}>
     <DocumentBlank size={iconSize} slot="displayIcon"/>
     {title} ID: {id} Category: {category}
     <div slot="actionIcons">

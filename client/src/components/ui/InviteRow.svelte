@@ -22,7 +22,7 @@
     };
 </script>
 
-<RowTemplate iconSize={iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
+<RowTemplate {iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
     <PersonMail size={iconSize} slot="displayIcon"/>
     {email} Office: {office} Permission: {permission} Created on: {creation}
     <div slot="actionIcons">
