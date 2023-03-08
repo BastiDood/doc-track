@@ -1,6 +1,7 @@
 <script lang="ts">
     import { register } from '../register.ts';
     import { Session } from '../../api/session.ts';
+    import Navbar from '../../components/ui/Navbar.svelte';
 </script>
 <main>
     {#await register()}
@@ -9,7 +10,7 @@
         {#await Session.getUser()}
             Getting user...
         {:then user}
-            Hello, {user.name}!
+            <Navbar username={user.name} />
         {/await}
     {/await}
 </main>

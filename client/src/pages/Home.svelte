@@ -18,5 +18,8 @@
 <style>
     div {
         text-align: center;
+        padding: 5pt;
+        border: 1pt;
+        background-color: #ffb334;
     }
 </style>
