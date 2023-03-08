@@ -1,11 +1,11 @@
 <script lang="ts">
     import './row-element.css';
-
     import { createEventDispatcher } from 'svelte';
-
+    import { IconSize } from '../types.ts'
     import DocumentBlank from '../Icons/DocumentBlank.svelte';
     import OverflowMenuVertical from '../Icons/OverflowMenuVertical.svelte';
 
+    export let iconsize = IconSize.Normal;
     const dispatch = createEventDispatcher();
     let showActionIcons = false;
 
@@ -30,7 +30,7 @@
         on:keydown
     >
         <slot name="displayIcon">
-            <DocumentBlank/>
+            <DocumentBlank size={iconsize}/>
         </slot>
     </div>
     <div
@@ -47,6 +47,6 @@
             <slot name="actionIcons">
             </slot>
         {/if}
-        <OverflowMenuVertical on:click={() => dispatch('overflowclick')}/>
+        <OverflowMenuVertical size={iconsize} on:click={() => dispatch('overflowclick')}/>
     </div>
 </div>

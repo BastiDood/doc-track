@@ -6,8 +6,9 @@
     import RowTemplate from './RowTemplate.svelte';
     import SendAlt from '../icons/SendAlt.svelte';
 
-    import { type RowEvent, RowType } from '../types.ts';
+    import { IconSize, RowEvent, RowType } from '../types.ts';
 
+    export let iconsize = IconSize.Normal;
     export let id: string;
     export let category: number;
     export let title: string;
@@ -19,11 +20,11 @@
     };
 </script>
 
-<RowTemplate on:overflowclick={() => dispatch('overflowclick', rowEvent)}>
-    <DocumentBlank slot="displayIcon"/>
+<RowTemplate {iconsize} on:overflowclick={() => dispatch('overflowclick', rowEvent)}>
+    <DocumentBlank size={iconsize} slot="displayIcon"/>
     {title} ID: {id} Category: {category}
     <div slot="actionIcons">
-        <SendAlt on:click = {() => dispatch('sendDocument', rowEvent)} />
-        <CheckboxIndeterminateFilled on:click = {() => dispatch('terminateDocument', rowEvent)} />
+        <SendAlt size={iconsize} on:click = {() => dispatch('sendDocument', rowEvent)} />
+        <CheckboxIndeterminateFilled size={iconsize} on:click = {() => dispatch('terminateDocument', rowEvent)} />
     </div>
 </RowTemplate>

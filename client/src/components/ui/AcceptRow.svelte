@@ -7,8 +7,9 @@
     import DocumentImport from '../icons/DocumentImport.svelte';
     import RowTemplate from './RowTemplate.svelte';
 
-    import { type RowEvent, RowType } from '../types.ts';
+    import { RowEvent, RowType, IconSize } from '../types.ts';
 
+    export let iconsize = IconSize.Normal;
     export let id: string;
     export let category: number;
     export let title: string;
@@ -20,12 +21,12 @@
     };
 </script>
 
-<RowTemplate on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
-    <DocumentImport slot="displayIcon"/>
+<RowTemplate {iconsize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
+    <DocumentImport size={iconsize} slot="displayIcon"/>
     {title} ID: {id} Category: {category}
     <div slot="actionIcons">
-        <Checkmark on:click = {() => dispatch('acceptDocument', rowEvent)} />
-        <Close on:click = {() => dispatch('declineDocument', rowEvent)} />
-        <Camera on:click = {() => dispatch('toggleCamera', rowEvent)} />
+        <Checkmark size={iconsize} on:click = {() => dispatch('acceptDocument', rowEvent)} />
+        <Close size={iconsize} on:click = {() => dispatch('declineDocument', rowEvent)} />
+        <Camera size={iconsize} on:click = {() => dispatch('toggleCamera', rowEvent)} />
     </div>
 </RowTemplate>
