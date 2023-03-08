@@ -6,7 +6,7 @@
     import DocumentBlank from '../Icons/DocumentBlank.svelte';
     import OverflowMenuVertical from '../Icons/OverflowMenuVertical.svelte';
 
-    export let iconsize = IconSize.Normal;
+    export let iconSize = IconSize.Normal;
     const dispatch = createEventDispatcher();
     let showActionIcons = false;
 
@@ -31,7 +31,7 @@
         on:keydown
     >
         <slot name="displayIcon">
-            <DocumentBlank size={iconsize}/>
+            <DocumentBlank size={iconSize}/>
         </slot>
     </div>
     <div
@@ -48,6 +48,6 @@
             <slot name="actionIcons">
             </slot>
         {/if}
-        <OverflowMenuVertical size={iconsize} on:click={() => dispatch('overflowclick')}/>
+        <OverflowMenuVertical size={iconSize} on:click={() => dispatch('overflowclick')}/>
     </div>
 </div>

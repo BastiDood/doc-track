@@ -8,7 +8,7 @@
 
     import { IconSize, RowEvent, RowType } from '../types.ts';
 
-    export let iconsize = IconSize.Normal;
+    export let iconSize = IconSize.Normal;
     export let id: string;
     export let category: number;
     export let title: string;
@@ -20,11 +20,11 @@
     };
 </script>
 
-<RowTemplate {iconsize} on:overflowclick={() => dispatch('overflowclick', rowEvent)}>
-    <DocumentBlank size={iconsize} slot="displayIcon"/>
+<RowTemplate iconSize={iconSize} on:overflowclick={() => dispatch('overflowclick', rowEvent)}>
+    <DocumentBlank size={iconSize} slot="displayIcon"/>
     {title} ID: {id} Category: {category}
     <div slot="actionIcons">
-        <SendAlt size={iconsize} on:click = {() => dispatch('sendDocument', rowEvent)} />
-        <CheckboxIndeterminateFilled size={iconsize} on:click = {() => dispatch('terminateDocument', rowEvent)} />
+        <SendAlt size={iconSize} on:click = {() => dispatch('sendDocument', rowEvent)} />
+        <CheckboxIndeterminateFilled size={iconSize} on:click = {() => dispatch('terminateDocument', rowEvent)} />
     </div>
 </RowTemplate>

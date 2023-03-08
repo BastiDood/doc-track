@@ -7,7 +7,7 @@
 
     import { IconSize, RowEvent, RowType } from '../types.ts';
 
-    export let iconsize = IconSize.Normal;
+    export let iconSize = IconSize.Normal;
 
     // From invitation.ts
     export let office: number;
@@ -22,10 +22,10 @@
     };
 </script>
 
-<RowTemplate {iconsize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
-    <PersonMail size={iconsize} slot="displayIcon"/>
+<RowTemplate iconSize={iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
+    <PersonMail size={iconSize} slot="displayIcon"/>
     {email} Office: {office} Permission: {permission} Created on: {creation}
     <div slot="actionIcons">
-        <Close size={iconsize} on:click = {() => dispatch('removeInvitation', rowEvent)} />
+        <Close size={iconSize} on:click = {() => dispatch('removeInvitation', rowEvent)} />
     </div>
 </RowTemplate>

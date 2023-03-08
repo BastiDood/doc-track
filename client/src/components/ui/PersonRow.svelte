@@ -9,7 +9,7 @@
 
     import { RowEvent, IconSize, RowType } from '../types.ts';
 
-    export let iconsize = IconSize.Normal;
+    export let iconSize = IconSize.Normal;
     
     // From user.ts
     export let id: string;
@@ -29,13 +29,13 @@
     };
 </script>
 
-<RowTemplate {iconsize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
-    <img class={iconsize} src={picture} alt={name} slot="displayIcon">
+<RowTemplate iconSize={iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
+    <img class={iconSize} src={picture} alt={name} slot="displayIcon">
     {name} ID: {id} Email: {email} Office: {office} Global Perms: {globalPermission} Local Perms: {localPermission}
     <div slot="actionIcons">
-        <Search size={iconsize} on:click = {() => dispatch('showUserInfo', rowEvent)} />
-        <Edit size={iconsize} on:click = {() => dispatch('editUser', rowEvent)} />
-        <Close size={iconsize} on:click = {() => dispatch('removeUser', rowEvent)} />
+        <Search size={iconSize} on:click = {() => dispatch('showUserInfo', rowEvent)} />
+        <Edit size={iconSize} on:click = {() => dispatch('editUser', rowEvent)} />
+        <Close size={iconSize} on:click = {() => dispatch('removeUser', rowEvent)} />
     </div>
 </RowTemplate>
 

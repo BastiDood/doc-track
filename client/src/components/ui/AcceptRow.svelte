@@ -9,7 +9,7 @@
 
     import { RowEvent, RowType, IconSize } from '../types.ts';
 
-    export let iconsize = IconSize.Normal;
+    export let iconSize = IconSize.Normal;
     export let id: string;
     export let category: number;
     export let title: string;
@@ -21,12 +21,12 @@
     };
 </script>
 
-<RowTemplate {iconsize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
-    <DocumentImport size={iconsize} slot="displayIcon"/>
+<RowTemplate iconSize={iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
+    <DocumentImport size={iconSize} slot="displayIcon"/>
     {title} ID: {id} Category: {category}
     <div slot="actionIcons">
-        <Checkmark size={iconsize} on:click = {() => dispatch('acceptDocument', rowEvent)} />
-        <Close size={iconsize} on:click = {() => dispatch('declineDocument', rowEvent)} />
-        <Camera size={iconsize} on:click = {() => dispatch('toggleCamera', rowEvent)} />
+        <Checkmark size={iconSize} on:click = {() => dispatch('acceptDocument', rowEvent)} />
+        <Close size={iconSize} on:click = {() => dispatch('declineDocument', rowEvent)} />
+        <Camera size={iconSize} on:click = {() => dispatch('toggleCamera', rowEvent)} />
     </div>
 </RowTemplate>
