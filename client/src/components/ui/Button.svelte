@@ -2,7 +2,6 @@
   import { ButtonType } from "../types.ts";
   import './button.css'
   export let type: ButtonType = ButtonType.Primary;
-  console.log(type);
 </script>
 
 <button 
