@@ -1,6 +1,7 @@
 <script lang="ts">
     import './row-element.css';
     import { createEventDispatcher } from 'svelte';
+
     import { IconSize } from '../types.ts'
     import DocumentBlank from '../Icons/DocumentBlank.svelte';
     import OverflowMenuVertical from '../Icons/OverflowMenuVertical.svelte';
