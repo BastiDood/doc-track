@@ -1,5 +1,8 @@
 <script>
+    import Button from '../components/ui/Button.svelte';
+
     import { register } from './register.ts';
+    import { ButtonType } from '../components/types.ts';
 </script>
 
 <main>
