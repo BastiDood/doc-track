@@ -11,9 +11,9 @@ export enum IconColor {
 }
 
 export enum IconSize {
-    Normal = "1rem",
-    Medium = "1.25rem",
-    Large = "1.5rem"
+    Normal = "normal",
+    Medium = "medium",
+    Large = "large"
 }
 
 export enum ButtonType {
