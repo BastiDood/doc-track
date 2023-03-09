@@ -7,7 +7,7 @@
     export let alt = '';
 
     // Replace the next lines to generate an icon.
-	const iconUrl = new URL('../../assets/eye-slash.svg', import.meta.url);
+	const iconUrl = new URL('../../assets/icons/eye-slash.svg', import.meta.url);
 </script>
 
 <img class="{color} {size}" {alt} src="{iconUrl.pathname}" on:click on:keydown />

@@ -7,7 +7,7 @@
     export let alt = '';
 
     // Replace the next lines to generate an icon.
-	const iconUrl = new URL('../../assets/person-info.svg', import.meta.url);
+	const iconUrl = new URL('../../assets/icons/person-info.svg', import.meta.url);
 </script>
 
 <img class="{color} {size}" {alt} src="{iconUrl.pathname}" on:click on:keydown />
