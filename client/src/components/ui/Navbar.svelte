@@ -12,16 +12,13 @@
 </script>
 
 <div class="topbar">
-    <div class="leftalign">Hello, {username}!</div>
+    <div class="leftalign">Hello, <br>{username}!</div>
     <div class="rightalign"><a href="/"><Button type={ButtonType.Primary}><Logout /></Button></a></div>
-    <div class="centeralign">Doctrack!</div>
 </div>
 
 <style>
     .topbar {
-        background: #ffb334;
         align-items: left;
-        padding: 0pt;
         position:fixed;
         width:100%;
         height:30pt;
@@ -31,11 +28,12 @@
     }
     .leftalign {
         text-align: left;
+        float: left;
+        padding-left: 5pt;
     }
     .rightalign {
         text-align: right;
-    }
-    .centeralign {
-        text-align: center;
+        float: right;
+        margin-right: 5pt;
     }
 </style>
