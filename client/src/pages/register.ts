@@ -17,6 +17,9 @@ async function getSubscription(manager: PushManager): Promise<PushSubscription> 
 }
 
 export async function register() {
-    await navigator.serviceWorker.register(new URL('sw.ts', import.meta.url), { type: 'module' });
+    await navigator.serviceWorker.register(new URL('sw.ts', import.meta.url), {
+        type: 'module',
+        scope: '/',
+    });
     const { pushManager } = await navigator.serviceWorker.ready;
 }
