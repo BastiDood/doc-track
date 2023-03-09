@@ -11,9 +11,9 @@ export enum IconColor {
 }
 
 export enum IconSize {
-    Normal = '1rem',
-    Medium = '1.25rem',
-    Large = '1.5rem',
+    Normal = 'normal',
+    Medium = 'medium',
+    Large = 'large',
 }
 
 export enum ButtonType {
@@ -26,4 +26,16 @@ export enum InputType {
     Text = 'text',
     Password = 'password',
     Number = 'number',
+}
+
+export enum RowType {
+    AcceptDocument,
+    Inbox,
+    Invite,
+    Person,
+}
+
+export interface RowEvent {
+    type: RowType;
+    data: Object;
 }
