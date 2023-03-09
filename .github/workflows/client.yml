@@ -1,0 +1,25 @@
+name: Client
+
+on:
+  workflow_dispatch:
+  push:
+    branches: main
+    paths:
+      - 'client/**'
+  pull_request:
+    paths:
+      - 'client/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - name: Setup Repository
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm install
+      - name: Build Project
+        run: npm run build
