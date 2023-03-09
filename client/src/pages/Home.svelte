@@ -2,21 +2,58 @@
     import Button from '../components/ui/Button.svelte';
 
     import { register } from './register.ts';
-    import { ButtonType } from '../components/types.ts';
+    import { ButtonType, InputType } from '../components/types.ts';
+
+    import Google from '../components/icons/Google.svelte';
+    import Camera from '../components/icons/Camera.svelte';
+    import Search from '../components/icons/Search.svelte';
+    import TextInput from '../components/ui/TextInput.svelte';
+
+    const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
 </script>
 
 <main>
     {#await register()}
         Waiting for service worker...
     {:then}
-        <div>
-            <a href="/auth/login"><Button type={ButtonType.Primary}>Login with Google</Button></a>
+        <div class="middle-container">
+            <img src={placeholderSrc} alt="DocTrack Logo" />
+            <h3>DocTrack: Document Tracking System</h3>
+            <a href="/auth/login">
+                <Button type={ButtonType.Primary}><Google />Log in with University of the Philippines Mail</Button>
+            </a>
+            <div class="search-container">
+                <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." />
+                <Button type={ButtonType.Primary}><Camera /></Button>
+                <Button type={ButtonType.Primary}><Search /></Button>
+            </div>
         </div>
     {/await}
 </main>
 
 <style>
-    div {
+    main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    img {
+        border-radius: 10pt;
+        max-width: 512px;
+    }
+
+    .middle-container {
         text-align: center;
+        padding: 5pt;
+        border: 1pt;
+        background-color: #ffb334;
+    }
+
+    .search-container {
+        padding: 5pt;
+        margin: 0 auto;
     }
 </style>

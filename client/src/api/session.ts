@@ -1,6 +1,6 @@
 import { OK, UNAUTHORIZED, NOT_ACCEPTABLE } from 'http-status';
 
-import { type User, UserSchema } from '~model/user.ts';
+import { type User, UserSchema } from '../../../model/src/user.ts';
 
 import {
     InvalidSession,
