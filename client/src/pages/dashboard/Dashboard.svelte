@@ -7,12 +7,6 @@
     {#await register()}
         Waiting for service worker...
     {:then}
-        {#await Session.getUser()}
-            Getting user...
-        {:then user}
-            <Navbar username={user.name} />
-        {:catch}
-            <h1>Invalid user!</h1>
-        {/await}
+        <Navbar />
     {/await}
 </main>

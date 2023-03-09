@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { Session } from '../../api/session.ts';
+
     import Button from '../../components/ui/Button.svelte';
     import Logout from '../../components/icons/Logout.svelte';
 
@@ -18,12 +20,16 @@
             redirect: '/',
         },
     ];
-
-    export let username: string;
 </script>
 
 <nav>
-    <div class="greeting">Hello, {username}!</div>
+    <p>
+        {#await Session.getUser()}
+            Hello!
+        {:then user}
+            Hello, {user.name}!
+        {/await}
+    </p>
     <div class="links">
         {#each contents as content}
             <a href={content.redirect}>{content.text}</a>
@@ -40,9 +46,8 @@
         position: sticky;
     }
 
-    .greeting {
-        text-align: left;
-        float: left;
+    p {
+        margin: 0;
     }
 
     .links {
