@@ -5,10 +5,10 @@ import { info, warning } from 'log';
 import { Pool } from 'postgres';
 
 import { hashUuid } from './util.ts';
+import { getDiscoveryDocument } from '../../cache.ts';
 import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
 import { OAUTH_SCOPE_STRING } from '../../model/oauth/google.ts';
-import { DISCOVERY } from '../../model/oauth/openid.ts';
 
 /**
  * Rejects users that already have a valid session in the database.
@@ -58,7 +58,8 @@ export async function handleLogin(pool: Pool, req: Request) {
         });
 
         // Generate the response headers
-        const headers = new Headers({ Location: `${DISCOVERY.authorization_endpoint}?${params}` });
+        const { authorization_endpoint } = await getDiscoveryDocument();
+        const headers = new Headers({ Location: `${authorization_endpoint}?${params}` });
         setCookie(headers, {
             path: '/',
             name: 'sid',

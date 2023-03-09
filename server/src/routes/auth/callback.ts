@@ -6,10 +6,10 @@ import { Status } from 'http';
 import { Pool } from 'postgres';
 
 import { hashUuid, parseJwt } from './util.ts';
+import { getDiscoveryDocument } from '../../cache.ts';
 import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
 import { AuthorizationCode, TokenResponseSchema } from '../../model/oauth/google.ts';
-import { DISCOVERY } from '../../model/oauth/openid.ts';
 
 export async function handleCallback(pool: Pool, req: Request, params: URLSearchParams) {
     // Redirect to start of log-in flow if no session ID
@@ -49,7 +49,9 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             redirect_uri: env.OAUTH_REDIRECT,
             grant_type: 'authorization_code',
         });
-        const response = await fetch(DISCOVERY.token_endpoint, {
+
+        const { token_endpoint } = await getDiscoveryDocument();
+        const response = await fetch(token_endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body,
