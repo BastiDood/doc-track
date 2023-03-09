@@ -5,19 +5,25 @@ export interface Icon {
 }
 
 export enum IconColor {
-    Default = "default", 
-    Primary = "primary",
-    Faded = "faded"
+    Default = 'default', 
+    Primary = 'primary',
+    Faded = 'faded',
 }
 
 export enum IconSize {
-    Normal = "1rem",
-    Medium = "1.25rem",
-    Large = "1.5rem"
+    Normal = '1rem',
+    Medium = '1.25rem',
+    Large = '1.5rem',
 }
 
 export enum ButtonType {
     Primary = 'primary',
     Secondary = 'secondary',
-    Danger = 'danger'
+    Danger = 'danger',
+}
+
+export enum InputType {
+    Text = 'text',
+    Password = 'password',
+    Number = 'number',
 }
