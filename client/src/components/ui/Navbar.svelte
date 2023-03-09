@@ -3,16 +3,27 @@
     import Logout from '../../components/icons/Logout.svelte';
 
     import { ButtonType } from '../../components/types.ts';
-    let contents = [
-        {text:"Logout", icon:"", redirect:"/"},
-        {text:"Dashboard", icon:"", redirect:"/dashboard"},
-        {text:"Profile", icon:"", redirect:"/"},
-    ]
-    export let username: String;
+
+    const contents = [
+        {
+            text: 'Logout',
+            redirect: '/',
+        },
+        {
+            text: 'Dashboard',
+            redirect: '/dashboard',
+        },
+        {
+            text: 'Profile',
+            redirect: '/',
+        },
+    ];
+
+    export let username: string;
 </script>
 
 <div class="topbar">
-    <div class="leftalign">Hello, <br>{username}!</div>
+    <div class="leftalign">Hello, {username}!</div>
     <nav class="navbar">
         {#each contents as content}
             <a href={content.redirect} class="navbarentry">{content.text}</a>
