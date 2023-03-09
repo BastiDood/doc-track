@@ -6,7 +6,7 @@
     let contents = [
         {text:"Logout", icon:"", redirect:"/"},
         {text:"Dashboard", icon:"", redirect:"/dashboard"},
-        {text:"Profile", icon:"", redirect:"/profile"},
+        {text:"Profile", icon:"", redirect:"/"},
     ]
     export let username: String;
 </script>

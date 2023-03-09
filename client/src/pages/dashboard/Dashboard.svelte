@@ -11,13 +11,8 @@
             Getting user...
         {:then user}
             <Navbar username={user.name} />
-
+        {:catch}
+            <h1>Invalid user!</h1>
         {/await}
     {/await}
 </main>
-
-<style>
-    main {
-        background-color: #ffffff;
-    }
-</style>
