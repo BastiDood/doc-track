@@ -22,43 +22,39 @@
     export let username: string;
 </script>
 
-<div class="topbar">
-    <div class="leftalign">Hello, {username}!</div>
-    <nav class="navbar">
+<nav>
+    <div class="greeting">Hello, {username}!</div>
+    <div class="links">
         {#each contents as content}
-            <a href={content.redirect} class="navbarentry">{content.text}</a>
+            <a href={content.redirect}>{content.text}</a>
         {/each}
-</div>
+    </div>
+</nav>
 
 <style>
-    .topbar {
-        align-items: left;
-        position:fixed;
-        width:100%;
-        height:30pt;
-        padding:5pt;
+    nav {
+        display: flex;
         background-color: blueviolet;
-        left:0;
-        top:0;
+        justify-content: space-between;
+        padding: 0.5rem;
+        position: sticky;
     }
-    .leftalign {
+
+    .greeting {
         text-align: left;
         float: left;
-        padding-left: 5pt;
     }
-    .navbar {
-        text-align: right;
-        float: right;
-        margin-right: 5pt;
-        height:30pt;
+
+    .links {
+        display: flex;
+        gap: 0.5rem;
     }
-    .navbarentry {
-        margin-left: 5pt;
-        border-left-style: solid;
-        background-color: blueviolet;
-        border: 1pt;
+
+    .links > a {
+        display: inline-block;
     }
-    .navbarentry:hover {
+
+    .links > a:hover {
         background-color: blue;
     }
 </style>
