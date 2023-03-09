@@ -76,6 +76,7 @@ export function handlePost(pool: Pool, req: Request) {
         case '/api/office': return handleCreateOffice(pool, req);
         case '/api/snapshot': return handleInsertSnapshot(pool, req, searchParams);
         case '/api/vapid': return handleSubscribe(pool, req);
+        case '/auth/logout': return handleLogout(pool, req);
         default:
             error(`[POST] ${pathname} not found`);
             return new Response(null, { status: Status.NotFound });
@@ -112,7 +113,6 @@ export function handleDelete(pool: Pool, req: Request) {
         case '/api/category': return handleDeleteCategory(pool, req, searchParams);
         case '/api/invite': return handleRevokeInvitation(pool, req, searchParams);
         case '/api/staff': return handleRemoveStaff(pool, req, searchParams);
-        case '/auth/logout': return handleLogout(pool, req);
         default:
             error(`[DELETE] ${pathname} not found`);
             return new Response(null, { status: Status.NotFound });
