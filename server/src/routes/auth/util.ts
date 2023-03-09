@@ -4,7 +4,7 @@ import { decode as hexDecode } from 'hex';
 
 import { HeaderSchema } from '../../model/jwk/header.ts';
 import { type IdToken, IdTokenSchema } from '../../model/oauth/openid.ts';
-import { KEYS } from '../../model/oauth/openid.ts';
+import { getCerts } from '../../cache.ts';
 
 /** Takes a UUID v4 string, applies SHA-256, and returns a URL-safe Base64-encoded hash. */
 export async function hashUuid(id: string) {
@@ -30,7 +30,8 @@ export async function parseJwt(jwt: string): Promise<IdToken> {
         ? { name: 'RSASSA-PKCS1-v1_5' }
         : { name: 'ECDSA', hash: 'SHA-256' };
 
-    const key = KEYS.get(kid);
+    const keys = await getCerts();
+    const key = keys.get(kid);
     assert(key?.algorithm.name === algorithm.name);
 
     const encoder = new TextEncoder;
