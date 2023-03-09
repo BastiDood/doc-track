@@ -30,7 +30,8 @@ async function handleActivate() {
 
 async function handleFetch(req: Request): Promise<Response> {
     // If already pre-cached, serve it. Otherwise, fetch the network.
-    const maybeRes = await caches.match(req);
+    const cache = await caches.open(version);
+    const maybeRes = await cache.match(req);
     return maybeRes ?? fetch(req);
 }
 
@@ -46,7 +47,11 @@ self.addEventListener('activate', evt => {
 
 self.addEventListener('fetch', evt => {
     assert(evt instanceof FetchEvent);
-    if (evt.request.redirect === 'manual') return;
+
+    // HACK: Exception for `/auth/callback`
+    const url = new URL(evt.request.url);
+    if (url.pathname === '/auth/callback') return;
+
     evt.respondWith(handleFetch(evt.request));
 }, { passive: true });
 
