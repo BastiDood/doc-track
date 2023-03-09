@@ -13,7 +13,10 @@
 
 <div class="topbar">
     <div class="leftalign">Hello, <br>{username}!</div>
-    <div class="rightalign"><a href="/"><Button type={ButtonType.Primary}><Logout /></Button></a></div>
+    <nav class="navbar">
+        {#each contents as content}
+            <a href={content.redirect} class="navbarentry">{content.text}</a>
+        {/each}
 </div>
 
 <style>
@@ -23,6 +26,7 @@
         width:100%;
         height:30pt;
         padding:5pt;
+        background-color: blueviolet;
         left:0;
         top:0;
     }
@@ -31,9 +35,19 @@
         float: left;
         padding-left: 5pt;
     }
-    .rightalign {
+    .navbar {
         text-align: right;
         float: right;
         margin-right: 5pt;
+        height:30pt;
+    }
+    .navbarentry {
+        margin-left: 5pt;
+        border-left-style: solid;
+        background-color: blueviolet;
+        border: 1pt;
+    }
+    .navbarentry:hover {
+        background-color: blue;
     }
 </style>

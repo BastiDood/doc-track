@@ -11,6 +11,13 @@
             Getting user...
         {:then user}
             <Navbar username={user.name} />
+
         {/await}
     {/await}
 </main>
+
+<style>
+    main {
+        background-color: #ffffff;
+    }
+</style>

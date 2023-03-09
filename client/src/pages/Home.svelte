@@ -55,6 +55,6 @@
         margin-right: 5pt;
     }
     :global(body) {
-        background-color: #1e31d6;
+        background-color: #0eb2e4;
     }
 </style>
