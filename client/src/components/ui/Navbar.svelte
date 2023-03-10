@@ -15,7 +15,7 @@
             Hello, {user.name}!
         {/await}
     </p>
-    <div class="links">
+    <div>
         <form method="POST" action="/auth/logout">
             <input type="submit" value="Logout" />
         </form>
