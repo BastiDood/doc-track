@@ -9,17 +9,23 @@
 
     --font-size: 16px;
     --x-large: 2rem;
-    --large: 1.5rem
+    --large: 1.5rem;
     --medium: 1.25rem;
     --normal: 1rem;
     --small: 0.875rem;
     --x-small: 0.75rem;
 
     --border-radius: 10px;
-    
+
 }
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
+    padding: 0;
     background-color: var(--dashboard-bg);
     font-family: 'Open Sans', sans-serif;
     color: var(--text-color);
@@ -37,11 +43,11 @@ h2 {
 }
 
 h3 {
-    font-size: var(--medium)
+    font-size: var(--medium);
 }
 
 p {
-    font-size: var(--normal)
+    font-size: var(--normal);
 }
 
 .primary {
