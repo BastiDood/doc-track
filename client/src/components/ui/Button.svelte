@@ -11,10 +11,12 @@
 </button>
 
 <style>
+  @import url('../../pages/global.css');
+
   button {
     margin: 5px;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     border: 0;
     cursor: pointer;
     color: white;
