@@ -11,6 +11,8 @@ export enum Status {
     Terminate = 'Terminate',
 }
 
+export const StatusSchema = z.nativeEnum(Status);
+
 export const SnapshotSchema = z.object({
     doc: DocumentSchema.shape.id,
     creation: z.coerce.date(),

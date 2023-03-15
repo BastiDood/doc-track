@@ -346,6 +346,14 @@ Deno.test('full OAuth flow', async t => {
                 title: doc.title,
             }]);
         });
+
+        await t.step('user metrics are consistent', async () => {
+            const metrics = await db.generateUserSummary(USER.id);
+            assertStrictEquals(metrics.get(Status.Register), 1n);
+            assertStrictEquals(metrics.get(Status.Send), 1n);
+            assertStrictEquals(metrics.get(Status.Receive), undefined);
+            assertStrictEquals(metrics.get(Status.Terminate), undefined);
+        });
     });
 
     await t.step('category deprecation and activation', async () => {
