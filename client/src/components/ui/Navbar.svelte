@@ -23,7 +23,7 @@
 </nav>
 
 <style>
-    @import url('../../pages/var.css');
+    @import url('../../pages/vars.css');
 
     nav {
         display: flex;
