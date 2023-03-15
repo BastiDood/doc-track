@@ -23,7 +23,9 @@
 
 <RowTemplate {iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
     <DocumentImport size={iconSize} slot="displayIcon"/>
-    {title} ID: {id} Category: {category}
+    <p>
+        {title} ID: {id} Category: {category}
+    </p>
     <div slot="actionIcons">
         <Checkmark size={iconSize} on:click = {() => dispatch('acceptDocument', rowEvent)} />
         <Close size={iconSize} on:click = {() => dispatch('declineDocument', rowEvent)} />

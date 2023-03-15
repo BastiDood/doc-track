@@ -24,7 +24,9 @@
 
 <RowTemplate {iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
     <PersonMail size={iconSize} slot="displayIcon"/>
-    {email} Office: {office} Permission: {permission} Created on: {creation}
+    <p>
+        {email} Office: {office} Permission: {permission} Created on: {creation}
+    </p>
     <div slot="actionIcons">
         <Close size={iconSize} on:click = {() => dispatch('removeInvitation', rowEvent)} />
     </div>
