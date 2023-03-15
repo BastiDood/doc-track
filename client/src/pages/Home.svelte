@@ -32,6 +32,8 @@
 </main>
 
 <style>
+    @import url('global.css');
+
     main {
         display: flex;
         align-items: center;
@@ -49,7 +51,8 @@
         text-align: center;
         padding: 5pt;
         border: 1pt;
-        background-color: #ffb334;
+        background-color: var(--login-bg);
+        border-radius: var(--border-radius);
     }
 
     .search-container {
