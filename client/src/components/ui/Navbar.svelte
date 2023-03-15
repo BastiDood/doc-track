@@ -23,9 +23,11 @@
 </nav>
 
 <style>
+    @import url('../../pages/var.css');
+
     nav {
         display: flex;
-        background-color: blueviolet;
+        background-color: var(--secondary-color);
         justify-content: space-between;
         padding: 0.5rem;
         position: sticky;
