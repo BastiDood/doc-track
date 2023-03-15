@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Session } from '../../api/session.ts';
-    import { onMount } from "svelte";
+    import MediaQuery from "./../MediaQuery.svelte";
 
     import Button from '../../components/ui/Button.svelte';
     import Logout from '../../components/icons/Logout.svelte';
@@ -21,26 +21,28 @@
         { label: "Manage Administrators", href: "#" },
         { label: "Manage Global Settings", href: "#" },
     ];
-</script>
 
-<nav>
+</script>
+<MediaQuery query="(max-width: 768px)" let:matches>
+<nav class="{matches ? 'mobile' : ''}">
     <p>
         {#await Session.getUser()}
             Hello!
         {:then user}
-            Hello, {user.name}!
+            Hello, {user.name}! {matches ? `(Mobile)` : `(Desktop)`}
         {/await}
     </p>
-        <ul class="navelements">
-            {#each navItems as item}
-                <li><a href={item.href} class="navitem">{item.label}</a></li>
-            {/each}
-            <li><form method="POST" action="/auth/logout" class="navitem">
-                    <input type="submit" value="Logout" />
-                </form>
-            </li>
-        </ul>
+    <ul class="navelements">
+        {#each navItems as item}
+            <li><a href={item.href} class="navitem">{item.label}</a></li>
+        {/each}
+        <li><form method="POST" action="/auth/logout" class="navitem">
+                <input type="submit" value="Logout" />
+            </form>
+        </li>
+    </ul>
 </nav>
+</MediaQuery>
 
 <style>
     nav {
@@ -69,8 +71,12 @@
 
     .navitem:hover {
         background-color: blue;
+        transition: all 0.3s ease 0s;
     }
     
+    .mobile {
+        background-color: green;
+    }
 
     p {
         margin: 0;
