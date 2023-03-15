@@ -43,20 +43,20 @@
     }
 
     img {
-        border-radius: 10pt;
+        border-radius: var(--border-radius);
         max-width: 512px;
     }
 
     .middle-container {
         text-align: center;
-        padding: 5pt;
-        border: 1pt;
+        padding: var(--spacing-small);
+        border: var(--spacing-tiny) solid var(--primary-color);
         background-color: var(--login-bg);
         border-radius: var(--border-radius);
     }
 
     .search-container {
-        padding: 5pt;
+        padding: var(--spacing-small);
         margin: 0 auto;
     }
 </style>

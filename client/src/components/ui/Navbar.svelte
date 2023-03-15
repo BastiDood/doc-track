@@ -29,7 +29,7 @@
         display: flex;
         background-color: var(--secondary-color);
         justify-content: space-between;
-        padding: 0.5rem;
+        padding: var(--spacing-small);
         position: sticky;
     }
 

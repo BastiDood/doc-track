@@ -10,12 +10,14 @@
 <input {type} {placeholder} {name} class:round-border={isRoundedBorder} />
 
 <style>
+  @import url('../../pages/vars.css');
+
   input {
-    border: #4040f2 2px solid;
-    padding: 5px 8px;
+    border: var(--primary-color) 2px solid;
+    padding: var(--spacing-small) var(--spacing-normal);
   }
 
   .round-border {
-    border-radius: 15px;
+    border-radius: var(--border-radius);
   }
 </style>
