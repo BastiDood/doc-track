@@ -22,7 +22,9 @@
 
 <RowTemplate {iconSize} on:overflowclick={() => dispatch('overflowclick', rowEvent)}>
     <DocumentBlank size={iconSize} slot="displayIcon"/>
-    {title} ID: {id} Category: {category}
+    <p>
+        {title} ID: {id} Category: {category}
+    </p>
     <div slot="actionIcons">
         <SendAlt size={iconSize} on:click = {() => dispatch('sendDocument', rowEvent)} />
         <CheckboxIndeterminateFilled size={iconSize} on:click = {() => dispatch('terminateDocument', rowEvent)} />
