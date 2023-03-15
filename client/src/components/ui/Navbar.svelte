@@ -11,14 +11,15 @@
 
     // TODO: Updates based on permissions
     const navItems = [
-        { label: "logo", href: "#" },
-        { label: "Item 1", href: "#" },
-        { label: "Item 2", href: "#" },
-        { label: "Item 3", href: "#" },
-        { label: "Item 4", href: "#" },
-        { label: "Item 5", href: "#" },
-        { label: "Item 6", href: "#" },
-        { label: "Item 7", href: "#" }
+        { label: "Inbox", href: "#" },
+        { label: "Outbox", href: "#" },
+        { label: "Drafts", href: "#" },
+        { label: "Barcodes", href: "#" },
+        { label: "Metrics", href: "#" },
+        { label: "Manage Invites", href: "#" },
+        { label: "Manage Staff", href: "#" },
+        { label: "Manage Administrators", href: "#" },
+        { label: "Manage Global Settings", href: "#" },
     ];
 </script>
 
@@ -32,7 +33,7 @@
     </p>
         <ul class="navelements">
             {#each navItems as item}
-                <li><a href={item.href} class="navitem">item.label</a></li>
+                <li><a href={item.href} class="navitem">{item.label}</a></li>
             {/each}
             <li><form method="POST" action="/auth/logout" class="navitem">
                     <input type="submit" value="Logout" />
@@ -48,7 +49,6 @@
         justify-content: space-between;
         align-items: flex-start;
         box-shadow: 0 1px 8px #ddd;
-        padding: 0.5rem;
         position: sticky;
     }
 
@@ -62,6 +62,8 @@
     .navitem {
         list-style: none;
         padding: 1em;
+        background: none;
+        text-decoration: none;
         display: inline-block;
     }
 
