@@ -16,6 +16,7 @@ import {
 } from './api/category.ts';
 import { handleCreateDocument, handleGetInbox, handleGetPaperTrail } from './api/document.ts';
 import { handleAddInvitation, handleRevokeInvitation } from './api/invite.ts';
+import { handleGenerateUserSummary } from './api/metrics.ts';
 import { handleCreateOffice, handleUpdateOffice } from './api/office.ts';
 import { handleGetUserFromSession } from './api/session.ts';
 import { handleInsertSnapshot } from './api/snapshot.ts';
@@ -34,6 +35,7 @@ export async function handleGet(pool: Pool, req: Request) {
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/api/document': return handleGetPaperTrail(pool, req, searchParams);
         case '/api/inbox': return handleGetInbox(pool, req, searchParams);
+        case '/api/metrics/user': return handleGenerateUserSummary(pool, req);
         case '/api/session': return handleGetUserFromSession(pool, req);
         case '/api/vapid': return handleVapidPublicKey();
         case '/auth/login': return handleLogin(pool, req);
