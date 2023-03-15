@@ -8,7 +8,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: var(--dashboard-bg);
+    background: var(--dashboard-bg);
     font-family: 'Open Sans', sans-serif;
     color: var(--text-color);
     font-size: var(--normal);
