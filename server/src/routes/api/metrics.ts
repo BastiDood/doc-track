@@ -9,6 +9,18 @@ import { Global } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
 
+/**
+ * Gets the summary of a user's metrics across all their offices.
+ *
+ * # Inputs
+ * - Requires a session whose global permissions include {@linkcode Global.ViewMetrics}
+ *
+ * # Outputs
+ * - `200` => returns the counts of the grouped snapshots as JSON in the {@linkcode Response} body
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => insufficient permissions
+ * - `406` => content negotiation failed
+ */
 export async function handleGenerateUserSummary(pool: Pool, req: Request) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
