@@ -11,54 +11,54 @@
 
     // TODO: Updates based on permissions
     const navItems = [
-        { label: "Inbox", href: "#" },
-        { label: "Outbox", href: "#" },
-        { label: "Drafts", href: "#" },
-        { label: "Barcodes", href: "#" },
-        { label: "Metrics", href: "#" },
-        { label: "Manage Invites", href: "#" },
-        { label: "Manage Staff", href: "#" },
-        { label: "Manage Administrators", href: "#" },
-        { label: "Manage Global Settings", href: "#" },
+        { label: "Inbox", href: "#inbox" },
+        { label: "Outbox", href: "#outbox" },
+        { label: "Drafts", href: "#drafts" },
+        { label: "Barcodes", href: "#barcodes" },
+        { label: "Metrics", href: "#metrics" },
+        { label: "Manage Invites", href: "#invites" },
+        { label: "Manage Staff", href: "#staff" },
+        { label: "Manage Administrators", href: "#admins" },
+        { label: "Manage Global Settings", href: "#globalsettings" },
     ];
 
 </script>
 <MediaQuery query="(max-width: 768px)" let:matches>
-<nav class="{matches ? 'mobile' : ''}">
-    <p>
-        {#await Session.getUser()}
-            Hello!
-        {:then user}
-            Hello, {user.name}! {matches ? `(Mobile)` : `(Desktop)`}
-        {/await}
-    </p>
-    <ul class="navelements">
-        {#each navItems as item}
-            <li><a href={item.href} class="navitem">{item.label}</a></li>
-        {/each}
-        <li><form method="POST" action="/auth/logout" class="navitem">
-                <input type="submit" value="Logout" />
-            </form>
-        </li>
-    </ul>
-</nav>
+<div>
+    <nav class="{matches ? 'mobile' : ''}">
+        <p class="profile">
+            {#await Session.getUser()}
+                Hello!
+            {:then user}
+                Hello, {user.name}! {matches ? `(Mobile)` : `(Desktop)`}
+            {/await}
+        </p>
+        <ul class="navelements">
+            {#each navItems as item}
+                <li><a href={item.href} class="navitem">{item.label}</a></li>
+            {/each}
+            <li><form method="POST" action="/auth/logout" class="navitem">
+                    <input type="submit" value="Logout" />
+                </form>
+            </li>
+        </ul>
+    </nav>
+</div>
 </MediaQuery>
 
 <style>
     nav {
-        display: flex;
         background-color: blueviolet;
-        justify-content: space-between;
-        align-items: flex-start;
         box-shadow: 0 1px 8px #ddd;
         position: sticky;
     }
 
     .navelements {
         display: flex;
-        justify-content: flex-end;
+        flex-direction: row-reverse;
+        flex-flow: row wrap;
+        justify-content: space-around;
         list-style-type: none;
-        align-items: stretch;
     }
     
     .navitem {
@@ -66,6 +66,7 @@
         padding: 1em;
         background: none;
         text-decoration: none;
+        background-color: pink;
         display: inline-block;
     }
 
@@ -78,7 +79,8 @@
         background-color: green;
     }
 
-    p {
+    .profile {
+        display: inline-block;
         margin: 0;
     }
 </style>
