@@ -30,6 +30,8 @@ h3 {
 
 p {
     font-size: var(--normal);
+    padding: 0;
+    margin: 0;
 }
 
 .primary {
