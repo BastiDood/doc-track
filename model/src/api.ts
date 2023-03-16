@@ -58,6 +58,9 @@ export type InboxEntry = z.infer<typeof InboxEntrySchema>;
 
 export const SummarySchema = z.object({
     status: StatusSchema,
-    amount: z.coerce.bigint().nonnegative(),
+    amount: z.coerce.bigint().positive(),
 });
 export type Summary = z.infer<typeof SummarySchema>;
+
+export const MetricsSchema = z.record(StatusSchema, SummarySchema.shape.amount);
+export type Metrics = z.infer<typeof MetricsSchema>;
