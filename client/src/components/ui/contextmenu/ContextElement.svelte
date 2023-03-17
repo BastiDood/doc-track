@@ -4,15 +4,14 @@
     import { IconSize } from '../../types.ts'
     import Add from '../../icons/Add.svelte';
 
-    export let iconSize = IconSize.Normal();
-    export let contextData
+    export let iconSize = IconSize.Normal;
     const dispatch = createEventDispatcher();
 
 </script>
 
 <div 
-    on:click={() => dispatch('contextEvent')}
-    on:keydown={() => dispatch('contextEvent')}
+    on:click
+    on:keydown
     >
     <div>
         <slot name="contextIcon">
@@ -22,9 +21,6 @@
 
     <div>
         <slot>
-            <p>
-                Default text
-            </p>
         </slot>
     </div>
 </div>

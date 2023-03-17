@@ -4,9 +4,10 @@
     @import url(../../../pages/vars.css);
 
     hr {
-        color: gray;
-        background-color: gray;
-        width: 0;
+        background-color: black;
+        width: 100%;
+        margin: 0;
+        padding: 0;
         height: var(--spacing-tiny)
     }
 </style>

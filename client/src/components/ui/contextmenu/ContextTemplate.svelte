@@ -2,8 +2,8 @@
     export let show = false;
 </script>
 
-<div class="drawer" class:hidden={!show}>
-
+<div class="drawer" class:show={show}>
+    <slot></slot>
 </div>
 
 <style>
@@ -14,11 +14,15 @@
         width: 100vw;
         border: var(--spacing-tiny) solid black;
         transition: bottom var(--animation-length);
-        bottom: 0;
-        border-radius: var(--border-radius) var(--border-radius);
-    }
-    .hidden {
         bottom: -100%;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        display: block;
+        position: fixed;
+        background-color: white;
+        z-index: 100;
+    }
+    .show {
+        bottom: 0;
     }
 
 </style>
