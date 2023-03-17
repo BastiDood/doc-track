@@ -29,6 +29,20 @@ export enum RowType {
     Person,
 }
 
+export enum Events {
+    OverflowClick = 'overflowClick',
+    AcceptDocument = 'acceptDocument',
+    DeclineDocument = 'declineDocument',
+    Camera = 'toggleCamera',
+    SendDocument = 'sendDocument',
+    TerminateDocument = 'terminateDocument',
+    CreateInvitation = 'createInvitation',
+    RemoveInvitation = 'removeInvitation',
+    ShowUserInfo = 'showUserInfo',
+    DeleteUser = 'deleteUser',
+    EditUser = 'editUser',
+}
+
 export interface ContextPayload {
     ty: RowType.AcceptDocument | RowType.Inbox;
     id: number;
