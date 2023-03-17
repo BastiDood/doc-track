@@ -1,5 +1,5 @@
 <div>
-  <p>Inbox</p>
+  <p>Manage Administrators</p>
 </div>
 
 

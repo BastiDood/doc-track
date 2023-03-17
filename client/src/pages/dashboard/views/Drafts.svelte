@@ -1,5 +1,5 @@
 <div>
-  <p>Inbox</p>
+  <p>Drafts</p>
 </div>
 
 
