@@ -5,7 +5,7 @@
     import PersonMail from '../icons/PersonMail.svelte'
     import RowTemplate from './RowTemplate.svelte';
 
-    import { IconSize, RowEvent, RowType } from '../types.ts';
+    import { IconSize, InvitePayload, RowType } from '../types.ts';
 
     export let iconSize = IconSize.Normal;
 
@@ -16,9 +16,10 @@
     export let creation: string;
     
     const dispatch = createEventDispatcher();
-    const rowEvent: RowEvent = {
-        type: RowType.Invite,
-        data: { office, email },
+    const rowEvent: InvitePayload = {
+        ty: RowType.Invite,
+        email: email,
+        office: office,
     };
 </script>
 

@@ -7,7 +7,7 @@
     import RowTemplate from './RowTemplate.svelte';
     import Search from '../icons/Search.svelte';
 
-    import { RowEvent, IconSize, RowType } from '../types.ts';
+    import { PersonPayload, IconSize, RowType } from '../types.ts';
 
     export let iconSize = IconSize.Normal;
     
@@ -23,9 +23,9 @@
     export let localPermission: number;
 
     const dispatch = createEventDispatcher();
-    const rowEvent: RowEvent = {
-        type: RowType.Person,
-        data: { id },
+    const rowEvent: PersonPayload = {
+        id: id,
+        office: office,
     };
 </script>
 

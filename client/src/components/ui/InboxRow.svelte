@@ -6,7 +6,7 @@
     import RowTemplate from './RowTemplate.svelte';
     import SendAlt from '../icons/SendAlt.svelte';
 
-    import { IconSize, RowEvent, RowType } from '../types.ts';
+    import { IconSize, ContextPayload, RowType } from '../types.ts';
 
     export let iconSize = IconSize.Normal;
     export let id: string;
@@ -14,9 +14,9 @@
     export let title: string;
 
     const dispatch = createEventDispatcher();
-    const rowEvent: RowEvent = {
+    const rowEvent: ContextPayload = {
         type: RowType.Inbox,
-        data: { id },
+        id: id,
     };
 </script>
 

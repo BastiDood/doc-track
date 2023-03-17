@@ -7,7 +7,7 @@
     import DocumentImport from '../icons/DocumentImport.svelte';
     import RowTemplate from './RowTemplate.svelte';
 
-    import { RowEvent, RowType, IconSize } from '../types.ts';
+    import { ContextPayload, RowType, IconSize } from '../types.ts';
 
     export let iconSize = IconSize.Normal;
     export let id: string;
@@ -15,10 +15,10 @@
     export let title: string;
 
     const dispatch = createEventDispatcher();
-    const rowEvent: RowEvent = {
-        type: RowType.AcceptDocument,
-        data: { id },
-    };
+    const rowEvent: ContextPayload = {
+        ty: RowType.AcceptDocument,
+        id: id,
+    }
 </script>
 
 <RowTemplate {iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
