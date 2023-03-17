@@ -35,7 +35,17 @@ export enum RowType {
     Person,
 }
 
-export interface RowEvent {
-    type: RowType;
-    data: Object;
+export interface ContextPayload {
+    ty: RowType.AcceptDocument | RowType.Inbox | RowType.Person;
+    id: number;
 }
+
+export interface InvitePayload {
+    ty: RowType.Inbox;
+    id: number;
+    office: number;
+}
+
+
+
+export type RowEvent = ContextPayload | InvitePayload;
