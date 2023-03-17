@@ -21,6 +21,7 @@ module.exports = {
         {
             files: [ '*.svelte' ],
             processor: 'svelte3/svelte3',
+            rules: { 'init-declarations': 'off' },
         }
     ],
     settings: { 'svelte3/typescript': true },
