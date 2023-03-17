@@ -26,5 +26,7 @@ jobs:
         run: pnpm install
       - name: Install `client` Dependencies
         run: pnpm install
+      - name: Lint `client`
+        run: pnpm lint
       - name: Build Project
         run: pnpm build
