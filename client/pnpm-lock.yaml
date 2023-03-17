@@ -86,7 +86,7 @@ devDependencies:
     version: 2.8.3(@parcel/core@2.8.3)
   '@parcel/transformer-typescript-types':
     specifier: ^2.8.3
-    version: 2.8.3(@parcel/core@2.8.3)(typescript@4.9.5)
+    version: 2.8.3(@parcel/core@2.8.3)(typescript@5.0.2)
   '@parcel/transformer-webmanifest':
     specifier: ^2.8.3
     version: 2.8.3(@parcel/core@2.8.3)
@@ -110,13 +110,13 @@ devDependencies:
     version: 3.58.0
   svelte-preprocess:
     specifier: ^5.0.3
-    version: 5.0.3(svelte@3.58.0)(typescript@4.9.5)
+    version: 5.0.3(svelte@3.58.0)(typescript@5.0.2)
   typescript:
-    specifier: ^4.9.5
-    version: 4.9.5
+    specifier: ^5.0.2
+    version: 5.0.2
   typescript-svelte-plugin:
     specifier: ^0.3.21
-    version: 0.3.21(svelte@3.58.0)(typescript@4.9.5)
+    version: 0.3.21(svelte@3.58.0)(typescript@5.0.2)
 
 packages:
 
@@ -936,7 +936,7 @@ packages:
       - '@parcel/core'
     dev: true
 
-  /@parcel/transformer-typescript-types@2.8.3(@parcel/core@2.8.3)(typescript@4.9.5):
+  /@parcel/transformer-typescript-types@2.8.3(@parcel/core@2.8.3)(typescript@5.0.2):
     resolution: {integrity: sha512-zjsJsgecjw4X1nt5R7A61uWwzwCce0usKKPqnE5tQpYtF4FfK5X69r0l5JLovlyaT2uwoe+hvhu2AELA0kKRQA==}
     engines: {node: '>= 12.0.0', parcel: ^2.8.3}
     peerDependencies:
@@ -945,10 +945,10 @@ packages:
       '@parcel/diagnostic': 2.8.3
       '@parcel/plugin': 2.8.3(@parcel/core@2.8.3)
       '@parcel/source-map': 2.1.1
-      '@parcel/ts-utils': 2.8.3(typescript@4.9.5)
+      '@parcel/ts-utils': 2.8.3(typescript@5.0.2)
       '@parcel/utils': 2.8.3
       nullthrows: 1.1.1
-      typescript: 4.9.5
+      typescript: 5.0.2
     transitivePeerDependencies:
       - '@parcel/core'
     dev: true
@@ -974,14 +974,14 @@ packages:
       - '@parcel/core'
     dev: true
 
-  /@parcel/ts-utils@2.8.3(typescript@4.9.5):
+  /@parcel/ts-utils@2.8.3(typescript@5.0.2):
     resolution: {integrity: sha512-4HMt9B9LF2pDFvSKGImho48tlCvCUl7ly1ZMXvQdmEq2i0yoS81tDsmxX3yly/RVUVeUCGAj1JRuuy1lw5zw1A==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
       typescript: '>=3.0.0'
     dependencies:
       nullthrows: 1.1.1
-      typescript: 4.9.5
+      typescript: 5.0.2
     dev: true
 
   /@parcel/types@2.8.3(@parcel/core@2.8.3):
@@ -2052,7 +2052,7 @@ packages:
       has-flag: 4.0.0
     dev: true
 
-  /svelte-preprocess@5.0.3(svelte@3.58.0)(typescript@4.9.5):
+  /svelte-preprocess@5.0.3(svelte@3.58.0)(typescript@5.0.2):
     resolution: {integrity: sha512-GrHF1rusdJVbOZOwgPWtpqmaexkydznKzy5qIC2FabgpFyKN57bjMUUUqPRfbBXK5igiEWn1uO/DXsa2vJ5VHA==}
     engines: {node: '>= 14.10.0'}
     requiresBuild: true
@@ -2096,7 +2096,7 @@ packages:
       sorcery: 0.11.0
       strip-indent: 3.0.0
       svelte: 3.58.0
-      typescript: 4.9.5
+      typescript: 5.0.2
     dev: true
 
   /svelte-spa-router@3.3.0:
@@ -2105,7 +2105,7 @@ packages:
       regexparam: 2.0.1
     dev: false
 
-  /svelte2tsx@0.6.10(svelte@3.58.0)(typescript@4.9.5):
+  /svelte2tsx@0.6.10(svelte@3.58.0)(typescript@5.0.2):
     resolution: {integrity: sha512-7CtUexhSHppSpLwVX7yI9OxJp7+esCNTuOF/CaVxWTgWp88QF/2/dCbpND/cTZmBxht5cFFQBwoLXXqFLdYe3Q==}
     peerDependencies:
       svelte: ^3.55
@@ -2114,7 +2114,7 @@ packages:
       dedent-js: 1.0.1
       pascal-case: 3.1.2
       svelte: 3.58.0
-      typescript: 4.9.5
+      typescript: 5.0.2
     dev: true
 
   /svelte@3.58.0:
@@ -2172,19 +2172,19 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /typescript-svelte-plugin@0.3.21(svelte@3.58.0)(typescript@4.9.5):
+  /typescript-svelte-plugin@0.3.21(svelte@3.58.0)(typescript@5.0.2):
     resolution: {integrity: sha512-gFZYmC7HYGpbF6nWra1eFXEJvk+yxnSeg1fOp7C0humC3rc48917TcZB5OPBVI7wiiYrr8qgvhvcCBUfDJYUGA==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.14
-      svelte2tsx: 0.6.10(svelte@3.58.0)(typescript@4.9.5)
+      svelte2tsx: 0.6.10(svelte@3.58.0)(typescript@5.0.2)
     transitivePeerDependencies:
       - svelte
       - typescript
     dev: true
 
-  /typescript@4.9.5:
-    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
-    engines: {node: '>=4.2.0'}
+  /typescript@5.0.2:
+    resolution: {integrity: sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==}
+    engines: {node: '>=12.20'}
     hasBin: true
     dev: true
 
