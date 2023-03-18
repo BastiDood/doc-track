@@ -8,20 +8,13 @@
     const dispatch = createEventDispatcher();
 </script>
 
-<div 
-    on:click
-    on:keydown
-    >
+<div on:click on:keydown>
     <div>
         <slot name="contextIcon">
             <Add size={iconSize} />
         </slot>
     </div>
-
-    <div>
-        <slot>
-        </slot>
-    </div>
+    <div><slot></slot></div>
 </div>
 
 <style>
