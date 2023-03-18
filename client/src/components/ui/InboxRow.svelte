@@ -21,7 +21,7 @@
 </script>
 
 <RowTemplate {iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
-    <DocumentBlank size={iconSize} slot="displayIcon"/>
+    <DocumentBlank size={iconSize} slot="displayIcon" />
     <p>
         {title} ID: {id} Category: {category}
     </p>

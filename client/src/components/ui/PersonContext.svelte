@@ -19,21 +19,21 @@
 <ContextTemplate bind:show={show}>
     <ContextElement on:click={() => dispatch(Events.ShowUserInfo, payload)}>
         <div slot="contextIcon">
-            <Search size={iconSize}/>
+            <Search size={iconSize} />
             View User Details
         </div>
     </ContextElement>
-    <ContextDivider/>
+    <ContextDivider />
     <ContextElement on:click={() => dispatch(Events.EditUser, payload)}>
         <div slot="contextIcon">
-            <Edit size={iconSize}/>
+            <Edit size={iconSize} />
             Edit User Details
         </div>
     </ContextElement>
-    <ContextDivider/>
+    <ContextDivider />
     <ContextElement on:click={() => dispatch(Events.DeleteUser, payload)}>
         <div slot="contextIcon">
-            <Close size={iconSize}/>
+            <Close size={iconSize} />
             Delete User
         </div>
     </ContextElement>

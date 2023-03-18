@@ -22,7 +22,7 @@
 </script>
 
 <RowTemplate {iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
-    <DocumentImport size={iconSize} slot="displayIcon"/>
+    <DocumentImport size={iconSize} slot="displayIcon" />
     <p>
         {title} ID: {id} Category: {category}
     </p>
