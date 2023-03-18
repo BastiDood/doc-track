@@ -6,7 +6,6 @@
 
     export let iconSize = IconSize.Normal;
     const dispatch = createEventDispatcher();
-
 </script>
 
 <div 

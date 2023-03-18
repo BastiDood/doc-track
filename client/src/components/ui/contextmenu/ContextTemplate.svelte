@@ -9,7 +9,6 @@
 <style>
     @import url('../../../pages/vars.css');
 
-
     div {
         width: 100vw;
         border: var(--spacing-tiny) solid black;
@@ -21,11 +20,8 @@
         background-color: white;
         z-index: 100;
     }
+
     .show {
         bottom: 0;
     }
-
 </style>
-
-
-
