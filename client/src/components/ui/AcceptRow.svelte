@@ -7,7 +7,7 @@
     import DocumentImport from '../icons/DocumentImport.svelte';
     import RowTemplate from './RowTemplate.svelte';
 
-    import { ContextPayload, RowType, IconSize } from '../types.ts';
+    import { ContextPayload, RowType, IconSize, Events } from '../types.ts';
 
     export let iconSize = IconSize.Normal;
     export let id: string;
@@ -21,14 +21,14 @@
     }
 </script>
 
-<RowTemplate {iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
+<RowTemplate {iconSize} on:overflowclick = {() => dispatch(Events.OverflowClick, rowEvent)}>
     <DocumentImport size={iconSize} slot="displayIcon"/>
     <p>
         {title} ID: {id} Category: {category}
     </p>
     <div slot="actionIcons">
-        <Checkmark size={iconSize} on:click = {() => dispatch('acceptDocument', rowEvent)} />
-        <Close size={iconSize} on:click = {() => dispatch('declineDocument', rowEvent)} />
-        <Camera size={iconSize} on:click = {() => dispatch('toggleCamera', rowEvent)} />
+        <Checkmark size={iconSize} on:click = {() => dispatch(Events.AcceptDocument, rowEvent)} />
+        <Close size={iconSize} on:click = {() => dispatch(Events.DeclineDocument, rowEvent)} />
+        <Camera size={iconSize} on:click = {() => dispatch(Events.Camera, rowEvent)} />
     </div>
 </RowTemplate>
