@@ -16,7 +16,7 @@
         <!-- Sample navigation of pages. Implement in drawer
         <Button on:click={() => push('/inbox')}>Inbox</Button>
         <Button on:click={() => push('/outbox')}>Outbox</Button>
-        -->
         <Router {routes} />
+        -->
     {/await}
 </main>

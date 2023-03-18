@@ -1,29 +1,32 @@
 <script lang="ts">
     import { Session } from '../../api/session.ts';
-    import MediaQuery from "./../MediaQuery.svelte";
+    import NavQuery from "./NavQuery.svelte";
 
     import Button from '../../components/ui/Button.svelte';
     import Logout from '../../components/icons/Logout.svelte';
 
     import { ButtonType } from '../../components/types.ts';
 
+    import Router, { push, pop, replace } from 'svelte-spa-router';
+    import routes from '../../pages/dashboard/routes.ts';
+
     let mobile = false;
 
     // TODO: Updates based on permissions
     const navItems = [
-        { label: "Inbox", href: "#inbox" },
-        { label: "Outbox", href: "#outbox" },
-        { label: "Drafts", href: "#drafts" },
-        { label: "Barcodes", href: "#barcodes" },
-        { label: "Metrics", href: "#metrics" },
-        { label: "Manage Invites", href: "#invites" },
-        { label: "Manage Staff", href: "#staff" },
-        { label: "Manage Administrators", href: "#admins" },
-        { label: "Manage Global Settings", href: "#globalsettings" },
+        { label: "Inbox", href: "inbox", key:'I' },
+        { label: "Outbox", href: "outbox", key:'O' },
+        { label: "Drafts", href: "drafts", key:'D' },
+        { label: "Barcodes", href: "barcodes", key:'B' },
+        { label: "Metrics", href: "metrics", key:'M' },
+        { label: "Manage Invites", href: "manage-invites", key:'N' },
+        { label: "Manage Staff", href: "manage-staff", key:'S' },
+        { label: "Manage Administrators", href: "manage-administrators", key:'A' },
+        { label: "Manage Global Settings", href: "manage-global-settings", key:'G' }, 
     ];
 
 </script>
-<MediaQuery query="(max-width: 768px)" let:matches>
+<NavQuery query="(max-width: 768px)" let:matches>
 <nav class="navelements{matches ? ' mobile' : ''}">
     <p class="profile">
         {#await Session.getUser()}
@@ -32,15 +35,16 @@
             Hello, {user.name}! {matches ? `(Mobile)` : `(Desktop)`}
         {/await}
     </p>
-        {#each navItems as item}
-            <div><a href={item.href} class="navitem">{item.label}</a></div>
+        {#each navItems as item} 
+            <div><button class="navitem" on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
         {/each}
         <div><form method="POST" action="/auth/logout" class="navitem">
                 <input type="submit" value="Logout" />
             </form>
         </div>
 </nav>
-</MediaQuery>
+<Router {routes} />
+</NavQuery>
 
 <style>
     nav {
