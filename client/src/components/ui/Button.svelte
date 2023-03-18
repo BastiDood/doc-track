@@ -1,5 +1,4 @@
 <script lang="ts">
-  import './button.css';
   import { ButtonType } from '../types.ts';
   export let type: ButtonType = ButtonType.Primary;
 </script>
@@ -11,10 +10,12 @@
 </button>
 
 <style>
+  @import url('../../pages/global.css');
+
   button {
-    margin: 5px;
-    padding: 10px;
-    border-radius: 10px;
+    margin: var(--spacing-normal);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius);
     border: 0;
     cursor: pointer;
     color: white;

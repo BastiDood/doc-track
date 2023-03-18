@@ -16,6 +16,7 @@ import {
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
+    SummarySchema,
 } from '~model/api.ts';
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
@@ -24,7 +25,7 @@ import { type Invitation, InvitationSchema } from '~model/invitation.ts';
 import { type Office, OfficeSchema } from '~model/office.ts';
 import { type Pending, PendingSchema } from '~model/pending.ts';
 import { type Session, SessionSchema } from '~model/session.ts';
-import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
+import { type Snapshot, SnapshotSchema, Status } from '~model/snapshot.ts';
 import { type Staff, StaffSchema } from '~model/staff.ts';
 import { type User, UserSchema } from '~model/user.ts';
 
@@ -494,5 +495,15 @@ export class Database {
             case 1: return true;
             default: unreachable();
         }
+    }
+
+    /** Generate a user-centric summary of the metrics (across all offices). */
+    async generateUserSummary(uid: User['id']): Promise<Map<Status, bigint>> {
+        const { rows } = await this.#client
+            .queryObject`SELECT status,COUNT(status) AS amount FROM snapshot WHERE evaluator = ${uid} GROUP BY status`;
+        const map = new Map<Status, bigint>;
+        for (const { status, amount } of SummarySchema.array().parse(rows))
+            map.set(status, amount);
+        return map;
     }
 }

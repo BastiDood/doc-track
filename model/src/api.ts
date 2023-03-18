@@ -4,7 +4,7 @@ import { BarcodeSchema } from './barcode.ts';
 import { BatchSchema } from './batch.ts';
 import { CategorySchema } from './category.ts';
 import { DocumentSchema } from './document.ts';
-import { SnapshotSchema } from './snapshot.ts';
+import { SnapshotSchema, StatusSchema } from './snapshot.ts';
 import { UserSchema } from './user.ts';
 
 export const MinBatchSchema = z.object({
@@ -55,3 +55,12 @@ export const InboxEntrySchema = SnapshotSchema
     .and(DocumentSchema.pick({ title: true }));
 
 export type InboxEntry = z.infer<typeof InboxEntrySchema>;
+
+export const SummarySchema = z.object({
+    status: StatusSchema,
+    amount: z.coerce.bigint().positive(),
+});
+export type Summary = z.infer<typeof SummarySchema>;
+
+export const MetricsSchema = z.record(StatusSchema, SummarySchema.shape.amount);
+export type Metrics = z.infer<typeof MetricsSchema>;

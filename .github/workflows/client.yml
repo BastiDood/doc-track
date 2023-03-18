@@ -19,10 +19,12 @@ jobs:
     steps:
       - name: Setup Repository
         uses: actions/checkout@v3
-      - name: Install Model Dependencies
+      - name: Install `pnpm`
+        run: npm install -g pnpm
+      - name: Install `model` Dependencies
         working-directory: model
-        run: npm install
-      - name: Install Client Dependencies
-        run: npm install
+        run: pnpm install
+      - name: Install `client` Dependencies
+        run: pnpm install
       - name: Build Project
-        run: npm run build
+        run: pnpm build

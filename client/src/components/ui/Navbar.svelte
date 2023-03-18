@@ -24,32 +24,29 @@
 
 </script>
 <MediaQuery query="(max-width: 768px)" let:matches>
-<div>
-    <nav class="{matches ? 'mobile' : ''}">
-        <p class="profile">
-            {#await Session.getUser()}
-                Hello!
-            {:then user}
-                Hello, {user.name}! {matches ? `(Mobile)` : `(Desktop)`}
-            {/await}
-        </p>
-        <ul class="navelements">
-            {#each navItems as item}
-                <li><a href={item.href} class="navitem">{item.label}</a></li>
-            {/each}
-            <li><form method="POST" action="/auth/logout" class="navitem">
-                    <input type="submit" value="Logout" />
-                </form>
-            </li>
-        </ul>
-    </nav>
-</div>
+<nav class="navelements{matches ? ' mobile' : ''}">
+    <p class="profile">
+        {#await Session.getUser()}
+            Hello!
+        {:then user}
+            Hello, {user.name}! {matches ? `(Mobile)` : `(Desktop)`}
+        {/await}
+    </p>
+        {#each navItems as item}
+            <div><a href={item.href} class="navitem">{item.label}</a></div>
+        {/each}
+        <div><form method="POST" action="/auth/logout" class="navitem">
+                <input type="submit" value="Logout" />
+            </form>
+        </div>
+</nav>
 </MediaQuery>
 
 <style>
     nav {
-        background-color: blueviolet;
+        background-color: var(--secondary-color);
         box-shadow: 0 1px 8px #ddd;
+        padding: var(--spacing-small);
         position: sticky;
     }
 
@@ -57,7 +54,7 @@
         display: flex;
         flex-direction: row-reverse;
         flex-flow: row wrap;
-        justify-content: space-around;
+        justify-content: flex-end;
         list-style-type: none;
     }
     
@@ -81,6 +78,7 @@
 
     .profile {
         display: inline-block;
+        size: 20%;
         margin: 0;
     }
 </style>

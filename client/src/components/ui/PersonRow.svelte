@@ -7,7 +7,7 @@
     import RowTemplate from './RowTemplate.svelte';
     import Search from '../icons/Search.svelte';
 
-    import { RowEvent, IconSize, RowType } from '../types.ts';
+    import { PersonPayload, IconSize, Events} from '../types.ts';
 
     export let iconSize = IconSize.Normal;
     
@@ -23,19 +23,21 @@
     export let localPermission: number;
 
     const dispatch = createEventDispatcher();
-    const rowEvent: RowEvent = {
-        type: RowType.Person,
-        data: { id },
+    const rowEvent: PersonPayload = {
+        id: id,
+        office: office,
     };
 </script>
 
-<RowTemplate {iconSize} on:overflowclick = {() => dispatch('overflowclick', rowEvent)}>
+<RowTemplate {iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
     <img class={iconSize} src={picture} alt={name} slot="displayIcon">
-    {name} ID: {id} Email: {email} Office: {office} Global Perms: {globalPermission} Local Perms: {localPermission}
+    <p>
+        {name} ID: {id} Email: {email} Office: {office} Global Perms: {globalPermission} Local Perms: {localPermission}
+    </p>
     <div slot="actionIcons">
-        <Search size={iconSize} on:click = {() => dispatch('showUserInfo', rowEvent)} />
-        <Edit size={iconSize} on:click = {() => dispatch('editUser', rowEvent)} />
-        <Close size={iconSize} on:click = {() => dispatch('removeUser', rowEvent)} />
+        <Search size={iconSize} on:click={() => dispatch(Events.ShowUserInfo, rowEvent)} />
+        <Edit size={iconSize} on:click={() => dispatch(Events.EditUser, rowEvent)} />
+        <Close size={iconSize} on:click={() => dispatch(Events.DeleteUser, rowEvent)} />
     </div>
 </RowTemplate>
 

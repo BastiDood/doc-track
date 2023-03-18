@@ -1,8 +1,4 @@
-:root {
-    --normal: 1rem;
-    --medium: 1.25rem;
-    --large: 1.5rem;
-}
+@import url('../../pages/vars.css');
 
 .faded {
     filter: invert(73%) sepia(4%) saturate(555%) hue-rotate(171deg) brightness(95%) contrast(94%);
