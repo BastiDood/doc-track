@@ -29,6 +29,6 @@
         {email} Office: {office} Permission: {permission} Created on: {creation}
     </p>
     <div slot="actionIcons">
-        <Close size={iconSize} on:click = {() => dispatch(Events.removeInvitation, rowEvent)} />
+        <Close size={iconSize} on:click = {() => dispatch(Events.RemoveInvitation, rowEvent)} />
     </div>
 </RowTemplate>
