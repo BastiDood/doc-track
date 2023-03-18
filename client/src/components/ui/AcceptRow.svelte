@@ -18,7 +18,7 @@
     const rowEvent: ContextPayload = {
         ty: RowType.AcceptDocument,
         id: id,
-    }
+    };
 </script>
 
 <RowTemplate {iconSize} on:overflowclick = {() => dispatch(Events.OverflowClick, rowEvent)}>

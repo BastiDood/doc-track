@@ -13,7 +13,7 @@
     const dispatch = createEventDispatcher();
     export let show = false;
     export let payload: PersonPayload;
-    export let iconSize = IconSize.Normal
+    export let iconSize = IconSize.Normal;
 </script>
 
 <ContextTemplate bind:show={show}>
