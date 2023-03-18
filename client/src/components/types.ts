@@ -1,9 +1,3 @@
-export interface Icon {
-    box: number; 
-    name: string;
-    svg: string;
-}
-
 export enum IconColor {
     Default = 'default', 
     Primary = 'primary',
@@ -35,7 +29,35 @@ export enum RowType {
     Person,
 }
 
-export interface RowEvent {
-    type: RowType;
-    data: Object;
+export enum Events {
+    OverflowClick = 'overflowClick',
+    AcceptDocument = 'acceptDocument',
+    DeclineDocument = 'declineDocument',
+    Camera = 'toggleCamera',
+    SendDocument = 'sendDocument',
+    TerminateDocument = 'terminateDocument',
+    CreateInvitation = 'createInvitation',
+    RemoveInvitation = 'removeInvitation',
+    ShowUserInfo = 'showUserInfo',
+    DeleteUser = 'deleteUser',
+    EditUser = 'editUser',
 }
+
+export interface ContextPayload {
+    ty: RowType.AcceptDocument | RowType.Inbox;
+    id: number;
+}
+
+export interface InvitePayload {
+    ty: RowType.Invite;
+    email: string;
+    office: number;
+}
+
+export interface PersonPayload {
+    ty: RowType.Person;
+    id: number;
+    office: number;
+}
+
+export type RowEvent = ContextPayload | InvitePayload | PersonPayload;

@@ -22,5 +22,6 @@
     --spacing-tiny: 0.0625rem;
 
     --border-radius: 10px;
+    --animation-length: .3s;
 
 }
