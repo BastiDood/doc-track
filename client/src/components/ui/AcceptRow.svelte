@@ -21,14 +21,14 @@
     };
 </script>
 
-<RowTemplate {iconSize} on:overflowclick = {() => dispatch(Events.OverflowClick, rowEvent)}>
+<RowTemplate {iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
     <DocumentImport size={iconSize} slot="displayIcon"/>
     <p>
         {title} ID: {id} Category: {category}
     </p>
     <div slot="actionIcons">
-        <Checkmark size={iconSize} on:click = {() => dispatch(Events.AcceptDocument, rowEvent)} />
-        <Close size={iconSize} on:click = {() => dispatch(Events.DeclineDocument, rowEvent)} />
-        <Camera size={iconSize} on:click = {() => dispatch(Events.Camera, rowEvent)} />
+        <Checkmark size={iconSize} on:click={() => dispatch(Events.AcceptDocument, rowEvent)} />
+        <Close size={iconSize} on:click={() => dispatch(Events.DeclineDocument, rowEvent)} />
+        <Camera size={iconSize} on:click={() => dispatch(Events.Camera, rowEvent)} />
     </div>
 </RowTemplate>

@@ -23,12 +23,12 @@
     };
 </script>
 
-<RowTemplate {iconSize} on:overflowclick = {() => dispatch(Events.OverflowClick, rowEvent)}>
+<RowTemplate {iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
     <PersonMail size={iconSize} slot="displayIcon"/>
     <p>
         {email} Office: {office} Permission: {permission} Created on: {creation}
     </p>
     <div slot="actionIcons">
-        <Close size={iconSize} on:click = {() => dispatch(Events.RemoveInvitation, rowEvent)} />
+        <Close size={iconSize} on:click={() => dispatch(Events.RemoveInvitation, rowEvent)} />
     </div>
 </RowTemplate>

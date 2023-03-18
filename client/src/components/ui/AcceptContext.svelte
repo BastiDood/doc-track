@@ -17,21 +17,21 @@
 </script>
 
 <ContextTemplate bind:show={show}>
-    <ContextElement on:click = {() => dispatch(Events.AcceptDocument, payload)}>
+    <ContextElement on:click={() => dispatch(Events.AcceptDocument, payload)}>
         <div slot="contextIcon">
             <Checkmark size={iconSize}/>
             Accept Document
         </div>
     </ContextElement>
     <ContextDivider/>
-    <ContextElement on:click = {() => dispatch(Events.DeclineDocument, payload)}>
+    <ContextElement on:click={() => dispatch(Events.DeclineDocument, payload)}>
         <div slot="contextIcon">
             <Close size={iconSize}/>
             Decline Document
         </div>
     </ContextElement>
     <ContextDivider/>
-    <ContextElement on:click = {() => dispatch(Events.Camera, payload)}>
+    <ContextElement on:click={() => dispatch(Events.Camera, payload)}>
         <div slot="contextIcon">
             <Camera size={iconSize}/>
             Take a Picture / Choose a Image

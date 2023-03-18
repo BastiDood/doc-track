@@ -29,15 +29,15 @@
     };
 </script>
 
-<RowTemplate {iconSize} on:overflowclick = {() => dispatch(Events.OverflowClick, rowEvent)}>
+<RowTemplate {iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
     <img class={iconSize} src={picture} alt={name} slot="displayIcon">
     <p>
         {name} ID: {id} Email: {email} Office: {office} Global Perms: {globalPermission} Local Perms: {localPermission}
     </p>
     <div slot="actionIcons">
-        <Search size={iconSize} on:click = {() => dispatch(Events.ShowUserInfo, rowEvent)} />
-        <Edit size={iconSize} on:click = {() => dispatch(Events.EditUser, rowEvent)} />
-        <Close size={iconSize} on:click = {() => dispatch(Events.DeleteUser, rowEvent)} />
+        <Search size={iconSize} on:click={() => dispatch(Events.ShowUserInfo, rowEvent)} />
+        <Edit size={iconSize} on:click={() => dispatch(Events.EditUser, rowEvent)} />
+        <Close size={iconSize} on:click={() => dispatch(Events.DeleteUser, rowEvent)} />
     </div>
 </RowTemplate>
 

@@ -26,7 +26,7 @@
         {title} ID: {id} Category: {category}
     </p>
     <div slot="actionIcons">
-        <SendAlt size={iconSize} on:click = {() => dispatch(Events.SendDocument, rowEvent)} />
-        <CheckboxIndeterminateFilled size={iconSize} on:click = {() => dispatch(Events.TerminateDocument, rowEvent)} />
+        <SendAlt size={iconSize} on:click={() => dispatch(Events.SendDocument, rowEvent)} />
+        <CheckboxIndeterminateFilled size={iconSize} on:click={() => dispatch(Events.TerminateDocument, rowEvent)} />
     </div>
 </RowTemplate>
