@@ -28,9 +28,25 @@
         { label: "Manage Global Settings", href: "manage-global-settings", key:'G' }, 
     ];
 
+
+    function logout() {
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = "/auth/logout";
+
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+
+        form.appendChild(hiddenField);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+
 </script>
 
 <NavQuery query="(max-width: 1024px)" let:matches>
+    
 <nav class="navelements{matches ? ' mobile' : ''}">
     {#await Session.getUser()}
         Hello!
@@ -39,9 +55,7 @@
         {#each navItems as item} 
             <div><button class="navitem" on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
         {/each}
-        <form method="POST" action="/auth/logout" class="navitem">
-            <input type="submit" value="Logout" />
-        </form>
+        <div><button class="navitem" on:click={() => logout()}><Logout /></button></div>
         <NavPicture name={user.name} email={user.email}  />
     {/await}
 </nav>
@@ -78,6 +92,7 @@
         height: 50pt;
         background: none;
         text-decoration: none;
+        cursor: pointer;
         user-select: none;
         color: var(--primary-color);
         display: inline-block;
@@ -86,6 +101,11 @@
     .navitem:hover {
         background-color: var(--danger-color);
         transition: all 0.3s ease 0s;
+    }
+
+    .logout {
+        width: 100%;
+        height: 100%;
     }
     
     
