@@ -4,7 +4,7 @@
     import { register } from '../register.ts';
     import { Session } from '../../api/session.ts';
     import Navbar from '../../components/ui/Navbar.svelte';
-    import Button from '../../components/ui/Button.svelte'
+    import Button from '../../components/ui/Button.svelte';
 
     import routes from './routes.ts';
 </script>

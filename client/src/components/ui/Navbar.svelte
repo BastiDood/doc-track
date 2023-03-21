@@ -1,11 +1,14 @@
 <script lang="ts">
     import { Session } from '../../api/session.ts';
-    import NavQuery from "./NavQuery.svelte";
+    import NavQuery from './NavQuery.svelte';
+    import NavPicture from './NavPicture.svelte';
 
     import Button from '../../components/ui/Button.svelte';
     import Logout from '../../components/icons/Logout.svelte';
 
     import { ButtonType } from '../../components/types.ts';
+
+    
 
     import Router, { push, pop, replace } from 'svelte-spa-router';
     import routes from '../../pages/dashboard/routes.ts';
@@ -26,22 +29,22 @@
     ];
 
 </script>
-<NavQuery query="(max-width: 768px)" let:matches>
+
+<NavQuery query="(max-width: 1024px)" let:matches>
 <nav class="navelements{matches ? ' mobile' : ''}">
-    <p class="profile">
-        {#await Session.getUser()}
-            Hello!
-        {:then user}
-            Hello, {user.name}! {matches ? `(Mobile)` : `(Desktop)`}
-        {/await}
-    </p>
+    {#await Session.getUser()}
+        Hello!
+    {:then user}
+        <div class="picturecontainer">
+            <NavPicture name={user.name} email={user.email}  />
+        </div>
+    {/await}
         {#each navItems as item} 
             <div><button class="navitem" on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
         {/each}
-        <div><form method="POST" action="/auth/logout" class="navitem">
-                <input type="submit" value="Logout" />
-            </form>
-        </div>
+        <form method="POST" action="/auth/logout" class="navitem">
+            <input type="submit" value="Logout" />
+        </form>
 </nav>
 <Router {routes} />
 </NavQuery>
@@ -51,7 +54,21 @@
         background-color: var(--secondary-color);
         box-shadow: 0 1px 8px #ddd;
         padding: var(--spacing-small);
+        justify-content: space-evenly;
         position: sticky;
+    }
+
+    .picturecontainer {
+        position: fixed;
+        top: 10;
+        left: 10;
+    }
+
+    button {
+        padding: 0;
+        border: 0;
+        outline: 0;
+        background-color: transparent;
     }
 
     .navelements {
@@ -65,24 +82,21 @@
     .navitem {
         list-style: none;
         padding: 1em;
+        height: 50pt;
         background: none;
         text-decoration: none;
-        background-color: pink;
+        user-select: none;
+        color: var(--primary-color);
         display: inline-block;
     }
 
     .navitem:hover {
-        background-color: blue;
+        background-color: var(--danger-color);
         transition: all 0.3s ease 0s;
     }
     
+    
     .mobile {
         background-color: green;
-    }
-
-    .profile {
-        display: inline-block;
-        size: 20%;
-        margin: 0;
     }
 </style>
