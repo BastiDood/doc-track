@@ -25,7 +25,7 @@
         <slot/>
         <hr />
         <slot name="buttons" >
-            <Button> Sample Text </Button>
+            <Button on:click = { () => dialog.close() }> Close Modal </Button>
         </slot>
 
     </div>
