@@ -32,6 +32,7 @@
 </dialog>
 
 <style>
+    /* https://svelte.dev/examples/modal */
     @import url('../../pages/global.css');
 
     dialog {
@@ -56,6 +57,28 @@
     }
 
     dialog[open] {
-        animation: zoom var()
+        animation: zoom var(--animation-length) cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+
+    @keyframes zoom {
+        from {
+            transform: scale(0.95)
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+
+    dialog[open]::backdrop {
+		animation: fade var(--animation-length) ease-out;
+	}
+
+	@keyframes fade {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
 </style>
