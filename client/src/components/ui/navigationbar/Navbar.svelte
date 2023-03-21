@@ -1,17 +1,17 @@
 <script lang="ts">
-    import { Session } from '../../api/session.ts';
+    import { Session } from '../../../api/session.ts';
     import NavQuery from './NavQuery.svelte';
     import NavPicture from './NavPicture.svelte';
 
-    import Button from '../../components/ui/Button.svelte';
-    import Logout from '../../components/icons/Logout.svelte';
+    import Button from '../Button.svelte';
+    import Logout from '../../icons/Logout.svelte';
 
-    import { ButtonType } from '../../components/types.ts';
+    import { ButtonType } from '../../../components/types.ts';
 
     
 
     import Router, { push, pop, replace } from 'svelte-spa-router';
-    import routes from '../../pages/dashboard/routes.ts';
+    import routes from '../../../pages/dashboard/routes.ts';
 
     let mobile = false;
 
@@ -35,16 +35,15 @@
     {#await Session.getUser()}
         Hello!
     {:then user}
-        <div class="picturecontainer">
-            <NavPicture name={user.name} email={user.email}  />
-        </div>
-    {/await}
+    
         {#each navItems as item} 
             <div><button class="navitem" on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
         {/each}
         <form method="POST" action="/auth/logout" class="navitem">
             <input type="submit" value="Logout" />
         </form>
+        <NavPicture name={user.name} email={user.email}  />
+    {/await}
 </nav>
 <Router {routes} />
 </NavQuery>
@@ -56,12 +55,6 @@
         padding: var(--spacing-small);
         justify-content: space-evenly;
         position: sticky;
-    }
-
-    .picturecontainer {
-        position: fixed;
-        top: 10;
-        left: 10;
     }
 
     button {
