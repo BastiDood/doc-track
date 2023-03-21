@@ -12,8 +12,8 @@
 <dialog
     bind:this={dialog}
     class:form={isForm}
-    on:close = { () => showModal = false }
-    on:click|self = { () => dialog.close() }
+    on:close={() => showModal = false}
+    on:click|self={() => dialog.close()}
     on:keypress|stopPropagation
 >
     <div 
@@ -25,9 +25,8 @@
         <slot/>
         <hr />
         <slot name="buttons" >
-            <Button on:click = { () => dialog.close() }> Close Modal </Button>
+            <Button on:click={() => dialog.close()}>Close Modal</Button>
         </slot>
-
     </div>
 </dialog>
 
