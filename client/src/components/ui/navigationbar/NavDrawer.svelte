@@ -27,6 +27,7 @@
       justify-content: space-between;
       position: absolute;
       left: 0;
+      top: 70px;
       z-index: 50;
       transition: left 0.3s;
       height: 100%;
