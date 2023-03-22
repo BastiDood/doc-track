@@ -15,7 +15,6 @@
     import routes from '../../../pages/dashboard/routes.ts';
 
     // Mobile stuff 
-    import Sidebar from './NavDrawer.svelte';
     export let showBar : boolean;
 
     // TODO: Updates based on permissions
@@ -33,27 +32,25 @@
         document.body.appendChild(form);
         form.submit();
     }
-
-
 </script>
 
 <NavQuery query="(max-width: 1024px)" let:matches>
 
     
 <nav class="navelements{matches ? ' mobile' : ''}">
-    {#await Session.getUser()}
-        Getting user info...
-    {:then user}
-        <div class={`mobile-icon${matches ? "" : " hidden"}`}>
-            <Button type={ButtonType.Primary} on:click={() => showBar = !showBar}>
-                <Hamburger />
-            </Button>
-        </div>
+    <div class={`mobile-icon${matches ? "" : " hidden"}`}>
+        <Button type={ButtonType.Primary} on:click={() => showBar = !showBar}>
+            <Hamburger />
+        </Button>
+    </div>
 
-        {#each navItems as item} 
-            <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
-        {/each}
-        <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => logout()}><Logout /></button></div>
+    {#each navItems as item} 
+        <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
+    {/each}
+    <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => logout()}><Logout /></button></div>
+    {#await Session.getUser()}
+        <NavPicture name="Guest" email="Guest" />
+    {:then user}
         <NavPicture name={user.name} email={user.email}  />
     {/await}
 </nav>

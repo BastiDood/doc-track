@@ -30,7 +30,7 @@
     {:then}
         <main>
             <Navbar bind:showBar={toggleDrawer} bind:navItems={navItems} />
-            <Sidebar bind:show={toggleDrawer} />
+            <Sidebar bind:show={toggleDrawer} bind:navItems={navItems} />
         </main>
     {/await}
 

@@ -1,12 +1,13 @@
 <script>
   export let show = false;
+  export let navItems;
 </script>
 
 <nav class:show={show}>
   <div>
-      <a href="#/inbox">Inbox</a>
-      <a href="#/outbox">Outbox</a>
-      <a href="#/settings">Settings</a>
+        {#each navItems as item} 
+            <a href={`#/${item.href}`}>{item.label}</a>
+      {/each}
   </div>
   <form method="POST" action="/auth/logout">
       <input type="submit" value="Logout" />
@@ -26,6 +27,7 @@
       justify-content: space-between;
       position: absolute;
       left: 0;
+      z-index: 50;
       transition: left 0.3s;
       height: 100%;
   }
