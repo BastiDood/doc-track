@@ -49,6 +49,7 @@
         display: block;
         padding: 0.5rem;
         text-decoration: none;
+        user-select: none;
         transition: background-color 0.2s, border-left 0.2s;
     }
 

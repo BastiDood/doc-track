@@ -107,6 +107,7 @@
         top: 0;
         left: 0;
         position: fixed;
+        user-select: none;
     }
 
     .hidden {

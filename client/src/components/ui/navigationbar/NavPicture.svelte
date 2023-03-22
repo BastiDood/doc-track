@@ -4,7 +4,7 @@
 </script>
 
 <div>
-    <div class="profilepicture"><p>{name[0]}</p></div>
+    <div class="profilepicture"><p style="user-select: none">{name[0]}</p></div>
     <p style="float: left; user-select: none;">{name.split(" ")[name.split(" ").length-1]}</p>
 </div>
 
