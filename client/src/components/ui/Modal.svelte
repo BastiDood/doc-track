@@ -1,6 +1,6 @@
 <script lang="ts">
     import Button from './Button.svelte';
-    import Close from '../icons/Close.svelte'
+    import Close from '../icons/Close.svelte';
 
     export let showModal = false;
 
