@@ -5,6 +5,7 @@
 
     import Button from '../Button.svelte';
     import Logout from '../../icons/Logout.svelte';
+    import Hamburger from '../../icons/Eye.svelte';
 
     import { ButtonType } from '../../../components/types.ts';
 
@@ -13,7 +14,9 @@
     import Router, { push, pop, replace } from 'svelte-spa-router';
     import routes from '../../../pages/dashboard/routes.ts';
 
-    let mobile = false;
+    // Mobile stuff 
+    import Sidebar from './NavDrawer.svelte';
+    export let showBar : boolean;
 
     // TODO: Updates based on permissions
     const navItems = [
@@ -27,7 +30,6 @@
         { label: "Manage Administrators", href: "manage-administrators", key:'A' },
         { label: "Manage Global Settings", href: "manage-global-settings", key:'G' }, 
     ];
-
 
     function logout() {
         const form = document.createElement('form');
@@ -46,19 +48,26 @@
 </script>
 
 <NavQuery query="(max-width: 1024px)" let:matches>
+
     
 <nav class="navelements{matches ? ' mobile' : ''}">
     {#await Session.getUser()}
-        Hello!
+        Getting user info...
     {:then user}
-    
+        <div class={`mobile-icon${matches ? "" : " hidden"}`}>
+            <Button type={ButtonType.Primary} on:click={() => showBar = !showBar}>
+                <Hamburger />
+            </Button>
+        </div>
+
         {#each navItems as item} 
-            <div><button class="navitem" on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
+            <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
         {/each}
-        <div><button class="navitem" on:click={() => logout()}><Logout /></button></div>
+        <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => logout()}><Logout /></button></div>
         <NavPicture name={user.name} email={user.email}  />
     {/await}
 </nav>
+
 <Router {routes} />
 </NavQuery>
 
@@ -102,14 +111,18 @@
         background-color: var(--danger-color);
         transition: all 0.3s ease 0s;
     }
-
-    .logout {
-        width: 100%;
-        height: 100%;
-    }
-    
     
     .mobile {
         background-color: green;
+    }
+
+    .mobile-icon {
+        top: 0;
+        left: 0;
+        position: fixed;
+    }
+
+    .hidden {
+        display: none;
     }
 </style>

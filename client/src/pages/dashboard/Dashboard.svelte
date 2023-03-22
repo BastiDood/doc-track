@@ -7,16 +7,17 @@
     import Button from '../../components/ui/Button.svelte';
 
     import routes from './routes.ts';
+    import Sidebar from '../../components/ui/navigationbar/NavDrawer.svelte';
+
+    let toggleDrawer = false;
+
 </script>
-<main>
     {#await register()}
         Waiting for service worker...
     {:then}
-        <Navbar />
-        <!-- Sample navigation of pages. Implement in drawer
-        <Button on:click={() => push('/inbox')}>Inbox</Button>
-        <Button on:click={() => push('/outbox')}>Outbox</Button>
-        <Router {routes} />
-        -->
+        <main>
+            <Navbar bind:showBar={toggleDrawer} />
+            <Sidebar bind:show={toggleDrawer} />
+        </main>
     {/await}
-</main>
+
