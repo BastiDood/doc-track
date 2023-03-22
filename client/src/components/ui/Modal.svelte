@@ -2,30 +2,25 @@
     import Button from "./Button.svelte";
 
     export let showModal = false;
-    export let isForm = false;
 
-    let dialog: HTMLDialogElement;
+    let dialog: HTMLDialogElement | null;
 
-    $: if (dialog && showModal) dialog.showModal();
+    $: if (showModal) dialog?.showModal();
 </script>
 
 <dialog
     bind:this={dialog}
-    class:form={isForm}
-    on:close={() => showModal = false}
-    on:click|self={() => dialog.close()}
-    on:keypress|stopPropagation
+    on:close = {() => showModal = false}
+    on:click|self = {() => dialog?.close()}
+    on:keydown = {() => showModal = false}
 >
-    <div 
-        on:click|stopPropagation
-        on:keypress|stopPropagation
-    >
+    <div>
         <slot name="header" />
         <hr />
         <slot/>
         <hr />
         <slot name="buttons" >
-            <Button on:click={() => dialog.close()}>Close Modal</Button>
+            <Button on:click={() => dialog?.close()}>Close Modal</Button>
         </slot>
     </div>
 </dialog>
@@ -40,11 +35,6 @@
         border-radius: var(--border-radius);
         border: none;
         padding: 0;
-    }
-
-    .form {
-        max-width: 80%;
-        max-height: 80%;
     }
 
     dialog::backdrop {
