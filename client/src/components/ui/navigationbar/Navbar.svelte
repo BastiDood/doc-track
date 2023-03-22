@@ -19,17 +19,7 @@
     export let showBar : boolean;
 
     // TODO: Updates based on permissions
-    const navItems = [
-        { label: "Inbox", href: "inbox", key:'I' },
-        { label: "Outbox", href: "outbox", key:'O' },
-        { label: "Drafts", href: "drafts", key:'D' },
-        { label: "Barcodes", href: "barcodes", key:'B' },
-        { label: "Metrics", href: "metrics", key:'M' },
-        { label: "Manage Invites", href: "manage-invites", key:'N' },
-        { label: "Manage Staff", href: "manage-staff", key:'S' },
-        { label: "Manage Administrators", href: "manage-administrators", key:'A' },
-        { label: "Manage Global Settings", href: "manage-global-settings", key:'G' }, 
-    ];
+    export let navItems;
 
     function logout() {
         const form = document.createElement('form');

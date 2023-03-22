@@ -11,12 +11,25 @@
 
     let toggleDrawer = false;
 
+    // TODO: Updates based on permissions
+    let navItems = [
+        { label: "Inbox", href: "inbox", key:'I' },
+        { label: "Outbox", href: "outbox", key:'O' },
+        { label: "Drafts", href: "drafts", key:'D' },
+        { label: "Barcodes", href: "barcodes", key:'B' },
+        { label: "Metrics", href: "metrics", key:'M' },
+        { label: "Manage Invites", href: "manage-invites", key:'N' },
+        { label: "Manage Staff", href: "manage-staff", key:'S' },
+        { label: "Manage Administrators", href: "manage-administrators", key:'A' },
+        { label: "Manage Global Settings", href: "manage-global-settings", key:'G' }, 
+    ];
+
 </script>
     {#await register()}
         Waiting for service worker...
     {:then}
         <main>
-            <Navbar bind:showBar={toggleDrawer} />
+            <Navbar bind:showBar={toggleDrawer} bind:navItems={navItems} />
             <Sidebar bind:show={toggleDrawer} />
         </main>
     {/await}
