@@ -50,7 +50,7 @@
 
     a:hover {
         background-color: #eee;
-        border-left: 0.5rem solid var(--acc-color);
+        border-right: 0.5rem solid var(--acc-color);
     }
 
     input[type="submit"] {

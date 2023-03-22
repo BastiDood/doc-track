@@ -47,7 +47,7 @@
     {#each navItems as item} 
         <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
     {/each}
-    <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => logout()}><Logout /></button></div>
+    <div><button class={`navitem`} on:click={() => logout()}><Logout /></button></div>
     {#await Session.getUser()}
         <NavPicture name="Guest" email="Guest" />
     {:then user}
