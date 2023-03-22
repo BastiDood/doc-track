@@ -9,10 +9,7 @@
     $: showModal ? dialog?.show() : dialog?.close();
 </script>
 
-<dialog
-    bind:this={dialog}
-    on:close
->  
+<dialog bind:this={dialog} on:close>  
     <div class="column">
         <div>
             <div id="headerIcon">
