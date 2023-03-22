@@ -17,7 +17,7 @@
                     <slot name="header" />
                 </div>
                 <div>
-                    <Close on:click = {() => showModal = false}/>
+                    <Close on:click={() => showModal = false} />
                 </div>
         </div>
         <div class="column">
@@ -26,7 +26,7 @@
             <hr />
             <div id="buttons">
                 <slot name="buttons">
-                    <Button on:click = {() => showModal = false}>Close Modal</Button>
+                    <Button on:click={() => showModal = false}>Close Modal</Button>
                 </slot>
             </div>
         </div>
