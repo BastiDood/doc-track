@@ -17,7 +17,7 @@
         <div>
             <div id="headerIcon">
                 <div>
-                    <slot name="header"/>
+                    <slot name="header" />
                 </div>
                 <div>
                     <Close on:click = {() => showModal = false}/>
@@ -25,7 +25,7 @@
         </div>
         <div class="column">
             <hr />
-            <slot/>
+            <slot />
             <hr />
             <div id="buttons">
                 <slot name="buttons">
