@@ -1,27 +1,38 @@
 <script lang="ts">
-    import Button from "./Button.svelte";
+    import Button from './Button.svelte';
+    import Close from '../icons/Close.svelte'
 
     export let showModal = false;
 
     let dialog: HTMLDialogElement | null;
 
-    $: if (showModal) dialog?.showModal();
+    $: showModal ? dialog?.show() : dialog?.close();
 </script>
 
 <dialog
     bind:this={dialog}
-    on:close = {() => showModal = false}
-    on:click|self = {() => dialog?.close()}
-    on:keydown = {() => showModal = false}
->
-    <div>
-        <slot name="header" />
-        <hr />
-        <slot/>
-        <hr />
-        <slot name="buttons" >
-            <Button on:click={() => dialog?.close()}>Close Modal</Button>
-        </slot>
+    on:close
+>  
+    <div class="column">
+        <div>
+            <div id="headerIcon">
+                <div>
+                    <slot name="header"/>
+                </div>
+                <div>
+                    <Close on:click = {() => showModal = false}/>
+                </div>
+        </div>
+        <div class="column">
+            <hr />
+            <slot/>
+            <hr />
+            <div id="buttons">
+                <slot name="buttons">
+                    <Button on:click = {() => showModal = false}>Close Modal</Button>
+                </slot>
+            </div>
+        </div>
     </div>
 </dialog>
 
@@ -30,8 +41,6 @@
     @import url('../../pages/global.css');
 
     dialog {
-        max-width: 32em;
-        width: 80vh;
         border-radius: var(--border-radius);
         border: none;
         padding: 0;
@@ -53,4 +62,19 @@
 		animation: fade var(--animation-length) ease-out;
 	}
 
+    .column {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    #headerIcon {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #buttons {
+        display: flex;
+        justify-content: space-evenly;
+    }
 </style>
