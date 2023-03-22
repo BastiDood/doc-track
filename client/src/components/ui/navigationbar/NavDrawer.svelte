@@ -3,13 +3,17 @@
 
     export let show = false;
     export let navItems;
+
+    let selected;
 </script>
 
 <NavQuery query="(min-width: 1024px)" let:matches>
 <nav class:show={matches || !show}>
   <div>
         {#each navItems as item} 
-            <a href={`#/${item.href}`}>{item.label}</a>
+            <a href={`#/${item.href}`} on:click={() => {selected = item.href}} class={selected == item.href ? "selected" : ""}>
+                {item.label}
+            </a>
       {/each}
   </div>
   <form method="POST" action="/auth/logout">
@@ -30,7 +34,7 @@
         justify-content: space-between;
         position: absolute;
         left: 0;
-        top: 70px;
+        top: 75px;
         z-index: 50;
         transition: left 0.3s;
         height: 100%;
@@ -50,6 +54,10 @@
 
     a:hover {
         background-color: #eee;
+        
+    }
+
+    .selected {
         border-right: 0.5rem solid var(--acc-color);
     }
 
