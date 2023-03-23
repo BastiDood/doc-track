@@ -7,8 +7,7 @@
     let selected;
 </script>
 
-<NavQuery query="(min-width: 1024px)" let:matches>
-<nav class:show={matches || !show}>
+<nav class:show={!show}>
   <div>
         {#each navItems as item} 
             <a href={`#/${item.href}`} on:click={() => {selected = item.href}} class={selected == item.href ? "selected" : ""}>
@@ -20,7 +19,6 @@
       <input type="submit" value="Logout" />
   </form>
 </nav>
-</NavQuery>
 <style>
     :global(body) {
         padding: 0;
@@ -35,7 +33,7 @@
         position: absolute;
         left: 0;
         top: 75px;
-        z-index: 50;
+        z-index: 0;
         transition: left 0.3s;
         height: 100%;
     }
@@ -48,6 +46,7 @@
         color: initial;
         display: block;
         padding: 0.5rem;
+        width: 175pt;
         text-decoration: none;
         user-select: none;
         transition: background-color 0.2s, border-left 0.2s;

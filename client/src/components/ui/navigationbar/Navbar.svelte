@@ -17,9 +17,6 @@
     // Mobile stuff 
     export let showBar : boolean;
 
-    // TODO: Updates based on permissions
-    export let navItems;
-
     function logout() {
         const form = document.createElement('form');
         form.method = 'post';
@@ -34,19 +31,14 @@
     }
 </script>
 
-<NavQuery query="(max-width: 1024px)" let:matches>
-
     
-<nav class="navelements{matches ? ' mobile' : ''}">
-    <div class={`mobile-icon${matches ? "" : " hidden"}`}>
+<nav class="navelements">
+    <div class={`mobile-icon`}>
         <Button type={ButtonType.Primary} on:click={() => showBar = !showBar}>
             <Hamburger />
         </Button>
     </div>
 
-    {#each navItems as item} 
-        <div><button class={`navitem${matches ? " hidden" : ""}`} on:click={() => push(`/${item.href}`)}>{item.label}</button></div>
-    {/each}
     <div><button class={`navitem`} on:click={() => logout()}><Logout /></button></div>
     {#await Session.getUser()}
         <NavPicture name="Guest" email="Guest" />
@@ -56,7 +48,6 @@
 </nav>
 
 <Router {routes} />
-</NavQuery>
 
 <style>
     nav {
@@ -97,10 +88,6 @@
     .navitem:hover {
         background-color: var(--danger-color);
         transition: all 0.3s ease 0s;
-    }
-    
-    .mobile {
-        background-color: green;
     }
 
     .mobile-icon {
