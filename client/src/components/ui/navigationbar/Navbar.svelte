@@ -1,6 +1,5 @@
 <script lang="ts">
     import { Session } from '../../../api/session.ts';
-    import NavQuery from './NavQuery.svelte';
     import NavPicture from './NavPicture.svelte';
 
     import Button from '../Button.svelte';

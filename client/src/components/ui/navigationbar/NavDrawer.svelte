@@ -1,6 +1,4 @@
 <script>
-    import NavQuery from './NavQuery.svelte';
-
     export let show = false;
     export let navItems;
 
