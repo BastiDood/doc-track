@@ -1,33 +1,39 @@
 <script lang="ts">
-    import { Session } from '../../../api/session.ts';
+    import type { User } from '../../../../../model/src/user.ts';
+
     import Hamburger from '../../icons/Menu.svelte';
 
     export let show = false;
+    export let user: User;
 </script>
 
 <nav>
-    <span id="icon">
-        <Hamburger on:click={() => show = !show} />
-    </span>
-    <span>
-        {#await Session.getUser()}
-            Hello!
-            {:then user}
-            Hello, {user.name}!
-        {/await}
-    </span>
+    <div>
+        <span id="icon"><Hamburger on:click={() => show = !show} /></span>
+        <span>Hello, {user.name}!</span>
+    </div>
+    <img src={user.picture} alt="{user.name}" />
 </nav>
 
 <style>
     @import url('../../../pages/vars.css');
 
     nav {
+        align-content: center;
         background-color: var(--secondary-color);
         box-shadow: 0 1px 8px #ddd;
+        display: flex;
+        justify-content: space-between;
         padding: var(--spacing-small);
     }
 
     #icon {
         cursor: pointer;
+    }
+
+    img {
+        border-radius: 50%;
+        display: block;
+        height: 1.25rem;
     }
 </style>

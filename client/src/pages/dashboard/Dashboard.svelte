@@ -6,6 +6,7 @@
 
     import routes from './views/index.ts';
     import { register } from '../register.ts';
+    import { Session } from '../../api/session.ts';
 
     let toggleDrawer = false;
 </script>
@@ -14,11 +15,15 @@
     {#await register()}
         Waiting for service worker...
     {:then}
-        <Navbar bind:show={toggleDrawer} />
-        <section>
-            <NavDrawer show={toggleDrawer} />
-            <Router {routes} />
-        </section>
+        {#await Session.getUser()}
+            Loading user...
+        {:then user}
+            <Navbar {user} bind:show={toggleDrawer} />
+            <section>
+                <NavDrawer show={toggleDrawer} />
+                <Router {routes} />
+            </section>
+        {/await}
     {/await}
 </main>
 
