@@ -20,7 +20,7 @@
 </nav>
 
 <style>
-    @import url('../../../pages/global.css');
+    @import url('../../../pages/vars.css');
 
     nav {
         background-color: var(--nav-bg);
