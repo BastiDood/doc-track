@@ -21,7 +21,6 @@
 @import url(../../../pages/global.css);
 
     nav {
-        --acc-color: blue;
         background-color: var(--nav-bg);
         display: flex;
         flex-direction: column;
