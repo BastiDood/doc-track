@@ -1,6 +1,5 @@
 <script>
     export let name; 
-    export let email;
 </script>
 
 <div>
