@@ -1,8 +1,8 @@
 <script>
     import Router from 'svelte-spa-router';
 
-    import Navbar from '../../components/ui/navigationbar/Navbar.svelte';
-    import NavDrawer from '../../components/ui/navigationbar/NavDrawer.svelte';
+    import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
+    import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
 
     import routes from './views/index.ts';
     import { register } from '../register.ts';
@@ -18,9 +18,9 @@
         {#await Session.getUser()}
             Loading user...
         {:then user}
-            <Navbar {user} bind:show={toggleDrawer} />
+            <TopBar {user} bind:show={toggleDrawer} />
             <section>
-                <NavDrawer show={toggleDrawer} />
+                <SideDrawer show={toggleDrawer} />
                 <Router {routes} />
             </section>
         {/await}
