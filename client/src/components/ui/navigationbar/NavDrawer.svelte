@@ -20,13 +20,11 @@
   </form>
 </nav>
 <style>
-    :global(body) {
-        padding: 0;
-    }
+@import url(../../../pages/global.css);
 
     nav {
         --acc-color: blue;
-        background-color: #ccc;
+        background-color: var(--nav-bg);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -34,7 +32,7 @@
         left: 0;
         top: 75px;
         z-index: 0;
-        transition: left 0.3s;
+        transition: left var(--animation-length);
         height: 100%;
     }
     nav.show {
@@ -42,14 +40,14 @@
     }
   
     a {
-        border-left: 0.5rem solid transparent;
+        border-left: var(--spacing-normal) solid transparent;
         color: initial;
         display: block;
-        padding: 0.5rem;
+        padding: var(--spacing-normal);
         width: 175pt;
         text-decoration: none;
         user-select: none;
-        transition: background-color 0.2s, border-left 0.2s;
+        transition: background-color var(--animation-length), border-left var(--animation-length);
     }
 
     a:hover {
@@ -58,17 +56,17 @@
     }
 
     .selected {
-        border-right: 0.5rem solid var(--acc-color);
+        border-right: var(--spacing-normal) solid var(--nav-bg);
     }
 
     input[type="submit"] {
         background-color: var(--bg-color);
-        border-left: 0.5rem solid transparent;
+        border-left: var(--spacing-normal) solid transparent;
         cursor: pointer;
         margin: 0;
-        padding: 0.5rem;
+        padding: var(--spacing-normal);
         text-align: initial;
-        transition: background-color 0.2s;
+        transition: background-color var(--animation-length);
         width: 100%;
     }
 
