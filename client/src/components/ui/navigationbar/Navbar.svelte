@@ -21,7 +21,7 @@
     nav {
         align-content: center;
         background-color: var(--primary-color);
-        box-shadow: 0 1px 8px #ddd;
+        box-shadow: 0 1px var(--spacing-normal) var(--shadow-color);
         display: flex;
         justify-content: space-between;
         padding: var(--spacing-small);
