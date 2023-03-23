@@ -20,7 +20,7 @@
 
     nav {
         align-content: center;
-        background-color: var(--secondary-color);
+        background-color: var(--primary-color);
         box-shadow: 0 1px 8px #ddd;
         display: flex;
         justify-content: space-between;
