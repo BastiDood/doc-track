@@ -2,11 +2,13 @@
     --primary-color: #4040f2;
     --secondary-color: #0d0d54;
     --danger-color: #ca1717;
-    --nav-bg: #0eb2e4;
-    --login-bg: #ffb334;
-    --dashboard-bg: radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%);
-    --text-color: #000000;
+    --hover-color: #eaeaea;
+    --shadow-color: #ddd;
 
+    --login-bg: #ffb334;
+    --dashboard-bg: #fff;
+
+    --text-color: #000000;
     --font-size: 16px;
     --x-large: 2rem;
     --large: 1.5rem;
@@ -23,5 +25,4 @@
 
     --border-radius: 10px;
     --animation-length: .3s;
-
 }
