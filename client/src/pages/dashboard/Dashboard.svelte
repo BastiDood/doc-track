@@ -1,34 +1,36 @@
-<script lang="ts">
-    import { register } from '../register.ts';
-    import { Session } from '../../api/session.ts';
-    import Navbar from '../../components/ui/navigationbar/Navbar.svelte';
-    import Button from '../../components/ui/Button.svelte';
+<script>
+    import Router from 'svelte-spa-router';
 
-    import routes from './routes.ts';
-    import Sidebar from '../../components/ui/navigationbar/NavDrawer.svelte';
+    import Navbar from '../../components/ui/navigationbar/Navbar.svelte';
+    import NavDrawer from '../../components/ui/navigationbar/NavDrawer.svelte';
+
+    import routes from './views/index.ts';
+    import { register } from '../register.ts';
 
     let toggleDrawer = false;
-
-    // TODO: Updates based on permissions
-    let navItems = [
-        { label: "Inbox", href: "inbox", key:'I' },
-        { label: "Outbox", href: "outbox", key:'O' },
-        { label: "Drafts", href: "drafts", key:'D' },
-        { label: "Barcodes", href: "barcodes", key:'B' },
-        { label: "Metrics", href: "metrics", key:'M' },
-        { label: "Manage Invites", href: "manage-invites", key:'N' },
-        { label: "Manage Staff", href: "manage-staff", key:'S' },
-        { label: "Manage Administrators", href: "manage-administrators", key:'A' },
-        { label: "Manage Global Settings", href: "manage-global-settings", key:'G' }, 
-    ];
-
 </script>
+
+<main>
     {#await register()}
         Waiting for service worker...
     {:then}
-        <main>
-            <Navbar bind:showBar={toggleDrawer} bind:navItems={navItems} />
-            <Sidebar bind:show={toggleDrawer} bind:navItems={navItems} />
-        </main>
+        <Navbar bind:show={toggleDrawer} />
+        <section>
+            <NavDrawer show={toggleDrawer} />
+            <Router {routes} />
+        </section>
     {/await}
+</main>
 
+<style>
+    main {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    section {
+        height: 100%;
+        position: relative;
+    }
+</style>
