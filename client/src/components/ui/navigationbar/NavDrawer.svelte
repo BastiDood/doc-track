@@ -26,20 +26,19 @@
         background-color: var(--nav-bg);
         display: flex;
         flex-direction: column;
+        height: 100%;
         justify-content: space-between;
         max-width: 300px;
-        left: 0;
-        position: relative;
+        left: -100%;
+        position: absolute;
         transition: left var(--animation-length);
-        height: 100%;
     }
 
     nav.show {
-        left: -100%;
+        left: 0;
     }
   
     a {
-        border-left: var(--spacing-normal) solid transparent;
         color: initial;
         display: block;
         padding: var(--spacing-normal);
@@ -54,7 +53,6 @@
 
     input[type="submit"] {
         background-color: var(--bg-color);
-        border-left: var(--spacing-normal) solid transparent;
         cursor: pointer;
         margin: 0;
         padding: var(--spacing-normal);
