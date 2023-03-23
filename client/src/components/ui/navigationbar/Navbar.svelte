@@ -1,9 +1,6 @@
 <script lang="ts">
     import { Session } from '../../../api/session.ts';
-    import { ButtonType } from '../../../components/types.ts';
-
-    import Button from '../Button.svelte';
-    import Hamburger from '../../icons/Eye.svelte';
+    import Hamburger from '../../icons/Menu.svelte';
 
     export let show = false;
 </script>
