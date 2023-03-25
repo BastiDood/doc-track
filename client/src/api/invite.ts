@@ -1,12 +1,4 @@
-import {
-    OK,
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_FOUND,
-    NOT_ACCEPTABLE,
-    CONFLICT,
-} from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import { type Invitation, InvitationSchema } from '~model/invitation.ts';
 
@@ -30,12 +22,12 @@ export namespace Invite {
             },
         });
         switch (res.status) {
-            case OK: return InvitationSchema.shape.creation.parse(await res.json());
-            case CONFLICT: return null;
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.OK: return InvitationSchema.shape.creation.parse(await res.json());
+            case StatusCodes.CONFLICT: return null;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -51,12 +43,12 @@ export namespace Invite {
             },
         });
         switch (res.status) {
-            case OK: return InvitationSchema.omit({ office: true, email: true }).parse(await res.json());
-            case NOT_FOUND: return null;
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.OK: return InvitationSchema.omit({ office: true, email: true }).parse(await res.json());
+            case StatusCodes.NOT_FOUND: return null;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }

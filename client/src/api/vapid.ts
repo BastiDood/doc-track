@@ -1,4 +1,4 @@
-import { OK, CREATED } from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import { UnexpectedStatusCode } from './error.ts';
 import { assert } from '../assert.ts';
@@ -7,7 +7,7 @@ export namespace Vapid {
     /** @returns VAPID public key of the server as raw bytes */
     export async function getVapidPublicKey(): Promise<ArrayBuffer> {
         const res = await fetch('/api/vapid', { headers: { 'Accept': 'application/octet-stream' } });
-        if (res.status === OK) return res.arrayBuffer();
+        if (res.status === StatusCodes.OK) return res.arrayBuffer();
         throw new UnexpectedStatusCode;
     }
 
@@ -16,7 +16,7 @@ export namespace Vapid {
         const auth = keys?.auth;
         assert(auth);
 
-        const p256dh = keys.p256dh;
+        const p256dh = keys?.p256dh;
         assert(p256dh);
 
         const res = await fetch('/api/vapid', {
@@ -30,7 +30,7 @@ export namespace Vapid {
             }),
         });
 
-        if (res.status === CREATED) return;
+        if (res.status === StatusCodes.CREATED) return;
         throw new UnexpectedStatusCode;
     }
 }

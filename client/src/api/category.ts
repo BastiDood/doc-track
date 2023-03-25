@@ -1,14 +1,4 @@
-import {
-    OK,
-    CREATED,
-    ACCEPTED,
-    BAD_REQUEST,
-    NO_CONTENT,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_FOUND,
-    NOT_ACCEPTABLE,
-} from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import { type Category as CategoryType, CategorySchema } from '~model/category.ts';
 
@@ -31,9 +21,9 @@ export namespace Category {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case OK: return CategorySchema.array().parse(await res.json());
-            case UNAUTHORIZED: throw new InvalidSession;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.OK: return CategorySchema.array().parse(await res.json());
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -53,11 +43,11 @@ export namespace Category {
             },
         });
         switch (res.status) {
-            case CREATED: return CategorySchema.shape.id.parse(JSON.parse(await res.json()));
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.CREATED: return CategorySchema.shape.id.parse(JSON.parse(await res.json()));
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -77,12 +67,12 @@ export namespace Category {
             },
         });
         switch (res.status) {
-            case NO_CONTENT: return true;
-            case NOT_FOUND: return false;
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.NO_CONTENT: return true;
+            case StatusCodes.NOT_FOUND: return false;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -99,12 +89,12 @@ export namespace Category {
             credentials: 'same-origin',
         });
         switch (res.status) {
-            case ACCEPTED: return false;
-            case NO_CONTENT: return true;
-            case NOT_FOUND: return null;
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.ACCEPTED: return false;
+            case StatusCodes.NO_CONTENT: return true;
+            case StatusCodes.NOT_FOUND: return null;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -121,11 +111,11 @@ export namespace Category {
             headers: { 'Accept': 'text/plain' },
         });
         switch (res.status) {
-            case OK: return res.text();
-            case NOT_FOUND: return null;
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.OK: return res.text();
+            case StatusCodes.NOT_FOUND: return null;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             default: throw new UnexpectedStatusCode;
         }
     }

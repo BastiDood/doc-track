@@ -1,4 +1,4 @@
-import { OK, UNAUTHORIZED, NOT_ACCEPTABLE } from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import { type User, UserSchema } from '../../../model/src/user.ts';
 
@@ -15,9 +15,9 @@ export namespace Session {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case OK: return UserSchema.parse(await res.json());
-            case UNAUTHORIZED: throw new InvalidSession;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.OK: return UserSchema.parse(await res.json());
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }

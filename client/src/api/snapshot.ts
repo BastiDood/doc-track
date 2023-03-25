@@ -1,11 +1,4 @@
-import {
-    CREATED,
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_ACCEPTABLE,
-    CONFLICT,
-} from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import type { Office } from '~model/office.ts';
 
@@ -35,12 +28,12 @@ export namespace Snapshot {
             },
         });
         switch (res.status) {
-            case CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
-            case CONFLICT: return InsertSnapshotErrorSchema.parse(await res.json());
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
+            case StatusCodes.CONFLICT: return InsertSnapshotErrorSchema.parse(await res.json());
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }

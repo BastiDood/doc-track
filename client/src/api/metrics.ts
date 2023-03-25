@@ -1,9 +1,4 @@
-import {
-    OK,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_ACCEPTABLE,
-} from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import { type Metrics as MetricsType, MetricsSchema } from '~model/api.ts';
 
@@ -21,10 +16,10 @@ export namespace Metrics {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case OK: return MetricsSchema.parse(await res.json());
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.OK: return MetricsSchema.parse(await res.json());
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }

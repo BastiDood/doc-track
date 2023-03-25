@@ -1,12 +1,4 @@
-import {
-    OK,
-    CREATED,
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_ACCEPTABLE,
-    CONFLICT,
-} from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import type { Document as DocumentType } from '~model/document.ts';
 import type { Office } from '~model/office.ts';
@@ -45,12 +37,12 @@ export namespace Document {
             },
         });
         switch (res.status) {
-            case CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
-            case CONFLICT: return BarcodeAssignmentErrorSchema.parse(await res.json());
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
+            case StatusCodes.CONFLICT: return BarcodeAssignmentErrorSchema.parse(await res.json());
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -61,11 +53,11 @@ export namespace Document {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case OK: return InboxEntrySchema.array().parse(await res.json());
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.OK: return InboxEntrySchema.array().parse(await res.json());
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -75,9 +67,9 @@ export namespace Document {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case OK: return PaperTrailSchema.array().parse(await res.json());
-            case BAD_REQUEST: throw new InvalidInput;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.OK: return PaperTrailSchema.array().parse(await res.json());
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
