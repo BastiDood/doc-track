@@ -9,7 +9,7 @@ specifiers:
   '@plasmohq/parcel-transformer-svelte3': ^0.4.5
   '@types/serviceworker': ^0.0.66
   cssnano: ^5.1.15
-  http-status: ^1.6.2
+  http-status-codes: ^2.2.0
   parcel: ^2.8.3
   postcss: ^8.4.21
   svelte: ^3.57.0
@@ -21,7 +21,7 @@ specifiers:
 
 dependencies:
   '@parcel/service-worker': 2.8.3
-  http-status: 1.6.2
+  http-status-codes: 2.2.0
   svelte-spa-router: 3.3.0
   zod: 3.21.4
 
@@ -1394,9 +1394,8 @@ packages:
       entities: 3.0.1
     dev: true
 
-  /http-status/1.6.2:
-    resolution: {integrity: sha512-oUExvfNckrpTpDazph7kNG8sQi5au3BeTo0idaZFXEhTaJKu7GNJCLHI0rYY2wljm548MSTM+Ljj/c6anqu2zQ==}
-    engines: {node: '>= 0.4.0'}
+  /http-status-codes/2.2.0:
+    resolution: {integrity: sha512-feERVo9iWxvnejp3SEfm/+oNG517npqL2/PIA8ORjyOZjGC7TwCRQsZylciLS64i6pJ0wRYz3rkXLRwbtFa8Ng==}
     dev: false
 
   /import-fresh/3.3.0:
