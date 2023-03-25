@@ -1,12 +1,4 @@
-import {
-    ACCEPTED,
-    NO_CONTENT,
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_FOUND,
-    NOT_ACCEPTABLE,
-} from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import type { Staff as StaffType } from '~model/staff.ts';
 
@@ -27,12 +19,12 @@ export namespace Staff {
             headers: { 'Content-Type': 'text/plain' },
         });
         switch (res.status) {
-            case NO_CONTENT: return true;
-            case NOT_FOUND: return false;
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.NO_CONTENT: return true;
+            case StatusCodes.NOT_FOUND: return false;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -45,13 +37,13 @@ export namespace Staff {
             headers: { 'Content-Type': 'text/plain' },
         });
         switch (res.status) {
-            case ACCEPTED: return false;
-            case NO_CONTENT: return true;
-            case NOT_FOUND: return null;
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.ACCEPTED: return false;
+            case StatusCodes.NO_CONTENT: return true;
+            case StatusCodes.NOT_FOUND: return null;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }

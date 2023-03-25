@@ -1,12 +1,4 @@
-import {
-    OK,
-    CREATED,
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_FOUND,
-    NOT_ACCEPTABLE,
-} from 'http-status';
+import { StatusCodes } from 'http-status-codes';
 
 import {
     type GeneratedBatch,
@@ -31,12 +23,12 @@ export namespace Batch {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case OK: return MinBatchSchema.parse(await res.json());
-            case NOT_FOUND: return null;
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.OK: return MinBatchSchema.parse(await res.json());
+            case StatusCodes.NOT_FOUND: return null;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -48,11 +40,11 @@ export namespace Batch {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case CREATED: return GeneratedBatchSchema.parse(await res.json());
-            case BAD_REQUEST: throw new InvalidInput;
-            case UNAUTHORIZED: throw new InvalidSession;
-            case FORBIDDEN: throw new InsufficientPermissions;
-            case NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.CREATED: return GeneratedBatchSchema.parse(await res.json());
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }
