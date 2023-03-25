@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "noUncheckedIndexedAccess": true,
+        "strict": true
+    },
+    "tasks": {
+        "test": "deno test --allow-env --allow-net",
+    },
+    "fmt": {
+        "options": {
+            "lineWidth": 120,
+            "indentWidth": 4,
+            "singleQuote": true,
+            "semiColons": true
+        }
+    },
+    "imports": {
+        "~client/": "../client/src/",
+        "~model/": "../model/src/",
+        "~server/": "../server/src/",
+        "asserts": "https://deno.land/std@0.180.0/testing/asserts.ts",
+        "cookie": "https://deno.land/std@0.180.0/http/cookie.ts",
+        "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
+    }
+}
