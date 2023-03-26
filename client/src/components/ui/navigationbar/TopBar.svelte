@@ -7,7 +7,7 @@
     export let user: User;
 </script>
 
-<nav>
+<nav on:click|stopPropagation on:keypress>
     <div>
         <span id="icon"><Hamburger on:click={() => show = !show} /></span>
         <span>Hello, {user.name}!</span>

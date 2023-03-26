@@ -19,13 +19,9 @@
         {#await Session.getUser()}
             Loading user...
         {:then user}
-            <div on:click|stopPropagation on:keypress>
-                <TopBar {user} bind:show={toggleDrawer}/>
-            </div>
+            <TopBar {user} bind:show={toggleDrawer}/>
             <section>
-                <div on:click|stopPropagation on:keypress>
                 <SideDrawer show={toggleDrawer} />
-                </div>
                 <Router {routes} />
             </section>
         {/await}

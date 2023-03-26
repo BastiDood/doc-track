@@ -3,7 +3,7 @@
     export let show = false;
 </script>
 
-<nav class:show={show}>
+<nav class:show={show} on:click|stopPropagation on:keypress>
     <section>
         <a href="#/inbox" use:active>Inbox</a>
         <a href="#/outbox" use:active>Outbox</a>
