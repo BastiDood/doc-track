@@ -19,7 +19,7 @@
         {#await Session.getUser()}
             Loading user...
         {:then user}
-            <TopBar {user} bind:show={toggleDrawer}/>
+            <TopBar {user} bind:show={toggleDrawer} />
             <section>
                 <SideDrawer show={toggleDrawer} />
                 <Router {routes} />
