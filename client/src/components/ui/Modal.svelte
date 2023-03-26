@@ -1,16 +1,34 @@
 <script lang="ts">
+    import { createEventDispatcher } from 'svelte';
+    import { Events } from '../../components/types.ts'
+
     import Button from './Button.svelte';
     import Close from '../icons/Close.svelte';
-
+    
     export let showModal = false;
 
     let dialog: HTMLDialogElement | null;
 
-    $: showModal ? dialog?.show() : dialog?.close();
+    $: if (dialog && showModal) dialog.showModal();
+
+    const dispatch = createEventDispatcher()
+
+    function onClose() {
+        showModal = false;
+        dispatch(Events.ModalClose)
+    }
 </script>
 
-<dialog bind:this={dialog} on:close>  
-    <div class="column">
+<dialog bind:this={dialog} 
+    on:close = { () => onClose() }
+    on:click|self = {() => dialog?.close()}
+    on:keydown|self = { () => dialog?.close()}
+    >
+
+    <div class="column"
+    on:click|stopPropagation
+    on:keydown|stopPropagation
+    >
         <div>
             <div id="headerIcon">
                 <div>
@@ -20,10 +38,9 @@
                     <Close on:click={() => showModal = false} />
                 </div>
         </div>
+        <hr />
         <div class="column">
-            <hr />
             <slot />
-            <hr />
             <div id="buttons">
                 <slot name="buttons">
                     <Button on:click={() => showModal = false}>Close Modal</Button>
@@ -35,7 +52,7 @@
 
 <style>
     /* https://svelte.dev/examples/modal */
-    @import url('../../pages/global.css');
+    @import url('../../pages/vars.css');
 
     dialog {
         border-radius: var(--border-radius);
