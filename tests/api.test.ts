@@ -152,6 +152,30 @@ Deno.test('full API integration test', async t => {
         assertEquals(result.creation, creation);
     });
 
+    await t.step('Category API', async () => {
+        // Get categories before addition
+        const origCategories = await Category.getAllActive();
+
+        // Create new category
+        const cid = await Category.create(b64encode(crypto.getRandomValues(new Uint8Array(8))));
+        assertNotStrictEquals(cid, 0);
+
+        // Rename existing category
+        const random = b64encode(crypto.getRandomValues(new Uint8Array(8)));
+        assert(await Category.rename(cid, random));
+
+        // Get active categories before deletion
+        const oldCategories = await Category.getAllActive();
+        assertArrayIncludes(oldCategories, [ ...origCategories, { id: cid, name: random } ]);
+
+        // Remove existing category
+        assertStrictEquals(await Category.remove(cid), true);
+
+        // Get active categories after deletion
+        const newCategories = await Category.getAllActive();
+        assertEquals(newCategories, origCategories);
+    });
+
     // Restore the original fetch
     globalThis.fetch = origFetch;
     await pool.end();
