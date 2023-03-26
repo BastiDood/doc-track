@@ -12,7 +12,7 @@
 
 </script>
 
-<main on:click = {() => {if (toggleDrawer) toggleDrawer = false }} on:keydown>
+<main on:click={() => toggleDrawer &&= false} on:keydown>
     {#await register()}
         Waiting for service worker...
     {:then}
