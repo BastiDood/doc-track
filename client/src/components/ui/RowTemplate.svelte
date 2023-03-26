@@ -3,8 +3,8 @@
     import { createEventDispatcher } from 'svelte';
 
     import { IconSize } from '../types.ts'
-    import DocumentBlank from '../Icons/DocumentBlank.svelte';
-    import OverflowMenuVertical from '../Icons/OverflowMenuVertical.svelte';
+    import DocumentBlank from '../icons/DocumentBlank.svelte';
+    import OverflowMenuVertical from '../icons/OverflowMenuVertical.svelte';
 
     export let iconSize = IconSize.Normal;
     const dispatch = createEventDispatcher();
