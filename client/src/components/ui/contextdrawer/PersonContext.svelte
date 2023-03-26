@@ -2,7 +2,7 @@
     import { createEventDispatcher } from 'svelte';
 
     import { Events, PersonPayload, IconSize } from '../types.ts';
-    import ContextTemplate from '../contextMenu/ContextTemplate.svelte';
+    import ContextTemplate from '../contextmenu/ContextTemplate.svelte';
     import ContextElement from '../contextmenu/ContextElement.svelte';
     import ContextDivider from '../contextmenu/ContextDivider.svelte';
 
