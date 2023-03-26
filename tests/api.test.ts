@@ -90,7 +90,13 @@ Deno.test('full API integration test', async t => {
     const origFetch = globalThis.fetch;
     const cookies = new Map<string, string>;
     globalThis.fetch = async (input, init) => {
-        const res = await handleRequest(pool, new Request('https://doctrack.app' + input, init));
+        const res = await handleRequest(pool, new Request('https://doctrack.app' + input, {
+            ...init,
+            headers: {
+                ...Object.fromEntries(cookies.entries()),
+                ...init?.headers,
+            },
+        }));
         for (const { name, value } of getSetCookies(res.headers))
             cookies.set(name, value);
         return res;
