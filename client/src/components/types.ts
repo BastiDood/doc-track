@@ -42,6 +42,7 @@ export enum Events {
     DeleteUser = 'deleteUser',
     EditUser = 'editUser',
     ModalClose = 'modalClose',
+    ContextClose = 'contextClose',
 }
 
 export interface ContextPayload {
