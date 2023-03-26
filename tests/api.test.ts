@@ -1,4 +1,5 @@
-import { assert } from 'https://deno.land/std@0.160.0/testing/asserts.ts';
+import { assert, assertEquals, assertNotStrictEquals, assertStrictEquals } from 'asserts';
+import { encode as b64encode } from 'base64url';
 import { equals as bytewiseEquals } from 'bytes';
 import { getSetCookies } from 'cookie';
 import { Pool } from 'postgres';
@@ -15,8 +16,63 @@ import { Staff } from '~client/api/staff.ts';
 import { User } from '~client/api/user.ts';
 import { Vapid } from '~client/api/vapid.ts';
 
+import { Global, Local } from '~model/permission.ts';
+
+import { Database } from '~server/database.ts';
 import { env } from '~server/env.ts';
 import { handleRequest } from '~server/routes/mod.ts';
+
+async function setup(pool: Pool) {
+    const db = await Database.fromPool(pool);
+    try {
+        // Create mock office
+        const oid = await db.createOffice('DocTrack');
+        assertNotStrictEquals(oid, 0);
+
+        // Randomly generate an email for uniqueness
+        const randomEmail = b64encode(crypto.getRandomValues(new Uint8Array(6)));
+        assertStrictEquals(randomEmail.length, 8);
+
+        // Invite mock email to the system
+        const email = `${randomEmail}@up.edu.ph`;
+        const creation = await db.upsertInvitation({
+            office: oid,
+            permission: (Local.ViewInbox << 1) - 1,
+            email,
+        });
+        assertNotStrictEquals(creation, null);
+
+        // Construct mock user
+        const user = {
+            id: crypto.randomUUID(),
+            name: 'Hello World',
+            picture: 'https://doctrack.app/profile/user.png',
+            permission: (Global.ViewMetrics << 1) - 1,
+            email,
+        };
+
+        // Formally integrate user into the system
+        const offices = await db.insertInvitedUser(user);
+        assert(offices !== null);
+        const [ first, ...rest ] = offices;
+        assertStrictEquals(rest.length, 0);
+        assertStrictEquals(first, oid);
+
+        // Construct a full valid session
+        const { id, nonce, expiration } = await db.generatePendingSession();
+        const pending = await db.upgradeSession({
+            id,
+            user_id: user.id,
+            expiration,
+        });
+        assert(pending !== null);
+        assertEquals(pending.expiration, expiration);
+        assert(bytewiseEquals(pending.nonce, nonce));
+        return { oid, sid: id, user };
+    } finally {
+        db.release();
+    }
+}
 
 Deno.test('full API integration test', async t => {
     const pool = new Pool({
@@ -26,10 +82,9 @@ Deno.test('full API integration test', async t => {
         port: env.PG_PORT,
         database: env.PG_DATABASE,
     }, 1, false);
-    
-    // Preconnect with the database (to mitigate resource leaks)
-    const client = await pool.connect();
-    client.release();
+
+    // Set up mock session
+    const { oid, sid, user } = await setup(pool);
 
     // Mock the `fetch` function and its cookie store
     const origFetch = globalThis.fetch;
