@@ -14,22 +14,22 @@
 
     const dispatch = createEventDispatcher();
 
+    function closeDialog(this: HTMLDialogElement) {
+        this.close();
+    }
+
     function onClose() {
         showModal = false;
         dispatch(Events.ModalClose);
     }
 </script>
 
-<dialog bind:this={dialog} 
-    on:close = { () => onClose() }
-    on:click|self = {() => dialog?.close()}
-    on:keydown|self = { () => dialog?.close()}
-    >
-
-    <div class="column"
-    on:click|stopPropagation
-    on:keydown|stopPropagation
-    >
+<dialog
+    on:close={onClose}
+    on:click|self={closeDialog}
+    on:keydown|self={closeDialog}
+>
+    <div class="column" on:click|stopPropagation on:keydown|stopPropagation>
         <div>
             <div id="headerIcon">
                 <div>
