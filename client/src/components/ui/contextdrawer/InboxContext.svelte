@@ -19,14 +19,14 @@
 <ContextTemplate bind:show={show}>
     <ContextElement on:click={() => dispatch(Events.SendDocument, payload)}>
         <div slot="contextIcon">
-            <SendAlt size={iconSize} alt="Send Document"/>
+            <SendAlt size={iconSize} alt="Send Document" />
             Send Document
         </div>
     </ContextElement>
     <ContextDivider />
     <ContextElement on:click={() => dispatch(Events.TerminateDocument, payload)}>
         <div slot="contextIcon">
-            <CheckboxIndeterminateFilled size={iconSize} alt="Terminate Document"/>
+            <CheckboxIndeterminateFilled size={iconSize} alt="Terminate Document" />
             Terminate Document
         </div>
     </ContextElement>

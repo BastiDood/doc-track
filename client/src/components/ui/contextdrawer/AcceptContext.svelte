@@ -19,21 +19,21 @@
 <ContextTemplate bind:show={show}>
     <ContextElement on:click={() => dispatch(Events.AcceptDocument, payload)}>
         <div slot="contextIcon">
-            <Checkmark size={iconSize} alt="Accept Document"/>
+            <Checkmark size={iconSize} alt="Accept Document" />
             Accept Document
         </div>
     </ContextElement>
     <ContextDivider />
     <ContextElement on:click={() => dispatch(Events.DeclineDocument, payload)}>
         <div slot="contextIcon">
-            <Close size={iconSize} alt="Decline Document"/>
+            <Close size={iconSize} alt="Decline Document" />
             Decline Document
         </div>
     </ContextElement>
     <ContextDivider />
     <ContextElement on:click={() => dispatch(Events.Camera, payload)}>
         <div slot="contextIcon">
-            <Camera size={iconSize} alt="Select an Image"/>
+            <Camera size={iconSize} alt="Select an Image" />
             Take a Picture / Choose a Image
         </div>
     </ContextElement>

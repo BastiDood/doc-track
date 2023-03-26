@@ -15,7 +15,7 @@
     <div class="icon"><slot name="icon" /></div>
     <p>{title}</p>
     <div class="icon" on:keydown on:click|stopPropagation={() => dispatch(Events.OverflowClick)}>
-        <OverflowMenuVertical size={iconSize} alt="Show overflow menu"/>
+        <OverflowMenuVertical size={iconSize} alt="Show overflow menu" />
     </div>
 </div>
 

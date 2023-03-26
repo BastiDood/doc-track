@@ -16,7 +16,7 @@
 <ContextTemplate bind:show={show}>
     <ContextElement on:click={() => dispatch(Events.RemoveInvitation, payload)}>
         <div slot="contextIcon">
-            <Close size={iconSize} alt="Cancel Invitation"/>
+            <Close size={iconSize} alt="Cancel Invitation" />
             Cancel Invitation
         </div>
     </ContextElement>

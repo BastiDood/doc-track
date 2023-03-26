@@ -23,5 +23,5 @@
 </script>
 
 <RowTemplate title={`${email} Office: ${office} Permission: ${permission} Created on: ${creation}`}{iconSize} on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}>
-    <PersonMail size={iconSize} slot="icon" alt="An invited person"/>
+    <PersonMail size={iconSize} slot="icon" alt="An invited person" />
 </RowTemplate>

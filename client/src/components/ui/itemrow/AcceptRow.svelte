@@ -19,5 +19,5 @@
 </script>
 
 <RowTemplate title={`${title} ID: ${id} Category: ${category}`} {iconSize} on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}>
-    <DocumentImport size={iconSize} slot="icon" alt="A pending document"/>
+    <DocumentImport size={iconSize} slot="icon" alt="A pending document" />
 </RowTemplate>

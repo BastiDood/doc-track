@@ -20,5 +20,5 @@
 
 <RowTemplate title={`${title} ID: ${id} Category: ${category}`} {iconSize} 
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}>
-    <DocumentBlank size={iconSize} slot="icon" alt ="An inbox document"/>
+    <DocumentBlank size={iconSize} slot="icon" alt ="An inbox document" />
 </RowTemplate>
