@@ -14,7 +14,6 @@
     let currentContext: RowEvent | null = null;
 
     function overflowClickHandler(e: CustomEvent) {
-        console.log(e)
         if (!e.detail) return;
         currentContext = e.detail;
         showContextMenu = true;
@@ -44,7 +43,7 @@
     </Modal>
 {/if}
 
-{#if showContextMenu && currentContext?.type === RowType.Inbox}
+{#if showContextMenu && currentContext?.ty === RowType.Inbox}
     <InboxContext
         bind:show={showContextMenu}
         payload={currentContext}

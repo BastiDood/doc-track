@@ -13,7 +13,7 @@
 
     const dispatch = createEventDispatcher();
     const rowEvent: ContextPayload = {
-        type: RowType.Inbox,
+        ty: RowType.Inbox,
         id: id,
     };
 </script>
