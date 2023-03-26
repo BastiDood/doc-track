@@ -29,7 +29,6 @@
 </main>
 
 <style>
-    @import url('../global.css');
     main {
         display: flex;
         flex-direction: column;
