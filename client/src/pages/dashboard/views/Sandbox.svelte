@@ -2,24 +2,24 @@
     import { documentTest } from './sample.ts';
     import { RowEvent, RowType } from '../../../components/types.ts';
     import { Events } from '../../../components/types.ts'
-    import InboxRow from '../../../components/ui/InboxRow.svelte';
-    import InboxContext from '../../../components/ui/InboxContext.svelte';
+
+    import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte'
+    import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
+
     let showContextMenu = false;
     let showModal = false;
     let modalHeader = '';
     let modalText = '';
     let currentContext: RowEvent | null = null;
+
     function overflowClickHandler(e: CustomEvent) {
-        if (showContextMenu) showContextMenu = false;
+        console.log(e)
         if (!e.detail) return;
         currentContext = e.detail;
         showContextMenu = true;
     }
-    function onBGClick() {
-        if (showContextMenu) showContextMenu = false;
-        if (showModal) showModal = false;
-    }
+
     function eventHandler(e: CustomEvent) {
         if (!e.detail) return;
         switch(e.type) {
@@ -44,7 +44,7 @@
     </Modal>
 {/if}
 
-{#if showContextMenu && currentContext?.ty === RowType.Inbox}
+{#if showContextMenu && currentContext?.type === RowType.Inbox}
     <InboxContext
         bind:show={showContextMenu}
         payload={currentContext}
@@ -59,8 +59,6 @@
             category={doc.category}
             title={doc.title} 
             on:overflowClick={overflowClickHandler}
-            on:sendDocument={eventHandler}
-            on:terminateDocument={eventHandler}
         />
     {/each}
 
