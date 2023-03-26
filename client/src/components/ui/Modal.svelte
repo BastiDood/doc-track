@@ -4,9 +4,9 @@
     import { Events } from '../../components/types.ts';
 
     import Button from './Button.svelte';
-    import Close from '../icons/Close.svelte';
 
     export let showModal = false;
+    export let title: string;
 
     let dialog: HTMLDialogElement | null;
 
@@ -24,31 +24,17 @@
     }
 </script>
 
-<dialog
-    on:close={onClose}
-    on:click|self={closeDialog}
-    on:keydown|self={closeDialog}
->
-    <div class="column" on:click|stopPropagation on:keydown|stopPropagation>
-        <div>
-            <div id="headerIcon">
-                <div>
-                    <slot name="header" />
-                </div>
-                <div>
-                    <Close on:click={() => showModal = false} />
-                </div>
-        </div>
-        <hr />
-        <div class="column">
-            <slot />
-            <div id="buttons">
-                <slot name="buttons">
-                    <Button on:click={() => showModal = false}>Close Modal</Button>
-                </slot>
-            </div>
-        </div>
-    </div>
+<dialog on:close={onClose} on:click|self={closeDialog} on:keydown|self={closeDialog}>
+    <header>
+        <h1>{title}</h1>
+        <div>Close on:click={() => showModal = false} /></div>
+    </header>
+    <hr />
+    <slot />
+    <hr />
+    <slot name="buttons">
+        <Button on:click={() => showModal = false}>Close Modal</Button>
+    </slot>
 </dialog>
 
 <style>
@@ -58,26 +44,20 @@
     dialog {
         border-radius: var(--border-radius);
         border: none;
-        padding: 0;
-    }
-
-    dialog > div {
+        display: flex;
+        flex-direction: column;
         padding: var(--spacing-large);
     }
 
-    .column {
+    header {
         display: flex;
-        flex-direction: column;
-
     }
 
-    #headerIcon {
-        display: flex;
-        justify-content: space-between;
+    header > h1 {
+        flex-grow: 1;
     }
 
-    #buttons {
-        display: flex;
-        justify-content: space-evenly;
+    header > div {
+        flex-grow: 0;
     }
 </style>
