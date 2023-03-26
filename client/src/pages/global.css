@@ -47,7 +47,6 @@ dialog[open]::backdrop {
     animation: fade var(--animation-length) ease-out;
 }
 
-
 .primary {
     background-color: var(--primary-color);
 }
@@ -59,4 +58,3 @@ dialog[open]::backdrop {
 .danger {
     background-color: var(--danger-color);
 }
-
