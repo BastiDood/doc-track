@@ -57,13 +57,13 @@ export namespace Category {
      * @returns `false` if {@linkcode Category} ID does not exist
      */
     export async function rename(id: CategoryType['id'], name: CategoryType['name']): Promise<boolean> {
-        const res = await fetch('/api/category', {
+        const res = await fetch(`/api/category?id=${id}`, {
             credentials: 'same-origin',
             method: 'PUT',
-            body: JSON.stringify({ id, name }),
+            body: name,
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain',
             },
         });
         switch (res.status) {
