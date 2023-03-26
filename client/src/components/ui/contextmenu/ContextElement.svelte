@@ -11,7 +11,7 @@
 <div on:click on:keydown>
     <div>
         <slot name="contextIcon">
-            <Add size={iconSize} />
+            <Add size={iconSize} alt="Placeholder" />
         </slot>
     </div>
     <div><slot></slot></div>

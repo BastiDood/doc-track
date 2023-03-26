@@ -3,7 +3,7 @@
     export let show = false;
 </script>
 
-<nav class:show={show}>
+<nav class:show={show} on:click|stopPropagation on:keypress>
     <section>
         <a href="#/inbox" use:active>Inbox</a>
         <a href="#/outbox" use:active>Outbox</a>
@@ -14,6 +14,7 @@
         <a href="#/admin" use:active>Manage Administrators</a>
         <a href="#/metrics" use:active>Metrics</a>
         <a href="#/settings" use:active>Settings</a>
+        <a href="#/sandbox" use:active>Sandbox</a>
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />

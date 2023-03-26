@@ -2,9 +2,9 @@
     import './icon-styles.css';
     import { IconColor, IconSize } from '../types.ts';
     
-    export let color = IconColor.Default;
-    export let size = IconSize.Normal;
-    export let alt = '';
+    export let color: IconColor = IconColor.Default;
+    export let size: IconSize = IconSize.Normal;
+    export let alt: string;
 
     // Replace the next lines to generate an icon.
 	const iconUrl = new URL('../../assets/icons/google.svg', import.meta.url);

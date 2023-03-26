@@ -1,12 +1,11 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
 
-    import { Events, InvitePayload, IconSize } from '../types.ts';
-    import ContextTemplate from './contextmenu/ContextTemplate.svelte';
-    import ContextElement from './contextmenu/ContextElement.svelte';
-    import ContextDivider from './contextmenu/ContextDivider.svelte';
+    import { Events, InvitePayload, IconSize } from '../../types.ts';
+    import ContextTemplate from '../contextMenu/ContextTemplate.svelte';
+    import ContextElement from '../contextmenu/ContextElement.svelte';
 
-    import Close from '../icons/Close.svelte';
+    import Close from '../../icons/Close.svelte';
 
     const dispatch = createEventDispatcher();
     export let show = false;
@@ -17,7 +16,7 @@
 <ContextTemplate bind:show={show}>
     <ContextElement on:click={() => dispatch(Events.RemoveInvitation, payload)}>
         <div slot="contextIcon">
-            <Close size={iconSize} />
+            <Close size={iconSize} alt="Cancel Invitation" />
             Cancel Invitation
         </div>
     </ContextElement>

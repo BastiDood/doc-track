@@ -1,77 +1,53 @@
 <script lang="ts">
+
     import Button from './Button.svelte';
     import Close from '../icons/Close.svelte';
 
     export let showModal = false;
+    export let title: string;
 
-    let dialog: HTMLDialogElement | null;
+    let dialog: HTMLDialogElement | null = null;
+    $: if (showModal) dialog?.showModal(); else dialog?.close();
 
-    $: showModal ? dialog?.show() : dialog?.close();
+    function offModal() {
+        showModal = false;
+    }
 </script>
 
-<dialog bind:this={dialog} on:close>  
-    <div class="column">
-        <div>
-            <div id="headerIcon">
-                <div>
-                    <slot name="header" />
-                </div>
-                <div>
-                    <Close on:click={() => showModal = false} />
-                </div>
-        </div>
-        <div class="column">
-            <hr />
-            <slot />
-            <hr />
-            <div id="buttons">
-                <slot name="buttons">
-                    <Button on:click={() => showModal = false}>Close Modal</Button>
-                </slot>
-            </div>
-        </div>
-    </div>
+<dialog on:close bind:this={dialog}>
+    <header>
+        <h1>{title}</h1>
+        <div><Close on:click={offModal} alt="Close modal"/></div>
+    </header>
+    <hr />
+    <slot />
+    <hr />
+    <slot name="buttons">
+        <Button on:click={offModal}>Close Modal</Button>
+    </slot>
 </dialog>
 
 <style>
     /* https://svelte.dev/examples/modal */
-    @import url('../../pages/global.css');
+    @import url('../../pages/vars.css');
 
     dialog {
         border-radius: var(--border-radius);
         border: none;
-        padding: 0;
-    }
-
-    dialog::backdrop {
-        background: rgba(0, 0, 0, 0.3);
-    }
-    
-    dialog > div {
+        display: flex;
+        flex-direction: column;
         padding: var(--spacing-large);
     }
 
-    dialog[open] {
-        animation: zoom var(--animation-length) cubic-bezier(0.34, 1.56, 0.64, 1);
+    header {
+        display: flex;
     }
 
-    dialog[open]::backdrop {
-		animation: fade var(--animation-length) ease-out;
-	}
-
-    .column {
-        display: flex;
-        flex-direction: column;
-
+    header > h1 {
+        flex-grow: 1;
     }
 
-    #headerIcon {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    #buttons {
-        display: flex;
-        justify-content: space-evenly;
+    header > div {
+        flex-grow: 0;
     }
 </style>

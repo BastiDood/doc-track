@@ -9,9 +9,10 @@
     import { Session } from '../../api/session.ts';
 
     let toggleDrawer = false;
+
 </script>
 
-<main>
+<main on:click={() => toggleDrawer &&= false} on:keydown>
     {#await register()}
         Waiting for service worker...
     {:then}
