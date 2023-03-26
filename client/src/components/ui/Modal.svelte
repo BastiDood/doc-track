@@ -1,21 +1,22 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { Events } from '../../components/types.ts'
+
+    import { Events } from '../../components/types.ts';
 
     import Button from './Button.svelte';
     import Close from '../icons/Close.svelte';
-    
+
     export let showModal = false;
 
     let dialog: HTMLDialogElement | null;
 
     $: if (dialog && showModal) dialog.showModal();
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher();
 
     function onClose() {
         showModal = false;
-        dispatch(Events.ModalClose)
+        dispatch(Events.ModalClose);
     }
 </script>
 
