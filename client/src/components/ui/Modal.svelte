@@ -7,7 +7,7 @@
     export let showModal = false;
     export let title: string;
 
-    let dialog: HTMLDialogElement | null;
+    let dialog: HTMLDialogElement | null = null;
     $: if (showModal) dialog?.showModal(); else dialog?.close();
 
     function offModal() {
@@ -15,7 +15,7 @@
     }
 </script>
 
-<dialog on:close>
+<dialog on:close bind:this={dialog}>
     <header>
         <h1>{title}</h1>
         <div><Close on:click={offModal} /></div>
