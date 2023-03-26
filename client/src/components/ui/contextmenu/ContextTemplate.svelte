@@ -1,27 +1,52 @@
 <script lang="ts">
+    import { Events } from '../../types.ts';
     export let show = false;
+    
+    let context: HTMLDialogElement | null;
+
+    $: if (context && show) context?.showModal();
+
+    function onClose() {
+        show = false;
+        dispatch(Events.ContextClose)
+    }
 </script>
 
-<div class="drawer" class:show={show}>
-    <slot></slot>
-</div>
+<dialog
+    class:show = {show}
+    bind:this = {context}
+    on:close = {() => onClose()}
+    on:click|self = {() => context?.close()}
+    on:keydown|self = {() => context?.close()}
+    >
+    <div class="drawer"
+        on:click|stopPropagation
+        on:keydown|stopPropagation
+    >
+        <slot></slot>
+    </div>
+</dialog>
 
 <style>
-    @import url('../../../pages/vars.css');
+    @import url('../../../pages/global.css');
 
-    div {
+    dialog {
         width: 100vw;
         border: var(--spacing-tiny) solid black;
-        transition: bottom var(--animation-length);
-        bottom: -100%;
+        bottom: -95%;
         border-radius: var(--border-radius) var(--border-radius) 0 0;
         display: block;
-        position: fixed;
+        position: relative;
         background-color: white;
-        z-index: 100;
     }
 
-    .show {
-        bottom: 0;
+    dialog[open] {
+        animation: slide-in var(--animation-length) forwards;
+    }
+
+    @keyframes slide-in {
+    0% { transform: translateY(100vh); }
+    100% { transform: translateY(0%); }
     }
 </style>
+
