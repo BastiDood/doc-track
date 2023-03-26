@@ -4,6 +4,7 @@
     import { Events } from '../../components/types.ts';
 
     import Button from './Button.svelte';
+    import Close from '../icons/Close.svelte';
 
     export let showModal = false;
     export let title: string;
@@ -27,7 +28,7 @@
 <dialog on:close={onClose} on:click|self={closeDialog} on:keydown|self={closeDialog}>
     <header>
         <h1>{title}</h1>
-        <div>Close on:click={() => showModal = false} /></div>
+        <div><Close on:click={() => showModal = false} /></div>
     </header>
     <hr />
     <slot />
