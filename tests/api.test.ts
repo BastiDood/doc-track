@@ -1,4 +1,4 @@
-import { assert, assertNotStrictEquals } from 'https://deno.land/std@0.160.0/testing/asserts.ts';
+import { assert } from 'https://deno.land/std@0.160.0/testing/asserts.ts';
 import { equals as bytewiseEquals } from 'bytes';
 import { getSetCookies } from 'cookie';
 import { Pool } from 'postgres';
@@ -42,8 +42,16 @@ Deno.test('full API integration test', async t => {
     };
 
     await t.step('VAPID wrappers', async () => {
+        // Public key retrieval
         const key = new Uint8Array(await Vapid.getVapidPublicKey());
         assert(bytewiseEquals(key, env.VAPID_PUB_KEY));
+
+        // Submit push subscription
+        await Vapid.sendSubscription({
+            endpoint: 'https://notifications.doctrack.app/123',
+            keys: { auth: 'auth', p256dh: 'p256dh' },
+            expirationTime: null,
+        });
     });
 
     // Restore the original fetch
