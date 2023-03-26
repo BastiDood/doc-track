@@ -1,43 +1,35 @@
 <script lang="ts">
-    import { Events } from '../../types.ts';
     export let show = false;
     
-    let context: HTMLDialogElement | null;
+    let context: HTMLDialogElement | null = null;
+    $: if (show) context?.showModal();
 
-    $: if (context && show) context?.showModal();
-
-    function onClose() {
+    function offShow() {
         show = false;
-        dispatch(Events.ContextClose)
+    }
+
+    function closeDialog(this: HTMLDialogElement) {
+        this.close();
     }
 </script>
 
-<dialog
-    class:show = {show}
-    bind:this = {context}
-    on:close = {() => onClose()}
-    on:click|self = {() => context?.close()}
-    on:keydown|self = {() => context?.close()}
-    >
-    <div class="drawer"
-        on:click|stopPropagation
-        on:keydown|stopPropagation
-    >
-        <slot></slot>
+<dialog bind:this={context} on:close={offShow} on:click|self={closeDialog} on:keydown>
+    <div on:click|stopPropagation on:keydown|stopPropagation>
+        <slot />
     </div>
 </dialog>
 
 <style>
-    @import url('../../../pages/global.css');
+    @import url('../../../pages/vars.css');
 
     dialog {
-        width: 100vw;
+        background-color: var(--dashboard-bg);
         border: var(--spacing-tiny) solid black;
         bottom: -95%;
         border-radius: var(--border-radius) var(--border-radius) 0 0;
         display: block;
         position: relative;
-        background-color: white;
+        width: 100%;
     }
 
     dialog[open] {
@@ -45,8 +37,8 @@
     }
 
     @keyframes slide-in {
-    0% { transform: translateY(100vh); }
-    100% { transform: translateY(0%); }
+        0% { transform: translateY(100vh); }
+        100% { transform: translateY(0%); }
     }
 </style>
 
