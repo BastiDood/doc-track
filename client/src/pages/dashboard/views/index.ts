@@ -7,6 +7,7 @@ import ManageInvites from './Invites.svelte';
 import ManageStaff from './Staff.svelte';
 import Metrics from './Metrics.svelte';
 import Outbox from './Outbox.svelte';
+import Sandbox from './Sandbox.svelte';
 
 export default {
     '/barcodes': Barcodes,
@@ -18,4 +19,5 @@ export default {
     '/staff': ManageStaff,
     '/metrics': Metrics,
     '/outbox': Outbox,
+    '/sandbox': Sandbox,
 };
