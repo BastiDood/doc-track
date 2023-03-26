@@ -52,7 +52,7 @@
 
 <style>
     /* https://svelte.dev/examples/modal */
-    @import url('../../pages/vars.css');
+    @import url('../../pages/global.css');
 
     dialog {
         border-radius: var(--border-radius);
@@ -60,21 +60,9 @@
         padding: 0;
     }
 
-    dialog::backdrop {
-        background: rgba(0, 0, 0, 0.3);
-    }
-    
     dialog > div {
         padding: var(--spacing-large);
     }
-
-    dialog[open] {
-        animation: zoom var(--animation-length) cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    dialog[open]::backdrop {
-		animation: fade var(--animation-length) ease-out;
-	}
 
     .column {
         display: flex;
