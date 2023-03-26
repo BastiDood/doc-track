@@ -9,18 +9,23 @@
     import { Session } from '../../api/session.ts';
 
     let toggleDrawer = false;
+
 </script>
 
-<main>
+<main on:click = {() => {if (toggleDrawer) toggleDrawer = false }} on:keydown>
     {#await register()}
         Waiting for service worker...
     {:then}
         {#await Session.getUser()}
             Loading user...
         {:then user}
-            <TopBar {user} bind:show={toggleDrawer} />
+            <div on:click|stopPropagation on:keypress>
+                <TopBar {user} bind:show={toggleDrawer}/>
+            </div>
             <section>
+                <div on:click|stopPropagation on:keypress>
                 <SideDrawer show={toggleDrawer} />
+                </div>
                 <Router {routes} />
             </section>
         {/await}
@@ -28,6 +33,7 @@
 </main>
 
 <style>
+    @import url('../global.css');
     main {
         display: flex;
         flex-direction: column;
