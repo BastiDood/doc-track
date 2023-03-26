@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Events } from '../../components/types.ts';
 
     import Button from './Button.svelte';
     import Close from '../icons/Close.svelte';
@@ -18,7 +17,7 @@
 <dialog on:close bind:this={dialog}>
     <header>
         <h1>{title}</h1>
-        <div><Close on:click={offModal} /></div>
+        <div><Close on:click={offModal} alt="Close modal"/></div>
     </header>
     <hr />
     <slot />
