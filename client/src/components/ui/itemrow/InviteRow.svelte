@@ -1,9 +1,8 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';    
 
-    import Close from '../icons/Close.svelte';
     import PersonMail from '../icons/PersonMail.svelte'
-    import RowTemplate from './RowTemplate.svelte';
+    import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, InvitePayload, RowType, Events } from '../types.ts';
 
@@ -23,12 +22,6 @@
     };
 </script>
 
-<RowTemplate {iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
-    <PersonMail size={iconSize} slot="displayIcon" />
-    <p>
-        {email} Office: {office} Permission: {permission} Created on: {creation}
-    </p>
-    <div slot="actionIcons">
-        <Close size={iconSize} on:click={() => dispatch(Events.RemoveInvitation, rowEvent)} />
-    </div>
+<RowTemplate title={`${email} Office: ${office} Permission: ${permission} Created on: ${creation}`}{iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
+    <PersonMail size={iconSize} slot="icon" alt="An invited person"/>
 </RowTemplate>
