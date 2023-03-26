@@ -88,18 +88,18 @@ Deno.test('full API integration test', async t => {
 
     // Mock the `fetch` function and its cookie store
     const origFetch = globalThis.fetch;
-    const cookies = new Map<string, string>;
-    globalThis.fetch = async (input, init) => {
-        const res = await handleRequest(pool, new Request('https://doctrack.app' + input, {
+    globalThis.fetch = (input, init) => {
+        const request = new Request('https://doctrack.app' + input, {
             ...init,
             headers: {
-                ...Object.fromEntries(cookies.entries()),
+                Cookie: `sid=${sid}`,
                 ...init?.headers,
             },
-        }));
-        for (const { name, value } of getSetCookies(res.headers))
-            cookies.set(name, value);
-        return res;
+        });
+        const response = handleRequest(pool, request);
+        return response instanceof Response
+            ? Promise.resolve(response)
+            : response;
     };
 
     await t.step('VAPID wrappers', async () => {
@@ -113,6 +113,22 @@ Deno.test('full API integration test', async t => {
             keys: { auth: 'auth', p256dh: 'p256dh' },
             expirationTime: null,
         });
+    });
+
+    await t.step('Invite API', async () => {
+        // Add invitation
+        const email = 'yo@up.edu.ph';
+        const creation = await Invite.add({
+            email,
+            office: oid,
+            permission: Local.AddStaff,
+        });
+        assertNotStrictEquals(creation, null);
+
+        // Revoke invitation
+        const result = await Invite.revoke({ email, office: oid });
+        assertStrictEquals(result?.permission, Local.AddStaff);
+        assertEquals(result.creation, creation);
     });
 
     // Restore the original fetch
