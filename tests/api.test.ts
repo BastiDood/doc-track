@@ -119,6 +119,13 @@ Deno.test('full API integration test', async t => {
         assertEquals(session, user);
     });
 
+    await t.step('User API', async () =>
+        assert(await User.setPermission({
+            id: user.id,
+            permission: user.permission,
+        }))
+    );
+
     await t.step('Invite API', async () => {
         // Add invitation
         const email = 'yo@up.edu.ph';
