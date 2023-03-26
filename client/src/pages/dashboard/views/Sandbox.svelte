@@ -1,6 +1,6 @@
 <script lang="ts">
     import { documentTest } from './sample.ts';
-    import type { RowEvent } from '../../../components/types.ts';
+    import { RowEvent, RowType } from '../../../components/types.ts';
     import { Events } from '../../../components/types.ts'
     import InboxRow from '../../../components/ui/InboxRow.svelte';
     import InboxContext from '../../../components/ui/InboxContext.svelte';
@@ -9,7 +9,7 @@
     let showModal = false;
     let modalHeader = '';
     let modalText = '';
-    let currentContext: RowEvent | undefined;
+    let currentContext: RowEvent | null = null;
     function overflowClickHandler(e: CustomEvent) {
         if (showContextMenu) showContextMenu = false;
         if (!e.detail) return;
@@ -39,23 +39,28 @@
 <h1> Sandbox </h1>
 
 {#if showModal}
-    <Modal bind:showModal>
-        <h1 slot="header">{modalHeader}</h1>
+    <Modal title={modalHeader} bind:showModal>
         <p>{modalText}</p>
     </Modal>
 {/if}
 
-{#if showContextMenu}
-    <InboxContext bind:show={showContextMenu} payload={currentContext}
-    on:sendDocument = {(e) => eventHandler(e)}
-    on:terminateDocument = {(e) => eventHandler(e)}/>
+{#if showContextMenu && currentContext?.ty === RowType.Inbox}
+    <InboxContext
+        bind:show={showContextMenu}
+        payload={currentContext}
+        on:sendDocument={eventHandler}
+        on:terminateDocument={eventHandler}
+    />
 {/if}
 <div>
     {#each documentTest as doc}
-        <InboxRow id={doc.id} category={doc.category} title={doc.title} 
-        on:overflowClick = {(e) => overflowClickHandler(e)}
-        on:sendDocument = {(e) => eventHandler(e)}
-        on:terminateDocument = {(e) => eventHandler(e)}
+        <InboxRow
+            id={doc.id}
+            category={doc.category}
+            title={doc.title} 
+            on:overflowClick={overflowClickHandler}
+            on:sendDocument={eventHandler}
+            on:terminateDocument={eventHandler}
         />
     {/each}
 
