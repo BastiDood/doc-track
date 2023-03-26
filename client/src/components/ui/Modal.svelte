@@ -10,7 +10,7 @@
 
     let dialog: HTMLDialogElement | null;
 
-    $: if (dialog && showModal) dialog.showModal();
+    $: if (showModal) dialog?.showModal();
 
     const dispatch = createEventDispatcher();
 
