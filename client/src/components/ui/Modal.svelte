@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
-
     import { Events } from '../../components/types.ts';
 
     import Button from './Button.svelte';
@@ -10,31 +8,23 @@
     export let title: string;
 
     let dialog: HTMLDialogElement | null;
+    $: if (showModal) dialog?.showModal(); else dialog?.close();
 
-    $: if (showModal) dialog?.showModal();
-
-    const dispatch = createEventDispatcher();
-
-    function closeDialog(this: HTMLDialogElement) {
-        this.close();
-    }
-
-    function onClose() {
+    function offModal() {
         showModal = false;
-        dispatch(Events.ModalClose);
     }
 </script>
 
-<dialog on:close={onClose} on:click|self={closeDialog} on:keydown|self={closeDialog}>
+<dialog on:close>
     <header>
         <h1>{title}</h1>
-        <div><Close on:click={() => showModal = false} /></div>
+        <div><Close on:click={offModal} /></div>
     </header>
     <hr />
     <slot />
     <hr />
     <slot name="buttons">
-        <Button on:click={() => showModal = false}>Close Modal</Button>
+        <Button on:click={offModal}>Close Modal</Button>
     </slot>
 </dialog>
 

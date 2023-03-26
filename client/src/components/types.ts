@@ -41,7 +41,6 @@ export enum Events {
     ShowUserInfo = 'showUserInfo',
     DeleteUser = 'deleteUser',
     EditUser = 'editUser',
-    ModalClose = 'modalClose',
     ContextClose = 'contextClose',
 }
 
