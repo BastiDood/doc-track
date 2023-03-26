@@ -30,7 +30,8 @@
 <RowTemplate 
     title={`${name} ID: ${id} Email: ${email} Office: ${office} Global Perms: ${globalPermission} Local Perms: ${localPermission}`}
     {iconSize} 
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}>
+    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+>
     <img class={iconSize} src={picture} alt={name} slot="icon" />
 </RowTemplate>
 
