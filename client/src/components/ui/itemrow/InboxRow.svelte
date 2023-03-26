@@ -4,7 +4,7 @@
     import DocumentBlank from '../../icons/DocumentBlank.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { IconSize, ContextPayload, RowType, Events } from '../types.ts';
+    import { IconSize, ContextPayload, RowType, Events } from '../../types.ts';
 
     export let iconSize = IconSize.Normal;
     export let id: string;
@@ -19,6 +19,6 @@
 </script>
 
 <RowTemplate title={`${title} ID: ${id} Category: ${category}`} {iconSize} 
-    on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
+    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}>
     <DocumentBlank size={iconSize} slot="icon" alt ="An inbox document"/>
 </RowTemplate>

@@ -4,7 +4,7 @@
     import DocumentImport from '../../icons/DocumentImport.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { ContextPayload, RowType, IconSize, Events } from '../types.ts';
+    import { ContextPayload, RowType, IconSize, Events } from '../../types.ts';
 
     export let iconSize = IconSize.Normal;
     export let id: string;
@@ -18,6 +18,6 @@
     };
 </script>
 
-<RowTemplate title={`${title} ID: ${id} Category: ${category}`} {iconSize} on:overflowclick={() => dispatch(Events.OverflowClick, rowEvent)}>
+<RowTemplate title={`${title} ID: ${id} Category: ${category}`} {iconSize} on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}>
     <DocumentImport size={iconSize} slot="icon" alt="A pending document"/>
 </RowTemplate>
