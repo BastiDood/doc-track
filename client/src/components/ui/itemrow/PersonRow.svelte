@@ -22,8 +22,8 @@
 
     const dispatch = createEventDispatcher();
     const rowEvent: PersonPayload = {
-        id: id,
-        office: office,
+        id,
+        office,
     };
 </script>
 

@@ -14,7 +14,7 @@
     const dispatch = createEventDispatcher();
     const rowEvent: ContextPayload = {
         ty: RowType.AcceptDocument,
-        id: id,
+        id,
     };
 </script>
 
