@@ -1,7 +1,6 @@
 import { assert, assertEquals, assertNotStrictEquals, assertStrictEquals } from 'asserts';
 import { encode as b64encode } from 'base64url';
 import { equals as bytewiseEquals } from 'bytes';
-import { getSetCookies } from 'cookie';
 import { Pool } from 'postgres';
 
 import { Batch } from '~client/api/batch.ts';
@@ -113,6 +112,11 @@ Deno.test('full API integration test', async t => {
             keys: { auth: 'auth', p256dh: 'p256dh' },
             expirationTime: null,
         });
+    });
+
+    await t.step('Session API', async () => {
+        const session = await Session.getUser();
+        assertEquals(session, user);
     });
 
     await t.step('Invite API', async () => {
