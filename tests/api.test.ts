@@ -1,4 +1,4 @@
-import { assert, assertEquals, assertNotStrictEquals, assertStrictEquals } from 'asserts';
+import { assert, assertArrayIncludes, assertEquals, assertNotStrictEquals, assertStrictEquals } from 'asserts';
 import { encode as b64encode } from 'base64url';
 import { equals as bytewiseEquals } from 'bytes';
 import { Pool } from 'postgres';
@@ -125,6 +125,16 @@ Deno.test('full API integration test', async t => {
             permission: user.permission,
         }))
     );
+
+    const otherOid = await Office.create('Test Office');
+    await t.step('Office API', async () => {
+        // Create new office
+        assertNotStrictEquals(otherOid, 0);
+
+        // Update existing office
+        assert(await Office.update({ id: otherOid, name: 'New Test Office' }));
+        assertArrayIncludes(await Office.getAll(), [ { id: otherOid, name: 'New Test Office' } ]);
+    });
 
     await t.step('Invite API', async () => {
         // Add invitation
