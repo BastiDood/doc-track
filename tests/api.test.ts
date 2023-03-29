@@ -1,4 +1,4 @@
-import { assert, assertArrayIncludes, assertEquals, assertNotStrictEquals, assertStrictEquals } from 'asserts';
+import { assert, assertArrayIncludes, assertEquals, assertInstanceOf, assertNotStrictEquals, assertStrictEquals } from 'asserts';
 import { encode as b64encode } from 'base64url';
 import { equals as bytewiseEquals } from 'bytes';
 import { Pool } from 'postgres';
@@ -152,30 +152,23 @@ Deno.test('full API integration test', async t => {
         assertEquals(result.creation, creation);
     });
 
-    await t.step('Category API', async () => {
-        // Get categories before addition
-        const origCategories = await Category.getAllActive();
-
+    const origCategories = await Category.getAllActive();
+    await t.step('Category API - creation/deletion', async () => {
         // Create new category
-        const cid = await Category.create(b64encode(crypto.getRandomValues(new Uint8Array(8))));
+        const cid = await Category.create('Leave of Absence');
         assertNotStrictEquals(cid, 0);
 
         // Rename existing category
-        const random = b64encode(crypto.getRandomValues(new Uint8Array(8)));
-        assert(await Category.rename(cid, random));
+        const cRandomRename = b64encode(crypto.getRandomValues(new Uint8Array(8)));
+        assert(await Category.rename(cid, cRandomRename));
 
         // Get active categories before deletion
         const oldCategories = await Category.getAllActive();
-        assertArrayIncludes(oldCategories, [ ...origCategories, { id: cid, name: random } ]);
+        assertArrayIncludes(oldCategories, [ ...origCategories, { id: cid, name: cRandomRename } ]);
 
-        // Remove existing category
+        // Delete existing category
         assertStrictEquals(await Category.remove(cid), true);
-
-        // Get active categories after deletion
-        const newCategories = await Category.getAllActive();
-        assertEquals(newCategories, origCategories);
-
-        // TODO: Test Category Reactivation
+        assertEquals(await Category.getAllActive(), origCategories);
     });
 
     const { id: bid, codes, creation } = await Batch.generate(oid);
@@ -186,6 +179,44 @@ Deno.test('full API integration test', async t => {
         assert(new Date >= creation);
 
         // TODO: Test Getter for Earliest Batch
+    });
+
+    const cName = b64encode(crypto.getRandomValues(new Uint8Array(8)));
+    const cid = await Category.create(cName);
+    assertNotStrictEquals(cid, 0);
+    await t.step('Document API', async () => {
+        const [ first, ...rest ] = codes;
+        assert(first !== undefined);
+        assertStrictEquals(rest.length, 9);
+
+        // Document creation
+        const doc = await Document.create(
+            oid,
+            {
+                id: first,
+                title: 'Leave of Absence',
+                category: cid,
+            },
+            'This is a cool remark!'
+        );
+        assertInstanceOf(doc, Date);
+        assert(new Date >= creation);
+    });
+
+    await t.step('Category API - retirement', async () => {
+        // Retire existing category
+        assertStrictEquals(await Category.remove(cid), false);
+
+        // Get active categories after deletion
+        const newCategories = await Category.getAllActive();
+        assertEquals(newCategories, origCategories);
+
+        // Reactivate retired category
+        assertStrictEquals(await Category.activate(cid), cName);
+
+        // Get active categories before deletion
+        const oldCategories = await Category.getAllActive();
+        assertArrayIncludes(oldCategories, [ ...origCategories, { id: cid, name: cName } ]);
     });
 
     // Restore the original fetch
