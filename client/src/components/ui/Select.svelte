@@ -20,7 +20,7 @@
         border: var(--spacing-tiny) solid var(--shadow-color);
         border-radius: var(--border-radius);
         background: var(--dashboard-bg);
-        box-shadow: 0 1px 3px -2px #9098A9;
+        box-shadow: 0 var(--spacing-tiny) var(--spacing-small) -0.0625em var(--shadow-color);
         cursor: pointer;
         font-size: var(--normal);
         transition: all var(--animation-length) ease;
