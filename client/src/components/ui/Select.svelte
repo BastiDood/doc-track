@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let options: Array<string> = [];
+    export let options: string[] = [];
     export let index = 0;
     export let value;
 
