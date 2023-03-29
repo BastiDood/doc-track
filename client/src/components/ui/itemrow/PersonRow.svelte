@@ -4,21 +4,21 @@
 
     import RowTemplate from '../RowTemplate.svelte';
 
-
     import { PersonPayload, IconSize, Events} from '../../types.ts';
-
+    import { User } from '../../../../../model/user.ts';
+    import { Staff } from '../../../../../model/staff.ts';
     export let iconSize = IconSize.Normal;
     
     // From user.ts
-    export let id: string;
-    export let name: string;
-    export let email: string;
-    export let picture: string;
-    export let globalPermission: number;
+    export let id: User['id'];
+    export let name: User['name'];
+    export let email: User['email'];
+    export let picture: User['picture'];
+    export let globalPermission: User['permission'];
 
     // From staff.ts
-    export let office: number;
-    export let localPermission: number;
+    export let office: Staff['office'];
+    export let localPermission: Staff['permission'];
 
     const dispatch = createEventDispatcher();
     const rowEvent: PersonPayload = {

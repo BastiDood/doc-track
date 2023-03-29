@@ -5,14 +5,14 @@
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, InvitePayload, RowType, Events } from '../../types.ts';
-
+    import { Invitation } from '../../../../../model/src/invitation.ts';
     export let iconSize = IconSize.Normal;
 
     // From invitation.ts
-    export let office: number;
-    export let email: string;
-    export let permission: number;
-    export let creation: string;
+    export let office: Invitation['office'];
+    export let email: Invitation['email'];
+    export let permission: Invitation['permission'];
+    export let creation: Invitation['creation'];
     
     const dispatch = createEventDispatcher();
     const rowEvent: InvitePayload = {

@@ -5,11 +5,13 @@
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, ContextPayload, RowType, Events } from '../../types.ts';
+    import { Document } from '../../../../../model/src/document.ts';
+
 
     export let iconSize = IconSize.Normal;
-    export let id: string;
-    export let category: number;
-    export let title: string;
+    export let id: Document['id'];
+    export let category: Document['category'];
+    export let title: Document['title'];
 
     const dispatch = createEventDispatcher();
     const rowEvent: ContextPayload = {

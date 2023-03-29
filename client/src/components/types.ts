@@ -1,3 +1,7 @@
+import { Document } from '../../../model/src/document.ts';
+import { Invitation } from '../../../model/src/invitation.ts';
+import { Staff } from '../../../model/src/staff.ts';
+
 export enum IconColor {
     Default = 'default', 
     Primary = 'primary',
@@ -45,19 +49,19 @@ export enum Events {
 
 export interface ContextPayload {
     ty: RowType.AcceptDocument | RowType.Inbox;
-    id: number;
+    id: Document['id'];
 }
 
 export interface InvitePayload {
     ty: RowType.Invite;
-    email: string;
-    office: number;
+    email: Invitation['email'];
+    office: Invitation['office'];
 }
 
 export interface PersonPayload {
     ty: RowType.Person;
-    id: number;
-    office: number;
+    id: Staff['user_id'];
+    office: Staff['office'];
 }
 
 export type RowEvent = ContextPayload | InvitePayload | PersonPayload;
