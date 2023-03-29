@@ -5,7 +5,7 @@
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, InvitePayload, RowType, Events } from '../../types.ts';
-    import { Invitation } from '../../../../../model/src/invitation.ts'
+    import { Invitation } from '../../../../../model/src/invitation.ts';
     export let iconSize = IconSize.Normal;
 
     // From invitation.ts
