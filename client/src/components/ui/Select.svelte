@@ -8,7 +8,7 @@
 
 <select bind:value={index}>
     {#each options as option, i}
-        <option value={i}> {options[i]}</option>
+        <option value={i}>{options[i]}</option>
     {/each}
 </select>
 
