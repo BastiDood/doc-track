@@ -39,7 +39,10 @@
 </script>
 <h1> Sandbox </h1>
 
-<Select bind:value = {currentlySelected} options = {['Test Office 1', 'Test Office 2', 'Test Office 3']}/>
+<Select
+    bind:value={currentlySelected}
+    options={[ 'Test Office 1', 'Test Office 2', 'Test Office 3' ]}
+/>
 <p>Currently selected: {currentlySelected}</p>
 
 {#if showModal}
