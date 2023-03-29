@@ -1,7 +1,7 @@
 <script lang="ts">
     export let options: string[] = [];
     export let index = 0;
-    export let value;
+    export let value: string = '';
 
     $: value = options[index];
 </script>
