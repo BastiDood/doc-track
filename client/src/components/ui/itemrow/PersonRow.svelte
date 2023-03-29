@@ -7,7 +7,6 @@
     import { PersonPayload, IconSize, Events} from '../../types.ts';
     import { User } from '../../../../../model/user.ts';
     import { Staff } from '../../../../../model/staff.ts';
-    '
     export let iconSize = IconSize.Normal;
     
     // From user.ts
