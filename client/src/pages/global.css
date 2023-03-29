@@ -19,6 +19,7 @@ body {
 
 h1 {
     font-size: var(--x-large);
+    color: var(--primary-color);
 }
 
 h2 {
