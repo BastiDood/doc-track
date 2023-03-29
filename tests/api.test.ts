@@ -174,6 +174,18 @@ Deno.test('full API integration test', async t => {
         // Get active categories after deletion
         const newCategories = await Category.getAllActive();
         assertEquals(newCategories, origCategories);
+
+        // TODO: Test Category Reactivation
+    });
+
+    const { id: bid, codes, creation } = await Batch.generate(oid);
+    await t.step('Batch API', () => {
+        // Create new batch
+        assertNotStrictEquals(bid, 0);
+        assertStrictEquals(codes.length, 10);
+        assert(new Date >= creation);
+
+        // TODO: Test Getter for Earliest Batch
     });
 
     // Restore the original fetch
