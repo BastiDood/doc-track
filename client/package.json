@@ -16,6 +16,7 @@
         "@parcel/packager-raw-url": "^2.8.3",
         "@parcel/transformer-webmanifest": "^2.8.3",
         "@plasmohq/parcel-transformer-svelte3": "^0.4.5",
+        "@square/svelte-store": "^1.0.15",
         "@types/serviceworker": "^0.0.67",
         "cssnano": "^5.1.15",
         "parcel": "^2.8.3",
