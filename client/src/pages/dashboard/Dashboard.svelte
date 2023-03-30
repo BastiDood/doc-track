@@ -1,12 +1,13 @@
 <script>
     import Router from 'svelte-spa-router';
 
+    import { userSession } from './UserStore.ts';
+
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
 
     import routes from './views/index.ts';
     import { register } from '../register.ts';
-    import { Session } from '../../api/session.ts';
 
     let toggleDrawer = false;
 
@@ -16,7 +17,7 @@
     {#await register()}
         Waiting for service worker...
     {:then}
-        {#await Session.getUser()}
+        {#await userSession.load()}
             Loading user...
         {:then user}
             <TopBar {user} bind:show={toggleDrawer} />
