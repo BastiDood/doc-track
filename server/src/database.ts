@@ -479,6 +479,12 @@ export class Database {
                 .parse(first);
     }
 
+    /** Get all offices from the system. */
+    async getAllOffices(): Promise<Office[]> {
+        const { rows } = await this.#client.queryObject`SELECT id,name FROM office`;
+        return OfficeSchema.array().parse(rows);
+    }
+
     /** Adds a new office to the system. */
     async createOffice(name: Office['name']): Promise<Office['id']> {
         const { rows: [ first, ...rest ] } = await this.#client

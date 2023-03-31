@@ -10,6 +10,51 @@ import { Global } from '~model/permission.ts';
 import { Database } from '../../database.ts';
 
 /**
+ * Gets a list of all the offices in the system.
+ *
+ * # Inputs
+ * - Requires a valid session ID of a staff member.
+ *
+ * # Outputs
+ * - `200` => returns array of office objects
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => insufficient permissions
+ * - `406` => content negotiation failed
+ */
+export async function handleGetAllOffices(pool: Pool, req: Request) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Office] Absent session');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error('[Office] Content negotiation failed');
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const user = await db.getUserFromSession(sid);
+        if (user === null) {
+            error(`[Office] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((user.permission & Global.GetOffices) !== Global.GetOffices) {
+            error(`[Office] User ${user.id} ${user.name} <${user.email}> cannot fetch list of offices`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const offices = await db.getAllOffices();
+        info(`[Office] User ${user.id} ${user.name} <${user.email}> fetched list of offices`);
+        return new Response(JSON.stringify(offices));
+    } finally {
+        db.release();
+    }
+}
+
+/**
  * Creates a new office with a given name.
  *
  * # Inputs
