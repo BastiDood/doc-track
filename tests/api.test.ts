@@ -160,6 +160,14 @@ Deno.test('full API integration test', async t => {
         assertEquals(result.creation, creation);
     });
 
+    await t.step('Staff API - setting permissions', async () =>
+        assert(await Staff.setPermission({
+            office: oid,
+            user_id: user.id,
+            permission: (Local.ViewMetrics << 1) - 1,
+        }))
+    );
+
     const origCategories = await Category.getAllActive();
     await t.step('Category API - creation/deletion', async () => {
         // Create new category
@@ -237,6 +245,16 @@ Deno.test('full API integration test', async t => {
         // Get active categories before deletion
         const oldCategories = await Category.getAllActive();
         assertArrayIncludes(oldCategories, [ ...origCategories, { id: cid, name: cName } ]);
+    });
+
+    await t.step('Staff API - retirement', async () => {
+        const result = await Staff.remove({
+            office: oid,
+            user_id: user.id,
+        });
+        assertStrictEquals(result, false);
+
+        // TODO: Test full removal of user
     });
 
     // Restore the original fetch
