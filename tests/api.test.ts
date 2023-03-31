@@ -231,6 +231,15 @@ Deno.test('full API integration test', async t => {
         assert(new Date >= result);
     });
 
+    await t.step('Metrics API', async () => {
+        const summary = await Metrics.generateUserSummary();
+        assert(summary !== undefined);
+        assertStrictEquals(summary.Register, 1n);
+        assertStrictEquals(summary.Send, 1n);
+        assertStrictEquals(summary.Receive, undefined);
+        assertStrictEquals(summary.Terminate, undefined);
+    });
+
     await t.step('Category API - retirement', async () => {
         // Retire existing category
         assertStrictEquals(await Category.remove(cid), false);
