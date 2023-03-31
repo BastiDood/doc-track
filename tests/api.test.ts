@@ -1,4 +1,11 @@
-import { assert, assertArrayIncludes, assertEquals, assertInstanceOf, assertNotStrictEquals, assertStrictEquals } from 'asserts';
+import {
+    assert,
+    assertArrayIncludes,
+    assertEquals,
+    assertInstanceOf,
+    assertNotStrictEquals,
+    assertStrictEquals
+} from 'asserts';
 import { encode as b64encode } from 'base64url';
 import { equals as bytewiseEquals } from 'bytes';
 import { Pool } from 'postgres';
