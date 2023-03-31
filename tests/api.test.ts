@@ -23,6 +23,7 @@ import { User } from '~client/api/user.ts';
 import { Vapid } from '~client/api/vapid.ts';
 
 import { Global, Local } from '~model/permission.ts';
+import { Status } from '~model/snapshot.ts';
 
 import { Database } from '~server/database.ts';
 import { env } from '~server/env.ts';
@@ -191,11 +192,12 @@ Deno.test('full API integration test', async t => {
     const cName = b64encode(crypto.getRandomValues(new Uint8Array(8)));
     const cid = await Category.create(cName);
     assertNotStrictEquals(cid, 0);
-    await t.step('Document API', async () => {
-        const [ first, ...rest ] = codes;
-        assert(first !== undefined);
-        assertStrictEquals(rest.length, 9);
 
+    const [ first, ...rest ] = codes;
+    assert(first !== undefined);
+    assertStrictEquals(rest.length, 9);
+
+    await t.step('Document API', async () => {
         // Document creation
         const doc = await Document.create(
             oid,
@@ -208,6 +210,17 @@ Deno.test('full API integration test', async t => {
         );
         assertInstanceOf(doc, Date);
         assert(new Date >= creation);
+    });
+
+    await t.step('Snapshot API', async () => {
+        const result = await Snapshot.insert(oid, {
+            doc: first,
+            target: otherOid,
+            status: Status.Send,
+            remark: 'Sending!',
+        });
+        assertInstanceOf(result, Date);
+        assert(new Date >= result);
     });
 
     await t.step('Category API - retirement', async () => {
