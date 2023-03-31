@@ -11,6 +11,20 @@ import {
 } from './error.ts';
 
 export namespace Office {
+    export async function getAll(): Promise<OfficeType[]> {
+        const res = await fetch('/api/office', {
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json' },
+        });
+        switch (res.status) {
+            case StatusCodes.OK: return OfficeSchema.array().parse(await res.json());
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
+
     export async function create(name: OfficeType['name']): Promise<OfficeType['id']> {
         const res = await fetch('/api/office', {
             credentials: 'same-origin',
