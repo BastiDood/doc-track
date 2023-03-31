@@ -29,10 +29,22 @@ async function handleActivate() {
 }
 
 async function handleFetch(req: Request): Promise<Response> {
+    // For endpoints with API, attempt internet endpoint but if too long, fetch from cache.
     // If already pre-cached, serve it. Otherwise, fetch the network.
     const cache = await caches.open(version);
-    const maybeRes = await cache.match(req);
-    return maybeRes ?? fetch(req);
+    const url = new URL(req.url);
+    try {
+        const res = await fetch(req); 
+        if (url.pathname.startsWith('/api/') || url.hostname.endsWith('googleusercontent.com'))
+            await cache.put(url, res.clone());
+
+        return res;
+    } catch (error) {
+        assert(error instanceof TypeError);
+        const maybeRes = await cache.match(req);
+        assert(maybeRes instanceof Response);
+        return maybeRes;
+    }
 }
 
 self.addEventListener('install', evt => {
