@@ -12,7 +12,7 @@ import {
 
 export namespace Office {
     export async function getAll(): Promise<OfficeType[]> {
-        const res = await fetch('/api/office', {
+        const res = await fetch('/api/offices', {
             credentials: 'same-origin',
             headers: { 'Accept': 'application/json' },
         });
