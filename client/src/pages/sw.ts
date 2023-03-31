@@ -35,7 +35,7 @@ async function handleFetch(req: Request): Promise<Response> {
     const url = new URL(req.url);
     try {
         const res = await fetch(req); 
-        if (url.pathname.startsWith('/api/')) {
+        if (url.pathname.startsWith('/api/') || url.hostname.endsWith('googleusercontent.com')) {
             await cache.put(url, res.clone());
         }
         return res;
