@@ -15,13 +15,13 @@ export namespace Category {
      * Requires a valid session for a valid session.
      * @returns list of active {@linkcode Category} entries
      */
-    export async function getAllActive(): Promise<CategoryType[]> {
+    export async function getAllActive(): Promise<Pick<CategoryType, 'id' | 'name'>[]> {
         const res = await fetch('/api/categories', {
             credentials: 'same-origin',
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case StatusCodes.OK: return CategorySchema.array().parse(await res.json());
+            case StatusCodes.OK: return CategorySchema.pick({ id: true, name: true }).array().parse(await res.json());
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
@@ -57,13 +57,13 @@ export namespace Category {
      * @returns `false` if {@linkcode Category} ID does not exist
      */
     export async function rename(id: CategoryType['id'], name: CategoryType['name']): Promise<boolean> {
-        const res = await fetch('/api/category', {
+        const res = await fetch(`/api/category?id=${id}`, {
             credentials: 'same-origin',
             method: 'PUT',
-            body: JSON.stringify({ id, name }),
+            body: name,
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain',
             },
         });
         switch (res.status) {

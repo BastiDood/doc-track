@@ -15,7 +15,6 @@ import { Database } from '../../database.ts';
  *
  * # Inputs
  * - Requires a valid session ID of a system operator.
- * - Accepts `office` as a query parameter.
  *
  * # Outputs
  * - `200` => return {@linkcode Response} containing {@linkcode Category[]} as JSON body
@@ -151,7 +150,7 @@ export async function handleRenameCategory(pool: Pool, req: Request, params: URL
     const input = params.get('id');
     const cid = input ? parseInt(input, 10) : NaN;
     if (isNaN(cid)) {
-        error(`[Category] Session ${sid} provided an empty target office ID`);
+        error(`[Category] Session ${sid} provided an empty target category ID`);
         return new Response(null, { status: Status.BadRequest });
     }
 

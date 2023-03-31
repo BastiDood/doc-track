@@ -40,7 +40,7 @@ export async function handleAddInvitation(pool: Pool, req: Request, params: URLS
         return new Response(null, { status: Status.BadRequest });
     }
 
-    if (accepts(req, 'application/json') !== undefined) {
+    if (accepts(req, 'application/json') === undefined) {
         error(`[Invite] Content negotiation failed for session ${sid}`);
         return new Response(null, { status: Status.NotAcceptable });
     }
@@ -84,7 +84,7 @@ export async function handleAddInvitation(pool: Pool, req: Request, params: URLS
         }
 
         info(`[Invite] User ${staff.user_id} added invitation <${email}> to office ${office}`);
-        return new Response(creation.getUTCMilliseconds().toString(), {
+        return new Response(creation.valueOf().toString(), {
             headers: { 'Content-Type': 'application/json' },
             status: Status.OK,
         });
@@ -123,7 +123,7 @@ export async function handleRevokeInvitation(pool: Pool, req: Request, params: U
         return new Response(null, { status: Status.BadRequest });
     }
 
-    if (accepts(req, 'application/json') !== undefined) {
+    if (accepts(req, 'application/json') === undefined) {
         error(`[Invite] Content negotiation failed for for session ${sid}`);
         return new Response(null, { status: Status.NotAcceptable });
     }

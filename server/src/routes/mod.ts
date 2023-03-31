@@ -28,7 +28,7 @@ import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 const STATIC_ROOT = resolve(Deno.cwd(), '../client/dist');
 info(`[Static] file server hosted at ${STATIC_ROOT}`);
 
-export async function handleGet(pool: Pool, req: Request) {
+async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/batch': return handleGetEarliestAvailableBatch(pool, req, searchParams);
@@ -70,7 +70,7 @@ export async function handleGet(pool: Pool, req: Request) {
     }
 }
 
-export function handlePost(pool: Pool, req: Request) {
+function handlePost(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/batch': return handleGenerateBatch(pool, req, searchParams);
@@ -86,7 +86,7 @@ export function handlePost(pool: Pool, req: Request) {
     }
 }
 
-export function handlePatch(pool: Pool, req: Request) {
+function handlePatch(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/category': return handleActivateCategory(pool, req, searchParams);
@@ -98,7 +98,7 @@ export function handlePatch(pool: Pool, req: Request) {
     }
 }
 
-export function handlePut(pool: Pool, req: Request) {
+function handlePut(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/category': return handleRenameCategory(pool, req, searchParams);
@@ -110,7 +110,7 @@ export function handlePut(pool: Pool, req: Request) {
     }
 }
 
-export function handleDelete(pool: Pool, req: Request) {
+function handleDelete(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/category': return handleDeleteCategory(pool, req, searchParams);
@@ -120,4 +120,22 @@ export function handleDelete(pool: Pool, req: Request) {
             error(`[DELETE] ${pathname} not found`);
             return new Response(null, { status: Status.NotFound });
     }
+}
+
+function route(method: string) {
+    switch (method) {
+        case 'GET': return handleGet;
+        case 'POST': return handlePost;
+        case 'PUT': return handlePut;
+        case 'DELETE': return handleDelete;
+        case 'PATCH': return handlePatch;
+        default: return null;
+    }
+}
+
+export function handleRequest(pool: Pool, req: Request) {
+    const handler = route(req.method);
+    if (handler !== null) return handler(pool, req);
+    error(`[${req.method}] Unsupported`);
+    return new Response(null, { status: Status.NotImplemented });
 }

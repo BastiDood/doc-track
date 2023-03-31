@@ -121,11 +121,12 @@ export class Database {
 
     /** Upserts a user to the invite list and returns the creation date. */
     async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation'] | null> {
+        const permBits = permission.toString(2);
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO invitation (office,email,permission)
-                SELECT * FROM (SELECT ${office}::SMALLINT,${email},${permission}::LocalPermission) AS data
+                SELECT * FROM (SELECT ${office}::SMALLINT,${email},${permBits}::LocalPermission) AS data
                     WHERE NOT EXISTS (SELECT 1 FROM users AS u WHERE u.email = ${email}) LIMIT 1
-                ON CONFLICT (office,email) DO UPDATE SET permission = ${permission}, creation = DEFAULT
+                ON CONFLICT (office,email) DO UPDATE SET permission = ${permBits}, creation = DEFAULT
                 RETURNING creation`;
         assertStrictEquals(rest.length, 0);
         return first === undefined
@@ -155,8 +156,9 @@ export class Database {
         const transaction = this.#client.createTransaction('registration', { isolation_level: 'serializable' });
         await transaction.begin();
 
+        const permBits = permission.toString(2);
         const updateResult = await transaction
-            .queryArray`UPDATE users SET name = ${name}, email = ${email}, picture = ${picture}, permission = ${permission} WHERE id = ${id}`;
+            .queryArray`UPDATE users SET name = ${name}, email = ${email}, picture = ${picture}, permission = ${permBits} WHERE id = ${id}`;
         assert(updateResult.rowCount !== undefined);
 
         // User already exists
@@ -176,13 +178,14 @@ export class Database {
 
         // Add the user into the system
         const insertResult = await transaction
-            .queryArray`INSERT INTO users (id,name,email,picture,permission) VALUES (${id},${name},${email},${picture},${permission})`;
+            .queryArray`INSERT INTO users (id,name,email,picture,permission) VALUES (${id},${name},${email},${picture},${permBits})`;
         assertStrictEquals(insertResult.rowCount, 1);
 
         // Add the user to all the offices (if any)
         for (const { office, permission } of invites) {
+            const bits = permission.toString(2);
             const staffResult = await transaction
-                .queryArray`INSERT INTO staff (user_id,office,permission) VALUES (${id},${office},${permission})`;
+                .queryArray`INSERT INTO staff (user_id,office,permission) VALUES (${id},${office},${bits})`;
             assertStrictEquals(staffResult.rowCount, 1);
         }
 
