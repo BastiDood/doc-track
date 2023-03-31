@@ -1,7 +1,7 @@
 <script>
     import Router from 'svelte-spa-router';
 
-    import { userSession } from './UserStore.ts';
+    import { userSession } from './stores/UserStore.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
