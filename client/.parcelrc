@@ -4,5 +4,8 @@
         "*.css": [ "@parcel/transformer-css" ],
         "*.svelte": [ "@plasmohq/parcel-transformer-svelte3" ]
     },
-    "optimizers": { "*.{js,ts}": [ "@parcel/optimizer-swc" ] }
+    "optimizers": {
+        "*.{js,ts}": [ "@parcel/optimizer-swc" ],
+        "*.svg": [ ]
+    }
 }
