@@ -1,11 +1,30 @@
 {
-    "extends": "@parcel/config-default",
+    "bundler": "@parcel/bundler-default",
     "transformers": {
-        "*.css": [ "@parcel/transformer-css" ],
-        "*.svelte": [ "@plasmohq/parcel-transformer-svelte3" ]
+        "*.css": ["@parcel/transformer-css"],
+        "*.{js,ts,mjs}": ["@parcel/transformer-js"],
+        "*.html": ["@parcel/transformer-html"],
+        "*.svelte": ["@plasmohq/parcel-transformer-svelte3"],
+        "*.png": ["@parcel/transformer-image"],
+        "*.svg": ["@parcel/transformer-svg"],
+        "types:*.{ts,tsx}": ["@parcel/transformer-typescript-types"],
+        "webmanifest:*.{json,webmanifest}": ["@parcel/transformer-webmanifest"],
+        "worklet:*.{js,ts}": ["@parcel/transformer-worklet", "..."]
     },
+    "namers": ["@parcel/namer-default"],
     "optimizers": {
-        "*.{js,ts}": [ "@parcel/optimizer-swc" ],
-        "*.svg": [ ]
-    }
+        "*.{js,ts}": ["@parcel/optimizer-swc"],
+        "*.svg": []
+    },
+    "packagers": {
+        "*.html": "@parcel/packager-html",
+        "*.css": "@parcel/packager-css",
+        "*.js": "@parcel/packager-js",
+        "*.svg": "@parcel/packager-svg",
+        "*.ts": "@parcel/packager-ts",
+        "*.{svg,webmanifest}": "@parcel/packager-raw-url",
+        "*": "@parcel/packager-raw"
+    },
+    "compressors": { "*": ["@parcel/compressor-raw"] },
+    "resolvers": ["@parcel/resolver-default"]
 }
