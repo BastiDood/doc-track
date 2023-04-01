@@ -27,6 +27,12 @@ devDependencies:
   '@parcel/namer-default':
     specifier: ^2.8.3
     version: 2.8.3(@parcel/core@2.8.3)
+  '@parcel/optimizer-css':
+    specifier: ^2.8.3
+    version: 2.8.3(@parcel/core@2.8.3)
+  '@parcel/optimizer-htmlnano':
+    specifier: ^2.8.3
+    version: 2.8.3(@parcel/core@2.8.3)
   '@parcel/optimizer-swc':
     specifier: ^2.8.3
     version: 2.8.3(@parcel/core@2.8.3)

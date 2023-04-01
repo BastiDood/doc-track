@@ -15,6 +15,8 @@
         "@parcel/compressor-raw": "^2.8.3",
         "@parcel/core": "^2.8.3",
         "@parcel/namer-default": "^2.8.3",
+        "@parcel/optimizer-css": "^2.8.3",
+        "@parcel/optimizer-htmlnano": "^2.8.3",
         "@parcel/optimizer-swc": "^2.8.3",
         "@parcel/packager-css": "^2.8.3",
         "@parcel/packager-html": "^2.8.3",

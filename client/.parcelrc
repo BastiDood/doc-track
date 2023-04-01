@@ -2,7 +2,7 @@
     "bundler": "@parcel/bundler-default",
     "transformers": {
         "*.css": ["@parcel/transformer-css"],
-        "*.{js,ts,mjs}": ["@parcel/transformer-js"],
+        "*.{js,ts,mjs,cjs}": ["@parcel/transformer-js"],
         "*.html": ["@parcel/transformer-html"],
         "*.svelte": ["@plasmohq/parcel-transformer-svelte3"],
         "*.png": ["@parcel/transformer-image"],
@@ -13,7 +13,9 @@
     },
     "namers": ["@parcel/namer-default"],
     "optimizers": {
-        "*.{js,ts}": ["@parcel/optimizer-swc"],
+        "*.css": ["@parcel/optimizer-css"],
+        "*.html": ["@parcel/optimizer-htmlnano"],
+        "*.{js,mjs,cjs}": ["@parcel/optimizer-swc"],
         "*.svg": []
     },
     "packagers": {
