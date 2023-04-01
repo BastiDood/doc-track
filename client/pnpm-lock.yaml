@@ -46,22 +46,22 @@ devDependencies:
     specifier: ^2.8.3
     version: 2.8.3
   svelte:
-    specifier: ^3.57.0
-    version: 3.57.0
+    specifier: ^3.58.0
+    version: 3.58.0
   svelte-preprocess:
     specifier: ^5.0.3
-    version: 5.0.3(svelte@3.57.0)(typescript@4.9.5)
+    version: 5.0.3(svelte@3.58.0)(typescript@4.9.5)
   typescript:
     specifier: ^4.9.5
     version: 4.9.5
   typescript-svelte-plugin:
     specifier: ^0.3.21
-    version: 0.3.21(svelte@3.57.0)(typescript@4.9.5)
+    version: 0.3.21(svelte@3.58.0)(typescript@4.9.5)
 
 packages:
 
-  /@babel/code-frame@7.18.6:
-    resolution: {integrity: sha512-TDCmlK5eOvH+eH7cdAFlNXeVJqWIQ7gW9tY1GJIpUtFb6CmjVyq2VM3u71bOyR8CRihcCgMUYoDNyLXao3+70Q==}
+  /@babel/code-frame@7.21.4:
+    resolution: {integrity: sha512-LYvhNKfwWSPpocw8GI7gpK2nq3HSDuEPC/uSYaALSJu9xjsalaaYFOq0Pwt5KmVqwEbZlDu81aLXwBOmD/Fv9g==}
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/highlight': 7.18.6
@@ -947,7 +947,7 @@ packages:
     resolution: {integrity: sha512-m6y+jY2fFUJvQUKvxT7we/fN8V+zOcY/OAtoCBFExXN0lMWsgmlCw7VaFXd9EEWaDd5/gMlQ0ozCOCwe4FNPvQ==}
     dependencies:
       cookie-storage: 6.1.0
-      svelte: 3.57.0
+      svelte: 3.58.0
     dev: true
 
   /@swc/core-darwin-arm64@1.3.44:
@@ -1137,8 +1137,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001472
-      electron-to-chromium: 1.4.342
+      caniuse-lite: 1.0.30001473
+      electron-to-chromium: 1.4.348
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10(browserslist@4.21.5)
     dev: true
@@ -1156,8 +1156,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite@1.0.30001472:
-    resolution: {integrity: sha512-xWC/0+hHHQgj3/vrKYY0AAzeIUgr7L9wlELIcAvZdDUHlhL/kNxMdnQLOSOQfP8R51ZzPhmHdyMkI0MMpmxCfg==}
+  /caniuse-lite@1.0.30001473:
+    resolution: {integrity: sha512-ewDad7+D2vlyy+E4UJuVfiBsU69IL+8oVmTuZnH5Q6CIUbxNfI50uVpRHbUPDD6SUaN2o0Lh4DhTrvLG/Tn1yg==}
     dev: true
 
   /chalk@2.4.2:
@@ -1317,8 +1317,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /electron-to-chromium@1.4.342:
-    resolution: {integrity: sha512-dTei3VResi5bINDENswBxhL+N0Mw5YnfWyTqO75KGsVldurEkhC9+CelJVAse8jycWyP8pv3VSj4BSyP8wTWJA==}
+  /electron-to-chromium@1.4.348:
+    resolution: {integrity: sha512-gM7TdwuG3amns/1rlgxMbeeyNoBFPa+4Uu0c7FeROWh4qWmvSOnvcslKmWy51ggLKZ2n/F/4i2HJ+PVNxH9uCQ==}
     dev: true
 
   /entities@2.2.0:
@@ -1781,7 +1781,7 @@ packages:
     resolution: {integrity: sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==}
     engines: {node: '>=8'}
     dependencies:
-      '@babel/code-frame': 7.18.6
+      '@babel/code-frame': 7.21.4
       error-ex: 1.3.2
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
@@ -1947,7 +1947,7 @@ packages:
       has-flag: 4.0.0
     dev: true
 
-  /svelte-preprocess@5.0.3(svelte@3.57.0)(typescript@4.9.5):
+  /svelte-preprocess@5.0.3(svelte@3.58.0)(typescript@4.9.5):
     resolution: {integrity: sha512-GrHF1rusdJVbOZOwgPWtpqmaexkydznKzy5qIC2FabgpFyKN57bjMUUUqPRfbBXK5igiEWn1uO/DXsa2vJ5VHA==}
     engines: {node: '>= 14.10.0'}
     requiresBuild: true
@@ -1990,7 +1990,7 @@ packages:
       magic-string: 0.27.0
       sorcery: 0.11.0
       strip-indent: 3.0.0
-      svelte: 3.57.0
+      svelte: 3.58.0
       typescript: 4.9.5
     dev: true
 
@@ -2000,7 +2000,7 @@ packages:
       regexparam: 2.0.1
     dev: false
 
-  /svelte2tsx@0.6.10(svelte@3.57.0)(typescript@4.9.5):
+  /svelte2tsx@0.6.10(svelte@3.58.0)(typescript@4.9.5):
     resolution: {integrity: sha512-7CtUexhSHppSpLwVX7yI9OxJp7+esCNTuOF/CaVxWTgWp88QF/2/dCbpND/cTZmBxht5cFFQBwoLXXqFLdYe3Q==}
     peerDependencies:
       svelte: ^3.55
@@ -2008,12 +2008,12 @@ packages:
     dependencies:
       dedent-js: 1.0.1
       pascal-case: 3.1.2
-      svelte: 3.57.0
+      svelte: 3.58.0
       typescript: 4.9.5
     dev: true
 
-  /svelte@3.57.0:
-    resolution: {integrity: sha512-WMXEvF+RtAaclw0t3bPDTUe19pplMlfyKDsixbHQYgCWi9+O9VN0kXU1OppzrB9gPAvz4NALuoca2LfW2bOjTQ==}
+  /svelte@3.58.0:
+    resolution: {integrity: sha512-brIBNNB76mXFmU/Kerm4wFnkskBbluBDCjx/8TcpYRb298Yh2dztS2kQ6bhtjMcvUhd5ynClfwpz5h2gnzdQ1A==}
     engines: {node: '>= 8'}
     dev: true
 
@@ -2067,11 +2067,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /typescript-svelte-plugin@0.3.21(svelte@3.57.0)(typescript@4.9.5):
+  /typescript-svelte-plugin@0.3.21(svelte@3.58.0)(typescript@4.9.5):
     resolution: {integrity: sha512-gFZYmC7HYGpbF6nWra1eFXEJvk+yxnSeg1fOp7C0humC3rc48917TcZB5OPBVI7wiiYrr8qgvhvcCBUfDJYUGA==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.14
-      svelte2tsx: 0.6.10(svelte@3.57.0)(typescript@4.9.5)
+      svelte2tsx: 0.6.10(svelte@3.58.0)(typescript@4.9.5)
     transitivePeerDependencies:
       - svelte
       - typescript
