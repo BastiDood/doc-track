@@ -1,32 +1,39 @@
 {
     "bundler": "@parcel/bundler-default",
     "transformers": {
-        "*.css": ["@parcel/transformer-css"],
-        "*.{js,ts,mjs,cjs}": ["@parcel/transformer-js"],
-        "*.html": ["@parcel/transformer-html"],
-        "*.svelte": ["@plasmohq/parcel-transformer-svelte3"],
-        "*.png": ["@parcel/transformer-image"],
-        "*.svg": ["@parcel/transformer-svg"],
         "types:*.{ts,tsx}": ["@parcel/transformer-typescript-types"],
+        "worklet:*.{js,mjs,jsm,jsx,es6,cjs,ts,tsx}": ["@parcel/transformer-worklet", "..."],
+        "*.{js,mjs,jsm,jsx,es6,cjs,ts,tsx}": ["@parcel/transformer-js"],
         "webmanifest:*.{json,webmanifest}": ["@parcel/transformer-webmanifest"],
-        "worklet:*.{js,ts}": ["@parcel/transformer-worklet", "..."]
+        "*.css": ["@parcel/transformer-css"],
+        "*.html": ["@parcel/transformer-html"],
+        "*.{png,jpg,jpeg,webp,gif,tiff,avif,heic,heif}": ["@parcel/transformer-image"],
+        "*.svg": ["@parcel/transformer-svg"],
+        "*.{xml,rss,atom}": ["@parcel/transformer-xml"],
+        "*.svelte": ["@plasmohq/parcel-transformer-svelte3"],
+        "url:*": ["...", "@parcel/transformer-raw"]
     },
     "namers": ["@parcel/namer-default"],
     "optimizers": {
         "*.css": ["@parcel/optimizer-css"],
         "*.html": ["@parcel/optimizer-htmlnano"],
-        "*.{js,mjs,cjs}": ["@parcel/optimizer-swc"],
-        "*.svg": []
+        "*.{js,mjs,cjs}": ["@parcel/optimizer-swc"]
     },
     "packagers": {
         "*.html": "@parcel/packager-html",
         "*.css": "@parcel/packager-css",
-        "*.js": "@parcel/packager-js",
+        "*.{js,mjs,cjs}": "@parcel/packager-js",
         "*.svg": "@parcel/packager-svg",
         "*.ts": "@parcel/packager-ts",
         "*.{svg,webmanifest}": "@parcel/packager-raw-url",
         "*": "@parcel/packager-raw"
     },
-    "compressors": { "*": ["@parcel/compressor-raw"] },
+    "runtimes": [
+        "@parcel/runtime-js",
+        "@parcel/runtime-service-worker"
+    ],
+    "compressors": {
+        "*": ["@parcel/compressor-raw"]
+    },
     "resolvers": ["@parcel/resolver-default"]
 }
