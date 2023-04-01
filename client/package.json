@@ -13,6 +13,7 @@
     "devDependencies": {
         "@parcel/config-default": "^2.8.3",
         "@parcel/core": "^2.8.3",
+        "@parcel/optimizer-swc": "^2.8.3",
         "@parcel/packager-raw-url": "^2.8.3",
         "@parcel/transformer-css": "^2.8.3",
         "@parcel/transformer-webmanifest": "^2.8.3",
