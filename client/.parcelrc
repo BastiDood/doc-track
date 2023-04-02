@@ -1,4 +1,39 @@
 {
-    "extends": "@parcel/config-default",
-    "transformers": { "*.svelte": ["@plasmohq/parcel-transformer-svelte3"] }
+    "bundler": "@parcel/bundler-default",
+    "transformers": {
+        "types:*.{ts,tsx}": ["@parcel/transformer-typescript-types"],
+        "worklet:*.{js,mjs,jsm,jsx,es6,cjs,ts,tsx}": ["@parcel/transformer-worklet", "..."],
+        "*.{js,mjs,jsm,jsx,es6,cjs,ts,tsx}": ["@parcel/transformer-js"],
+        "webmanifest:*.{json,webmanifest}": ["@parcel/transformer-webmanifest"],
+        "*.css": ["@parcel/transformer-css"],
+        "*.html": ["@parcel/transformer-html"],
+        "*.{png,jpg,jpeg,webp,gif,tiff,avif,heic,heif}": ["@parcel/transformer-image"],
+        "*.svg": ["@parcel/transformer-svg"],
+        "*.{xml,rss,atom}": ["@parcel/transformer-xml"],
+        "*.svelte": ["@plasmohq/parcel-transformer-svelte3"],
+        "url:*": ["...", "@parcel/transformer-raw"]
+    },
+    "namers": ["@parcel/namer-default"],
+    "optimizers": {
+        "*.css": ["@parcel/optimizer-css"],
+        "*.html": ["@parcel/optimizer-htmlnano"],
+        "*.{js,mjs,cjs}": ["@parcel/optimizer-swc"]
+    },
+    "packagers": {
+        "*.html": "@parcel/packager-html",
+        "*.css": "@parcel/packager-css",
+        "*.{js,mjs,cjs}": "@parcel/packager-js",
+        "*.svg": "@parcel/packager-svg",
+        "*.ts": "@parcel/packager-ts",
+        "*.{svg,webmanifest}": "@parcel/packager-raw-url",
+        "*": "@parcel/packager-raw"
+    },
+    "runtimes": [
+        "@parcel/runtime-js",
+        "@parcel/runtime-service-worker"
+    ],
+    "compressors": {
+        "*": ["@parcel/compressor-raw"]
+    },
+    "resolvers": ["@parcel/resolver-default"]
 }
