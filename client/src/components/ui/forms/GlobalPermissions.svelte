@@ -28,7 +28,6 @@
 
         //No point in handling no-changes.
         if (currentUser.permission == permsVal) return;
-        console.log(`${currentUser.id}, ${permsVal}`)
  
         try {
             //Rebuild pseudo-user object
