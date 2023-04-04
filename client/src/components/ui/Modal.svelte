@@ -49,5 +49,6 @@
 
     header > div {
         flex-grow: 0;
+        cursor: pointer;
     }
 </style>
