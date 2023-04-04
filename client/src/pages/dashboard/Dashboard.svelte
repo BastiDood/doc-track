@@ -27,7 +27,7 @@
             </section>
         {:catch error}
             <p>
-                {error} <a href="/auth/login"> Try logging in again? </a>
+                {error} <a href="/auth/login">Try logging in again?</a>
             </p>
         {/await}
     {/await}

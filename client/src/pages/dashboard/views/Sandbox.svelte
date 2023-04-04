@@ -41,17 +41,17 @@
         showModal = true;
     }
 </script>
-<h1> Sandbox </h1>
+<h1>Sandbox</h1>
 
-<Button on:click = {()=> showPermission = true}>
+<Button on:click={() => showPermission = true}>
     Click me to Edit Global Permissions
 </Button>
 
 {#if showPermission}
     {#await userSession.load()}
-        Loading user
+        Loading user...
     {:then user} 
-        <GlobalPermissions currentUser={user} bind:showModal={showPermission}/>
+        <GlobalPermissions currentUser={user} bind:showModal={showPermission} />
     {/await}
 {/if}
 
