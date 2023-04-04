@@ -9,7 +9,6 @@
     import Select from '../../../components/ui/Select.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import GlobalPermissions from '../../../components/ui/forms/GlobalPermissions.svelte';
-    import { userSession } from '../stores/UserStore.ts';
 
     let showContextMenu = false;
     let showModal = false;
@@ -35,7 +34,7 @@
                 break;
             case Events.TerminateDocument:
                 modalHeader = "Terminate Document";
-                break
+                break;
         }
         modalText = JSON.stringify(e.detail);
         showModal = true;
@@ -48,11 +47,9 @@
 </Button>
 
 {#if showPermission}
-    {#await userSession.load()}
-        Loading user...
-    {:then user} 
-        <GlobalPermissions currentUser={user} bind:showModal={showPermission} />
-    {/await}
+    <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
+        <GlobalPermissions />
+    </Modal>
 {/if}
 
 <Select
@@ -61,13 +58,7 @@
 />
 <p>Currently selected: {currentlySelected}</p>
 
-{#if showModal}
-    <Modal title={modalHeader} bind:showModal>
-        <p>{modalText}</p>
-    </Modal>
-{/if}
-
-{#if showContextMenu && currentContext?.ty === RowType.Inbox}
+{#if currentContext?.ty === RowType.Inbox}
     <InboxContext
         bind:show={showContextMenu}
         payload={currentContext}
@@ -84,5 +75,4 @@
             on:overflowClick={overflowClickHandler}
         />
     {/each}
-
 </div>

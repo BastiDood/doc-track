@@ -1,72 +1,133 @@
 <script lang="ts">
-    import Modal from '../Modal.svelte';
+    import { assert } from '../../../assert.ts';
+
     import { User } from '../../../api/user.ts';
-    import { User as UserModel } from '../../../../../model/src/user.ts';
     import { Global } from '../../../../../model/src/permission.ts';
     import { userSession } from '../../../pages/dashboard/stores/UserStore.ts';
 
     import Button from '../Button.svelte';
     import Edit from '../../icons/Edit.svelte';
-    import Close from '../../icons/Close.svelte';
 
-    export let currentUser: UserModel;
-    export let showModal = false;
-    let permsVal = currentUser.permission;
-
-    function recomputePerms() {
-        // Get every checkbox and change temp permission to the perms sum
-        permsVal = 0;
-        document.getElementsByName('globalperms').forEach(node => {
-            if (!(node instanceof HTMLInputElement)) return;
-            if (node.checked) permsVal += +node.value;
-        });
-    }
-    async function handleSubmit() { 
+    async function handleSubmit(this: HTMLFormElement) { 
         // Recompute permissions before submitting
-        recomputePerms();
+        const nodes = this.elements.namedItem('perms');
+        assert(nodes instanceof RadioNodeList);
+
+        let permsVal = 0;
+        for (const node of nodes) {
+            assert(node instanceof HTMLInputElement);
+            assert(node.type === 'checkbox');
+            permsVal |= parseInt(node.value, 10);
+        }
 
         // No point in handling no-changes.
-        if (currentUser.permission === permsVal) return;
+        if ($userSession.permission === permsVal) return;
  
         try {
             // Rebuild pseudo-user object
             await User.setPermission({
-                id: currentUser.id,
+                id: $userSession.id,
                 permission: permsVal,
             });
-
-            await userSession.reload();
-            showModal = false;
+            await userSession.reload?.();
         } catch (err) {
             // TODO: No permission handler
             alert(err);
         }
     }
-
 </script>
 
-<Modal title="Edit Global Permissions" bind:showModal>
-    <h2>{currentUser.name}</h2>
-    <p>{currentUser.email}: {currentUser.id}</p>
-    <p> current(server side): {currentUser.permission}, newperms: {permsVal}</p>
-    <form id="globalpermsform" on:submit={handleSubmit} on:change={recomputePerms}>
-        {#each Object.keys(Global) as globalperm}
-            {#if isNaN(+globalperm)}
-                <label>
-                    <input
-                        type="checkbox"
-                        name="globalperms"
-                        checked={!!(permsVal & Global[globalperm])}
-                        value={Global[globalperm]}
-                    />
-                    {globalperm}
-                </label>
-                <br>
-            {/if}
-        {/each}
-    </form>
-    <div slot="buttons">
-        <Button on:click={handleSubmit}><Edit alt="Modify Staff" /> Modify Staff</Button>
-        <Button on:click={() => showModal = false}><Close alt="Cancel Changes" /> Cancel Changes</Button>
-    </div>
-</Modal>
+<h2>{$userSession.name}</h2>
+<p>{$userSession.email}: {$userSession.id}</p>
+<p>current(server side): {$userSession.permission}</p>
+<form on:submit|preventDefault|stopPropagation={handleSubmit}>
+<label>
+        <input
+            type="checkbox"
+            name="global-perms"
+            value={Global.GetOffices}
+            checked={($userSession.permission & Global.GetOffices) === Global.GetOffices}
+        />
+        Get Offices
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Global.CreateOffice}
+            checked={($userSession.permission & Global.CreateOffice) === Global.CreateOffice}
+        />
+        Create Office
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Global.UpdateOffice}
+            checked={($userSession.permission & Global.UpdateOffice) === Global.UpdateOffice}
+        />
+        Update Office
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Global.UpdateUser}
+            checked={($userSession.permission & Global.UpdateUser) === Global.UpdateUser}
+        />
+        Update User
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Global.CreateCategory}
+            checked={($userSession.permission & Global.CreateCategory) === Global.CreateCategory}
+        />
+        Create Category
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Global.UpdateCategory}
+            checked={($userSession.permission & Global.UpdateCategory) === Global.UpdateCategory}
+        />
+        Update Category
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Global.DeleteCategory}
+            checked={($userSession.permission & Global.DeleteCategory) === Global.DeleteCategory}
+        />
+        Delete Category
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Global.ActivateCategory}
+            checked={($userSession.permission & Global.ActivateCategory) === Global.ActivateCategory}
+        />
+        Activate Category
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Global.ViewMetrics}
+            checked={($userSession.permission & Global.ViewMetrics) === Global.ViewMetrics}
+        />
+        View Metrics
+    </label>
+    <Button submit on:click={handleSubmit}><Edit alt="Modify Staff" /> Modify Staff</Button>
+</form>
+
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
