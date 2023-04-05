@@ -13,20 +13,33 @@
     import SettingsIcon from '../../icons/Settings.svelte';
 
 
+    import LogoutIcon from '../../icons/Logout.svelte';
+
+    import InboxIcon from '../../icons/DocumentDownload.svelte';
+    import OutboxIcon from '../../icons/DocumentExport.svelte';
+    import DraftsIcon from '../../icons/Events.svelte';
+    import BarcodesIcon from '../../icons/Barcode.svelte';
+    import InvitesIcon from '../../icons/PersonAdd.svelte';
+    import StaffIcon from '../../icons/PersonMail.svelte';
+    import AdminIcon from '../../icons/PersonInfo.svelte';
+    import MetricsIcon from '../../icons/Events.svelte';
+    import SettingsIcon from '../../icons/Settings.svelte';
+
+
     export let show = false;
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
     <section>
-            <a href="#/inbox" class="unselectable" use:active><InboxIcon />Inbox</a>
-            <a href="#/outbox" class="unselectable" use:active><OutboxIcon />Outbox</a>
-            <a href="#/drafts" class="unselectable" use:active><DraftsIcon />Drafts</a>
-            <a href="#/metrics" class="unselectable" use:active><MetricsIcon />Metrics</a>            
-            <a href="#/barcodes" class="unselectable" use:active><BarcodesIcon />Barcodes</a>
-            <a href="#/invites" class="unselectable" use:active><InvitesIcon />Invites</a>
-            <a href="#/staff" class="unselectable" use:active><StaffIcon />Staff</a>
-            <a href="#/admin" class="unselectable" use:active><AdminIcon />Admin</a>
-            <a href="#/settings" class="unselectable" use:active><SettingsIcon />Settings</a>
+        <a href="#/inbox" use:active><InboxIcon />Inbox</a>
+        <a href="#/outbox" use:active><OutboxIcon />Outbox</a>
+        <a href="#/drafts" use:active><DraftsIcon />Drafts</a>
+        <a href="#/barcodes" use:active><BarcodesIcon />Barcodes</a>
+        <a href="#/invites" use:active><InvitesIcon />Invites</a>
+        <a href="#/staff" use:active><StaffIcon />Staff</a>
+        <a href="#/admin" use:active><AdminIcon />Admin</a>
+        <a href="#/metrics" use:active><MetricsIcon />Metrics</a>
+        <a href="#/settings" use:active><SettingsIcon />Settings</a>
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
