@@ -42,8 +42,9 @@
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         <TextInput 
-            placeholder = "New Office Name"
-            name = "officename"
+            placeholder="New Office Name"
+            name="officename"
+            label="New Office Name:"
         >
         Office Name: 
         </TextInput>
