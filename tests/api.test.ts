@@ -166,7 +166,10 @@ Deno.test('full API integration test', async t => {
     await t.step('Session API', async () => {
         const session = await Session.getUser();
         assertEquals(session, {
-            ...user,
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            picture: user.picture,
             local_perms: { [oid]: (Local.ViewMetrics << 1) - 1 },
             global_perms: user.permission,
         });
