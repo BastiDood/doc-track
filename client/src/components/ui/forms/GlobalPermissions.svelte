@@ -17,7 +17,7 @@
         for (const node of nodes) {
             assert(node instanceof HTMLInputElement);
             assert(node.type === 'checkbox');
-            permsVal |= parseInt(node.value, 10);
+            if (node.checked) permsVal |= parseInt(node.value, 10);
         }
 
         // No point in handling no-changes.
