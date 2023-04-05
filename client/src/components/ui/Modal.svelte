@@ -25,10 +25,6 @@
     </header>
     <hr />
     <slot />
-    <hr />
-    <slot name="buttons">
-        <Button on:click={offModal}>Close Modal</Button>
-    </slot>
 </dialog>
 
 <style>
