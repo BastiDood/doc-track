@@ -35,6 +35,7 @@
         left: -100%;
         position: absolute;
         transition: left var(--animation-length);
+        z-index: 1;
     }
 
     .show {

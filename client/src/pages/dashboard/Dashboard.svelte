@@ -25,6 +25,10 @@
                 <SideDrawer show={toggleDrawer} />
                 <Router {routes} />
             </section>
+        {:catch error}
+            <p>
+                {error} <a href="/auth/login">Try logging in again?</a>
+            </p>
         {/await}
     {/await}
 </main>

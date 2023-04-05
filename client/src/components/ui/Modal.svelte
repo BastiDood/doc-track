@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+
+    import { assert } from '../../assert.ts';
 
     import Button from './Button.svelte';
     import Close from '../icons/Close.svelte';
@@ -7,6 +10,7 @@
     export let title: string;
 
     let dialog: HTMLDialogElement | null = null;
+
     $: if (showModal) dialog?.showModal(); else dialog?.close();
 
     function offModal() {
@@ -17,14 +21,10 @@
 <dialog on:close bind:this={dialog}>
     <header>
         <h1>{title}</h1>
-        <div><Close on:click={offModal} alt="Close modal"/></div>
+        <div><Close on:click={offModal} alt="Close Modal"/></div>
     </header>
     <hr />
     <slot />
-    <hr />
-    <slot name="buttons">
-        <Button on:click={offModal}>Close Modal</Button>
-    </slot>
 </dialog>
 
 <style>
@@ -34,8 +34,6 @@
     dialog {
         border-radius: var(--border-radius);
         border: none;
-        display: flex;
-        flex-direction: column;
         padding: var(--spacing-large);
     }
 
@@ -45,9 +43,11 @@
 
     header > h1 {
         flex-grow: 1;
+        margin: 0;
     }
 
     header > div {
         flex-grow: 0;
+        cursor: pointer;
     }
 </style>

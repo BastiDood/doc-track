@@ -9,7 +9,6 @@
     import SendAlt from '../../icons/SendAlt.svelte';
     import CheckboxIndeterminateFilled from '../../icons/CheckboxIndeterminateFilled.svelte';
 
-
     const dispatch = createEventDispatcher();
     export let show = false;
     export let payload: ContextPayload;

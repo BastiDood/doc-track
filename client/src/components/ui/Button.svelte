@@ -1,12 +1,11 @@
 <script lang="ts">
   import { ButtonType } from '../types.ts';
   export let type: ButtonType = ButtonType.Primary;
+  export let submit = false;
 </script>
 
-<button 
-  class={type}
-  on:click>
-  <slot>{type}</slot>
+<button type={submit ? "submit" : "button"} class={type} on:click>
+    <slot>{type}</slot>
 </button>
 
 <style>
