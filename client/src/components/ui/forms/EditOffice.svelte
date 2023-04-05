@@ -40,13 +40,11 @@
 
 <section>
     <!--TODO: Replace with dropdown selection implementation-->
-    {#if (!$officeList)}
-        No offices avaialble
+    {#each $officeList as office}
+        <p data-id={office.id} data-name={office.name}>{office.id}: {office.name}</p>
     {:else}
-        {#each $officeList as office}
-            <p data-id={office.id} data-name={office.name}>{office.id}: {office.name}</p>
-        {/each}
-    {/if}
+        No offices available
+    {/each}
 </section>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
@@ -61,7 +59,7 @@
             name="officename"
             label="Office Name:"
         />
-        <Button submit><Checkmark alt="Edit Office"/> Edit Office </Button>
+        <Button submit><Checkmark alt="Edit Office"/> Edit Office</Button>
     </form>
 </article>
 

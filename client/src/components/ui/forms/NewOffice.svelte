@@ -20,8 +20,7 @@
             await Office.create(node.value);
             await officeList.reload?.();
             this.reset();
-        }
-        catch (err) {
+        } catch (err) {
             // TODO: No permission handler
             alert(err);
         }
@@ -31,13 +30,11 @@
 <p>You are currently adding an office as {$userSession.email}</p>
 
 <section>
-    {#if (!$officeList)}
-        No offices avaialble
+    {#each $officeList as office}
+        <p>{office.id}: {office.name}</p>
     {:else}
-        {#each $officeList as office}
-            <p>{office.id}: {office.name}</p>
-        {/each}
-    {/if}
+        No offices available
+    {/each}
 </section>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
@@ -45,13 +42,10 @@
             placeholder="New Office Name"
             name="officename"
             label="New Office Name:"
-        >
-        Office Name: 
-        </TextInput>
-        <Button submit><Checkmark alt="Create New Office"/> New Office </Button>
+        />
+        <Button submit><Checkmark alt="Create New Office"/> New Office</Button>
     </form>
 </article>
-
 
 <style>
     @import url('../../../pages/vars.css');
