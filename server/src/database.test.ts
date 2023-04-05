@@ -195,6 +195,21 @@ Deno.test('full OAuth flow', async t => {
         });
     });
 
+    await t.step('getting full user session information', async () => {
+        // Non-existent session
+        assertStrictEquals(await db.getFullSessionInfo(crypto.randomUUID()), null);
+
+        // Existing session
+        const info = await db.getFullSessionInfo(id);
+        assert(info !== null);
+        assertEquals(info.id, USER.id);
+        assertEquals(info.name, USER.name);
+        assertEquals(info.email, USER.email);
+        assertEquals(info.picture, USER.picture);
+        assertStrictEquals(info.global_perms, 0b111)
+        assertStrictEquals(info.local_perms[office], 0b011);
+    });
+
     await t.step('category tests', async () => {
         assertStrictEquals(await db.activateCategory(0), null);
         assertStrictEquals(await db.deleteCategory(0), null);
