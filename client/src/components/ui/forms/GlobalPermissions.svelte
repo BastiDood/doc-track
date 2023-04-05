@@ -123,7 +123,7 @@
         />
         View Metrics
     </label>
-    <Button submit={true}><Edit alt="Modify Staff" /> Modify Staff</Button>
+    <Button submit><Edit alt="Modify Staff" /> Modify Staff</Button>
 </form>
 
 <style>
