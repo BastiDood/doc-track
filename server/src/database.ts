@@ -41,6 +41,16 @@ type InvalidatedSession = {
 
 const DeprecationSchema = z.object({ result: z.boolean().nullable() });
 
+const FullSessionSchema = UserSchema
+    .omit({ permission: true })
+    .extend({
+        global_perms: z.string().transform(bits => parseInt(bits, 2)).pipe(UserSchema.shape.permission),
+        local_perms: z.record(
+            z.string().transform(oid => parseInt(oid, 10)).pipe(OfficeSchema.shape.id),
+            z.string().transform(bits => parseInt(bits, 2)).pipe(StaffSchema.shape.permission),
+        ),
+    });
+
 export class Database {
     #client: PoolClient;
 
@@ -480,6 +490,19 @@ export class Database {
                 .pick({ user_id: true, permission: true })
                 .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
                 .parse(first);
+    }
+
+    /** Get full session information (including global and local permissions). */
+    async getFullSessionInfo(sid: Session['id']) {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`WITH result AS (SELECT u.id,u.name,u.email,u.picture,u.permission AS global_perms
+                FROM session AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.id = ${sid} LIMIT 1),
+                lookup AS (SELECT s.office,s.permission FROM staff AS s WHERE s.user_id = (SELECT id FROM result))
+                SELECT result.*,json_object(ARRAY(SELECT office::TEXT FROM lookup), ARRAY(SELECT permission::TEXT FROM lookup)) AS local_perms FROM result`;
+        assertStrictEquals(rest.length, 0);
+        return first === undefined
+            ? null
+            : FullSessionSchema.parse(first);
     }
 
     /** Get all offices from the system. */
