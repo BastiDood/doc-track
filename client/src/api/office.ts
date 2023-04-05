@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { type Office as OfficeType, OfficeSchema } from '~model/office.ts';
+import { type Office as OfficeType, OfficeSchema } from '../../../model/src/office.ts';
 
 import {
     InsufficientPermissions,
