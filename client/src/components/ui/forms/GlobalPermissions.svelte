@@ -35,16 +35,17 @@
             alert(err);
         }
     }
+
 </script>
 
 <h2>{$userSession.name}</h2>
 <p>{$userSession.email}: {$userSession.id}</p>
 <p>current(server side): {$userSession.permission}</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-<label>
+    <label>
         <input
             type="checkbox"
-            name="global-perms"
+            name="perms"
             value={Global.GetOffices}
             checked={($userSession.permission & Global.GetOffices) === Global.GetOffices}
         />
@@ -122,7 +123,7 @@
         />
         View Metrics
     </label>
-    <Button submit on:click={handleSubmit}><Edit alt="Modify Staff" /> Modify Staff</Button>
+    <Button submit={true}><Edit alt="Modify Staff" /> Modify Staff</Button>
 </form>
 
 <style>
