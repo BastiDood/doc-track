@@ -27,7 +27,6 @@
         border: var(--spacing-tiny) solid black;
         bottom: -95%;
         border-radius: var(--border-radius) var(--border-radius) 0 0;
-        display: block;
         position: relative;
         width: 100%;
     }
