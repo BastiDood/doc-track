@@ -46,11 +46,9 @@
     Click me to Edit Global Permissions
 </Button>
 
-{#if showPermission}
-    <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
-        <GlobalPermissions />
-    </Modal>
-{/if}
+<Modal title="Edit Global Permissions" bind:showModal={showPermission}>
+    <GlobalPermissions />
+</Modal>
 
 <Select
     bind:value={currentlySelected}

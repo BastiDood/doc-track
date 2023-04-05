@@ -38,8 +38,6 @@
     dialog {
         border-radius: var(--border-radius);
         border: none;
-        display: flex;
-        flex-direction: column;
         padding: var(--spacing-large);
     }
 
@@ -49,6 +47,7 @@
 
     header > h1 {
         flex-grow: 1;
+        margin: 0;
     }
 
     header > div {
