@@ -19,7 +19,6 @@
         assert(elOfficeId.type === 'number')
         assert(elOfficeName.type === 'text');
         
-        
         if (!elOfficeId.value || !elOfficeName.value) return;
         
         try {
@@ -30,13 +29,11 @@
             });
             await officeList.reload?.();
             this.reset();
-        }
-        catch (err) {
+        } catch (err) {
             // TODO: No permission handler
             alert(err);
         }
     }
-
 </script>
 
 <p>You are currently editing an office {$userSession.email}</p>
@@ -67,7 +64,6 @@
         <Button submit><Checkmark alt="Edit Office"/> Edit Office </Button>
     </form>
 </article>
-
 
 <style>
     @import url('../../../pages/vars.css');
