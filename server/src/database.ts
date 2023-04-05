@@ -7,11 +7,13 @@ import type { Document } from '~model/document.ts';
 import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
 
 import {
+    type FullSession,
     type GeneratedBatch,
     type InboxEntry,
     type MinBatch,
     type PaperTrail,
     BarcodeAssignmentError,
+    FullSessionSchema,
     InboxEntrySchema,
     InsertSnapshotError,
     MinBatchSchema,
@@ -40,16 +42,6 @@ type InvalidatedSession = {
 }
 
 const DeprecationSchema = z.object({ result: z.boolean().nullable() });
-
-const FullSessionSchema = UserSchema
-    .omit({ permission: true })
-    .extend({
-        global_perms: z.string().transform(bits => parseInt(bits, 2)).pipe(UserSchema.shape.permission),
-        local_perms: z.record(
-            z.string().transform(oid => parseInt(oid, 10)).pipe(OfficeSchema.shape.id),
-            z.string().transform(bits => parseInt(bits, 2)).pipe(StaffSchema.shape.permission),
-        ),
-    });
 
 export class Database {
     #client: PoolClient;
@@ -493,7 +485,7 @@ export class Database {
     }
 
     /** Get full session information (including global and local permissions). */
-    async getFullSessionInfo(sid: Session['id']) {
+    async getFullSessionInfo(sid: Session['id']): Promise<FullSession | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`WITH result AS (SELECT u.id,u.name,u.email,u.picture,u.permission AS global_perms
                 FROM session AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.id = ${sid} LIMIT 1),

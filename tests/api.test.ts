@@ -122,11 +122,6 @@ Deno.test('full API integration test', async t => {
         });
     });
 
-    await t.step('Session API', async () => {
-        const session = await Session.getUser();
-        assertEquals(session, user);
-    });
-
     await t.step('User API', async () =>
         assert(await User.setPermission({
             id: user.id,
@@ -167,6 +162,15 @@ Deno.test('full API integration test', async t => {
             permission: (Local.ViewMetrics << 1) - 1,
         }))
     );
+
+    await t.step('Session API', async () => {
+        const session = await Session.getUser();
+        assertEquals(session, {
+            ...user,
+            local_perms: { [oid]: (Local.ViewMetrics << 1) - 1 },
+            global_perms: user.permission,
+        });
+    });
 
     const origCategories = await Category.getAllActive();
     await t.step('Category API - creation/deletion', async () => {
