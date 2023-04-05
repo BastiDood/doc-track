@@ -1,13 +1,18 @@
 <script lang="ts">
   import { InputType } from '../types.ts';
-  export let type = InputType.Primary;
+  
+  export let type: InputType = InputType.Text;
   export let placeholder = '';
+  export let disabled = false;
   export let name: string;
   export let isRoundedBorder = true;
+  export let label: string;
 </script>
 
-<label for={name}><slot></slot></label>
-<input {type} {placeholder} {name} class:round-border={isRoundedBorder} />
+<label>
+  {label}
+  <input {type} {placeholder} {name} {disabled} class:round-border={isRoundedBorder} />
+</label>
 
 <style>
   @import url('../../pages/vars.css');
