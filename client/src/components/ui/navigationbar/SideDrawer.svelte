@@ -14,10 +14,16 @@
 
 
     export let show = false;
+    export let permission = 0;
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
     <section>
+        {#if permission >= 1}
+            <a href="#/admin" use:active><AdminIcon />Admin</a>
+        {:else if permission >= 2}
+            <a href="#/staff" use:active><StaffIcon />Staff</a>
+        {/if}
         <a href="#/inbox" use:active><InboxIcon />Inbox</a>
         <a href="#/outbox" use:active><OutboxIcon />Outbox</a>
         <a href="#/drafts" use:active><DraftsIcon />Drafts</a>
@@ -27,7 +33,7 @@
         <a href="#/admin" use:active><AdminIcon />Admin</a>
         <a href="#/metrics" use:active><MetricsIcon />Metrics</a>
         <a href="#/settings" use:active><SettingsIcon />Settings</a>
-        
+
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />

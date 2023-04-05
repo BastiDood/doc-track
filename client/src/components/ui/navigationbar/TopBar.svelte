@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { User } from '../../../../../model/src/user.ts';
 
-    import Hamburger from '../../icons/Menu.svelte';
+    import Hamburger from '../../icons/Hamburger.svelte';
 
     export let show = false;
     export let user: User;
@@ -9,9 +9,9 @@
 
 <nav on:click|stopPropagation on:keypress>
     <div>
-        <span id="icon"><Hamburger alt="Expand Menu" on:click={() => (show = !show)} /></span>
-        <span>Hello, {user.name}!</span>
+        <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show}} /></span>
     </div>
+    <span>{user.name}</span>
     <img src={user.picture} alt="{user.name}" />
 </nav>
 
