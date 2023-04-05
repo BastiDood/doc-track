@@ -35,7 +35,6 @@
             alert(err);
         }
     }
-
 </script>
 
 <h2>{$userSession.name}</h2>

@@ -8,8 +8,12 @@
     import Select from '../../../components/ui/Select.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import GlobalPermissions from '../../../components/ui/forms/GlobalPermissions.svelte';
+    import NewOffice from '../../../components/ui/forms/NewOffice.svelte';
+    import EditOffice from '../../../components/ui/forms/EditOffice.svelte'
 
     let showContextMenu = false;
+    let showCreateOffice = false;
+    let showEditOffice = false;
     let currentContext: RowEvent | null = null;
     let currentlySelected = '';
     let showPermission = false;
@@ -23,11 +27,27 @@
 <h1>Sandbox</h1>
 
 <Button on:click={() => showPermission = true}>
-    Click me to Edit Global Permissions
+    Edit Global Permissions
+</Button>
+
+<Button on:click={() => showCreateOffice = true}>
+    Create an Office
+</Button>
+
+<Button on:click={() => showEditOffice = true}>
+    Edit an Office
 </Button>
 
 <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
     <GlobalPermissions />
+</Modal>
+
+<Modal title="Create New Office" bind:showModal={showCreateOffice}>
+    <NewOffice/>
+</Modal>
+
+<Modal title="Edit Office" bind:showModal={showEditOffice}>
+    <EditOffice/>
 </Modal>
 
 <Select
