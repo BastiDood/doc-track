@@ -70,10 +70,7 @@ export type Metrics = z.infer<typeof MetricsSchema>;
 export const FullSessionSchema = UserSchema
     .omit({ permission: true })
     .extend({
-        global_perms: z.string().transform(bits => parseInt(bits, 2)).pipe(UserSchema.shape.permission),
-        local_perms: z.record(
-            z.string().transform(oid => parseInt(oid, 10)).pipe(OfficeSchema.shape.id),
-            z.string().transform(bits => parseInt(bits, 2)).pipe(StaffSchema.shape.permission),
-        ),
+        global_perms: UserSchema.shape.permission,
+        local_perms: z.record(z.coerce.number().pipe(OfficeSchema.shape.id), StaffSchema.shape.permission),
     });
 export type FullSession = z.infer<typeof FullSessionSchema>;

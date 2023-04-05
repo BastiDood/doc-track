@@ -43,6 +43,12 @@ type InvalidatedSession = {
 
 const DeprecationSchema = z.object({ result: z.boolean().nullable() });
 
+const Bitstring = z.string().transform(bits => parseInt(bits, 2));
+const PostgresFullSession = FullSessionSchema.extend({
+    global_perms: Bitstring.pipe(FullSessionSchema.shape.global_perms),
+    local_perms: z.record(z.string().transform(num => parseInt(num, 10)), Bitstring).pipe(FullSessionSchema.shape.local_perms),
+});
+
 export class Database {
     #client: PoolClient;
 
@@ -494,7 +500,7 @@ export class Database {
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
-            : FullSessionSchema.parse(first);
+            : PostgresFullSession.parse(first);
     }
 
     /** Get all offices from the system. */
