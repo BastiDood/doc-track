@@ -11,12 +11,10 @@
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte'
-    import GenerateBarcode from '../../../components/ui/forms/GenerateBarcode.svelte';
 
     let showContextMenu = false;
     let showCreateOffice = false;
     let showEditOffice = false;
-    let showGenerateBarcode = false;
     let currentContext: RowEvent | null = null;
     let currentlySelected = '';
     let showPermission = false;
@@ -45,9 +43,6 @@
     Generate A Barcode
 </Button>
 
-<Modal title="Generate Barcodes" bind:showModal={showGenerateBarcode}>
-    <GenerateBarcode/>
-</Modal>
 <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
     <GlobalPermissions />
 </Modal>
