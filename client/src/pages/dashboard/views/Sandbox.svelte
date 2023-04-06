@@ -7,9 +7,11 @@
     import Modal from '../../../components/ui/Modal.svelte';
     import Select from '../../../components/ui/Select.svelte';
     import Button from '../../../components/ui/Button.svelte';
-    import GlobalPermissions from '../../../components/ui/forms/GlobalPermissions.svelte';
-    import NewOffice from '../../../components/ui/forms/NewOffice.svelte';
-    import EditOffice from '../../../components/ui/forms/EditOffice.svelte'
+
+    import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
+    import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
+    import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte'
+    import { userSession } from '../stores/UserStore.ts';
 
     let showContextMenu = false;
     let showCreateOffice = false;
@@ -39,7 +41,10 @@
 </Button>
 
 <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
-    <GlobalPermissions />
+    <GlobalPermissions user={{
+        ...$userSession,
+        permission: $userSession.global_perms,
+    }}/>
 </Modal>
 
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>

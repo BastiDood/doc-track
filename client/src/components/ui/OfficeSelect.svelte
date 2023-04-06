@@ -1,14 +1,12 @@
 <script lang="ts">
-    export let options: string[] = [];
-    export let index = 0;
-    export let value: string = '';
-
-    $: value = options[index];
+    import type { Office } from '../../../../model/src/office.ts';
+    export let offices: Office[];
+    export let oid: number | null = null;
 </script>
 
-<select bind:value={index}>
-    {#each options as option, i}
-        <option value={i}>{options[i]}</option>
+<select required bind:value={oid}>
+    {#each offices as office (office.id)}
+        <option value={office.id}>{office.name}</option>
     {/each}
 </select>
 
