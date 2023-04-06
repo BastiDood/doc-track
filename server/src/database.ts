@@ -517,10 +517,8 @@ export class Database {
         return OfficeSchema.pick({ id: true }).parse(first).id;
     }
 
-    /** Adds a new office to the system. */
+    /** Adds a new office to the system. Assumes that the `admin` is a valid user ID. */
     async createOfficeWithSuperuser(admin: User['id'], name: Office['name']): Promise<Office['id']> {
-        // TODO: add tests
-
         // Create new office
         const transaction = this.#client.createTransaction('office_superuser');
         await transaction.begin();
