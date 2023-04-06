@@ -41,9 +41,6 @@
 </script>
 
 <p>You are currently editing an office as {$userSession.email}</p>
-<section>
-    
-</section>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         <OfficeSelect bind:index={officeId} bind:value={officeName} options={$officeList}/>
@@ -65,7 +62,3 @@
         <Button submit><Checkmark alt="Edit Office"/> Edit Office</Button>
     </form>
 </article>
-
-<style>
-    @import url('../../../../pages/vars.css');
-</style>
