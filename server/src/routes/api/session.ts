@@ -31,7 +31,7 @@ export async function handleGetUserFromSession(pool: Pool, req: Request) {
 
     const db = await Database.fromPool(pool);
     try {
-        const user = await db.getUserFromSession(sid);
+        const user = await db.getFullSessionInfo(sid);
         if (user === null) {
             error(`[Session] Invalid session ${sid}`);
             return new Response(null, { status: Status.Unauthorized });

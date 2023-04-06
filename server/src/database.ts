@@ -7,11 +7,13 @@ import type { Document } from '~model/document.ts';
 import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
 
 import {
+    type FullSession,
     type GeneratedBatch,
     type InboxEntry,
     type MinBatch,
     type PaperTrail,
     BarcodeAssignmentError,
+    FullSessionSchema,
     InboxEntrySchema,
     InsertSnapshotError,
     MinBatchSchema,
@@ -40,6 +42,12 @@ type InvalidatedSession = {
 }
 
 const DeprecationSchema = z.object({ result: z.boolean().nullable() });
+
+const Bitstring = z.string().transform(bits => parseInt(bits, 2));
+const PostgresFullSession = FullSessionSchema.extend({
+    global_perms: Bitstring.pipe(FullSessionSchema.shape.global_perms),
+    local_perms: z.record(z.string().transform(num => parseInt(num, 10)), Bitstring).pipe(FullSessionSchema.shape.local_perms),
+});
 
 export class Database {
     #client: PoolClient;
@@ -480,6 +488,19 @@ export class Database {
                 .pick({ user_id: true, permission: true })
                 .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
                 .parse(first);
+    }
+
+    /** Get full session information (including global and local permissions). */
+    async getFullSessionInfo(sid: Session['id']): Promise<FullSession | null> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`WITH result AS (SELECT u.id,u.name,u.email,u.picture,u.permission AS global_perms
+                FROM session AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.id = ${sid} LIMIT 1),
+                lookup AS (SELECT s.office,s.permission FROM staff AS s WHERE s.user_id = (SELECT id FROM result))
+                SELECT result.*,json_object(ARRAY(SELECT office::TEXT FROM lookup), ARRAY(SELECT permission::TEXT FROM lookup)) AS local_perms FROM result`;
+        assertStrictEquals(rest.length, 0);
+        return first === undefined
+            ? null
+            : PostgresFullSession.parse(first);
     }
 
     /** Get all offices from the system. */

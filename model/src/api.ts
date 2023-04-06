@@ -4,7 +4,9 @@ import { BarcodeSchema } from './barcode.ts';
 import { BatchSchema } from './batch.ts';
 import { CategorySchema } from './category.ts';
 import { DocumentSchema } from './document.ts';
+import { OfficeSchema } from './office.ts';
 import { SnapshotSchema, StatusSchema } from './snapshot.ts';
+import { StaffSchema } from './staff.ts';
 import { UserSchema } from './user.ts';
 
 export const MinBatchSchema = z.object({
@@ -64,3 +66,11 @@ export type Summary = z.infer<typeof SummarySchema>;
 
 export const MetricsSchema = z.record(StatusSchema, SummarySchema.shape.amount);
 export type Metrics = z.infer<typeof MetricsSchema>;
+
+export const FullSessionSchema = UserSchema
+    .omit({ permission: true })
+    .extend({
+        global_perms: UserSchema.shape.permission,
+        local_perms: z.record(z.coerce.number().pipe(OfficeSchema.shape.id), StaffSchema.shape.permission),
+    });
+export type FullSession = z.infer<typeof FullSessionSchema>;
