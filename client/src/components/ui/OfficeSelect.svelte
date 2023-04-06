@@ -1,18 +1,12 @@
 <script lang="ts">
     import type { Office } from '../../../../model/src/office.ts';
-
-    export let options: Office[] = [];
-    export let value: string | undefined = undefined;
-    export let index = 0;
-
-    $: value = (options ? options.find((office => office.id == index))?.name : undefined);
+    export let offices: Office[];
+    export let oid = 0;
 </script>
 
-<select bind:value={index}>
-    {#each options as option (option.id)}
-        <option value={option.id}>{option.name}</option>
-    {:else}
-        <option value={0}> No available office to select. </option>
+<select bind:value={oid}>
+    {#each offices as office (office.id)}
+        <option value={office.id}>{office.name}</option>
     {/each}
 </select>
 

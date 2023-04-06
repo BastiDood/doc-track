@@ -4,6 +4,7 @@
     export let type: InputType = InputType.Text;
     export let placeholder = '';
     export let disabled = false;
+    export let required = true;
     export let name: string;
     export let label: string;
     export let value: string | number = '';
@@ -11,7 +12,7 @@
 
 <label>
     {label}
-    <input {type} {placeholder} {name} {disabled} {value} />
+    <input {type} {placeholder} {name} {disabled} {required} {value} />
 </label>
 
 <style>

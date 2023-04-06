@@ -2,8 +2,6 @@
     import { assert } from '../../../../assert.ts';
 
     import { Office } from '../../../../api/office.ts';
-    import { Office as OfficeModel} from '../../../../../../model/src/office.ts'
-    import { InputType } from '../../../types.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { officeList } from '../../../../pages/dashboard/stores/OfficeStore.ts';
 
@@ -12,26 +10,25 @@
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    let officeId: number;
-    let officeName: string;
+    let officeId: number | undefined;
 
     async function handleSubmit(this: HTMLFormElement) {
-        const elOfficeName = this.elements.namedItem('officename');
+        const input = this.elements.namedItem('officename');
+        assert(input instanceof HTMLInputElement);
+        assert(input.type === 'text');
 
-        assert(elOfficeName instanceof HTMLInputElement);
-        assert(elOfficeName.type === 'text');
+        if (officeId === undefined) return;
+        if (!this.reportValidity()) return;
+        if (input.value === $officeList[officeId].name) return;
 
-        if (!officeId || !elOfficeName.value || elOfficeName.value === officeName) return;
-        
         try {
             // Create a pseudo-office element
             await Office.update({
                 id: officeId,
-                name: elOfficeName.value
+                name: input.value
             });
             await officeList.reload?.();
-            officeId = 0;
-            officeName = '';
+            officeId = undefined;
             this.reset();
         } catch (err) {
             // TODO: No permission handler
@@ -43,22 +40,17 @@
 <p>You are currently editing an office as {$userSession.email}</p>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-        <OfficeSelect bind:index={officeId} bind:value={officeName} options={$officeList}/>
-        <br>
-        <TextInput
-            placeholder="New Office ID"
-            type = {InputType.Number}
-            name="officeid"
-            label="Office ID:"
-            bind:value={officeId}
-            disabled
-        />
-        <TextInput 
-            placeholder="Office Name"
-            name="officename"
-            label="Office Name:"
-            bind:value={officeName}
-        />
-        <Button submit><Checkmark alt="Edit Office"/> Edit Office</Button>
+        <OfficeSelect bind:oid={officeId} offices={$officeList} />
+        <br />
+        <p>Office ID: {officeId}</p>
+        {#if officeId !== undefined}
+            <TextInput
+                required
+                placeholder={$officeList[officeId].name}
+                name="officename"
+                label="Office Name:"
+            />
+            <Button submit><Checkmark alt="Edit Office"/> Edit Office</Button>
+        {/if}
     </form>
 </article>
