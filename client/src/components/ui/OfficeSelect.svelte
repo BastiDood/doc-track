@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Office } from '../../../../model/src/office.ts';
+    import type { Office } from '../../../../model/src/office.ts';
 
     export let options: Office[] = [];
     export let value: string | undefined = undefined;
