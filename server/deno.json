@@ -8,6 +8,7 @@
         "db": "postgres -D data",
         "template": "psql -U postgres -W -f db/init.sql -1 template1",
         "create": "createdb -U postgres -W doctrack",
+        "drop": "dropdb -U postgres -W doctrack",
         "test": "deno test --allow-env --allow-net",
         "start": "deno run --allow-env --allow-net --allow-read src/main.ts"
     },
