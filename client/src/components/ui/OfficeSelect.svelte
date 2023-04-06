@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { Office } from '../../../../model/src/office.ts'
+    import { Office } from '../../../../model/src/office.ts';
+
     export let options: Office[] = [];
     export let value: string | undefined = undefined;
     export let index = 0;
@@ -19,7 +20,7 @@
     @import url('../../pages/vars.css');
 
     select {
-        padding: var(--spacing-small) var(--spacing-normal)  var(--spacing-small) var(--spacing-normal);
+        padding: var(--spacing-small) var(--spacing-normal);
         border: var(--spacing-tiny) solid var(--shadow-color);
         border-radius: var(--border-radius);
         background: var(--dashboard-bg);

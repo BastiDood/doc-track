@@ -6,7 +6,7 @@
     export let disabled = false;
     export let name: string;
     export let label: string;
-    export let value: string = '';
+    export let value: string | number = '';
 </script>
 
 <label>
@@ -19,7 +19,7 @@
 
     input {
         border: var(--primary-color) 2px solid;
-        padding: var(--spacing-small) var(--spacing-normal);
         border-radius: var(--border-radius);
+        padding: var(--spacing-small) var(--spacing-normal);
     }
 </style>
