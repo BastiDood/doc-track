@@ -16,7 +16,7 @@
     @import url('../../pages/vars.css');
 
     select {
-        padding: var(--spacing-small) var(--spacing-normal)  var(--spacing-small) var(--spacing-normal);
+        padding: var(--spacing-small) var(--spacing-normal);
         border: var(--spacing-tiny) solid var(--shadow-color);
         border-radius: var(--border-radius);
         background: var(--dashboard-bg);

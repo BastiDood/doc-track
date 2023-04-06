@@ -5,14 +5,13 @@
     export let placeholder = '';
     export let disabled = false;
     export let name: string;
-    export let isRoundedBorder = true;
     export let label: string;
-    export let value: string | number = '';
+    export let value: string = '';
 </script>
 
 <label>
     {label}
-    <input {type} {placeholder} {name} {disabled} {value} class:round-border={isRoundedBorder} />
+    <input {type} {placeholder} {name} {disabled} {value} />
 </label>
 
 <style>
@@ -21,9 +20,6 @@
     input {
         border: var(--primary-color) 2px solid;
         padding: var(--spacing-small) var(--spacing-normal);
-    }
-
-    .round-border {
-    border-radius: var(--border-radius);
+        border-radius: var(--border-radius);
     }
 </style>
