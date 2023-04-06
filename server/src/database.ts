@@ -509,12 +509,33 @@ export class Database {
         return OfficeSchema.array().parse(rows);
     }
 
-    /** Adds a new office to the system. */
+    /** @deprecated Adds a new office to the system. */
     async createOffice(name: Office['name']): Promise<Office['id']> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`INSERT INTO office (name) VALUES (${name}) RETURNING id`;
         assertStrictEquals(rest.length, 0);
         return OfficeSchema.pick({ id: true }).parse(first).id;
+    }
+
+    /** Adds a new office to the system. */
+    async createOfficeWithSuperuser(admin: User['id'], name: Office['name']): Promise<Office['id']> {
+        // TODO: add tests
+
+        // Create new office
+        const transaction = this.#client.createTransaction('office_superuser');
+        await transaction.begin();
+        const { rows: [ first, ...rest ] } = await transaction
+            .queryObject`INSERT INTO office (name) VALUES (${name}) RETURNING id`;
+        assertStrictEquals(rest.length, 0);
+
+        // Add first superuser of the office
+        const { id } = OfficeSchema.pick({ id: true }).parse(first);
+        const { rowCount } = await transaction
+            .queryArray`INSERT INTO staff (user_id,office,permission) VALUES (${admin},${id},4095::LocalPermission)`;
+        assertStrictEquals(rowCount, 1);
+
+        await transaction.commit();
+        return id;
     }
 
     /** Update office information. Returns `true` if successful. */
