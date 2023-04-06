@@ -7,11 +7,12 @@
     export let name: string;
     export let isRoundedBorder = true;
     export let label: string;
+    export let value: string | number = '';
 </script>
 
 <label>
     {label}
-    <input {type} {placeholder} {name} {disabled} class:round-border={isRoundedBorder} />
+    <input {type} {placeholder} {name} {disabled} {value} class:round-border={isRoundedBorder} />
 </label>
 
 <style>
