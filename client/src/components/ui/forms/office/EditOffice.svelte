@@ -12,7 +12,7 @@
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    let officeID: number;
+    let officeId: number;
     let officeName: string;
 
     async function handleSubmit(this: HTMLFormElement) {
@@ -21,16 +21,16 @@
         assert(elOfficeName instanceof HTMLInputElement);
         assert(elOfficeName.type === 'text');
 
-        if (!officeID || !elOfficeName.value || elOfficeName.value === officeName) return;
+        if (!officeId || !elOfficeName.value || elOfficeName.value === officeName) return;
         
         try {
             // Create a pseudo-office element
             await Office.update({
-                id: officeID,
+                id: officeId,
                 name: elOfficeName.value
             });
             await officeList.reload?.();
-            officeID = 0;
+            officeId = 0;
             officeName = '';
             this.reset();
         } catch (err) {
@@ -40,21 +40,21 @@
     }
 </script>
 
-<p>You are currently editing an office {$userSession.email}</p>
+<p>You are currently editing an office as {$userSession.email}</p>
 <section>
     
 </section>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-        <OfficeSelect bind:index={officeID} bind:value={officeName} options={$officeList}/>
+        <OfficeSelect bind:index={officeId} bind:value={officeName} options={$officeList}/>
         <br>
         <TextInput
             placeholder="New Office ID"
             type = {InputType.Number}
             name="officeid"
             label="Office ID:"
-            bind:value={officeID}
-            disabled={true}
+            bind:value={officeId}
+            disabled
         />
         <TextInput 
             placeholder="Office Name"

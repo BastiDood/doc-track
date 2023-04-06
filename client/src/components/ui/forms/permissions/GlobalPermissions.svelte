@@ -9,7 +9,7 @@
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
 
-    export let userID = $userSession.id;
+    export let userId = $userSession.id;
 
     async function handleSubmit(this: HTMLFormElement) { 
         // Recompute permissions before submitting
@@ -29,7 +29,7 @@
         try {
             // Rebuild pseudo-user object
             await User.setPermission({
-                id: userID,
+                id: userId,
                 permission: permsVal,
             });
             await userSession.reload?.();
@@ -46,10 +46,10 @@
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     <TextInput
         placeholder="Input user ID here."
-        name="userID"
+        name="userId"
         label="User ID:"
         disabled={true}
-        bind:value={userID}
+        bind:value={userId}
     />
     <label>
         <input
