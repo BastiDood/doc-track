@@ -170,7 +170,10 @@ Deno.test('full API integration test', async t => {
             name: user.name,
             email: user.email,
             picture: user.picture,
-            local_perms: { [oid]: (Local.ViewMetrics << 1) - 1 },
+            local_perms: {
+                [oid]: (Local.ViewMetrics << 1) - 1,
+                [otherOid]: (Local.ViewMetrics << 1) - 1,
+            },
             global_perms: user.permission,
         });
     });
