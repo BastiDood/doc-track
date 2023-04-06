@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { assert } from '../../../assert.ts';
+    import { assert } from '../../../../assert.ts';
 
-    import { Office } from '../../../api/office.ts';
-    import { InputType } from '../../types.ts';
-    import { userSession } from '../../../pages/dashboard/stores/UserStore.ts';
-    import { officeList } from '../../../pages/dashboard/stores/OfficeStore.ts';
+    import { Office } from '../../../../api/office.ts';
+    import { InputType } from '../../../types.ts';
+    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { officeList } from '../../../../pages/dashboard/stores/OfficeStore.ts';
 
-    import TextInput from '../TextInput.svelte';
-    import Button from '../Button.svelte';
-    import Checkmark from '../../icons/Checkmark.svelte';
+    import TextInput from '../../TextInput.svelte';
+    import Button from '../../Button.svelte';
+    import Checkmark from '../../../icons/Checkmark.svelte';
 
     async function handleSubmit(this: HTMLFormElement) {
         const elOfficeId = this.elements.namedItem('officeid');
@@ -64,7 +64,7 @@
 </article>
 
 <style>
-    @import url('../../../pages/vars.css');
+    @import url('../../../../pages/vars.css');
     section {
         overflow-y: scroll;
         border: var(--spacing-tiny) solid;

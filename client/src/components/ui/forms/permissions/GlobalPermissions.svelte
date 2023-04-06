@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { assert } from '../../../assert.ts';
+    import { assert } from '../../../../assert.ts';
 
-    import { User } from '../../../api/user.ts';
-    import { Global } from '../../../../../model/src/permission.ts';
-    import { userSession } from '../../../pages/dashboard/stores/UserStore.ts';
+    import { User } from '../../../../api/user.ts';
+    import { Global } from '../../../../../../model/src/permission.ts';
+    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
-    import Button from '../Button.svelte';
-    import Edit from '../../icons/Edit.svelte';
+    import Button from '../../Button.svelte';
+    import Edit from '../../../icons/Edit.svelte';
 
     async function handleSubmit(this: HTMLFormElement) { 
         // Recompute permissions before submitting
