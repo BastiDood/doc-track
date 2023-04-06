@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Office } from '../../../../model/src/office.ts';
     export let offices: Office[];
-    export let oid = 0;
+    export let oid: number | null = null;
 </script>
 
 <select bind:value={oid}>
