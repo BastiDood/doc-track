@@ -12,7 +12,6 @@
     export let userID = $userSession.id;
 
     async function handleSubmit(this: HTMLFormElement) { 
-        console.log($userSession)
         // Recompute permissions before submitting
         const nodes = this.elements.namedItem('perms');
         assert(nodes instanceof RadioNodeList);
