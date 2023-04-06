@@ -9,7 +9,7 @@
 </script>
 
 <select bind:value={index}>
-    {#each options as option}
+    {#each options as option (option.id)}
         <option value={option.id}>{option.name}</option>
     {:else}
         <option value={0}> No available office to select. </option>
