@@ -30,7 +30,7 @@
 <p>You are currently adding an office as {$userSession.email}</p>
 
 <section>
-    {#each $officeList as office}
+    {#each $officeList as office (office.id)}
         <p>{office.id}: {office.name}</p>
     {:else}
         No offices available
