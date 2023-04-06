@@ -2,6 +2,7 @@
     import { assert } from '../../../../assert.ts';
 
     import { User } from '../../../../api/user.ts';
+    import type { User as UserModel } from '../../../../../../model/src/user.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
@@ -9,7 +10,7 @@
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
 
-    export let userId = $userSession.id;
+    export let user: UserModel;
 
     async function handleSubmit(this: HTMLFormElement) { 
         // Recompute permissions before submitting
@@ -24,12 +25,12 @@
         }
 
         // No point in handling no-changes.
-        if ($userSession.permission === permsVal) return;
+        if (user.permission === permsVal) return;
  
         try {
             // Rebuild pseudo-user object
             await User.setPermission({
-                id: userId,
+                id: user.id,
                 permission: permsVal,
             });
             await userSession.reload?.();
@@ -40,23 +41,17 @@
     }
 </script>
 
-<h2>{$userSession.name}</h2>
-<p>{$userSession.email}: {$userSession.id}</p>
-<p>current(server side): {$userSession.global_perms}</p>
+<h2>{user.name}</h2>
+<p>{user.email}: {user.id}</p>
+<p>current(server side): {user.permission}</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-    <TextInput
-        placeholder="Input user ID here."
-        name="userId"
-        label="User ID:"
-        disabled={true}
-        bind:value={userId}
-    />
+    <p>User ID: {user.id}</p>
     <label>
         <input
             type="checkbox"
             name="perms"
             value={Global.GetOffices}
-            checked={($userSession.global_perms & Global.GetOffices) === Global.GetOffices}
+            checked={(user.permission & Global.GetOffices) === Global.GetOffices}
         />
         Get Offices
     </label>
@@ -65,7 +60,7 @@
             type="checkbox"
             name="perms"
             value={Global.CreateOffice}
-            checked={($userSession.global_perms & Global.CreateOffice) === Global.CreateOffice}
+            checked={(user.permission & Global.CreateOffice) === Global.CreateOffice}
         />
         Create Office
     </label>
@@ -74,7 +69,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateOffice}
-            checked={($userSession.global_perms & Global.UpdateOffice) === Global.UpdateOffice}
+            checked={(user.permission & Global.UpdateOffice) === Global.UpdateOffice}
         />
         Update Office
     </label>
@@ -83,7 +78,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateUser}
-            checked={($userSession.global_perms & Global.UpdateUser) === Global.UpdateUser}
+            checked={(user.permission & Global.UpdateUser) === Global.UpdateUser}
         />
         Update User
     </label>
@@ -92,7 +87,7 @@
             type="checkbox"
             name="perms"
             value={Global.CreateCategory}
-            checked={($userSession.global_perms & Global.CreateCategory) === Global.CreateCategory}
+            checked={(user.permission & Global.CreateCategory) === Global.CreateCategory}
         />
         Create Category
     </label>
@@ -101,7 +96,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateCategory}
-            checked={($userSession.global_perms & Global.UpdateCategory) === Global.UpdateCategory}
+            checked={(user.permission & Global.UpdateCategory) === Global.UpdateCategory}
         />
         Update Category
     </label>
@@ -110,7 +105,7 @@
             type="checkbox"
             name="perms"
             value={Global.DeleteCategory}
-            checked={($userSession.global_perms & Global.DeleteCategory) === Global.DeleteCategory}
+            checked={(user.permission & Global.DeleteCategory) === Global.DeleteCategory}
         />
         Delete Category
     </label>
@@ -119,7 +114,7 @@
             type="checkbox"
             name="perms"
             value={Global.ActivateCategory}
-            checked={($userSession.global_perms & Global.ActivateCategory) === Global.ActivateCategory}
+            checked={(user.permission & Global.ActivateCategory) === Global.ActivateCategory}
         />
         Activate Category
     </label>
@@ -128,7 +123,7 @@
             type="checkbox"
             name="perms"
             value={Global.ViewMetrics}
-            checked={($userSession.global_perms & Global.ViewMetrics) === Global.ViewMetrics}
+            checked={(user.permission & Global.ViewMetrics) === Global.ViewMetrics}
         />
         View Metrics
     </label>
