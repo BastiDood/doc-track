@@ -529,7 +529,7 @@ export class Database {
         // Add first superuser of the office
         const { id } = OfficeSchema.pick({ id: true }).parse(first);
         const { rowCount } = await transaction
-            .queryArray`INSERT INTO staff (user_id,office,permission) VALUES (${admin},${id},4095::LocalPermission)`;
+            .queryArray`INSERT INTO staff (user_id,office,permission) VALUES (${admin},${id},4095::bit(11)::LocalPermission)`;
         assertStrictEquals(rowCount, 1);
 
         await transaction.commit();
