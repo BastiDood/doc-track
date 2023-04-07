@@ -6,7 +6,6 @@
     import { Global } from '../../../../../../model/src/permission.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
-    import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
 

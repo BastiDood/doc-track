@@ -5,7 +5,6 @@
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte'
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import Select from '../../../components/ui/Select.svelte';
     import Button from '../../../components/ui/Button.svelte';
 
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
