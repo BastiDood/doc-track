@@ -120,7 +120,6 @@
         />
         Invalidate Batch
     </label>
-    
     <label>
         <input
             type="checkbox"

@@ -5,7 +5,7 @@
   export let disabled = false;
 </script>
 
-  <button type={submit ? "submit" : "button"} class={type} {disabled} on:click>
+<button type={submit ? "submit" : "button"} class={type} {disabled} on:click>
     <slot>{type}</slot>
 </button>
 
