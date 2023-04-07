@@ -65,6 +65,9 @@ async function setup(pool: Pool) {
         assertStrictEquals(rest.length, 0);
         assertEquals(first, { office: oid, permission });
 
+        // Set as superuser
+        assert(await db.setUserPermissions(user.id, 511));
+
         // Construct a full valid session
         const { id, nonce, expiration } = await db.generatePendingSession();
         const pending = await db.upgradeSession({
@@ -122,10 +125,11 @@ Deno.test('full API integration test', async t => {
         });
     });
 
+    // Promote as superuser
     await t.step('User API', async () =>
         assert(await User.setPermission({
             id: user.id,
-            permission: 0,
+            permission: 511,
         }))
     );
 
