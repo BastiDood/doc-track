@@ -5,15 +5,14 @@
     import type { User as UserModel } from '../../../../../../model/src/user.ts';
     import { Local } from '../../../../../../model/src/permission.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-
-    import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
 
     export let user: UserModel;
     export let officeNo: number;
-
-    let permission = user.permission; //pass permission here as local permission
+    let permission: UserModel['permission']; //pass permission here as local permission
+    
+    $: permission = user.permission;
 
     async function handleSubmit(this: HTMLFormElement) { 
         // Recompute permissions before submitting
@@ -47,7 +46,7 @@
     }
 </script>
 
-<p> You are currently editing {user.name}: {user.email} on office {officeNo}</p>
+<p> You are currently editing the user {user.name}: {user.email} on office {officeNo}</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     <label>
         <input
@@ -139,15 +138,6 @@
             checked={(permission & Local.InsertSnapshot) === Local.InsertSnapshot}
         />
         Insert Snapshot
-    </label>
-    <label>
-        <input
-            type="checkbox"
-            name="perms"
-            value={Local.ViewMetrics}
-            checked={(permission & Local.ViewMetrics) === Local.ViewMetrics}
-        />
-        Revoke Invite
     </label>
     <label>
         <input
