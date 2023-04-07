@@ -41,9 +41,6 @@
     }
 </script>
 
-<h2>{user.name}</h2>
-<p>{user.email}: {user.id}</p>
-<p>current(server side): {user.permission}</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     <p>User ID: {user.id}</p>
     <label>

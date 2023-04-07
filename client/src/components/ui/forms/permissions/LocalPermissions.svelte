@@ -43,7 +43,6 @@
     }
 </script>
 
-<p> You are currently editing the user {user.name}: {user.email} on office {officeNo}</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     <label>
         <input
