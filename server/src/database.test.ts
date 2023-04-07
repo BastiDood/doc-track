@@ -4,6 +4,7 @@ import {
     assertEquals,
     assertFalse,
     assertInstanceOf,
+    assertNotStrictEquals,
     assertStrictEquals,
     equal,
 } from 'asserts';
@@ -229,6 +230,9 @@ Deno.test('full OAuth flow', async t => {
         assertStrictEquals(await db.activateCategory(id), null);
         assertStrictEquals(await db.deleteCategory(id), null);
     });
+
+    await t.step('office creation with superuser', async () =>
+        assertNotStrictEquals(await db.createOfficeWithSuperuser(USER.id, 'Cool Office'), 0));
 
     const { id: batch, codes } = await db.generateBatch({ office, generator: USER.id });
     await t.step('batch generation', () => {
