@@ -221,7 +221,7 @@ export class Database {
     async setStaffPermissions(uid: Staff['user_id'], oid: Staff['office'], perms: Staff['permission']): Promise<boolean> {
         // TODO: Check if valid permissions
         const { rowCount } = await this.#client
-            .queryArray`UPDATE staff SET permission = ${perms.toString(2)} WHERE user_id = ${uid} AND office = ${oid}`;
+            .queryArray`UPDATE staff SET permission = ${perms.toString(2)}::LocalPermission WHERE user_id = ${uid} AND office = ${oid}`;
         switch (rowCount) {
             case 0: return false;
             case 1: return true;
@@ -233,7 +233,7 @@ export class Database {
     async setUserPermissions(id: User['id'], perms: User['permission']): Promise<boolean> {
         // TODO: Check if valid permissions
         const { rowCount } = await this.#client
-            .queryArray`UPDATE users SET permission = ${perms.toString(2)} WHERE id = ${id}`;
+            .queryArray`UPDATE users SET permission = ${perms.toString(2)}::GlobalPermission WHERE id = ${id}`;
         switch (rowCount) {
             case 0: return false;
             case 1: return true;
