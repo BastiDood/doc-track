@@ -1,15 +1,15 @@
 <script lang="ts">
     import { assert } from '../../../../assert.ts';
 
-    import { User } from '../../../../api/user.ts';
+    import { Staff } from '../../../../api/staff.ts';
     import type { User as UserModel } from '../../../../../../model/src/user.ts';
-    import { Global } from '../../../../../../model/src/permission.ts';
+    import { Local } from '../../../../../../model/src/permission.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
 
     export let user: UserModel;
+    export let office: number;
 
     async function handleSubmit(this: HTMLFormElement) { 
         // Recompute permissions before submitting
@@ -28,10 +28,13 @@
  
         try {
             // Rebuild pseudo-user object
-            await User.setPermission({
-                id: user.id,
+            await Staff.setPermission({
+                office,
+                user_id: user.id, 
                 permission: permsVal,
             });
+
+            // Might be editing own session, might be not, reload anyway
             await userSession.reload?.();
         } catch (err) {
             // TODO: No permission handler
@@ -41,87 +44,113 @@
 </script>
 
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-    <p>User ID: {user.id}</p>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.GetOffices}
-            checked={(user.permission & Global.GetOffices) === Global.GetOffices}
+            value={Local.AddStaff}
+            checked={(user.permission & Local.AddStaff) === Local.AddStaff}
         />
-        Get Offices
+        Add Staff
     </label>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.CreateOffice}
-            checked={(user.permission & Global.CreateOffice) === Global.CreateOffice}
+            value={Local.RemoveStaff}
+            checked={(user.permission & Local.RemoveStaff) === Local.RemoveStaff}
         />
-        Create Office
+        Remove Staff
     </label>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.UpdateOffice}
-            checked={(user.permission & Global.UpdateOffice) === Global.UpdateOffice}
+            value={Local.UpdateStaff}
+            checked={(user.permission & Local.UpdateStaff) === Local.UpdateStaff}
         />
-        Update Office
+        Update Staff
     </label>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.UpdateUser}
-            checked={(user.permission & Global.UpdateUser) === Global.UpdateUser}
+            value={Local.AddInvite}
+            checked={(user.permission & Local.AddInvite) === Local.AddInvite}
         />
-        Update User
+        Add Invite
     </label>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.CreateCategory}
-            checked={(user.permission & Global.CreateCategory) === Global.CreateCategory}
+            value={Local.RevokeInvite}
+            checked={(user.permission & Local.RevokeInvite) === Local.RevokeInvite}
         />
-        Create Category
+        Revoke Invite
     </label>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.UpdateCategory}
-            checked={(user.permission & Global.UpdateCategory) === Global.UpdateCategory}
+            value={Local.ViewBatch}
+            checked={(user.permission & Local.ViewBatch) === Local.ViewBatch}
         />
-        Update Category
+        View Batch
     </label>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.DeleteCategory}
-            checked={(user.permission & Global.DeleteCategory) === Global.DeleteCategory}
+            value={Local.GenerateBatch}
+            checked={(user.permission & Local.GenerateBatch) === Local.GenerateBatch}
         />
-        Delete Category
+        Generate Batch
     </label>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.ActivateCategory}
-            checked={(user.permission & Global.ActivateCategory) === Global.ActivateCategory}
+            value={Local.InvalidateBatch}
+            checked={(user.permission & Local.InvalidateBatch) === Local.InvalidateBatch}
         />
-        Activate Category
+        Invalidate Batch
     </label>
     <label>
         <input
             type="checkbox"
             name="perms"
-            value={Global.ViewMetrics}
-            checked={(user.permission & Global.ViewMetrics) === Global.ViewMetrics}
+            value={Local.CreateDocument}
+            checked={(user.permission & Local.CreateDocument) === Local.CreateDocument}
+        />
+        Create Document
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Local.InsertSnapshot}
+            checked={(user.permission & Local.InsertSnapshot) === Local.InsertSnapshot}
+        />
+        Insert Snapshot
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Local.ViewMetrics}
+            checked={(user.permission & Local.ViewMetrics) === Local.ViewMetrics}
         />
         View Metrics
+    </label>
+    <label>
+        <input
+            type="checkbox"
+            name="perms"
+            value={Local.ViewInbox}
+            checked={(user.permission & Local.ViewInbox) === Local.ViewInbox}
+        />
+        View Inbox
     </label>
     <Button submit><Edit alt="Modify Staff" /> Modify Staff</Button>
 </form>

@@ -19,6 +19,7 @@
         try {
             await Office.create(node.value);
             await officeList.reload?.();
+            await userSession.reload?.(); // Reload to get superuser
             this.reset();
         } catch (err) {
             // TODO: No permission handler
