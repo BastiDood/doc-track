@@ -10,7 +10,7 @@
 
     export let user: UserModel;
     export let officeNo: number;
-    let permission: UserModel['permission']; //pass permission here as local permission
+    let permission: UserModel['permission']; // Pass permission here as local permission
     
     $: permission = user.permission;
 
@@ -37,7 +37,7 @@
                 permission: permsVal,
             });
 
-            //might be editing own session, might be not, reload anyway
+            // Might be editing own session, might be not, reload anyway
             await userSession.reload?.();
         } catch (err) {
             // TODO: No permission handler
