@@ -318,7 +318,6 @@ export class Database {
                     }
                 // falls through
                 default:
-                    console.log(code);
                     unreachable();
             }
         }
