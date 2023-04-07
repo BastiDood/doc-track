@@ -10,9 +10,6 @@
 
     export let user: UserModel;
     export let officeNo: number;
-    let permission: UserModel['permission']; // Pass permission here as local permission
-    
-    $: permission = user.permission;
 
     async function handleSubmit(this: HTMLFormElement) { 
         // Recompute permissions before submitting
@@ -27,7 +24,7 @@
         }
 
         // No point in handling no-changes.
-        if (permission === permsVal) return;
+        if (user.permission === permsVal) return;
  
         try {
             // Rebuild pseudo-user object
@@ -53,7 +50,7 @@
             type="checkbox"
             name="perms"
             value={Local.AddStaff}
-            checked={(permission & Local.AddStaff) === Local.AddStaff}
+            checked={(user.permission & Local.AddStaff) === Local.AddStaff}
         />
         Add Staff
     </label>
@@ -62,7 +59,7 @@
             type="checkbox"
             name="perms"
             value={Local.RemoveStaff}
-            checked={(permission & Local.RemoveStaff) === Local.RemoveStaff}
+            checked={(user.permission & Local.RemoveStaff) === Local.RemoveStaff}
         />
         Remove Staff
     </label>
@@ -71,7 +68,7 @@
             type="checkbox"
             name="perms"
             value={Local.UpdateStaff}
-            checked={(permission & Local.UpdateStaff) === Local.UpdateStaff}
+            checked={(user.permission & Local.UpdateStaff) === Local.UpdateStaff}
         />
         Update Staff
     </label>
@@ -80,7 +77,7 @@
             type="checkbox"
             name="perms"
             value={Local.AddInvite}
-            checked={(permission & Local.AddInvite) === Local.AddInvite}
+            checked={(user.permission & Local.AddInvite) === Local.AddInvite}
         />
         Add Invite
     </label>
@@ -89,7 +86,7 @@
             type="checkbox"
             name="perms"
             value={Local.RevokeInvite}
-            checked={(permission & Local.RevokeInvite) === Local.RevokeInvite}
+            checked={(user.permission & Local.RevokeInvite) === Local.RevokeInvite}
         />
         Revoke Invite
     </label>
@@ -98,7 +95,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewBatch}
-            checked={(permission & Local.ViewBatch) === Local.ViewBatch}
+            checked={(user.permission & Local.ViewBatch) === Local.ViewBatch}
         />
         View Batch
     </label>
@@ -107,7 +104,7 @@
             type="checkbox"
             name="perms"
             value={Local.GenerateBatch}
-            checked={(permission & Local.GenerateBatch) === Local.GenerateBatch}
+            checked={(user.permission & Local.GenerateBatch) === Local.GenerateBatch}
         />
         Generate Batch
     </label>
@@ -116,7 +113,7 @@
             type="checkbox"
             name="perms"
             value={Local.InvalidateBatch}
-            checked={(permission & Local.InvalidateBatch) === Local.InvalidateBatch}
+            checked={(user.permission & Local.InvalidateBatch) === Local.InvalidateBatch}
         />
         Invalidate Batch
     </label>
@@ -125,7 +122,7 @@
             type="checkbox"
             name="perms"
             value={Local.CreateDocument}
-            checked={(permission & Local.CreateDocument) === Local.CreateDocument}
+            checked={(user.permission & Local.CreateDocument) === Local.CreateDocument}
         />
         Create Document
     </label>
@@ -134,7 +131,7 @@
             type="checkbox"
             name="perms"
             value={Local.InsertSnapshot}
-            checked={(permission & Local.InsertSnapshot) === Local.InsertSnapshot}
+            checked={(user.permission & Local.InsertSnapshot) === Local.InsertSnapshot}
         />
         Insert Snapshot
     </label>
@@ -143,7 +140,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewMetrics}
-            checked={(permission & Local.ViewMetrics) === Local.ViewMetrics}
+            checked={(user.permission & Local.ViewMetrics) === Local.ViewMetrics}
         />
         View Metrics
     </label>
@@ -152,7 +149,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewInbox}
-            checked={(permission & Local.ViewInbox) === Local.ViewInbox}
+            checked={(user.permission & Local.ViewInbox) === Local.ViewInbox}
         />
         View Inbox
     </label>
