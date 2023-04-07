@@ -55,7 +55,7 @@
         {#if $userSession.local_perms[selectedOffice] !== undefined }
             <LocalPermissions user={{
                 ...$userSession,
-                permission: $userSession.local_perms[selectedOffice]!,
+                permission: $userSession.local_perms[selectedOffice],
             }} office={selectedOffice} />
         {:else}
             Current user is not a staff of the selected office.
