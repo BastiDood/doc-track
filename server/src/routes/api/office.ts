@@ -111,9 +111,9 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
             return new Response(null, { status: Status.Forbidden });
         }
 
-        const office = await db.createOffice(name);
-        info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> created new office ${office} "${name}"`);
-        return new Response(office.toString(), {
+        const oid = await db.createOfficeWithSuperuser(operator.id, name);
+        info(`[Office] User ${operator.id} ${operator.name} <${operator.email}> created new office ${oid} "${name}"`);
+        return new Response(oid.toString(), {
             headers: { 'Content-Type': 'application/json' },
             status: Status.Created,
         });
