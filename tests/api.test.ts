@@ -22,7 +22,7 @@ import { Staff } from '~client/api/staff.ts';
 import { User } from '~client/api/user.ts';
 import { Vapid } from '~client/api/vapid.ts';
 
-import { Global, Local } from '~model/permission.ts';
+import { Local } from '~model/permission.ts';
 import { Status } from '~model/snapshot.ts';
 
 import { Database } from '~server/database.ts';
@@ -44,7 +44,7 @@ async function setup(pool: Pool) {
         const email = `${randomEmail}@up.edu.ph`;
         const creation = await db.upsertInvitation({
             office: oid,
-            permission: (Local.ViewInbox << 1) - 1,
+            permission: 4095,
             email,
         });
         assertNotStrictEquals(creation, null);
@@ -54,7 +54,7 @@ async function setup(pool: Pool) {
             id: crypto.randomUUID(),
             name: 'Hello World',
             picture: 'https://doctrack.app/profile/user.png',
-            permission: (Global.ViewMetrics << 1) - 1,
+            permission: 511,
             email,
         };
 
@@ -159,7 +159,7 @@ Deno.test('full API integration test', async t => {
         assert(await Staff.setPermission({
             office: oid,
             user_id: user.id,
-            permission: (Local.ViewInbox << 1) - 1,
+            permission: 4095,
         }))
     );
 
@@ -171,8 +171,8 @@ Deno.test('full API integration test', async t => {
             email: user.email,
             picture: user.picture,
             local_perms: {
-                [oid]: (Local.ViewInbox << 1) - 1,
-                [otherOid]: (Local.ViewInbox << 1) - 1,
+                [oid]: 4095,
+                [otherOid]: 4095,
             },
             global_perms: user.permission,
         });
