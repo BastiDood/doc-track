@@ -106,7 +106,7 @@ export async function handleCreateOffice(pool: Pool, req: Request) {
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        if ((operator.permission & Global.CreateOffice) === 0) {
+        if ((operator.permission & Global.CreateOffice) !== Global.CreateOffice) {
             error(`[Office] User ${operator.id} ${operator.name} <${operator.email}> cannot create new office "${name}"`);
             return new Response(null, { status: Status.Forbidden });
         }
