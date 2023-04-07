@@ -9,7 +9,7 @@
     import Edit from '../../../icons/Edit.svelte';
 
     export let user: UserModel;
-    export let officeNo: number;
+    export let office: number;
 
     async function handleSubmit(this: HTMLFormElement) { 
         // Recompute permissions before submitting
@@ -29,7 +29,7 @@
         try {
             // Rebuild pseudo-user object
             await Staff.setPermission({
-                office: officeNo,
+                office,
                 user_id: user.id, 
                 permission: permsVal,
             });

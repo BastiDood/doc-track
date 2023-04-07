@@ -53,12 +53,11 @@
     Select an Office: <OfficeSelect bind:oid={selectedOffice} offices={$officeList}/>
     <br>
     {#if selectedOffice !== null}
-        
         {#if $userSession.local_perms[selectedOffice] !== undefined }
-        <LocalPermissions user={{
-            ...$userSession,
-            permission: $userSession.local_perms[selectedOffice]
-        }} officeNo={selectedOffice} />
+            <LocalPermissions user={{
+                ...$userSession,
+                permission: $userSession.local_perms[selectedOffice]!,
+            }} office={selectedOffice} />
         {:else}
             Current user is not a staff of the selected office.
         {/if}
