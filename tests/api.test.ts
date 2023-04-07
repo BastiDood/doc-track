@@ -159,7 +159,7 @@ Deno.test('full API integration test', async t => {
         assert(await Staff.setPermission({
             office: oid,
             user_id: user.id,
-            permission: (Local.ViewMetrics << 1) - 1,
+            permission: (Local.ViewInbox << 1) - 1,
         }))
     );
 
@@ -171,8 +171,8 @@ Deno.test('full API integration test', async t => {
             email: user.email,
             picture: user.picture,
             local_perms: {
-                [oid]: (Local.ViewMetrics << 1) - 1,
-                [otherOid]: (Local.ViewMetrics << 1) - 1,
+                [oid]: (Local.ViewInbox << 1) - 1,
+                [otherOid]: (Local.ViewInbox << 1) - 1,
             },
             global_perms: user.permission,
         });
