@@ -160,13 +160,12 @@ export class Database {
      * case `null` is returned). Otherwise, we delete all of the invites of the specified user
      * and return an array of the office IDs to which the user is invited.
      */
-    async insertInvitedUser({ id, name, email, picture, permission }: User): Promise<Office['id'][] | null> {
+    async insertInvitedUser({ id, name, email, picture }: Omit<User, 'permission'>): Promise<Pick<Invitation, 'office' | 'permission'>[] | null> {
         const transaction = this.#client.createTransaction('registration', { isolation_level: 'serializable' });
         await transaction.begin();
 
-        const permBits = permission.toString(2);
         const updateResult = await transaction
-            .queryArray`UPDATE users SET name = ${name}, email = ${email}, picture = ${picture}, permission = ${permBits} WHERE id = ${id}`;
+            .queryArray`UPDATE users SET name = ${name}, email = ${email}, picture = ${picture} WHERE id = ${id}`;
         assert(updateResult.rowCount !== undefined);
 
         // User already exists
@@ -186,10 +185,10 @@ export class Database {
 
         // Add the user into the system
         const insertResult = await transaction
-            .queryArray`INSERT INTO users (id,name,email,picture,permission) VALUES (${id},${name},${email},${picture},${permBits})`;
+            .queryArray`INSERT INTO users (id,name,email,picture) VALUES (${id},${name},${email},${picture})`;
         assertStrictEquals(insertResult.rowCount, 1);
 
-        // Add the user to all the offices (if any)
+        // Add the user to all offices to which they are invited (if any)
         for (const { office, permission } of invites) {
             const bits = permission.toString(2);
             const staffResult = await transaction
@@ -198,7 +197,7 @@ export class Database {
         }
 
         await transaction.commit();
-        return invites.map(i => i.office);
+        return invites;
     }
 
     /**
@@ -222,7 +221,7 @@ export class Database {
     async setStaffPermissions(uid: Staff['user_id'], oid: Staff['office'], perms: Staff['permission']): Promise<boolean> {
         // TODO: Check if valid permissions
         const { rowCount } = await this.#client
-            .queryArray`UPDATE staff SET permission = ${perms.toString(2)} WHERE user_id = ${uid} AND office = ${oid}`;
+            .queryArray`UPDATE staff SET permission = ${perms.toString(2)}::LocalPermission WHERE user_id = ${uid} AND office = ${oid}`;
         switch (rowCount) {
             case 0: return false;
             case 1: return true;
@@ -234,7 +233,7 @@ export class Database {
     async setUserPermissions(id: User['id'], perms: User['permission']): Promise<boolean> {
         // TODO: Check if valid permissions
         const { rowCount } = await this.#client
-            .queryArray`UPDATE users SET permission = ${perms.toString(2)} WHERE id = ${id}`;
+            .queryArray`UPDATE users SET permission = ${perms.toString(2)}::GlobalPermission WHERE id = ${id}`;
         switch (rowCount) {
             case 0: return false;
             case 1: return true;
@@ -319,7 +318,6 @@ export class Database {
                     }
                 // falls through
                 default:
-                    console.log(code);
                     unreachable();
             }
         }
