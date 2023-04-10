@@ -16,7 +16,7 @@
     let currName: OfficeModel['name'] | null = null;
 
     // eslint-disable-next-line no-extra-parens
-    $: currName = ($officeList as OfficeModel[]).find(office => office.id === currId)?.name ?? null;
+    $: currName = $officeList.find(office => office.id === currId)?.name ?? null;
     
     async function handleSubmit(this: HTMLFormElement) {
         const input = this.elements.namedItem('officename');
