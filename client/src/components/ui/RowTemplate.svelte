@@ -5,7 +5,7 @@
 
     import OverflowMenuVertical from '../icons/OverflowMenuVertical.svelte';
 
-    export let iconSize = IconSize.Normal;
+    export let iconSize: IconSize = IconSize.Normal;
     export let title: string;
 
     const dispatch = createEventDispatcher();

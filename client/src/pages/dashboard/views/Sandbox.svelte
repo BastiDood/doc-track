@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { User } from '~model/user.ts';
+
     import { documentTest } from './sample.ts';
     import { RowEvent, RowType } from '../../../components/types.ts';
 
@@ -24,49 +26,50 @@
     let showPermission = false;
     let selectedOffice: number | null = null;
 
-    function overflowClickHandler(e: CustomEvent) {
+    let currentUser: User | null = null;
+    $: currentUser = {
+        id: $userSession.id,
+        name: $userSession.name,
+        email: $userSession.email,
+        picture: $userSession.picture,
+        permission: $userSession.global_perms,
+    };
+
+    function overflowClickHandler(e: CustomEvent<RowEvent>) {
         if (!e.detail) return;
         currentContext = e.detail;
         showContextMenu = true;
     }
 </script>
-<h1>Sandbox</h1>
 
-<Button on:click={() => showPermission = true}>
+<h1>Sandbox</h1>
+<Button on:click={() => (showPermission = true)}>
     Edit Global Permissions
 </Button>
-
-<Button on:click={() => showCreateOffice = true}>
+<Button on:click={() => (showCreateOffice = true)}>
     Create an Office
 </Button>
-
-<Button on:click={() => showEditOffice = true}>
+<Button on:click={() => (showEditOffice = true)}>
     Edit an Office
 </Button>
-
-<Button on:click={() => showLocalPermission = true} disabled={$officeList.length === 0}>
+<Button on:click={() => (showLocalPermission = true)} disabled={$officeList.length === 0}>
     Edit Local Permission
 </Button>
 
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
     Select an Office: <OfficeSelect bind:oid={selectedOffice} offices={$officeList}/>
     <br>
-    {#if selectedOffice !== null}
-        {#if $userSession.local_perms[selectedOffice] !== undefined }
-            <LocalPermissions user={{
-                ...$userSession,
-                permission: $userSession.local_perms[selectedOffice],
-            }} office={selectedOffice} />
-        {:else}
-            Current user is not a staff of the selected office.
-        {/if}
+    {#if selectedOffice !== null && currentUser !== null }
+        <LocalPermissions user={currentUser} office={selectedOffice} />
+    {:else}
+        Current user is not a staff of the selected office.
     {/if}
 </Modal>
+
 <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
-    <GlobalPermissions user={{
-        ...$userSession,
-        permission: $userSession.global_perms,
-    }}/>
+    {#if currentUser !== null}
+        <GlobalPermissions user={currentUser} />
+    {/if}
 </Modal>
 
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>

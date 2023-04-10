@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { ButtonType } from '../types.ts';
-  export let type: ButtonType = ButtonType.Primary;
-  export let submit = false;
-  export let disabled = false;
+    import { ButtonType } from '../types.ts';
+    export let type: ButtonType = ButtonType.Primary;
+    export let submit = false;
+    export let disabled = false;
 </script>
 
 <button type={submit ? 'submit' : 'button'} class={type} {disabled} on:click>
@@ -10,7 +10,7 @@
 </button>
 
 <style>
-  @import url('../../pages/global.css');
+  @import url('../../pages/vars.css');
 
   button {
     margin: var(--spacing-normal);

@@ -4,9 +4,9 @@
 
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { PersonPayload, IconSize, Events } from '../../types.ts';
-    import { User } from '../../../../../model/user.ts';
-    import { Staff } from '../../../../../model/staff.ts';
+    import { PersonPayload, IconSize, Events, RowType } from '../../types.ts';
+    import { User } from '../../../../../model/src/user.ts';
+    import { Staff } from '../../../../../model/src/staff.ts';
     export let iconSize = IconSize.Normal;
     
     // From user.ts
@@ -22,6 +22,7 @@
 
     const dispatch = createEventDispatcher();
     const rowEvent: PersonPayload = {
+        ty: RowType.Person,
         id,
         office,
     };

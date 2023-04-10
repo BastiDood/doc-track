@@ -17,11 +17,11 @@
         assert(nodes instanceof RadioNodeList);
 
         let permsVal = 0;
-        for (const node of nodes) {
+        nodes.forEach(node => {
             assert(node instanceof HTMLInputElement);
             assert(node.type === 'checkbox');
             if (node.checked) permsVal |= parseInt(node.value, 10);
-        }
+        });
 
         // No point in handling no-changes.
         if (user.permission === permsVal) return;
