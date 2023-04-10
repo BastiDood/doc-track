@@ -30,7 +30,7 @@
             // Create a pseudo-office element
             await Office.update({
                 id: currId,
-                name: input.value
+                name: input.value,
             });
             await officeList.reload?.();
             currId = null;

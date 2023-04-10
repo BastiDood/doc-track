@@ -2,14 +2,14 @@
     import { documentTest } from './sample.ts';
     import { RowEvent, RowType } from '../../../components/types.ts';
 
-    import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte'
+    import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import Button from '../../../components/ui/Button.svelte';
 
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
-    import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte'
+    import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
     import { userSession } from '../stores/UserStore.ts';
     import { officeList } from '../stores/OfficeStore.ts';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
@@ -20,7 +20,7 @@
     let showEditOffice = false;
     let showLocalPermission = false;
     let currentContext: RowEvent | null = null;
-    let currentlySelected = '';
+    const currentlySelected = '';
     let showPermission = false;
     let selectedOffice: number | null = null;
 

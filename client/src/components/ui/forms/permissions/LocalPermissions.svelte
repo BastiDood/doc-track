@@ -11,7 +11,7 @@
     export let user: UserModel;
     export let office: number;
 
-    async function handleSubmit(this: HTMLFormElement) { 
+    async function handleSubmit(this: HTMLFormElement) {
         // Recompute permissions before submitting
         const nodes = this.elements.namedItem('perms');
         assert(nodes instanceof RadioNodeList);
@@ -25,12 +25,12 @@
 
         // No point in handling no-changes.
         if (user.permission === permsVal) return;
- 
+
         try {
             // Rebuild pseudo-user object
             await Staff.setPermission({
                 office,
-                user_id: user.id, 
+                user_id: user.id,
                 permission: permsVal,
             });
 

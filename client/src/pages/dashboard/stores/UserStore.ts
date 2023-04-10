@@ -8,6 +8,6 @@ import { Session } from '../../../api/session.ts';
 
 export const userSession: Loadable<FullSession> = asyncReadable(
     null,
-    Session.getUser, 
+    Session.getUser,
     { reloadable: true }
 );

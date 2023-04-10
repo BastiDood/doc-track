@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
 
-    import { IconSize } from '../../types.ts'
+    import { IconSize } from '../../types.ts';
     import Add from '../../icons/Add.svelte';
 
     export let iconSize = IconSize.Normal;

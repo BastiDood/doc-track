@@ -1,10 +1,10 @@
 <script lang="ts">
-    import './row-element.css'
+    import './row-element.css';
     import { createEventDispatcher } from 'svelte';
 
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { PersonPayload, IconSize, Events} from '../../types.ts';
+    import { PersonPayload, IconSize, Events } from '../../types.ts';
     import { User } from '../../../../../model/user.ts';
     import { Staff } from '../../../../../model/staff.ts';
     export let iconSize = IconSize.Normal;

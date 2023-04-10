@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';    
+    import { createEventDispatcher } from 'svelte';
 
-    import PersonMail from '../icons/PersonMail.svelte'
+    import PersonMail from '../icons/PersonMail.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, InvitePayload, RowType, Events } from '../../types.ts';
