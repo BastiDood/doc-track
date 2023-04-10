@@ -48,7 +48,7 @@
     }
 </script>
 
-<p>You are currently editing an office as {$userSession.email}</p>
+<p>You are currently editing an office as {$userSession?.email}</p>
 <article>
     {#if $officeList.length === 0}
         No offices to edit.
