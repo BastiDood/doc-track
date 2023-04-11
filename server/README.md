@@ -50,8 +50,14 @@ deno task template
 
 # Clone the previous template into a new database named `doctrack`. We may re-run
 # this command whenever # we want to restore to a blank state of the database so
-# that we don't have to keep re-initializingthe database.
+# that we don't have to keep re-initializing the database.
 deno task create
+
+# We must then initialize the root superuser. Note that this step will prompt you
+# for your unique Google User ID. If you do not know your ID yet, feel free to
+# provide a dummy value for now, then login to DocTrack, check the server logs for
+# your Google ID, and finally reinitialize the database with the correct value.
+deno task bootstrap
 
 # If you have not yet run this command before, place the
 # public and private keys into the `VAPID_PUB_KEY` and the

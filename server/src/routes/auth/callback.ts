@@ -84,7 +84,6 @@ export async function handleCallback(pool: Pool, req: Request, params: URLSearch
             name: idToken.name,
             email: idToken.email,
             picture: idToken.picture,
-            permission: 0,
         });
 
         if (offices === null)

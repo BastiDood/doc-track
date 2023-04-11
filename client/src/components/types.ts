@@ -3,7 +3,7 @@ import { Invitation } from '../../../model/src/invitation.ts';
 import { Staff } from '../../../model/src/staff.ts';
 
 export enum IconColor {
-    Default = 'default', 
+    Default = 'default',
     Primary = 'primary',
     Faded = 'faded',
 }

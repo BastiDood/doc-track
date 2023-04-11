@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';    
+    import { createEventDispatcher } from 'svelte';
 
-    import PersonMail from '../icons/PersonMail.svelte'
+    import PersonMail from '../../icons/PersonMail.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, InvitePayload, RowType, Events } from '../../types.ts';
@@ -23,7 +23,7 @@
 </script>
 
 <RowTemplate
-    title={`${email} Office: ${office} Permission: ${permission} Created on: ${creation}`}
+    title={`${email} Office: ${office} Permission: ${permission} Created on: ${creation.toDateString()}`}
     {iconSize}
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
 >

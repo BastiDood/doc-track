@@ -41,10 +41,11 @@ async function setup(pool: Pool) {
         assertStrictEquals(randomEmail.length, 8);
 
         // Invite mock email to the system
+        const permission = 4095;
         const email = `${randomEmail}@up.edu.ph`;
         const creation = await db.upsertInvitation({
             office: oid,
-            permission: 4095,
+            permission,
             email,
         });
         assertNotStrictEquals(creation, null);
@@ -54,7 +55,6 @@ async function setup(pool: Pool) {
             id: crypto.randomUUID(),
             name: 'Hello World',
             picture: 'https://doctrack.app/profile/user.png',
-            permission: 511,
             email,
         };
 
@@ -63,7 +63,10 @@ async function setup(pool: Pool) {
         assert(offices !== null);
         const [ first, ...rest ] = offices;
         assertStrictEquals(rest.length, 0);
-        assertStrictEquals(first, oid);
+        assertEquals(first, { office: oid, permission });
+
+        // Set as superuser
+        assert(await db.setUserPermissions(user.id, 511));
 
         // Construct a full valid session
         const { id, nonce, expiration } = await db.generatePendingSession();
@@ -122,10 +125,11 @@ Deno.test('full API integration test', async t => {
         });
     });
 
+    // Promote as superuser
     await t.step('User API', async () =>
         assert(await User.setPermission({
             id: user.id,
-            permission: user.permission,
+            permission: 511,
         }))
     );
 
@@ -174,7 +178,7 @@ Deno.test('full API integration test', async t => {
                 [oid]: 4095,
                 [otherOid]: 4095,
             },
-            global_perms: user.permission,
+            global_perms: 511,
         });
     });
 

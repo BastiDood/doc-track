@@ -24,7 +24,7 @@ export namespace Snapshot {
             body: JSON.stringify(info),
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
         });
         switch (res.status) {

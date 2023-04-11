@@ -43,7 +43,7 @@ export namespace Category {
             },
         });
         switch (res.status) {
-            case StatusCodes.CREATED: return CategorySchema.shape.id.parse(JSON.parse(await res.json()));
+            case StatusCodes.CREATED: return CategorySchema.shape.id.parse(await res.json());
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;

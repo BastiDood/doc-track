@@ -49,8 +49,8 @@ Deno.test('full OAuth flow', async t => {
     });
 
     await t.step('successfully revoke invites from the system', async () => {
+        const permission = 1;
         const email = 'world@up.edu.ph';
-        const permission = 0;
         const creation = await db.upsertInvitation({
             office,
             email,
@@ -72,7 +72,7 @@ Deno.test('full OAuth flow', async t => {
         name: 'Hello World',
         email: `${randomEmail}@up.edu.ph`,
         picture: 'https://cdn.google.com/hello.png',
-        permission: 1,
+        permission: 2,
     };
 
     await t.step('invalid retirement of staff', async () => {
@@ -132,7 +132,7 @@ Deno.test('full OAuth flow', async t => {
 
             const result = await db.insertInvitedUser(USER);
             assert(result !== null);
-            assertArrayIncludes(result, [ office ]);
+            assertArrayIncludes(result, [ { office: invite.office, permission: invite.permission } ]);
             assertStrictEquals(await db.upsertInvitation({
                 office,
                 email: USER.email,
@@ -175,9 +175,10 @@ Deno.test('full OAuth flow', async t => {
             expiration,
         });
         assertEquals(old, { nonce, expiration });
-
         assert(await db.checkValidSession(id));
-        assertEquals(await db.getUserFromSession(id), USER);
+
+        // Global permissions must be set to `0` by default.
+        assertEquals(await db.getUserFromSession(id), { ...USER, permission: 0 });
         assertEquals(await db.getStaffFromSession(id, office), {
             user_id: USER.id,
             permission: USER.permission,

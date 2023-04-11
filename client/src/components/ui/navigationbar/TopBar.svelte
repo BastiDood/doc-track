@@ -9,7 +9,7 @@
 
 <nav on:click|stopPropagation on:keypress>
     <div>
-        <span id="icon"><Hamburger on:click={() => show = !show} /></span>
+        <span id="icon"><Hamburger alt="Expand Menu" on:click={() => (show = !show)} /></span>
         <span>Hello, {user.name}!</span>
     </div>
     <img src={user.picture} alt="{user.name}" />

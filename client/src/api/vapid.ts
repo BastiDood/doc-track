@@ -16,7 +16,7 @@ export namespace Vapid {
         const auth = keys?.auth;
         assert(auth);
 
-        const p256dh = keys.p256dh;
+        const { p256dh } = keys;
         assert(p256dh);
 
         const res = await fetch('/api/vapid', {
