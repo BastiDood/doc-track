@@ -12,17 +12,18 @@
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    let currId: OfficeModel['id'] | null;
-    let currName: OfficeModel['name'] | undefined;
+    let currId: OfficeModel['id'] | null = null;
+    let currName: OfficeModel['name'] | null = null;
 
-    $: currName = $officeList.find(office => office.id === currId)?.name;
+    // eslint-disable-next-line no-extra-parens
+    $: currName = $officeList.find(office => office.id === currId)?.name ?? null;
     
     async function handleSubmit(this: HTMLFormElement) {
         const input = this.elements.namedItem('officename');
         assert(input instanceof HTMLInputElement);
         assert(input.type === 'text');
 
-        if (currId === null || currName === undefined) return;
+        if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
         if (input.value === currName) return;
 
@@ -30,20 +31,24 @@
             // Create a pseudo-office element
             await Office.update({
                 id: currId,
-                name: input.value
+                name: input.value,
             });
             await officeList.reload?.();
+
+            // eslint-disable-next-line require-atomic-updates
             currId = null;
-            currName = undefined;
+            // eslint-disable-next-line require-atomic-updates
+            currName = null;
+
             this.reset();
         } catch (err) {
             // TODO: No permission handler
-            alert(err);
+            console.error(err);
         }
     }
 </script>
 
-<p>You are currently editing an office as {$userSession.email}</p>
+<p>You are currently editing an office as {$userSession?.email}</p>
 <article>
     {#if $officeList.length === 0}
         No offices to edit.
@@ -51,9 +56,9 @@
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currId} offices={$officeList} />
             <br />
-            {#if currId !== null}
+            {#if typeof currId !== 'number'}
                 <p>Office ID: {currId}</p>
-                {#if currName !== undefined}
+                {#if currName !== null}
                     <TextInput
                         required
                         placeholder={currName}

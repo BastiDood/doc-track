@@ -1,9 +1,4 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-
-    import { assert } from '../../assert.ts';
-
-    import Button from './Button.svelte';
     import Close from '../icons/Close.svelte';
 
     export let showModal = false;
@@ -11,6 +6,7 @@
 
     let dialog: HTMLDialogElement | null = null;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     $: if (showModal) dialog?.showModal(); else dialog?.close();
 
     function offModal() {

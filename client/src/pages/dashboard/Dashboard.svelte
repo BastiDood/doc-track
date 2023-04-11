@@ -10,10 +10,9 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
-
 </script>
 
-<main on:click={() => toggleDrawer &&= false} on:keydown>
+<main on:click={() => (toggleDrawer &&= false)} on:keydown>
     {#await register()}
         Waiting for service worker...
     {:then}

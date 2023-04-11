@@ -1,13 +1,9 @@
-// HACK: IntelliSense doesn't seem to be playing nice unless we do this.
-import type { Loadable } from '@square/svelte-store/lib/async-stores/types.js';
-import { asyncReadable } from '@square/svelte-store/lib/async-stores';
-
-import type { FullSession } from '../../../../../model/src/api.ts';
+import { asyncReadable } from '@square/svelte-store';
 
 import { Session } from '../../../api/session.ts';
 
-export const userSession: Loadable<FullSession> = asyncReadable(
+export const userSession = asyncReadable(
     null,
-    Session.getUser, 
+    Session.getUser,
     { reloadable: true }
 );

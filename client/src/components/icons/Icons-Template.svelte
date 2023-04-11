@@ -8,7 +8,6 @@
 
     // Replace the next lines to generate an icon.
     const iconUrl = new URL('../../assets/icons/document-blank.svg', import.meta.url);
-
 </script>
 
 <img class="{color} {size}" {alt} src="{iconUrl.pathname}" on:click on:keydown />

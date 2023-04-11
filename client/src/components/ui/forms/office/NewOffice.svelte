@@ -13,9 +13,9 @@
         const node = this.elements.namedItem('officename');
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
-        
+    
         if (!node.value) return;
-        
+    
         try {
             await Office.create(node.value);
             await officeList.reload?.();

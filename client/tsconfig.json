@@ -4,12 +4,12 @@
         "allowImportingTsExtensions": true,
         "noEmit": true,
         "target": "ES2020",
+        "lib": [ "DOM", "ES2020" ],
         "module": "ES2020",
         "isolatedModules": true,
         "moduleResolution": "bundler",
         "strict": true,
         "paths": { "~model/*": [ "../model/src/*" ] },
-        "rootDir": "src",
         "types": [ "serviceworker" ],
         "plugins": [ { "name": "typescript-svelte-plugin" } ]
     },

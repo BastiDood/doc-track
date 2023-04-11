@@ -1,7 +1,9 @@
 <script lang="ts">
     export let show = false;
-    
+
     let context: HTMLDialogElement | null = null;
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     $: if (show) context?.showModal();
 
     function offShow() {
