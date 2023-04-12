@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { type Category as CategoryType, CategorySchema } from '~model/category.ts';
+import { type Category as CategoryType, CategorySchema } from '../../../model/src/category.ts';
 
 import {
     InsufficientPermissions,
@@ -30,6 +30,23 @@ export namespace Category {
         }
     }
 
+    /**
+     * Requires a valid session for a valid session.
+     * @returns list all (indiscrimate) {@linkcode Category} entries
+     */
+    export async function getAllCategories(): Promise<CategoryType[]> {
+        const res = await fetch('/api/categories/all', {
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json' },
+        });
+        switch (res.status) {
+            case StatusCodes.OK: return CategorySchema.array().parse(await res.json());
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
+    
     /**
      * Requires a valid session for a system operator.
      * @returns ID of the new {@linkcode Category} entry
