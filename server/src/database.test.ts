@@ -220,14 +220,18 @@ Deno.test('full OAuth flow', async t => {
         const id = await db.createCategory(first);
         assert(id !== null);
         assertEquals(await db.activateCategory(id), first);
-        assertArrayIncludes(await db.getAllCategories(), [ { id, name: first, active: true } ]);
+
+        const { active: oldCategories } = await db.getAllCategories();
+        assertArrayIncludes(oldCategories, [ { id, name: first } ]);
 
         const second = 'Request for Drop';
         assert(await db.renameCategory({ id, name: second }));
         assertEquals(await db.activateCategory(id), second);
-        assertArrayIncludes(await db.getAllCategories(), [ { id, name: second, active: true } ]);
+
+        const { active: newCategories } = await db.getAllCategories();
+        assertArrayIncludes(newCategories, [ { id, name: second } ]);
+
         assert(await db.deleteCategory(id));
-    
         assertStrictEquals(await db.activateCategory(id), null);
         assertStrictEquals(await db.deleteCategory(id), null);
     });
