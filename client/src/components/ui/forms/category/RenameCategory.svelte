@@ -7,10 +7,10 @@
     import { categoryActiveList, categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     
 
-    import TextInput from '../../TextInput.svelte.ts';
-    import Button from '../../Button.svelte.ts';
-    import Edit from '../../../icons/Edit.svelte.ts';
-    import CategorySelect from '../../CategorySelect.svelte.ts';
+    import TextInput from '../../TextInput.svelte';
+    import Button from '../../Button.svelte';
+    import Edit from '../../../icons/Edit.svelte';
+    import CategorySelect from '../../CategorySelect.svelte';
 
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | null = null;
