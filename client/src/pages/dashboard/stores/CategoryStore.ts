@@ -8,4 +8,3 @@ export const officeList = asyncReadable(
     { reloadable: true }
 );
 
-// Need some API to get all categories, even disabled ones for server operator.
