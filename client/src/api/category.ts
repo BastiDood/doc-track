@@ -10,7 +10,7 @@ import {
     UnexpectedStatusCode,
 } from './error.ts';
 
-import { type AllCategories, AllCategoriesSchema } from '~model/api.ts';
+import { type AllCategories, AllCategoriesSchema } from '../../../model/src/api.ts';
 
 export namespace Category {
     /**
