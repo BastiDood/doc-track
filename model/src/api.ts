@@ -74,3 +74,10 @@ export const FullSessionSchema = UserSchema
         local_perms: z.record(z.coerce.number().pipe(OfficeSchema.shape.id), StaffSchema.shape.permission),
     });
 export type FullSession = z.infer<typeof FullSessionSchema>;
+
+export const AllCategoriesSchema = z.object ({
+    active: z.array(CategorySchema.omit({active: true})),
+    retired: z.array(CategorySchema.omit({active: true}))
+});
+
+export type AllCategories = z.infer<typeof AllCategoriesSchema>;
