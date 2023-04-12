@@ -391,12 +391,6 @@ export class Database {
             : CategorySchema.pick({ id: true }).parse(first).id;
     }
 
-    /** @deprecated Gets a list of all the active categories in the system. */
-    async getActiveCategories(): Promise<Pick<Category, 'id' | 'name'>[]> {
-        const { rows } = await this.#client.queryObject('SELECT id,name FROM category WHERE active');
-        return CategorySchema.pick({ id: true, name: true }).array().parse(rows);
-    }
-
     /** Gets a list of all the active categories in the system. */
     async getAllCategories(): Promise<AllCategories> {
         const { rows: [ first, ...rest ] } = await this.#client

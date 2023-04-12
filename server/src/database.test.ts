@@ -13,6 +13,7 @@ import { Pool } from 'postgres';
 import { validate } from 'uuid';
 
 import { BarcodeAssignmentError, InsertSnapshotError } from '~model/api.ts';
+import type { Category } from "~model/category.ts";
 import { Status } from '~model/snapshot.ts';
 
 import { Database } from './database.ts';
@@ -382,18 +383,25 @@ Deno.test('full OAuth flow', async t => {
     });
 
     await t.step('category deprecation and activation', async () => {
+        // Assert the old state
+        const cmp = (cat: Omit<Category, 'active'>) => equal(cat, { id: category, name: randomCategory });
+        const oldCategories = await db.getAllCategories();
+        assert(oldCategories.active.some(cmp));
+        assertFalse(oldCategories.retire.some(cmp));
+
         // Deprecation
         const result = await db.deleteCategory(category);
         assertStrictEquals(result, false);
 
         // Not in any of the active categories
-        const active = await db.getActiveCategories();
-        assertFalse(active.some(cat => equal(cat, { id: category, name: randomCategory })));
+        const newCategories = await db.getAllCategories();
+        assertFalse(newCategories.active.some(cmp));
+        assert(newCategories.retire.some(cmp));
 
         // Activation
         const activation = await db.activateCategory(category);
         assertEquals(activation, randomCategory);
-        assertArrayIncludes(await db.getActiveCategories(), [ { id: category, name: randomCategory } ]);
+        assertEquals(await db.getAllCategories(), oldCategories);
     });
 
     db.release();
