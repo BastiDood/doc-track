@@ -16,7 +16,7 @@ import { Database } from '../../database.ts';
  * - Requires a valid session ID of a system operator.
  *
  * # Outputs
- * - `200` => return {@linkcode Response} containing {@linkcode Category[]} as JSON body
+ * - `200` => return {@linkcode Response} containing the categories as JSON body
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `406` => content negotiation failed
  */
