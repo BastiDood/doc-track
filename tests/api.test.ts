@@ -190,7 +190,7 @@ Deno.test('full API integration test', async t => {
 
         // Rename existing category
         const cRandomRename = b64encode(crypto.getRandomValues(new Uint8Array(8)));
-        assert(await Category.rename(cid, cRandomRename));
+        assert(await Category.rename({id: cid, name: cRandomRename}));
 
         // Get active categories before deletion
         const oldCategories = await Category.getAll();
