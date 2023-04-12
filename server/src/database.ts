@@ -400,7 +400,7 @@ export class Database {
                     'retire', coalesce((SELECT info FROM _ WHERE NOT active), '[]')
                 ) AS result`;
         assertStrictEquals(rest.length, 0);
-        return AllCategoriesSchema.parse(first);
+        return z.object({ result: AllCategoriesSchema }).parse(first).result;
     }
 
     /**
