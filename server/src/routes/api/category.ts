@@ -10,46 +10,6 @@ import { Global } from '~model/permission.ts';
 import { Database } from '../../database.ts';
 
 /**
- * Retrieves a list of all the active categories in the system.
- *
- * # Inputs
- * - Requires a valid session ID of a system operator.
- *
- * # Outputs
- * - `200` => return {@linkcode Response} containing the categories as JSON body
- * - `401` => session ID is absent, expired, or otherwise malformed
- * - `406` => content negotiation failed
- */
-export async function handleGetActiveCategories(pool: Pool, req: Request) {
-    const { sid } = getCookies(req.headers);
-    if (!sid) {
-        error('[Category] Absent session ID');
-        return new Response(null, { status: Status.Unauthorized });
-    }
-
-    if (accepts(req, 'application/json') === undefined) {
-        error(`[Category] Response content negotiation failed for session ${sid}`);
-        return new Response(null, { status: Status.NotAcceptable });
-    }
-
-    const db = await Database.fromPool(pool);
-    try {
-        if (await db.checkValidSession(sid)) {
-            const result = await db.getAllCategories();
-            info(`[Category] Fetched all categories for session ${sid}`);
-            return new Response(JSON.stringify(result), {
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-
-        error(`[Category] Invalid session ${sid}`);
-        return new Response(null, { status: Status.Unauthorized });
-    } finally {
-        db.release();
-    }
-}
-
-/**
  * Retrieves a list of all the categories in the system.
  *
  * # Inputs
