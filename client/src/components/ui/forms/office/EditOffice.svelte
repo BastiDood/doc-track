@@ -56,7 +56,7 @@
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currId} offices={$officeList} />
             <br />
-            {#if typeof currId !== 'number'}
+            {#if typeof currId === 'number'}
                 <p>Office ID: {currId}</p>
                 {#if currName !== null}
                     <TextInput
