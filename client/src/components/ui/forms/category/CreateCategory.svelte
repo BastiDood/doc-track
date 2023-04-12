@@ -3,7 +3,7 @@
 
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { categoryActiveList, categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -19,6 +19,8 @@
         try {
             await Category.create(node.value);
             await categoryList.reload?.();
+            await categoryActiveList.reload?.();
+    
             this.reset();
         } catch (err) {
             alert(err);
@@ -31,7 +33,7 @@
 
 <section>
     {#each $categoryList as category (category.id)}
-        <p>{category.id}: {category.name} [{category.active ? "ACTIVE" : "INACTIVE"}]</p>
+        <p>{category.id}: {category.name} [{category.active ? 'ACTIVE' : 'INACTIVE'}]</p>
     {:else}
         No categories available.
     {/each}
