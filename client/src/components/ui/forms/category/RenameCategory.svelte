@@ -4,7 +4,7 @@
     import { Category as CategoryModel } from '~model/category.ts';
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { categoryActiveList, categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     
 
     import TextInput from '../../TextInput.svelte';
@@ -16,7 +16,7 @@
     let currName: CategoryModel['name'] | null = null;
 
     // eslint-disable-next-line no-extra-parens
-    $: currName = $categoryActiveList.find(cat=> cat.id === currId)?.name ?? null;
+    $: currName = $categoryList.active.find(cat=> cat.id === currId)?.name ?? null;
     
     async function handleSubmit(this: HTMLFormElement) {
         const input = this.elements.namedItem('categoryname');
@@ -33,7 +33,6 @@
                 name: input.value,
             });
 
-            await categoryActiveList.reload?.();
             await categoryList.reload?.();
 
             // eslint-disable-next-line require-atomic-updates
@@ -52,11 +51,11 @@
 <p>You are currently renaming a category as {$userSession?.email}</p>
 
 <article>
-    {#if $categoryActiveList.length === 0}
+    {#if $categoryList.active.length === 0}
         No categories to edit.
     {:else}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catid={currId} categories={$categoryActiveList}/>
+            <CategorySelect bind:catid={currId} categories={$categoryList.active}/>
             <br/>
             {#if typeof currId === 'number'}
                 <p>Category ID: {currId}</p>
