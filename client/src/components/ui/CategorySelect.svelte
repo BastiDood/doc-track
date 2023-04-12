@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Category } from '../../../../model/src/category.ts';
-    export let categories: Pick<Category, "id" | "name">[];
+    export let categories: Pick<Category, 'id' | 'name'>[];
     export let catid: number | null = null;
 </script>
 

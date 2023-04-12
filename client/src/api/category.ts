@@ -75,7 +75,7 @@ export namespace Category {
      * Requires a valid session for a system operator.
      * @returns `false` if {@linkcode Category} ID does not exist
      */
-    export async function rename({id, name}: Pick<CategoryType, "id" | "name">): Promise<boolean> {
+    export async function rename({ id, name }: Pick<CategoryType, 'id' | 'name'>): Promise<boolean> {
         const res = await fetch(`/api/category?id=${id}`, {
             credentials: 'same-origin',
             method: 'PUT',
