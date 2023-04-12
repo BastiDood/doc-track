@@ -13,6 +13,7 @@ import { Pool } from 'postgres';
 import { validate } from 'uuid';
 
 import { BarcodeAssignmentError, InsertSnapshotError } from '~model/api.ts';
+import type { Category } from "~model/category.ts";
 import { Status } from '~model/snapshot.ts';
 
 import { Database } from './database.ts';
@@ -220,14 +221,18 @@ Deno.test('full OAuth flow', async t => {
         const id = await db.createCategory(first);
         assert(id !== null);
         assertEquals(await db.activateCategory(id), first);
-        assertArrayIncludes(await db.getActiveCategories(), [ { id, name: first } ]);
+
+        const { active: oldCategories } = await db.getAllCategories();
+        assertArrayIncludes(oldCategories, [ { id, name: first } ]);
 
         const second = 'Request for Drop';
         assert(await db.renameCategory({ id, name: second }));
         assertEquals(await db.activateCategory(id), second);
-        assertArrayIncludes(await db.getActiveCategories(), [ { id, name: second } ]);
-        assert(await db.deleteCategory(id));
 
+        const { active: newCategories } = await db.getAllCategories();
+        assertArrayIncludes(newCategories, [ { id, name: second } ]);
+
+        assert(await db.deleteCategory(id));
         assertStrictEquals(await db.activateCategory(id), null);
         assertStrictEquals(await db.deleteCategory(id), null);
     });
@@ -378,18 +383,25 @@ Deno.test('full OAuth flow', async t => {
     });
 
     await t.step('category deprecation and activation', async () => {
+        // Assert the old state
+        const cmp = (cat: Omit<Category, 'active'>) => equal(cat, { id: category, name: randomCategory });
+        const oldCategories = await db.getAllCategories();
+        assert(oldCategories.active.some(cmp));
+        assertFalse(oldCategories.retire.some(cmp));
+
         // Deprecation
         const result = await db.deleteCategory(category);
         assertStrictEquals(result, false);
 
         // Not in any of the active categories
-        const active = await db.getActiveCategories();
-        assertFalse(active.some(cat => equal(cat, { id: category, name: randomCategory })));
+        const newCategories = await db.getAllCategories();
+        assertFalse(newCategories.active.some(cmp));
+        assert(newCategories.retire.some(cmp));
 
         // Activation
         const activation = await db.activateCategory(category);
         assertEquals(activation, randomCategory);
-        assertArrayIncludes(await db.getActiveCategories(), [ { id: category, name: randomCategory } ]);
+        assertEquals(await db.getAllCategories(), oldCategories);
     });
 
     db.release();

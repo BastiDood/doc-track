@@ -5,7 +5,6 @@ import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
-import type { Category } from '~model/category.ts';
 import { Global } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
@@ -17,7 +16,7 @@ import { Database } from '../../database.ts';
  * - Requires a valid session ID of a system operator.
  *
  * # Outputs
- * - `200` => return {@linkcode Response} containing {@linkcode Category[]} as JSON body
+ * - `200` => return {@linkcode Response} containing the categories as JSON body
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `406` => content negotiation failed
  */
@@ -36,9 +35,9 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
     const db = await Database.fromPool(pool);
     try {
         if (await db.checkValidSession(sid)) {
-            const categories: Pick<Category, 'id' | 'name'>[] = await db.getActiveCategories();
+            const result = await db.getAllCategories();
             info(`[Category] Fetched all categories for session ${sid}`);
-            return new Response(JSON.stringify(categories), {
+            return new Response(JSON.stringify(result), {
                 headers: { 'Content-Type': 'application/json' },
             });
         }

@@ -7,11 +7,13 @@ import type { Document } from '~model/document.ts';
 import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
 
 import {
+    type AllCategories,
     type FullSession,
     type GeneratedBatch,
     type InboxEntry,
     type MinBatch,
     type PaperTrail,
+    AllCategoriesSchema,
     BarcodeAssignmentError,
     FullSessionSchema,
     InboxEntrySchema,
@@ -390,9 +392,15 @@ export class Database {
     }
 
     /** Gets a list of all the active categories in the system. */
-    async getActiveCategories(): Promise<Pick<Category, 'id' | 'name'>[]> {
-        const { rows } = await this.#client.queryObject('SELECT id,name FROM category WHERE active');
-        return CategorySchema.pick({ id: true, name: true }).array().parse(rows);
+    async getAllCategories(): Promise<AllCategories> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`WITH _ AS (SELECT active, json_agg(json_build_object('id', id, 'name', name)) AS info FROM category GROUP BY active)
+                SELECT json_build_object(
+                    'active', coalesce((SELECT info FROM _ WHERE active), '[]'),
+                    'retire', coalesce((SELECT info FROM _ WHERE NOT active), '[]')
+                ) AS result`;
+        assertStrictEquals(rest.length, 0);
+        return z.object({ result: AllCategoriesSchema }).parse(first).result;
     }
 
     /**

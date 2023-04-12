@@ -10,18 +10,20 @@ import {
     UnexpectedStatusCode,
 } from './error.ts';
 
+import { type AllCategories, AllCategoriesSchema } from '~model/api.ts';
+
 export namespace Category {
     /**
      * Requires a valid session for a valid session.
      * @returns list of active {@linkcode Category} entries
      */
-    export async function getAllActive(): Promise<Pick<CategoryType, 'id' | 'name'>[]> {
+    export async function getAll(): Promise<AllCategories> {
         const res = await fetch('/api/categories', {
             credentials: 'same-origin',
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case StatusCodes.OK: return CategorySchema.pick({ id: true, name: true }).array().parse(await res.json());
+            case StatusCodes.OK: return AllCategoriesSchema.parse(await res.json());
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
