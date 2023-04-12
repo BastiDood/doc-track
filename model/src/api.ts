@@ -75,9 +75,10 @@ export const FullSessionSchema = UserSchema
     });
 export type FullSession = z.infer<typeof FullSessionSchema>;
 
-export const AllCategoriesSchema = z.object ({
-    active: z.array(CategorySchema.omit({active: true})),
-    retired: z.array(CategorySchema.omit({active: true}))
+const WithoutActiveSchema = CategorySchema.pick({ id: true, name: true }).array();
+export const AllCategoriesSchema = z.object({
+    active: WithoutActiveSchema,
+    retire: WithoutActiveSchema,
 });
 
 export type AllCategories = z.infer<typeof AllCategoriesSchema>;

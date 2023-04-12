@@ -6,10 +6,4 @@ export const CategorySchema = z.object({
     active: z.boolean(),
 });
 
-export interface AllCategories {
-    active: CategoryWithoutActive[];
-    retired: CategoryWithoutActive[];
-}
-
 export type Category = z.infer<typeof CategorySchema>;
-export type CategoryWithoutActive = Omit<Category, "active">;
