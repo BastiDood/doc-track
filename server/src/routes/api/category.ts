@@ -38,8 +38,8 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
         if (await db.checkValidSession(sid)) {
             const categories: Category[] = await db.getAllCategories();
             const catres: AllCategories = {
-                active: categories.filter(cat=> cat.active).map(({active, ...rest}) => rest),
-                retired: categories.filter(cat=> !cat.active).map(({active, ...rest}) => rest),
+                active: categories.filter(cat=> cat.active).map(({_active, ...rest}) => rest),
+                retired: categories.filter(cat=> !cat.active).map(({_active, ...rest}) => rest),
             }
 
             info(`[Category] Fetched all categories for session ${sid}`);
