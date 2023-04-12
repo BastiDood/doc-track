@@ -5,7 +5,6 @@ import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
-import type { Category, AllCategories } from '~model/category.ts';
 import { Global } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
@@ -36,16 +35,9 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
     const db = await Database.fromPool(pool);
     try {
         if (await db.checkValidSession(sid)) {
-            const categories: Category[] = await db.getAllCategories();
-            const catres: AllCategories = {
-                // deno-lint-ignore no-unused-vars
-                active: categories.filter(cat=> cat.active).map(({active, ...rest}) => rest),
-                // deno-lint-ignore no-unused-vars
-                retired: categories.filter(cat=> !cat.active).map(({active, ...rest}) => rest),
-            }
-
+            const result = await db.getAllCategories();
             info(`[Category] Fetched all categories for session ${sid}`);
-            return new Response(JSON.stringify(catres), {
+            return new Response(JSON.stringify(result), {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
