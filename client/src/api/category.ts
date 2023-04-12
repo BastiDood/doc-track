@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import {type Category as CategoryType, CategorySchema} from '~model/category.ts';
+import { type Category as CategoryType, CategorySchema } from '~model/category.ts';
 
 import {
     InsufficientPermissions,
