@@ -13,10 +13,7 @@
 
     // eslint-disable-next-line no-extra-parens
     // eslint-disable-next-line no-unused-vars
-    $: inactiveCategories = $categoryList
-        .filter(cat=> !cat.active)
-        .map(({ active, ...otherattrib }) => otherattrib);
-    $: currName = inactiveCategories.find(cat=> cat.id === currId)?.name ?? null;
+    $: currName = $categoryList.retire.find(cat=> cat.id === currId)?.name ?? null;
     
     async function handleSubmit(this: HTMLFormElement) {
         if (currId === null) return;
@@ -25,7 +22,6 @@
         try {
             await Category.activate(currId);
 
-            await categoryActiveList.reload?.();
             await categoryList.reload?.();
 
             // eslint-disable-next-line require-atomic-updates
@@ -44,11 +40,11 @@
 <p>You are currently reactivating a category as {$userSession?.email}</p>
 
 <article>
-    {#if inactiveCategories.length === 0}
+    {#if $categoryList.retire.length === 0}
         No categories to edit.
     {:else}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catid={currId} categories={inactiveCategories}/>
+            <CategorySelect bind:catid={currId} categories={$categoryList.retire}/>
             <br/>
             {#if typeof currId === 'number'}
                 <p>Category ID: {currId}</p>
