@@ -5,7 +5,7 @@ import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
-import type { Category } from '~model/category.ts';
+import type { Category, AllCategories } from '~model/category.ts';
 import { Global } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
@@ -36,9 +36,14 @@ export async function handleGetAllCategories(pool: Pool, req: Request) {
     const db = await Database.fromPool(pool);
     try {
         if (await db.checkValidSession(sid)) {
-            const categories: Pick<Category, 'id' | 'name'>[] = await db.getActiveCategories();
+            const categories: Category[] = await db.getAllCategories();
+            const catres: AllCategories = {
+                active: categories.filter(cat=> cat.active).map(({active, ...rest}) => rest),
+                retired: categories.filter(cat=> !cat.active).map(({active, ...rest}) => rest),
+            }
+
             info(`[Category] Fetched all categories for session ${sid}`);
-            return new Response(JSON.stringify(categories), {
+            return new Response(JSON.stringify(catres), {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
