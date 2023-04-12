@@ -46,7 +46,7 @@ export namespace Category {
             default: throw new UnexpectedStatusCode;
         }
     }
-    
+
     /**
      * Requires a valid session for a system operator.
      * @returns ID of the new {@linkcode Category} entry
