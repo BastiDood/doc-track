@@ -9,6 +9,7 @@ import { extname } from 'posix';
 import { handleGetEarliestAvailableBatch, handleGenerateBatch } from './api/batch.ts';
 import {
     handleGetAllCategories,
+    handleGetActiveCategories,
     handleCreateCategory,
     handleRenameCategory,
     handleDeleteCategory,
@@ -32,7 +33,8 @@ async function handleGet(pool: Pool, req: Request) {
     const { pathname, searchParams } = new URL(req.url);
     switch (pathname) {
         case '/api/batch': return handleGetEarliestAvailableBatch(pool, req, searchParams);
-        case '/api/categories': return handleGetAllCategories(pool, req);
+        case '/api/categories': return handleGetActiveCategories(pool, req);
+        case '/api/categories/all': return handleGetAllCategories(pool, req);
         case '/api/document': return handleGetPaperTrail(pool, req, searchParams);
         case '/api/inbox': return handleGetInbox(pool, req, searchParams);
         case '/api/metrics/user': return handleGenerateUserSummary(pool, req);
