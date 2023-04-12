@@ -182,7 +182,8 @@ Deno.test('full API integration test', async t => {
         });
     });
 
-    const origCategories = await Category.getAllActive();
+    const origCategories = await Category.getAll();
+    console.log(origCategories)
     await t.step('Category API - creation/deletion', async () => {
         // Create new category
         const cid = await Category.create('Leave of Absence');
@@ -193,12 +194,12 @@ Deno.test('full API integration test', async t => {
         assert(await Category.rename(cid, cRandomRename));
 
         // Get active categories before deletion
-        const oldCategories = await Category.getAllActive();
-        assertArrayIncludes(oldCategories, [ ...origCategories, { id: cid, name: cRandomRename } ]);
+        const oldCategories = await Category.getAll();
+        assertArrayIncludes(oldCategories.active, [ ...origCategories.active, { id: cid, name: cRandomRename } ]);
 
         // Delete existing category
         assertStrictEquals(await Category.remove(cid), true);
-        assertEquals(await Category.getAllActive(), origCategories);
+        assertEquals(await Category.getAll(), origCategories);
     });
 
     const { id: bid, codes, creation } = await Batch.generate(oid);
@@ -257,17 +258,18 @@ Deno.test('full API integration test', async t => {
     await t.step('Category API - retirement', async () => {
         // Retire existing category
         assertStrictEquals(await Category.remove(cid), false);
-
         // Get active categories after deletion
-        const newCategories = await Category.getAllActive();
-        assertEquals(newCategories, origCategories);
+        const newCategories = await Category.getAll();
+        assertArrayIncludes(newCategories.retired, [...origCategories.retired, {id: cid, name: cName}]);
+        assertArrayIncludes(newCategories.active, origCategories.active.filter(cat => cat.id !== cid));
 
         // Reactivate retired category
         assertStrictEquals(await Category.activate(cid), cName);
 
         // Get active categories before deletion
-        const oldCategories = await Category.getAllActive();
-        assertArrayIncludes(oldCategories, [ ...origCategories, { id: cid, name: cName } ]);
+        const oldCategories = await Category.getAll();
+        assertArrayIncludes(newCategories.retired, origCategories.retired);
+        assertArrayIncludes(newCategories.active, origCategories.active);
     });
 
     await t.step('Staff API - retirement', async () => {
