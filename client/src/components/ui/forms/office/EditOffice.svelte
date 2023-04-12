@@ -43,7 +43,7 @@
             this.reset();
         } catch (err) {
             // TODO: No permission handler
-            console.error(err);
+            alert(err);
         }
     }
 </script>
