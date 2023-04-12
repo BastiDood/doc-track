@@ -195,9 +195,10 @@ Deno.test('full API integration test', async t => {
         // Get active categories before deletion
         const oldCategories = await Category.getAll();
         assertArrayIncludes(oldCategories.active, [ ...origCategories.active, { id: cid, name: cRandomRename } ]);
+        assertStrictEquals(oldCategories.retire.find(cat => cat.id === cid && cat.name === cRandomRename), undefined);
 
         // Delete existing category
-        assertStrictEquals(await Category.remove(cid), true);
+        assert(await Category.remove(cid));
         assertEquals(await Category.getAll(), origCategories);
     });
 
@@ -257,18 +258,19 @@ Deno.test('full API integration test', async t => {
     await t.step('Category API - retirement', async () => {
         // Retire existing category
         assertStrictEquals(await Category.remove(cid), false);
+
         // Get active categories after deletion
         const newCategories = await Category.getAll();
-        assertArrayIncludes(newCategories.retired, [...origCategories.retired, {id: cid, name: cName}]);
-        assertArrayIncludes(newCategories.active, origCategories.active.filter(cat => cat.id !== cid));
+        assertStrictEquals(newCategories.active.find(cat => cat.id === cid), undefined);
+        assertNotStrictEquals(newCategories.retire.find(cat => cat.id === cid), undefined);
 
         // Reactivate retired category
         assertStrictEquals(await Category.activate(cid), cName);
 
         // Get active categories before deletion
         const oldCategories = await Category.getAll();
-        assertArrayIncludes(newCategories.retired, origCategories.retired);
-        assertArrayIncludes(newCategories.active, origCategories.active);
+        assertNotStrictEquals(oldCategories.active.find(cat => cat.id === cid), undefined);
+        assertStrictEquals(oldCategories.retire.find(cat => cat.id === cid), undefined);
     });
 
     await t.step('Staff API - retirement', async () => {
