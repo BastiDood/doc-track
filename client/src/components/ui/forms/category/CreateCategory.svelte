@@ -3,11 +3,13 @@
 
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { categoryActiveList, categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
+    import active from 'svelte-spa-router/active';
+    import { each } from 'svelte/internal';
 
     async function handleSubmit(this: HTMLFormElement) {
         const node = this.elements.namedItem('newcat');
@@ -19,7 +21,6 @@
         try {
             await Category.create(node.value);
             await categoryList.reload?.();
-            await categoryActiveList.reload?.();
     
             this.reset();
         } catch (err) {
@@ -32,11 +33,16 @@
 <p>You are currently adding a category as {$userSession?.email}</p>
 
 <section>
-    {#each $categoryList as category (category.id)}
-        <p>{category.id}: {category.name} [{category.active ? 'ACTIVE' : 'INACTIVE'}]</p>
+    {#if $categoryList.active.length === 0 && $categoryList.retire.length === 0 }
+        {#each $categoryList.active  as category (category.id)}
+            <p>{category.id}: {category.name} [ACTIVE]</p>
+        {/each}
+        {#each $categoryList.retire  as category (category.id)}
+            <p>{category.id}: {category.name} [RETIRED]</p>
+        {/each}
     {:else}
         No categories available.
-    {/each}
+    {/if}
 </section>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
