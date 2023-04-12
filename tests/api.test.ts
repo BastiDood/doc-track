@@ -183,7 +183,6 @@ Deno.test('full API integration test', async t => {
     });
 
     const origCategories = await Category.getAll();
-    console.log(origCategories)
     await t.step('Category API - creation/deletion', async () => {
         // Create new category
         const cid = await Category.create('Leave of Absence');
