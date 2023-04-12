@@ -403,12 +403,6 @@ export class Database {
         return z.object({ result: AllCategoriesSchema }).parse(first).result;
     }
 
-    /** Gets a list of all (indiscrimate if activated or not) categories in the system. */
-    async getAllCategories(): Promise<Category[]> {
-        const { rows } = await this.#client.queryObject('SELECT id,name,active FROM category');
-        return CategorySchema.array().parse(rows);
-    }
-
     /**
      * Returns `true` if successfully renamed the category.
      *
