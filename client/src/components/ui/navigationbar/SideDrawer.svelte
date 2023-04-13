@@ -14,37 +14,44 @@
 
 
     export let show = false;
-    export let permission = 0;
+
+    // TODO: Change to individual permissions
+    /*
+        0 - No permissions
+        1 - Staff
+        2 - Admin
+        3 - Operator
+    */
+    export let permission = 3;
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
     <section>
         {#if permission >= 1}
-            <a href="#/admin" use:active><AdminIcon />Admin</a>
-        {:else if permission >= 2}
-            <a href="#/staff" use:active><StaffIcon />Staff</a>
+            <a href="#/inbox" class="unselectable" use:active><InboxIcon />Inbox</a>
+            <a href="#/outbox" class="unselectable" use:active><OutboxIcon />Outbox</a>
+            <a href="#/drafts" class="unselectable" use:active><DraftsIcon />Drafts</a>
+            <a href="#/metrics" class="unselectable" use:active><MetricsIcon />Metrics</a>            
         {/if}
-        <a href="#/inbox" use:active><InboxIcon />Inbox</a>
-        <a href="#/outbox" use:active><OutboxIcon />Outbox</a>
-        <a href="#/drafts" use:active><DraftsIcon />Drafts</a>
-        <a href="#/barcodes" use:active><BarcodesIcon />Barcodes</a>
-        <a href="#/invites" use:active><InvitesIcon />Invites</a>
-        <a href="#/staff" use:active><StaffIcon />Staff</a>
-        <a href="#/admin" use:active><AdminIcon />Admin</a>
-        <a href="#/metrics" use:active><MetricsIcon />Metrics</a>
-        <a href="#/settings" use:active><SettingsIcon />Settings</a>
-
+        {#if permission >= 2}
+            <a href="#/barcodes" class="unselectable" use:active><BarcodesIcon />Barcodes</a>
+            <a href="#/invites" class="unselectable" use:active><InvitesIcon />Invites</a>
+            <a href="#/staff" class="unselectable" use:active><StaffIcon />Staff</a>
+        {/if}
+        {#if permission >= 3}
+            <a href="#/admin" class="unselectable" use:active><AdminIcon />Admin</a>
+            <a href="#/settings" class="unselectable" use:active><SettingsIcon />Settings</a>
+        {/if}
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
     </form>
 </nav>
-
 <style>
     @import url('../../../pages/vars.css');
 
     nav {
-        background-color: var(--dashboard-bg);
+        background-color: var(--dashboard-sidedrawer);
         display: flex;
         flex-direction: column;
         font-family: inherit;
@@ -54,7 +61,6 @@
         left: -100%;
         position: absolute;
         transition: left var(--animation-length);
-        z-index: 1;
     }
 
     .show {
@@ -84,6 +90,10 @@
         text-align: initial;
         transition: background-color var(--animation-length), border-right var(--animation-length);
         width: 100%;
+    }
+
+    .unselectable {
+        user-select:none;
     }
 
     a:hover, input[type="submit"]:hover, :global(a.active) {

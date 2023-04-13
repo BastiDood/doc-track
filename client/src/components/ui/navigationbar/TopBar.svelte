@@ -7,20 +7,22 @@
     export let user: User;
 </script>
 
-<nav on:click|stopPropagation on:keypress>
+<nav id="mainnav" on:click|stopPropagation on:keypress>
     <div>
         <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show}} /></span>
+        
     </div>
-    <div>
-        <span><img src={user.picture} alt="{user.name}" /></span>
-    </div>
+    <nav id="profilenav">
+        <span class="unselectable">{user.name} </span>
+        <span><img class="unselectable" src={user.picture} alt="{user.name}" /></span>
+    </nav>
     
 </nav>
 
 <style>
     @import url('../../../pages/vars.css');
 
-    nav {
+    #mainnav {
         align-content: center;
         background-color: var(--primary-color);
         box-shadow: 0 1px var(--spacing-normal) var(--shadow-color);
@@ -28,9 +30,22 @@
         justify-content: space-between;
         padding: var(--spacing-small);
     }
+    #profilenav {
+        align-content: center;
+        background-color: var(--primary-color);
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: var(--spacing-small);
+    }
+
 
     #icon {
         cursor: pointer;
+    }
+
+    .unselectable {
+        user-select: none;
     }
 
     img {

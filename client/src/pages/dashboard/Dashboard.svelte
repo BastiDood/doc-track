@@ -10,6 +10,8 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
+
+
 </script>
 
 <main on:click={() => (toggleDrawer &&= false)} on:keydown>
@@ -42,5 +44,6 @@
     section {
         height: 100%;
         position: relative;
+        position:flex;
     }
 </style>
