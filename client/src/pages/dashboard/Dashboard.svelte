@@ -12,9 +12,6 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
-    let selectedTab = "Inbox";
-    let selectedId = 1;
-
 </script>
 
 <svelte:head>

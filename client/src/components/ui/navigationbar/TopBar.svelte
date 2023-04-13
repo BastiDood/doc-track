@@ -26,7 +26,7 @@
 <style>
     @import url('../../../pages/vars.css');
 
-    #navcontainer {
+    nav {
         align-content: center;
         background-color: var(--primary-color);
         box-shadow: 0 1px var(--spacing-normal) var(--shadow-color);
@@ -54,20 +54,8 @@
         padding: var(--spacing-small);
     }
 
-
     #icon {
         cursor: pointer;
-    }
-
-    .doctrack {
-        user-select: none;
-        font-size: var(--large);
-        font-weight: bold;
-
-    }
-
-    .unselectable {
-        user-select: none;
     }
 
     img {
