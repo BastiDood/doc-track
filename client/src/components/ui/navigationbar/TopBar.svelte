@@ -9,14 +9,14 @@
 
     export let show = false;
     export let user: User;
-    export let oid: number = 1;
+    export let selectedId: number;
 
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <nav id="leftnav">
         <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show}} /></span>
-        <OfficeSelect offices={$officeList} bind:oid={oid} />
+        <OfficeSelect offices={$officeList} bind:oid={selectedId} />
     </nav>
     <nav id="profilenav">
         <span class="unselectable">{user.name} </span>

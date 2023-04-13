@@ -10,9 +10,15 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
-
+    let selectedTab = "Inbox";
+    let selectedId = 1;
 
 </script>
+
+<svelte:head>
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <title>{selectedId}</title>
+</svelte:head>
 
 <main on:click={() => (toggleDrawer &&= false)} on:keydown>
     {#await register()}
@@ -21,9 +27,9 @@
         {#await currentUser.load()}
             Loading user...
         {:then user}
-            <TopBar {user} bind:show={toggleDrawer} />
+            <TopBar {user} bind:show={toggleDrawer} bind:selectedId={selectedId} />
             <section>
-                <SideDrawer show={toggleDrawer} />
+                <SideDrawer show={toggleDrawer} bind:selected={selectedTab} />
                 <Router {routes} />
             </section>
         {:catch error}
