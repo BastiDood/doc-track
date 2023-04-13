@@ -33,7 +33,7 @@
     }
 </script>
 
-<p>You are currently renaming a category as {$userSession?.email}</p>
+<p>You are currently removing a category as {$userSession?.email}</p>
 
 <article>
     {#if $categoryList.active.length === 0}
