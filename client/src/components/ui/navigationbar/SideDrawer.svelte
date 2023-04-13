@@ -1,6 +1,5 @@
 <script>
     import active from 'svelte-spa-router/active';
-    import LogoutIcon from '../../icons/Logout.svelte';
 
     import InboxIcon from '../../icons/DocumentDownload.svelte';
     import OutboxIcon from '../../icons/DocumentExport.svelte';
@@ -11,20 +10,6 @@
     import AdminIcon from '../../icons/PersonInfo.svelte';
     import MetricsIcon from '../../icons/Events.svelte';
     import SettingsIcon from '../../icons/Settings.svelte';
-
-
-    import LogoutIcon from '../../icons/Logout.svelte';
-
-    import InboxIcon from '../../icons/DocumentDownload.svelte';
-    import OutboxIcon from '../../icons/DocumentExport.svelte';
-    import DraftsIcon from '../../icons/Events.svelte';
-    import BarcodesIcon from '../../icons/Barcode.svelte';
-    import InvitesIcon from '../../icons/PersonAdd.svelte';
-    import StaffIcon from '../../icons/PersonMail.svelte';
-    import AdminIcon from '../../icons/PersonInfo.svelte';
-    import MetricsIcon from '../../icons/Events.svelte';
-    import SettingsIcon from '../../icons/Settings.svelte';
-
 
     export let show = false;
 </script>

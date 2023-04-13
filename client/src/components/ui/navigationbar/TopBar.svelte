@@ -2,11 +2,13 @@
     import type { User } from '../../../../../model/src/user.ts';
 
     import Hamburger from '../../icons/Hamburger.svelte';
+    import OfficeSelect from '../OfficeSelect.svelte';
+    import Office from '../../../api/office.ts';
+    import { officeList } from '../../../pages/dashboard/stores/OfficeStore.ts';
+    import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Styles } from 'sveltestrap';
 
     export let show = false;
     export let user: User;
-    export let selectedId: number;
-
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
@@ -26,7 +28,7 @@
 <style>
     @import url('../../../pages/vars.css');
 
-    nav {
+    #navcontainer {
         align-content: center;
         background-color: var(--primary-color);
         box-shadow: 0 1px var(--spacing-normal) var(--shadow-color);
