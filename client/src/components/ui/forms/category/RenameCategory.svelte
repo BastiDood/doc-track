@@ -5,7 +5,6 @@
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
-    
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -15,7 +14,7 @@
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | null = null;
 
-    $: currName = $categoryList.active.find(cat=> cat.id === currId)?.name ?? null;
+    $: currName = $categoryList.active.find(cat => cat.id === currId)?.name ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
         const input = this.elements.namedItem('categoryname');

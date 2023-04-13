@@ -7,13 +7,12 @@
     import Button from '../../Button.svelte';
     import Close from '../../../icons/Close.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
-    import active from 'svelte-spa-router/active';
 
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | null = null;
 
     $: currName = $categoryList.active.find(cat => cat.id === currId)?.name ?? null;
-    
+
     async function handleSubmit(this: HTMLFormElement) {
         if (currId === null || typeof currName !== 'string') return;
 

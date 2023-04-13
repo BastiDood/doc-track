@@ -8,8 +8,6 @@
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
-    import active from 'svelte-spa-router/active';
-    import { each } from 'svelte/internal';
 
     async function handleSubmit(this: HTMLFormElement) {
         const node = this.elements.namedItem('newcat');
