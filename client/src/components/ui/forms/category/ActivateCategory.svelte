@@ -42,7 +42,7 @@
         No categories to edit.
     {:else}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catid={currId} categories={$categoryList.retire}/>
+            <CategorySelect bind:catId={currId} categories={$categoryList.retire}/>
             <br/>
             {#if typeof currId === 'number'}
                 <p>Category ID: {currId}</p>

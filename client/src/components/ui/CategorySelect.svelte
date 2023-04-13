@@ -1,10 +1,10 @@
 <script lang="ts">
     import type { Category } from '../../../../model/src/category.ts';
     export let categories: Pick<Category, 'id' | 'name'>[];
-    export let catid: number | null = null;
+    export let catId: number | null = null;
 </script>
 
-<select required bind:value={catid}>
+<select required bind:value={catId}>
     {#each categories as category (category.id)}
         <option value={category.id}>{category.name}</option>
     {/each}
