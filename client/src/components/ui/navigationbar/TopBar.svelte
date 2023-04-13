@@ -11,8 +11,10 @@
     <div>
         <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show}} /></span>
     </div>
-    <span>{user.name}</span>
-    <img src={user.picture} alt="{user.name}" />
+    <div>
+        <span><img src={user.picture} alt="{user.name}" /></span>
+    </div>
+    
 </nav>
 
 <style>
@@ -34,6 +36,6 @@
     img {
         border-radius: 50%;
         display: block;
-        height: 1.25rem;
+        height: 2rem;
     }
 </style>

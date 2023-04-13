@@ -17,7 +17,8 @@
         border: none;
         padding: 0;
         cursor: pointer;
-
+        scale: 0.75;
+        hov
     }
 	svg {
 		transition: transform 0.3s ease-in-out;
