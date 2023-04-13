@@ -2,10 +2,8 @@ import { asyncReadable } from '@square/svelte-store';
 
 import { Category } from '../../../api/category.ts';
 
-export const officeList = asyncReadable(
-    { active: [], retired: [] },
+export const categoryList = asyncReadable(
+    { active: [], retire: [] },
     Category.getAll,
     { reloadable: true }
 );
-
-// Need some API to get all categories, even disabled ones for server operator.

@@ -16,15 +16,25 @@
     import { officeList } from '../stores/OfficeStore.ts';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import OfficeSelect from '../../../components/ui/OfficeSelect.svelte';
+    import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
+    import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
+    import RemoveCategory from '../../../components/ui/forms/category/RemoveCategory.svelte';
+    import ActivateCategory from '../../../components/ui/forms/category/ActivateCategory.svelte';
+
+    let currentContext: RowEvent | null = null;
+    let selectedOffice: number | null = null;
 
     let showContextMenu = false;
     let showCreateOffice = false;
     let showEditOffice = false;
     let showLocalPermission = false;
-    let currentContext: RowEvent | null = null;
-    const currentlySelected = '';
     let showPermission = false;
-    let selectedOffice: number | null = null;
+    let showCreateCategory = false;
+    let showEditCategory = false;
+    let showRemoveCategory = false;
+    let showActivateCategory = false;
+
+    const currentlySelected = '';
 
     let currentUser: User | null = null;
     $: currentUser = {
@@ -55,6 +65,31 @@
 <Button on:click={() => (showLocalPermission = true)} disabled={$officeList.length === 0}>
     Edit Local Permission
 </Button>
+<Button on:click={() => (showCreateCategory = true)}>
+    Create a Category
+</Button>
+<Button on:click={() => (showEditCategory = true)}>
+    Rename a Category
+</Button>
+<Button on:click={() => (showRemoveCategory = true)}>
+    Remove a Category
+</Button>
+<Button on:click={() => (showActivateCategory = true)}>
+    Activate a Category
+</Button>
+
+<Modal title="Rename a Category" bind:showModal={showEditCategory}>
+    <RenameCategory/>
+</Modal>
+<Modal title="Remove a Category" bind:showModal={showRemoveCategory}>
+    <RemoveCategory/>
+</Modal>
+<Modal title="Activate a Category" bind:showModal={showActivateCategory}>
+    <ActivateCategory/>
+</Modal>
+<Modal title="Create a Category" bind:showModal={showCreateCategory}>
+    <CreateCategory/>
+</Modal>
 
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
     Select an Office: <OfficeSelect bind:oid={selectedOffice} offices={$officeList}/>

@@ -28,7 +28,7 @@
     }
 </script>
 
-<p>You are currently adding an office as {$userSession.email}</p>
+<p>You are currently adding an office as {$userSession?.email}</p>
 
 <section>
     {#each $officeList as office (office.id)}

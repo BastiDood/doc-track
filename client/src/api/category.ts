@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { type Category as CategoryType, CategorySchema } from '~model/category.ts';
+import { type Category as CategoryType, CategorySchema } from '../../../model/src/category.ts';
 
 import {
     InsufficientPermissions,
@@ -10,7 +10,7 @@ import {
     UnexpectedStatusCode,
 } from './error.ts';
 
-import { type AllCategories, AllCategoriesSchema } from '~model/api.ts';
+import { type AllCategories, AllCategoriesSchema } from '../../../model/src/api.ts';
 
 export namespace Category {
     /**
@@ -58,7 +58,7 @@ export namespace Category {
      * Requires a valid session for a system operator.
      * @returns `false` if {@linkcode Category} ID does not exist
      */
-    export async function rename(id: CategoryType['id'], name: CategoryType['name']): Promise<boolean> {
+    export async function rename({ id, name }: Pick<CategoryType, 'id' | 'name'>): Promise<boolean> {
         const res = await fetch(`/api/category?id=${id}`, {
             credentials: 'same-origin',
             method: 'PUT',
