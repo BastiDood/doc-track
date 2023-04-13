@@ -1,10 +1,12 @@
 <script>
     import Router from 'svelte-spa-router';
+    import { location } from 'svelte-spa-router';
 
     import { currentUser } from './stores/UserStore.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
+    import { officeList } from '../../pages/dashboard/stores/OfficeStore.ts';
 
     import routes from './views/index.ts';
     import { register } from '../register.ts';
@@ -17,7 +19,7 @@
 
 <svelte:head>
     <link rel="stylesheet" href="/css/dashboard.css" />
-    <title>{selectedId}</title>
+    <title>{selectedId + ": " + $location.charAt(1).toUpperCase() + $location.slice(2)}</title>
 </svelte:head>
 
 <main on:click={() => (toggleDrawer &&= false)} on:keydown>
@@ -29,7 +31,7 @@
         {:then user}
             <TopBar {user} bind:show={toggleDrawer} bind:selectedId={selectedId} />
             <section>
-                <SideDrawer show={toggleDrawer} bind:selected={selectedTab} />
+                <SideDrawer show={toggleDrawer} />
                 <Router {routes} />
             </section>
         {:catch error}

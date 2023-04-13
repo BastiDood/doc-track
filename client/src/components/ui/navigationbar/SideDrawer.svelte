@@ -23,7 +23,6 @@
         3 - Operator
     */
     export let permission = 3;
-    export let selected = "Inbox";
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
