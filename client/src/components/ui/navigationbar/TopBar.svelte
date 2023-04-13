@@ -11,15 +11,16 @@
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <nav id="leftnav">
-        <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show}} /></span>
-        <OfficeSelect offices={$officeList} bind:oid={selectedId} />
+        <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show;}} /></span>
+        <!-- TODO: Temporarily disabled if officeList is null -->
+        <!-- <OfficeSelect offices={$officeList} bind:oid={selectedId} /> -->
     </nav>
     <p class="doctrack">DocTrack</p>
     <nav id="profilenav">
         <span class="unselectable">{user.name} </span>
         <span><img class="unselectable" src={user.picture} alt="{user.name[0]}" /></span>
     </nav>
-    
+
 </nav>
 
 <style>
