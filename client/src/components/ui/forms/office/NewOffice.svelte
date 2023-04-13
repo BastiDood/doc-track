@@ -3,7 +3,7 @@
 
     import { Office } from '../../../../api/office.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { officeList } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -18,7 +18,7 @@
     
         try {
             await Office.create(node.value);
-            await officeList.reload?.();
+            await allOffices.reload?.();
             await userSession.reload?.(); // Reload to get superuser
             this.reset();
         } catch (err) {
@@ -31,8 +31,8 @@
 <p>You are currently adding an office as {$userSession?.email}</p>
 
 <section>
-    {#each $officeList as office (office.id)}
-        <p>{office.id}: {office.name}</p>
+    {#each Object.entries($allOffices) as [id, name] (id)}
+        <p>{id}: {name}</p>
     {:else}
         No offices available
     {/each}

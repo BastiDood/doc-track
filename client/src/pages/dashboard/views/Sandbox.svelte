@@ -13,7 +13,7 @@
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
     import { userSession } from '../stores/UserStore.ts';
-    import { officeList } from '../stores/OfficeStore.ts';
+    import { allOffices } from '../stores/OfficeStore.ts';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import OfficeSelect from '../../../components/ui/OfficeSelect.svelte';
     import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
@@ -37,7 +37,7 @@
     const currentlySelected = '';
 
     let currentUser: User | null = null;
-    $: currentUser = {
+    $: currentUser = $userSession === null ? null : {
         id: $userSession.id,
         name: $userSession.name,
         email: $userSession.email,
@@ -62,7 +62,7 @@
 <Button on:click={() => (showEditOffice = true)}>
     Edit an Office
 </Button>
-<Button on:click={() => (showLocalPermission = true)} disabled={$officeList.length === 0}>
+<Button on:click={() => (showLocalPermission = true)} disabled={Object.getOwnPropertyNames($allOffices).length === 0}>
     Edit Local Permission
 </Button>
 <Button on:click={() => (showCreateCategory = true)}>
@@ -92,7 +92,7 @@
 </Modal>
 
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
-    Select an Office: <OfficeSelect bind:oid={selectedOffice} offices={$officeList}/>
+    Select an Office: <OfficeSelect bind:oid={selectedOffice} offices={$allOffices}/>
     <br>
     {#if selectedOffice !== null && currentUser !== null }
         <LocalPermissions user={currentUser} office={selectedOffice} />

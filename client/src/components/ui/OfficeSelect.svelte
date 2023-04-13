@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { Office } from '../../../../model/src/office.ts';
-    export let offices: Office[];
+    import type { AllOffices } from '../../../../model/src/api.ts';
+    export let offices: AllOffices;
     export let oid: number | null = null;
 </script>
 
 <select required bind:value={oid}>
-    {#each offices as office (office.id)}
-        <option value={office.id}>{office.name}</option>
+    {#each Object.entries(offices) as [id, office] (id)}
+        <option value={id}>{office}</option>
     {/each}
 </select>
 
