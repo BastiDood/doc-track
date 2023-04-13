@@ -15,9 +15,8 @@
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | null = null;
 
-    // eslint-disable-next-line no-extra-parens
     $: currName = $categoryList.active.find(cat=> cat.id === currId)?.name ?? null;
-    
+
     async function handleSubmit(this: HTMLFormElement) {
         const input = this.elements.namedItem('categoryname');
         assert(input instanceof HTMLInputElement);

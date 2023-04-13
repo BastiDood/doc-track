@@ -2,7 +2,7 @@
     import { Category as CategoryModel } from '~model/category.ts';
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { categoryActiveList, categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
@@ -11,9 +11,7 @@
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | null = null;
 
-    // eslint-disable-next-line no-extra-parens
-    // eslint-disable-next-line no-unused-vars
-    $: currName = $categoryList.retire.find(cat=> cat.id === currId)?.name ?? null;
+    $: currName = $categoryList.retire.find(cat => cat.id === currId)?.name ?? null;
     
     async function handleSubmit(this: HTMLFormElement) {
         if (currId === null) return;

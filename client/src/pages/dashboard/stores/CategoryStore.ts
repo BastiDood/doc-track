@@ -7,4 +7,3 @@ export const categoryList = asyncReadable(
     Category.getAll,
     { reloadable: true }
 );
-
