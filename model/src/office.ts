@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const OfficeSchema = z.object({
-    id: z.number().int().positive(),
+    id: z.coerce.number().int().positive(),
     name: z.string().min(1).max(40),
 });
 

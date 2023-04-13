@@ -58,6 +58,9 @@ export const InboxEntrySchema = SnapshotSchema
 
 export type InboxEntry = z.infer<typeof InboxEntrySchema>;
 
+export const AllOfficesSchema = z.record(OfficeSchema.shape.id, OfficeSchema.shape.name);
+export type AllOffices = z.infer<typeof AllOfficesSchema>;
+
 export const SummarySchema = z.object({
     status: StatusSchema,
     amount: z.coerce.bigint().positive(),
