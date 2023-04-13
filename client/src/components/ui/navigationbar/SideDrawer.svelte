@@ -41,6 +41,7 @@
         {#if permission >= 3}
             <a href="#/admin" class="unselectable" use:active><AdminIcon />Admin</a>
             <a href="#/settings" class="unselectable" use:active><SettingsIcon />Settings</a>
+            <a href="#/sandbox" class="unselectable" use:active><SettingsIcon />Sandbox</a>
         {/if}
     </section>
     <form method="POST" action="/auth/logout">
