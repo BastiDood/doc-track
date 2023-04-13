@@ -1,12 +1,10 @@
 <script>
-    import Router from 'svelte-spa-router';
-    import { location } from 'svelte-spa-router';
+    import Router, { location } from 'svelte-spa-router';
 
     import { currentUser } from './stores/UserStore.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
-    import { officeList } from '../../pages/dashboard/stores/OfficeStore.ts';
 
     import routes from './views/index.ts';
     import { register } from '../register.ts';
