@@ -28,6 +28,7 @@
         box-shadow: 0 1px var(--spacing-normal) var(--shadow-color);
         display: flex;
         justify-content: space-between;
+        align-items: center;
         padding: var(--spacing-small);
     }
     #profilenav {
