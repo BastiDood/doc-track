@@ -26,7 +26,7 @@
         {#await currentUser.load()}
             Loading user...
         {:then user}
-            <TopBar {user} bind:show={toggleDrawer} bind:selectedId={selectedId} />
+            <TopBar {user} bind:show={toggleDrawer}/>
             <SideDrawer show={toggleDrawer} />
             <section class="router">
                 <Router {routes}  />

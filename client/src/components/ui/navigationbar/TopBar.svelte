@@ -9,6 +9,7 @@
 
     export let show = false;
     export let user: User;
+
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
