@@ -54,7 +54,13 @@
 
     .router {
         overflow: scroll;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
+    .router::-webkit-scrollbar {
+        display: none; 
+    }
+
 
     section {
         height: 100%;
