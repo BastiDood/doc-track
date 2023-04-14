@@ -61,6 +61,17 @@
         cursor: pointer;
     }
 
+    .doctrack {
+        user-select: none;
+        font-size: var(--large);
+        font-weight: bold;
+
+    }
+
+    .unselectable {
+        user-select: none;
+    }
+
     img {
         border-radius: 50%;
         display: block;
