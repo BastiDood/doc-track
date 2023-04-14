@@ -388,6 +388,12 @@ Deno.test('full OAuth flow', async t => {
             assertStrictEquals(local.Send, 1);
             assertStrictEquals(local.Receive, undefined);
             assertStrictEquals(local.Terminate, undefined);
+
+            const global = await db.generateGlobalSummary();
+            assert(global.Register ?? 0 > 0);
+            assert(global.Send ?? 0 > 0);
+            assertStrictEquals(global.Receive, undefined);
+            assertStrictEquals(global.Terminate, undefined);
         });
     });
 
