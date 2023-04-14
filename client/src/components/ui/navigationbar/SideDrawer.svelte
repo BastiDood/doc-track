@@ -56,12 +56,14 @@
         display: flex;
         flex-direction: column;
         font-family: inherit;
-        height: 100%;
+        height: calc(100% - var(--topbar-height));
         justify-content: space-between;
         max-width: 300px;
+        top: var(--topbar-height);
         left: -100%;
-        position: absolute;
+        position: fixed;
         transition: left var(--animation-length);
+        z-index: 1;
     }
 
     .show {

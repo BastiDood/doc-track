@@ -29,12 +29,10 @@
         {#await currentUser.load()}
             Loading user...
         {:then user}
-            <TopBar {user} bind:show={toggleDrawer} bind:selectedId={selectedId} class="navbar" />
+            <TopBar {user} bind:show={toggleDrawer} bind:selectedId={selectedId} />
+            <SideDrawer show={toggleDrawer} />
             <section class="router">
-                <SideDrawer show={toggleDrawer} class="navbar" />
-                <div >
-                    <Router {routes}  />
-                </div>
+                <Router {routes}  />
             </section>
         {:catch error}
             <p>
