@@ -1,6 +1,5 @@
 import { getCookies } from 'cookie';
 import { Status } from 'http';
-import { map } from 'itertools';
 import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
@@ -48,10 +47,7 @@ export async function handleGenerateUserSummary(pool: Pool, req: Request) {
 
         const metrics = await db.generateUserSummary(user.id);
         info(`[Metrics] User ${user.id} ${user.name} <${user.email}> viewed user-global summary`);
-
-        const entries = map(metrics.entries(), ([ status, amount ]) => [ status, amount.toString() ] as const);
-        const json = Object.fromEntries(entries);
-        return new Response(JSON.stringify(json), {
+        return new Response(JSON.stringify(metrics), {
             headers: { 'Content-Type': 'application/json' },
         });
     } finally {
