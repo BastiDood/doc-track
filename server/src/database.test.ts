@@ -376,10 +376,10 @@ Deno.test('full OAuth flow', async t => {
 
         await t.step('user metrics are consistent', async () => {
             const metrics = await db.generateUserSummary(USER.id);
-            assertStrictEquals(metrics.get(Status.Register), 1n);
-            assertStrictEquals(metrics.get(Status.Send), 1n);
-            assertStrictEquals(metrics.get(Status.Receive), undefined);
-            assertStrictEquals(metrics.get(Status.Terminate), undefined);
+            assertStrictEquals(metrics[Status.Register], 1);
+            assertStrictEquals(metrics[Status.Send], 1);
+            assertStrictEquals(metrics[Status.Receive], undefined);
+            assertStrictEquals(metrics[Status.Terminate], undefined);
         });
     });
 
