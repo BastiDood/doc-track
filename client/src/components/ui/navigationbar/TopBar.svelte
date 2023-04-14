@@ -18,7 +18,7 @@
         <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show}} /></span>
         <OfficeSelect offices={$officeList} bind:oid={selectedId} />
     </nav>
-    <h2 class="unselectable">DocTrack</h2>
+    <p class="doctrack">DocTrack</p>
     <nav id="profilenav">
         <span class="unselectable">{user.name} </span>
         <span><img class="unselectable" src={user.picture} alt="{user.name[0]}" /></span>
@@ -45,7 +45,7 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        padding: var(--spacing-large);
+        padding: var(--spacing-small);
     }
 
     #profilenav {
@@ -60,6 +60,13 @@
 
     #icon {
         cursor: pointer;
+    }
+
+    .doctrack {
+        user-select: none;
+        font-size: var(--large);
+        font-weight: bold;
+
     }
 
     .unselectable {

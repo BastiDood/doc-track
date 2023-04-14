@@ -14,35 +14,19 @@
 
 
     export let show = false;
-
-    // TODO: Change to individual permissions
-    /*
-        0 - No permissions
-        1 - Staff
-        2 - Admin
-        3 - Operator
-    */
-    export let permission = 3;
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
     <section>
-        {#if permission >= 1}
             <a href="#/inbox" class="unselectable" use:active><InboxIcon />Inbox</a>
             <a href="#/outbox" class="unselectable" use:active><OutboxIcon />Outbox</a>
             <a href="#/drafts" class="unselectable" use:active><DraftsIcon />Drafts</a>
             <a href="#/metrics" class="unselectable" use:active><MetricsIcon />Metrics</a>            
-        {/if}
-        {#if permission >= 2}
             <a href="#/barcodes" class="unselectable" use:active><BarcodesIcon />Barcodes</a>
             <a href="#/invites" class="unselectable" use:active><InvitesIcon />Invites</a>
             <a href="#/staff" class="unselectable" use:active><StaffIcon />Staff</a>
-        {/if}
-        {#if permission >= 3}
             <a href="#/admin" class="unselectable" use:active><AdminIcon />Admin</a>
             <a href="#/settings" class="unselectable" use:active><SettingsIcon />Settings</a>
-            <a href="#/sandbox" class="unselectable" use:active><SettingsIcon />Sandbox</a>
-        {/if}
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />

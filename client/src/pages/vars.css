@@ -27,7 +27,7 @@
     --border-radius: 10px;
     --animation-length: .3s;
 
-    --topbar-height: 4.35rem;
+    --topbar-height: 3rem;
 }
 
 @keyframes zoom {
