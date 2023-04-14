@@ -29,10 +29,12 @@
         {#await currentUser.load()}
             Loading user...
         {:then user}
-            <TopBar {user} bind:show={toggleDrawer} bind:selectedId={selectedId} />
-            <section>
-                <SideDrawer show={toggleDrawer} />
-                <Router {routes} />
+            <TopBar {user} bind:show={toggleDrawer} bind:selectedId={selectedId} class="navbar" />
+            <section class="router">
+                <SideDrawer show={toggleDrawer} class="navbar" />
+                <div >
+                    <Router {routes}  />
+                </div>
             </section>
         {:catch error}
             <p>
@@ -47,6 +49,11 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        
+    }
+
+    .router {
+        overflow: scroll;
     }
 
     section {
