@@ -554,7 +554,7 @@ export class Database {
     async hookSubscription(sub: PushSubscription['endpoint'], doc: Document['id']): Promise<boolean> {
         // TODO: Add Tests with Document Bindings
         const { rowCount } = await this.#client
-            .queryArray`INSERT INTO subscription (sub,doc) VALUES (${sub},${doc}) ON CONFLICT (sub,doc) DO NOTHING`;
+            .queryArray`INSERT INTO notification (sub,doc) VALUES (${sub},${doc}) ON CONFLICT (sub,doc) DO NOTHING`;
         switch (rowCount) {
             case 0: return false;
             case 1: return true;
