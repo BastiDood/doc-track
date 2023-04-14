@@ -1,5 +1,5 @@
 import { decode } from 'base64url';
-import { equals } from 'bytes';
+import { equals } from 'bytes/equals';
 import { getCookies, setCookie } from 'cookie';
 import { critical, error, info, warning } from 'log';
 import { Status } from 'http';
