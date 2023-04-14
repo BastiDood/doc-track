@@ -3,9 +3,6 @@ import { range } from 'itertools';
 import { Pool, PoolClient, PostgresError } from 'postgres';
 import { z } from 'zod';
 
-import type { Document } from '~model/document.ts';
-import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
-
 import {
     type AllCategories,
     type AllInbox,
@@ -35,12 +32,14 @@ import {
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
+import type { Document } from '~model/document.ts';
 import { type Invitation, InvitationSchema } from '~model/invitation.ts';
 import { type Metrics, MetricsSchema } from '~model/metrics.ts';
 import { type Office, OfficeSchema } from '~model/office.ts';
 import { type Pending, PendingSchema } from '~model/pending.ts';
 import { type Session, SessionSchema } from '~model/session.ts';
 import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
+import { type PushSubscription, type PushSubscriptionJson, PushSubscriptionSchema } from '~model/subscription.ts';
 import { type Staff, StaffSchema } from '~model/staff.ts';
 import { type User, UserSchema } from '~model/user.ts';
 
@@ -560,6 +559,16 @@ export class Database {
             case 1: return true;
             default: unreachable();
         }
+    }
+
+    /** Gets all of the associated subscriptions to a document. */
+    async getSubscriptionsForDocument(did: Document['id']): Promise<Omit<PushSubscription, 'expiration'>[]> {
+        // TODO: Add Tests
+        const { rows } = await this.#client
+            .queryObject`SELECT s.endpoint,s.auth,s.p256dh
+                FROM notification AS n INNER JOIN subscription AS s ON n.sub = s.endpoint
+                WHERE n.doc = ${did} AND NOW() < s.expiration`;
+        return PushSubscriptionSchema.omit({ expiration: true }).array().parse(rows);
     }
 
     async getUsers(): Promise<User[]> {
