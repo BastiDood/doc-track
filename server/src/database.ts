@@ -514,7 +514,7 @@ export class Database {
     /** Get all offices from the system. */
     async getAllOffices(): Promise<AllOffices> {
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject("SELECT coalesce(json_object(array_agg(id::text), array_agg(name)), '{}') AS result FROM office;");
+            .queryObject("SELECT coalesce(json_object_agg(id,name),'{}') AS result FROM office;");
         assertStrictEquals(rest.length, 0);
         return z.object({ result: AllOfficesSchema }).parse(first).result;
     }
@@ -561,7 +561,7 @@ export class Database {
     async generateUserSummary(uid: User['id']): Promise<UserMetrics> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`WITH _ AS (SELECT status,COUNT(status) AS amount FROM snapshot WHERE evaluator = ${uid} GROUP BY status)
-                SELECT coalesce(json_object_agg(status,amount)) AS result FROM _`;
+                SELECT coalesce(json_object_agg(status,amount),'{}') AS result FROM _`;
         assertStrictEquals(rest.length, 0);
         return z.object({ result: UserMetricsSchema }).parse(first).result;
     }
