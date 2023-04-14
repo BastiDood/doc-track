@@ -22,16 +22,16 @@ import {
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
-    SummarySchema,
 } from '~model/api.ts';
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
 import { type Invitation, InvitationSchema } from '~model/invitation.ts';
+import { type UserMetrics, UserMetricsSchema } from '~model/metrics.ts';
 import { type Office, OfficeSchema } from '~model/office.ts';
 import { type Pending, PendingSchema } from '~model/pending.ts';
 import { type Session, SessionSchema } from '~model/session.ts';
-import { type Snapshot, SnapshotSchema, Status } from '~model/snapshot.ts';
+import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
 import { type Staff, StaffSchema } from '~model/staff.ts';
 import { type User, UserSchema } from '~model/user.ts';
 
@@ -558,12 +558,11 @@ export class Database {
     }
 
     /** Generate a user-centric summary of the metrics (across all offices). */
-    async generateUserSummary(uid: User['id']): Promise<Map<Status, bigint>> {
-        const { rows } = await this.#client
-            .queryObject`SELECT status,COUNT(status) AS amount FROM snapshot WHERE evaluator = ${uid} GROUP BY status`;
-        const map = new Map<Status, bigint>;
-        for (const { status, amount } of SummarySchema.array().parse(rows))
-            map.set(status, amount);
-        return map;
+    async generateUserSummary(uid: User['id']): Promise<UserMetrics> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`WITH _ AS (SELECT status,COUNT(status) AS amount FROM snapshot WHERE evaluator = ${uid} GROUP BY status)
+                SELECT coalesce(json_object_agg(status,amount)) AS result FROM _`;
+        assertStrictEquals(rest.length, 0);
+        return z.object({ result: UserMetricsSchema }).parse(first).result;
     }
 }

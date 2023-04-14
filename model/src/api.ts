@@ -5,7 +5,7 @@ import { BatchSchema } from './batch.ts';
 import { CategorySchema } from './category.ts';
 import { DocumentSchema } from './document.ts';
 import { OfficeSchema } from './office.ts';
-import { SnapshotSchema, StatusSchema } from './snapshot.ts';
+import { SnapshotSchema } from './snapshot.ts';
 import { StaffSchema } from './staff.ts';
 import { UserSchema } from './user.ts';
 
@@ -60,15 +60,6 @@ export type InboxEntry = z.infer<typeof InboxEntrySchema>;
 
 export const AllOfficesSchema = z.record(OfficeSchema.shape.id, OfficeSchema.shape.name);
 export type AllOffices = z.infer<typeof AllOfficesSchema>;
-
-export const SummarySchema = z.object({
-    status: StatusSchema,
-    amount: z.coerce.bigint().positive(),
-});
-export type Summary = z.infer<typeof SummarySchema>;
-
-export const MetricsSchema = z.record(StatusSchema, SummarySchema.shape.amount);
-export type Metrics = z.infer<typeof MetricsSchema>;
 
 export const FullSessionSchema = UserSchema
     .omit({ permission: true })
