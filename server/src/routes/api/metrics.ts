@@ -114,3 +114,50 @@ export async function handleGenerateLocalSummary(pool: Pool, req: Request, param
         db.release();
     }
 }
+
+/**
+ * Gets the summary of the entire system's metrics.
+ *
+ * # Inputs
+ * - Requires a session whose global permissions include {@linkcode Global.ViewMetrics}
+ *
+ * # Outputs
+ * - `200` => returns the counts of the grouped snapshots as JSON in the {@linkcode Response} body
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => insufficient permissions
+ * - `406` => content negotiation failed
+ */
+export async function handleGenerateGlobalSummary(pool: Pool, req: Request) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Metrics] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Metrics] Content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const user = await db.getUserFromSession(sid);
+        if (user === null) {
+            error(`[Metrics] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((user.permission & Global.ViewMetrics) !== Global.ViewMetrics) {
+            error(`[Metrics] User ${user.id} ${user.name} <${user.email}> cannot view system summary`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const metrics = await db.generateGlobalSummary();
+        info(`[Metrics] User ${user.id} ${user.name} <${user.email}> viewed system summary`);
+        return new Response(JSON.stringify(metrics), {
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } finally {
+        db.release();
+    }
+}
