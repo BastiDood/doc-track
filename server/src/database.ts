@@ -27,7 +27,7 @@ import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
 import { type Invitation, InvitationSchema } from '~model/invitation.ts';
-import { type UserMetrics, UserMetricsSchema } from '~model/metrics.ts';
+import { type Metrics, MetricsSchema } from '~model/metrics.ts';
 import { type Office, OfficeSchema } from '~model/office.ts';
 import { type Pending, PendingSchema } from '~model/pending.ts';
 import { type Session, SessionSchema } from '~model/session.ts';
@@ -558,11 +558,11 @@ export class Database {
     }
 
     /** Generate a user-centric summary of the metrics (across all offices). */
-    async generateUserSummary(uid: User['id']): Promise<UserMetrics> {
+    async generateUserSummary(uid: User['id']): Promise<Metrics> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`WITH _ AS (SELECT status,COUNT(status) AS amount FROM snapshot WHERE evaluator = ${uid} GROUP BY status)
                 SELECT coalesce(json_object_agg(status,amount),'{}') AS result FROM _`;
         assertStrictEquals(rest.length, 0);
-        return z.object({ result: UserMetricsSchema }).parse(first).result;
+        return z.object({ result: MetricsSchema }).parse(first).result;
     }
 }
