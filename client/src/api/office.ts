@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
+import { type AllOffices, AllOfficesSchema } from '../../../model/src/api.ts';
 import { type Office as OfficeType, OfficeSchema } from '../../../model/src/office.ts';
 
 import {
@@ -11,13 +12,13 @@ import {
 } from './error.ts';
 
 export namespace Office {
-    export async function getAll(): Promise<OfficeType[]> {
+    export async function getAll(): Promise<AllOffices> {
         const res = await fetch('/api/offices', {
             credentials: 'same-origin',
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case StatusCodes.OK: return OfficeSchema.array().parse(await res.json());
+            case StatusCodes.OK: return AllOfficesSchema.parse(await res.json());
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;

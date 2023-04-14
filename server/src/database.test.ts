@@ -46,7 +46,8 @@ Deno.test('full OAuth flow', async t => {
     await t.step('update office information', async () => {
         assertFalse(await db.updateOffice({ id: 0, name: 'Hello' }));
         assert(await db.updateOffice({ id: office, name: 'Hello' }));
-        assertArrayIncludes(await db.getAllOffices(), [ { id: office, name: 'Hello' } ]);
+        const offices = await db.getAllOffices();
+        assertStrictEquals(offices[office], 'Hello');
     });
 
     await t.step('successfully revoke invites from the system', async () => {

@@ -8,12 +8,14 @@ import type { PushSubscription, PushSubscriptionJson } from '~model/subscription
 
 import {
     type AllCategories,
+    type AllOffices,
     type FullSession,
     type GeneratedBatch,
     type InboxEntry,
     type MinBatch,
     type PaperTrail,
     AllCategoriesSchema,
+    AllOfficesSchema,
     BarcodeAssignmentError,
     FullSessionSchema,
     InboxEntrySchema,
@@ -510,9 +512,11 @@ export class Database {
     }
 
     /** Get all offices from the system. */
-    async getAllOffices(): Promise<Office[]> {
-        const { rows } = await this.#client.queryObject`SELECT id,name FROM office`;
-        return OfficeSchema.array().parse(rows);
+    async getAllOffices(): Promise<AllOffices> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject("SELECT coalesce(json_object(array_agg(id::text), array_agg(name)), '{}') AS result FROM office;");
+        assertStrictEquals(rest.length, 0);
+        return z.object({ result: AllOfficesSchema }).parse(first).result;
     }
 
     /** @deprecated Adds a new office to the system. */

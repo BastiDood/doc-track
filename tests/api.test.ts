@@ -140,7 +140,8 @@ Deno.test('full API integration test', async t => {
 
         // Update existing office
         assert(await Office.update({ id: otherOid, name: 'New Test Office' }));
-        assertArrayIncludes(await Office.getAll(), [ { id: otherOid, name: 'New Test Office' } ]);
+        const offices = await Office.getAll();
+        assertStrictEquals(offices[otherOid], 'New Test Office');
     });
 
     await t.step('Invite API', async () => {
