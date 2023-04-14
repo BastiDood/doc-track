@@ -118,10 +118,22 @@
     <InboxContext bind:show={showContextMenu} payload={currentContext} />
 {/if}
 
-<!-- Duplicated to test scroll bars -->
+
 <p>Currently selected: {currentlySelected}</p>
 <div>
     {#each documentTest as doc}
+        <InboxRow
+            id={doc.id}
+            category={doc.category}
+            title={doc.title} 
+            on:overflowClick={overflowClickHandler}
+        />
+        <InboxRow
+            id={doc.id}
+            category={doc.category}
+            title={doc.title} 
+            on:overflowClick={overflowClickHandler}
+        />
         <InboxRow
             id={doc.id}
             category={doc.category}
