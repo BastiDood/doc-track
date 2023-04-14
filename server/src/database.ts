@@ -578,4 +578,11 @@ export class Database {
         assertStrictEquals(rest.length, 0);
         return z.object({ result: MetricsSchema }).parse(first).result;
     }
+
+    async generateGlobalSummary(): Promise<Metrics> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject("WITH _ AS (SELECT status,COUNT(status) AS amount FROM snapshot GROUP BY status) SELECT coalesce(json_object_agg(status,amount),'{}') AS result FROM _");
+        assertStrictEquals(rest.length, 0);
+        return z.object({ result: MetricsSchema }).parse(first).result;
+    }
 }
