@@ -58,6 +58,7 @@
         display: block;
         padding: var(--spacing-normal);
         text-decoration: none;
+        user-select: none;
         transition: background-color var(--animation-length), border-right var(--animation-length);
     }
 
