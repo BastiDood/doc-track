@@ -542,12 +542,10 @@ export class Database {
     /** Register a push subscription to be used later for notifying a user. */
     async pushSubscription({ endpoint, expiration, auth, p256dh }: PushSubscriptionJson) {
         // TODO: Add Tests
-        // TODO: Convert keys to bit strings
-        // TODO: Add Tests with Document Bindings
         const expires = expiration?.toISOString() || 'infinity';
         const { rowCount } = await this.#client
             .queryArray`INSERT INTO subscription (endpoint,expiration,auth,p256dh)
-                VALUES (${endpoint},${expires},${auth},${p256dh})
+                VALUES (${endpoint},${expires},decode(${auth},'base64url'),decode(${p256dh},'base64url'))
                 ON CONFLICT (endpoint) DO UPDATE SET expiration = ${expires}`;
         assertStrictEquals(rowCount, 1);
     }
