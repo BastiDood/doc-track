@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { type Metrics as MetricsType, MetricsSchema } from '~model/api.ts';
+import { type UserMetrics, UserMetricsSchema } from '~model/metrics.ts';
 
 import {
     InsufficientPermissions,
@@ -10,13 +10,13 @@ import {
 } from './error.ts';
 
 export namespace Metrics {
-    export async function generateUserSummary(): Promise<MetricsType> {
+    export async function generateUserSummary(): Promise<UserMetrics> {
         const res = await fetch('/api/metrics/user', {
             credentials: 'same-origin',
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case StatusCodes.OK: return MetricsSchema.parse(await res.json());
+            case StatusCodes.OK: return UserMetricsSchema.parse(await res.json());
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;

@@ -250,8 +250,8 @@ Deno.test('full API integration test', async t => {
     await t.step('Metrics API', async () => {
         const summary = await Metrics.generateUserSummary();
         assert(summary !== undefined);
-        assertStrictEquals(summary.Register, 1n);
-        assertStrictEquals(summary.Send, 1n);
+        assertStrictEquals(summary.Register, 1);
+        assertStrictEquals(summary.Send, 1);
         assertStrictEquals(summary.Receive, undefined);
         assertStrictEquals(summary.Terminate, undefined);
     });
