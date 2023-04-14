@@ -248,12 +248,25 @@ Deno.test('full API integration test', async t => {
     });
 
     await t.step('Metrics API', async () => {
-        const summary = await Metrics.generateUserSummary();
-        assert(summary !== undefined);
-        assertStrictEquals(summary.Register, 1n);
-        assertStrictEquals(summary.Send, 1n);
-        assertStrictEquals(summary.Receive, undefined);
-        assertStrictEquals(summary.Terminate, undefined);
+        const user = await Metrics.generateUserSummary();
+        assertStrictEquals(user.Register, 1);
+        assertStrictEquals(user.Send, 1);
+        assertStrictEquals(user.Receive, undefined);
+        assertStrictEquals(user.Terminate, undefined);
+
+        // TODO: add tests for multiple users in the same office
+
+        const local = await Metrics.generateLocalSummary(oid);
+        assertStrictEquals(local.Register, 1);
+        assertStrictEquals(local.Send, 1);
+        assertStrictEquals(local.Receive, undefined);
+        assertStrictEquals(local.Terminate, undefined);
+
+        const global = await Metrics.generateGlobalSummary();
+        assert(global.Register ?? 0 > 0);
+        assert(global.Send ?? 0 > 0);
+        assertStrictEquals(global.Receive, undefined);
+        assertStrictEquals(global.Terminate, undefined);
     });
 
     await t.step('Category API - retirement', async () => {

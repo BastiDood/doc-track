@@ -375,11 +375,25 @@ Deno.test('full OAuth flow', async t => {
         });
 
         await t.step('user metrics are consistent', async () => {
-            const metrics = await db.generateUserSummary(USER.id);
-            assertStrictEquals(metrics.get(Status.Register), 1n);
-            assertStrictEquals(metrics.get(Status.Send), 1n);
-            assertStrictEquals(metrics.get(Status.Receive), undefined);
-            assertStrictEquals(metrics.get(Status.Terminate), undefined);
+            const user = await db.generateUserSummary(USER.id);
+            assertStrictEquals(user.Register, 1);
+            assertStrictEquals(user.Send, 1);
+            assertStrictEquals(user.Receive, undefined);
+            assertStrictEquals(user.Terminate, undefined);
+
+            // TODO: add tests for multiple users in the same office
+
+            const local = await db.generateLocalSummary(office);
+            assertStrictEquals(local.Register, 1);
+            assertStrictEquals(local.Send, 1);
+            assertStrictEquals(local.Receive, undefined);
+            assertStrictEquals(local.Terminate, undefined);
+
+            const global = await db.generateGlobalSummary();
+            assert(global.Register ?? 0 > 0);
+            assert(global.Send ?? 0 > 0);
+            assertStrictEquals(global.Receive, undefined);
+            assertStrictEquals(global.Terminate, undefined);
         });
     });
 
