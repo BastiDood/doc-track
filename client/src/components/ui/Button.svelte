@@ -19,6 +19,7 @@
     border: 0;
     cursor: pointer;
     color: white;
+    user-select: none;
   }
 
   button:hover {

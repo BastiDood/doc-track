@@ -3,7 +3,6 @@
 
     import Hamburger from '../../icons/Hamburger.svelte';
     import OfficeSelect from '../OfficeSelect.svelte';
-    import Office from '../../../api/office.ts';
     import { officeList } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Styles } from 'sveltestrap';
     
@@ -19,6 +18,7 @@
         <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show}} /></span>
         <OfficeSelect offices={$officeList} bind:oid={selectedId} />
     </nav>
+    <h2 class="unselectable">DocTrack</h2>
     <nav id="profilenav">
         <span class="unselectable">{user.name} </span>
         <span><img class="unselectable" src={user.picture} alt="{user.name[0]}" /></span>
