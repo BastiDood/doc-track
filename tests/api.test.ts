@@ -261,6 +261,12 @@ Deno.test('full API integration test', async t => {
         assertStrictEquals(local.Send, 1);
         assertStrictEquals(local.Receive, undefined);
         assertStrictEquals(local.Terminate, undefined);
+
+        const global = await Metrics.generateGlobalSummary();
+        assert(global.Register ?? 0 > 0);
+        assert(global.Send ?? 0 > 0);
+        assertStrictEquals(global.Receive, undefined);
+        assertStrictEquals(global.Terminate, undefined);
     });
 
     await t.step('Category API - retirement', async () => {
