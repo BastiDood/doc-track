@@ -5,9 +5,8 @@ async function getSubscription(manager: PushManager): Promise<PushSubscription> 
     const maybeSub = await manager.getSubscription();
     if (maybeSub !== null) return maybeSub;
 
-    const applicationServerKey = await Vapid.getVapidPublicKey();
     const sub = await manager.subscribe({
-        applicationServerKey,
+        applicationServerKey: await Vapid.getVapidPublicKey(),
         userVisibleOnly: true,
     });
 
