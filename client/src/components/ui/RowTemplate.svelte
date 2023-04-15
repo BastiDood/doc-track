@@ -30,12 +30,10 @@
 
     .icon {
         flex-grow: 0;
-        user-select: none;
     }
 
     p {
         flex-grow: 1;
         margin: 0;
-        user-select: none;
     }
 </style>

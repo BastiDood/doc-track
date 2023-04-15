@@ -12,8 +12,8 @@
     <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show;}} /></span>
     <p class="doctrack">DocTrack</p>
     <nav id="profilenav">
-        <span class="unselectable">{user.name} </span>
-        <span><img class="unselectable" src={user.picture} alt="{user.name[0]}" /></span>
+        <span>{user.name} </span>
+        <span><img src={user.picture} alt="{user.name[0]}" /></span>
     </nav>
 
 </nav>
@@ -25,7 +25,6 @@
         user-select: none;
         font-size: var(--large);
         font-weight: bold;
-
     }
 
     #icon {
@@ -57,10 +56,4 @@
         align-items: center;
         padding: var(--spacing-small);
     }
-
-
-    .unselectable {
-        user-select: none;
-    }
-    
 </style>

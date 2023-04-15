@@ -46,14 +46,6 @@
         
     }
 
-    .router {
-        overflow: scroll;
-        scrollbar-width: none;
-    }
-    .router::-webkit-scrollbar {
-        display: none; 
-    }
-
     section {
         height: 100%;
         position: relative;
