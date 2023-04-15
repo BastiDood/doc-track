@@ -146,3 +146,9 @@
 {#if currentContext?.ty === RowType.Inbox}
     <InboxContext bind:show={showContextMenu} payload={currentContext} />
 {/if}
+
+<style>
+    h1 {
+        margin: 0;
+    }
+</style>

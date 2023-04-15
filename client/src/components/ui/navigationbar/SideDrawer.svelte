@@ -38,12 +38,11 @@
         display: flex;
         flex-direction: column;
         font-family: inherit;
-        height: calc(100% - var(--topbar-height));
+        height: 100%;
         justify-content: space-between;
         max-width: 300px;
-        top: var(--topbar-height);
         left: -100%;
-        position: fixed;
+        position: absolute;
         transition: left var(--animation-length);
         z-index: 1;
     }
