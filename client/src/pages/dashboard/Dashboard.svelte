@@ -10,11 +10,11 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
+    let currentPage = 'Dashboard';
     $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
 </script>
 
 <svelte:head>
-    <link rel="stylesheet" href="/css/dashboard.css" />
     <title>{currentPage}</title>
 </svelte:head>
 
@@ -48,7 +48,6 @@
 
     .router {
         overflow: scroll;
-        -ms-overflow-style: none;
         scrollbar-width: none;
     }
     .router::-webkit-scrollbar {

@@ -9,11 +9,7 @@
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
-    <nav id="leftnav">
-        <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show;}} /></span>
-        <!-- TODO: Temporarily disabled if officeList is null -->
-        <!-- <OfficeSelect offices={$officeList} bind:oid={selectedId} /> -->
-    </nav>
+    <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show;}} /></span>
     <p class="doctrack">DocTrack</p>
     <nav id="profilenav">
         <span class="unselectable">{user.name} </span>
@@ -25,6 +21,23 @@
 <style>
     @import url('../../../pages/vars.css');
 
+    .doctrack {
+        user-select: none;
+        font-size: var(--large);
+        font-weight: bold;
+
+    }
+
+    #icon {
+        cursor: pointer;
+    }
+
+    img {
+        border-radius: 50%;
+        display: block;
+        height: 2rem;
+    }
+
     #navcontainer {
         align-content: center;
         background-color: var(--primary-color);
@@ -35,42 +48,19 @@
         padding: var(--spacing-small);
     }
 
-    #leftnav {
-        align-content: center;
-        background-color: var(--primary-color);
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        padding: var(--spacing-small);
-    }
-
     #profilenav {
         align-content: center;
         background-color: var(--primary-color);
         display: flex;
         justify-content: flex-end;
+        gap: var(--spacing-small);
         align-items: center;
         padding: var(--spacing-small);
     }
 
-    #icon {
-        cursor: pointer;
-    }
-
-    .doctrack {
-        user-select: none;
-        font-size: var(--large);
-        font-weight: bold;
-
-    }
 
     .unselectable {
         user-select: none;
     }
-
-    img {
-        border-radius: 50%;
-        display: block;
-        height: 2rem;
-    }
+    
 </style>
