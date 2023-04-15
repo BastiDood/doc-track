@@ -43,12 +43,11 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        
     }
 
     section {
         height: 100%;
         position: relative;
-        position:flex;
+        position: flex;
     }
 </style>

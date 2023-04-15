@@ -9,13 +9,12 @@
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
-    <span id="icon"><Hamburger bind:open={show} on:click={() => {show = !show;}} /></span>
+    <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
     <p class="doctrack">DocTrack</p>
     <nav id="profilenav">
         <span>{user.name} </span>
         <span><img src={user.picture} alt="{user.name[0]}" /></span>
     </nav>
-
 </nav>
 
 <style>
@@ -40,11 +39,13 @@
     #navcontainer {
         align-content: center;
         background-color: var(--primary-color);
-        box-shadow: 0 1px var(--spacing-normal) var(--shadow-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: var(--spacing-small);
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
     #profilenav {
