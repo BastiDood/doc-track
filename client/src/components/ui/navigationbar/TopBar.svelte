@@ -12,7 +12,7 @@
     <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
     <p class="doctrack">DocTrack</p>
     <nav id="profilenav">
-        <span>{user.name} </span>
+        <span>{user.name}</span>
         <span><img src={user.picture} alt="{user.name[0]}" /></span>
     </nav>
 </nav>
@@ -20,8 +20,7 @@
 <style>
     @import url('../../../pages/vars.css');
 
-    .doctrack {
-        user-select: none;
+    p {
         font-size: var(--large);
         font-weight: bold;
     }
