@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { AllOffices } from '../../../../model/src/api.ts';
     export let offices: AllOffices;
-    export let oid: number = 1;
+    export let oid = 1;
 </script>
 
 <select required bind:value={oid}>

@@ -14,7 +14,7 @@
 
 <svelte:head>
     <link rel="stylesheet" href="/css/dashboard.css" />
-    <title>{selectedId + ": " + $location.charAt(1).toUpperCase() + $location.slice(2)}</title>
+    <title>{`${selectedId}: ${$location.charAt(1).toUpperCase()}${$location.slice(2)}`}</title>
 </svelte:head>
 
 <main on:click={() => (toggleDrawer &&= false)} on:keydown>
