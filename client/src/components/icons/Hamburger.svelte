@@ -32,15 +32,15 @@
         transition: transform 0.3s ease-in-out;
     }
 
-    #top {
+    .open #top {
         transform: translate(6px, 0px) rotate(45deg);
     }
 
-    #middle {
+    .open #middle {
         opacity: 0;
     }
 
-    #bottom {
+    .open #bottom {
         transform: translate(-12px, 9px) rotate(-45deg);
     }
 </style>
