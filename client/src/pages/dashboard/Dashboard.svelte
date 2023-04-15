@@ -10,11 +10,12 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
+    $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
 </script>
 
 <svelte:head>
     <link rel="stylesheet" href="/css/dashboard.css" />
-    <title>{`${selectedId}: ${$location.charAt(1).toUpperCase()}${$location.slice(2)}`}</title>
+    <title>{currentPage}</title>
 </svelte:head>
 
 <main on:click={() => (toggleDrawer &&= false)} on:keydown>
