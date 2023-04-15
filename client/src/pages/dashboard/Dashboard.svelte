@@ -43,6 +43,7 @@
     }
 
     main {
+        height: -webkit-fill-available;
         overflow: hidden;
         position: relative;
     }
