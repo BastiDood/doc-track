@@ -15,5 +15,5 @@ export const currentUser = derived(userSession, session => ({
     name: session?.name,
     email: session?.email,
     picture: session?.picture,
-    permission: session?.global_perms
+    permission: session?.global_perms,
 } as User));
