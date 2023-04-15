@@ -9,7 +9,7 @@ export const userSession = asyncReadable(
     { reloadable: true }
 );
 
-export const currentUser = derived(userSession, session => session ===  null ? null : {
+export const currentUser = derived(userSession, session => session === null ? null : {
     id: session.id,
     name: session.name,
     email: session.email,
