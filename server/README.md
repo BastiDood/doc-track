@@ -21,8 +21,9 @@ The back-end API is powered by the [Deno] runtime for [TypeScript]. The database
 `PG_PASSWORD` | Provided password when logging into [PostgreSQL]. | &#x274c; |
 `PG_DATABASE` | Default database in the [PostgreSQL] instance. | &#x274c; | `doctrack`
 `PG_POOL` | Maximum number of pooled connections reserved by the [PostgreSQL] client. | &#x274c; | `4`
-`VAPID_PUB_KEY` | [Vapid public key][vapid] which will be used to interact with the [Web Push API]. | &#x2714; |
-`VAPID_PRV_KEY` | [Vapid private key][vapid] which will be used to subscribe to the [Web Push API]. | &#x2714; |
+`VAPID_PUB_KEY` | [VAPID public key][vapid] which will be used to interact with the [Web Push API]. | &#x2714; |
+`VAPID_PRV_KEY` | [VAPID private key][vapid] which will be used to subscribe to the [Web Push API]. | &#x2714; |
+`VAPID_EMAIL` | [VAPID email][vapid] which will be used to inform the sender if the push service failed to send notifications. | &#x2714; |
 
 [vapid]: https://blog.mozilla.org/services/2016/08/23/sending-vapid-identified-webpush-notifications-via-mozillas-push-service/
 [Web Push API]: https://developer.mozilla.org/en-US/docs/Web/API/Push_API
@@ -77,6 +78,7 @@ PG_USER=postgres
 PG_PORT=5432
 VAPID_PUB_KEY=
 VAPID_PRV_KEY=
+VAPID_EMAIL=
 
 # Starts the server at `0.0.0.0:3000`.
 deno task start
