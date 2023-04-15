@@ -54,7 +54,6 @@
         display: none; 
     }
 
-
     section {
         height: 100%;
         position: relative;
