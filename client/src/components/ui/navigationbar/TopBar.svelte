@@ -10,7 +10,7 @@
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
-    <p class="doctrack">DocTrack</p>
+    <p>DocTrack</p>
     <nav id="profilenav">
         <span>{user.name}</span>
         <span><img src={user.picture} alt="{user.name[0]}" /></span>
