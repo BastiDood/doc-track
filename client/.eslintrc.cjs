@@ -16,6 +16,7 @@ module.exports = {
     plugins: [
         'svelte3',
         '@typescript-eslint',
+        'square-svelte-store',
     ],
     overrides: [
         {
@@ -40,6 +41,7 @@ module.exports = {
         'no-unused-private-class-members': 'error',
         'no-use-before-define': 'error',
         'require-atomic-updates': 'error',
+        'square-svelte-store/use-square-svelte-stores': 'error',
 
         // Suggestions
         'block-scoped-var': 'error',
