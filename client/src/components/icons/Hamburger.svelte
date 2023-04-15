@@ -15,38 +15,32 @@
     button {
         background: none; 
         border: none;
-        padding: 0;
         cursor: pointer;
+        padding: 0;
         scale: 0.75;
     }
+
     svg {
-        transition: transform 0.3s ease-in-out;
         background-color: none;
+        transform: scale(0.7);
+        transition: transform 0.3s ease-in-out;
     }
 
-    svg line {
+    svg > line {
         stroke: currentColor;
         stroke-width: 3;
-        transition: transform 0.3s ease-in-out
+        transition: transform 0.3s ease-in-out;
     }
 
-    button {
-        z-index: 20;
+    #top {
+        transform: translate(6px, 0px) rotate(45deg);
     }
 
-    .open svg {
-        transform: scale(0.7)
-    }
-
-    .open #top {
-        transform: translate(6px, 0px) rotate(45deg)
-    }
-
-    .open #middle {
+    #middle {
         opacity: 0;
     }
 
-    .open #bottom {
-        transform: translate(-12px, 9px) rotate(-45deg)
+    #bottom {
+        transform: translate(-12px, 9px) rotate(-45deg);
     }
 </style>
