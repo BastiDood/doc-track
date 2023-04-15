@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { User } from '~model/user.ts';
-
     import { documentTest } from './sample.ts';
     import { RowEvent, RowType } from '../../../components/types.ts';
 
@@ -12,7 +10,7 @@
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
-    import { userSession } from '../stores/UserStore.ts';
+    import { currentUser } from '../stores/UserStore.ts';
     import { allOffices } from '../stores/OfficeStore.ts';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import OfficeSelect from '../../../components/ui/OfficeSelect.svelte';
@@ -35,15 +33,6 @@
     let showActivateCategory = false;
 
     const currentlySelected = '';
-
-    let currentUser: User | null = null;
-    $: currentUser = $userSession === null ? null : {
-        id: $userSession.id,
-        name: $userSession.name,
-        email: $userSession.email,
-        picture: $userSession.picture,
-        permission: $userSession.global_perms,
-    };
 
     function overflowClickHandler(e: CustomEvent<RowEvent>) {
         if (!e.detail) return;
@@ -94,17 +83,15 @@
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
     Select an Office: <OfficeSelect bind:oid={selectedOffice} offices={$allOffices}/>
     <br>
-    {#if selectedOffice !== null && currentUser !== null }
-        <LocalPermissions user={currentUser} office={selectedOffice} />
+    {#if selectedOffice !== null}
+        <LocalPermissions user={$currentUser} office={selectedOffice} />
     {:else}
         Current user is not a staff of the selected office.
     {/if}
 </Modal>
 
 <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
-    {#if currentUser !== null}
-        <GlobalPermissions user={currentUser} />
-    {/if}
+    <GlobalPermissions user={$currentUser} />
 </Modal>
 
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>
