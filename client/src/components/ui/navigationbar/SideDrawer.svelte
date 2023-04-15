@@ -1,31 +1,40 @@
 <script>
     import active from 'svelte-spa-router/active';
+
+    import InboxIcon from '../../icons/DocumentDownload.svelte';
+    import OutboxIcon from '../../icons/DocumentExport.svelte';
+    import EventsIcon from '../../icons/Events.svelte';
+    import BarcodesIcon from '../../icons/Barcode.svelte';
+    import InvitesIcon from '../../icons/PersonAdd.svelte';
+    import StaffIcon from '../../icons/PersonMail.svelte';
+    import AdminIcon from '../../icons/PersonInfo.svelte';
+    import SettingsIcon from '../../icons/Settings.svelte';
+
     export let show = false;
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
     <section>
-        <a href="#/inbox" use:active>Inbox</a>
-        <a href="#/outbox" use:active>Outbox</a>
-        <a href="#/drafts" use:active>Drafts</a>
-        <a href="#/barcodes" use:active>Manage Barcodes</a>
-        <a href="#/invites" use:active>Manage Invites</a>
-        <a href="#/staff" use:active>Manage Staff</a>
-        <a href="#/admin" use:active>Manage Administrators</a>
-        <a href="#/metrics" use:active>Metrics</a>
-        <a href="#/settings" use:active>Settings</a>
-        <a href="#/sandbox" use:active>Sandbox</a>
+        <a href="#/inbox" use:active><InboxIcon />Inbox</a>
+        <a href="#/outbox" use:active><OutboxIcon />Outbox</a>
+        <a href="#/drafts" use:active><EventsIcon />Drafts</a>
+        <a href="#/metrics" use:active><EventsIcon />Metrics</a>
+        <a href="#/barcodes" use:active><BarcodesIcon />Barcodes</a>
+        <a href="#/invites" use:active><InvitesIcon />Invites</a>
+        <a href="#/staff" use:active><StaffIcon />Staff</a>
+        <a href="#/admin" use:active><AdminIcon />Admin</a>
+        <a href="#/settings" use:active><SettingsIcon />Settings</a>
+        <a href="#/sandbox" use:active><SettingsIcon />Sandbox</a>
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
     </form>
 </nav>
-
 <style>
     @import url('../../../pages/vars.css');
 
     nav {
-        background-color: var(--dashboard-bg);
+        background-color: var(--dashboard-sidedrawer);
         display: flex;
         flex-direction: column;
         font-family: inherit;

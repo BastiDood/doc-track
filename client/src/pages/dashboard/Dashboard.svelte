@@ -1,5 +1,5 @@
 <script>
-    import Router from 'svelte-spa-router';
+    import Router, { location } from 'svelte-spa-router';
 
     import { currentUser } from './stores/UserStore.ts';
 
@@ -10,37 +10,50 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
+    let currentPage = 'Dashboard';
+    $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
 </script>
 
-<main on:click={() => (toggleDrawer &&= false)} on:keydown>
-    {#await register()}
-        Waiting for service worker...
-    {:then}
-        {#await currentUser.load()}
-            Loading user...
-        {:then user}
-            <TopBar {user} bind:show={toggleDrawer} />
-            <section>
-                <SideDrawer show={toggleDrawer} />
+<svelte:head>
+    <title>{currentPage}</title>
+</svelte:head>
+
+{#await currentUser.load()}
+    <p>Loading user...</p>
+{:then user}
+    <TopBar {user} bind:show={toggleDrawer} />
+    <main on:click={() => (toggleDrawer &&= false)} on:keydown>
+        {#await register()}
+            <p>Waiting for service worker...</p>
+        {:then}
+            <SideDrawer show={toggleDrawer} />
+            <section class="router">
                 <Router {routes} />
             </section>
         {:catch error}
-            <p>
-                {error} <a href="/auth/login">Try logging in again?</a>
-            </p>
+            <p>{error} <a href="/auth/login">Try logging in again?</a></p>
         {/await}
-    {/await}
-</main>
+    </main>
+{/await}
 
 <style>
-    main {
+    :global(body) {
         display: flex;
         flex-direction: column;
-        height: 100%;
+    }
+
+    main {
+        height: -webkit-fill-available;
+        overflow: hidden;
+        position: relative;
     }
 
     section {
         height: 100%;
         position: relative;
+    }
+
+    .router {
+        overflow-y: auto;
     }
 </style>

@@ -10,18 +10,18 @@
 </button>
 
 <style>
-  @import url('../../pages/vars.css');
+    @import url('../../pages/vars.css');
 
-  button {
-    margin: var(--spacing-normal);
-    padding: var(--spacing-medium);
-    border-radius: var(--border-radius);
-    border: 0;
-    cursor: pointer;
-    color: white;
-  }
+    button {
+        margin: var(--spacing-normal);
+        padding: var(--spacing-medium);
+        border-radius: var(--border-radius);
+        border: 0;
+        cursor: pointer;
+        color: white;
+    }
 
-  button:hover {
-    filter: contrast(1.5);
-  }
+    button:hover {
+        filter: contrast(1.5);
+    }
 </style>
