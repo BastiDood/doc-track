@@ -1,14 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap');
 @import url('vars.css');
 
+:root {
+    /** Relative to the Initial Containing Block. */
+    height: 100%;
+}
+
 body {
     background: var(--dashboard-bg);
     color: var(--text-color);
     font-family: 'Open Sans', sans-serif;
     font-size: var(--normal);
-    height: 100svh;
+    height: 100%;
     margin: 0;
-    overflow-y: hidden;
     padding: 0;
 }
 
