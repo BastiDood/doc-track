@@ -122,7 +122,7 @@ Deno.test('full API integration test', async t => {
     await t.step('VAPID wrappers', async () => {
         // Public key retrieval
         const key = new Uint8Array(await Vapid.getVapidPublicKey());
-        assert(bytewiseEquals(key, env.VAPID_PUB_KEY));
+        assert(bytewiseEquals(key, new Uint8Array(env.VAPID_RAW_PUB_KEY)));
 
         // Submit push subscription
         await Vapid.sendSubscription({

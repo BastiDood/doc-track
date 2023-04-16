@@ -1,7 +1,6 @@
 // https://web.dev/push-notifications-web-push-protocol/
 // https://developer.chrome.com/blog/web-push-encryption/
 
-import { assertStrictEquals } from 'asserts';
 import { concat } from 'bytes/concat';
 import { encode as b64encode } from 'base64url';
 import { HOUR } from 'datetime';
@@ -11,7 +10,7 @@ import type { PushSubscription } from '~model/subscription.ts';
 
 import { env } from './env.ts';
 
-const ECDH = { name: 'ECDH', namedCurve: 'P-256' } as const;
+const ECDSA = { name: 'ECDSA', namedCurve: 'P-256' } as const;
 const AES_GCM = { name: 'AES-GCM', length: 256 } as const;
 const HMAC = { name: 'HMAC', hash: 'SHA-256' } as const;
 
@@ -20,9 +19,7 @@ const WEB_PUSH_INFO = enc.encode('WebPush: info\u0000');
 const CEK_INFO_PREFIX = enc.encode('Content-Encoding: aesgcm\u0000P-256\u0000');
 const NONCE_INFO_PREFIX = enc.encode('Content-Encoding: nonce\u0000P-256\u0000');
 
-const ENCODED_VAPID_PUB_KEY = b64encode(env.VAPID_PUB_KEY);
-const VAPID_PRV_KEY = await crypto.subtle.importKey('raw', env.VAPID_PRV_KEY, ECDH, false, [ 'sign' ]);
-assertStrictEquals(VAPID_PRV_KEY.type, 'private');
+const ENCODED_VAPID_PUB_KEY = b64encode(env.VAPID_RAW_PUB_KEY);
 
 const JWT_HEADER = JSON.stringify({
     typ: 'JWT',
@@ -42,7 +39,7 @@ async function generateAuthorizationJwt({ origin }: URL) {
     // Sign the payload
     const encodedPayload = b64encode(enc.encode(payload))
     const token = `${ENCODED_JWT_HEADER}.${encodedPayload}`;
-    const signature = await crypto.subtle.sign('HMAC', VAPID_PRV_KEY, enc.encode(token));
+    const signature = await crypto.subtle.sign('HMAC', env.VAPID_PRV_KEY, enc.encode(token));
     return `WebPush ${token}.${signature}`;
 }
 
@@ -64,7 +61,7 @@ export async function createPushPayload(
     payload: PushNotification,
 ): Promise<Request> {
     // Compute the shared secret from the client's public key and the server's (newly generated) private key
-    const { privateKey: localPrivateKey, publicKey: localPublicKey } = await crypto.subtle.generateKey(ECDH, true, [ 'deriveKey' ]);
+    const { privateKey: localPrivateKey, publicKey: localPublicKey } = await crypto.subtle.generateKey(ECDSA, true, [ 'deriveKey' ]);
     const clientPublicKey = await crypto.subtle.importKey('raw', p256dh, HMAC, false, [ 'deriveKey' ]);
     const sharedSecret = await crypto.subtle.deriveKey({ name: 'ECDH', public: clientPublicKey }, localPrivateKey, AES_GCM, true, [ 'encrypt' ]);
     const rawSharedSecret = await crypto.subtle.exportKey('raw', sharedSecret);

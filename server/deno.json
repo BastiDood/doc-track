@@ -12,7 +12,8 @@
         "bootstrap": "psql -U postgres -W -f db/bootstrap.sql -1 doctrack",
         "shell": "psql -U postgres -W doctrack",
         "test": "deno test --allow-env --allow-net",
-        "start": "deno run --allow-env --allow-net --allow-read src/main.ts"
+        "start": "deno run --allow-env --allow-net --allow-read src/main.ts",
+        "vapid": "deno run scripts/vapid.ts"
     },
     "fmt": {
         "options": {

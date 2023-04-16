@@ -63,7 +63,7 @@ deno task bootstrap
 # If you have not yet run this command before, place the
 # public and private keys into the `VAPID_PUB_KEY` and the
 # `VAPID_PRV_KEY` environment variables, respectively.
-pnpm dlx web-push generate-vapid-keys
+deno task vapid
 
 # Set up (example) environment variables.
 PORT=3000

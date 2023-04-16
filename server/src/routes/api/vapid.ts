@@ -7,7 +7,7 @@ import { Database } from '../../database.ts';
 import { env } from '../../env.ts';
 
 export function handleVapidPublicKey() {
-    return new Response(env.VAPID_PUB_KEY, {
+    return new Response(env.VAPID_RAW_PUB_KEY, {
         headers: { 'Content-Type': 'application/octet-stream' },
     });
 }
