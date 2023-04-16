@@ -1,16 +1,15 @@
 <script lang="ts">
     import { documentTest } from './sample.ts';
-    import { RowEvent, RowType } from '../../../components/types.ts';
+    import { RowEvent, RowType, Events } from '../../../components/types.ts';
 
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import Button from '../../../components/ui/Button.svelte';
-
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
-    import { currentUser } from '../stores/UserStore.ts';
+    import { currentUser, userOffices } from '../stores/UserStore.ts';
     import { allOffices } from '../stores/OfficeStore.ts';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import OfficeSelect from '../../../components/ui/OfficeSelect.svelte';
@@ -18,6 +17,7 @@
     import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
     import RemoveCategory from '../../../components/ui/forms/category/RemoveCategory.svelte';
     import ActivateCategory from '../../../components/ui/forms/category/ActivateCategory.svelte';
+    import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
 
     let currentContext: RowEvent | null = null;
     let selectedOffice: number | null = null;
@@ -31,17 +31,45 @@
     let showEditCategory = false;
     let showRemoveCategory = false;
     let showActivateCategory = false;
+    let showInsertSnapshot = false;
 
-    const currentlySelected = '';
+    let insertSnapshotAction: number | null = null;
 
     function overflowClickHandler(e: CustomEvent<RowEvent>) {
         if (!e.detail) return;
         currentContext = e.detail;
         showContextMenu = true;
     }
+
+    function contextMenuHandler(e: CustomEvent<RowEvent>) {
+        if (!e.detail) return;
+        switch (e.type) {
+            case Events.SendDocument: {
+                insertSnapshotAction = 0;
+                break;
+            }
+            case Events.TerminateDocument: {
+                insertSnapshotAction = 2;
+                break;
+            }
+            default: break;
+        }
+        if (selectedOffice) showInsertSnapshot = true;
+    }
+
 </script>
 
 <h1>Sandbox</h1>
+{#await userOffices.load()}
+    Loading user offices
+    {:then office}
+        {#if Object.getOwnPropertyNames(office).length !== 0}
+            Select Current Office: <OfficeSelect offices={office} bind:oid={selectedOffice}/>
+        {:else}
+            User does not belong to a single Office.
+        {/if}
+{/await}
+<br>
 <Button on:click={() => (showPermission = true)}>
     Edit Global Permissions
 </Button>
@@ -101,39 +129,15 @@
 <Modal title="Edit Office" bind:showModal={showEditOffice}>
     <EditOffice/>
 </Modal>
-
-<p>Currently selected: {currentlySelected}</p>
-<div>
-    {#each documentTest as doc}
-        <InboxRow
-            id={doc.id}
-            category={doc.category}
-            title={doc.title} 
-            on:overflowClick={overflowClickHandler}
-        />
-    {/each}
-</div>
-
-{#if currentContext?.ty === RowType.Inbox}
-    <InboxContext bind:show={showContextMenu} payload={currentContext} />
+{#if selectedOffice !== null && currentContext !== null && showInsertSnapshot}
+    <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
+        <InsertSnapshot payload={currentContext} userOfficeId={selectedOffice} statusIndex={insertSnapshotAction}/> 
+    </Modal>
 {/if}
 
-<!-- Duplicated to test scroll bars -->
-<p>Currently selected: {currentlySelected}</p>
+<p>Currently selected: {selectedOffice}</p>
 <div>
     {#each documentTest as doc}
-        <InboxRow
-            id={doc.id}
-            category={doc.category}
-            title={doc.title} 
-            on:overflowClick={overflowClickHandler}
-        />
-        <InboxRow
-            id={doc.id}
-            category={doc.category}
-            title={doc.title} 
-            on:overflowClick={overflowClickHandler}
-        />
         <InboxRow
             id={doc.id}
             category={doc.category}
@@ -144,7 +148,10 @@
 </div>
 
 {#if currentContext?.ty === RowType.Inbox}
-    <InboxContext bind:show={showContextMenu} payload={currentContext} />
+    <InboxContext bind:show={showContextMenu} payload={currentContext} 
+        on:sendDocument={contextMenuHandler}
+        on:terminateDocument={contextMenuHandler}   
+    />
 {/if}
 
 <style>
