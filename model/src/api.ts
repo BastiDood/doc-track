@@ -14,13 +14,11 @@ export const MinBatchSchema = z.object({
     creation: BatchSchema.shape.creation,
     codes: BarcodeSchema.shape.code.array(),
 });
-
 export type MinBatch = z.infer<typeof MinBatchSchema>;
 
 export const GeneratedBatchSchema = BatchSchema
     .omit({ office: true, generator: true })
-    .extend({ codes: BarcodeSchema.shape.code.array() })
-
+    .extend({ codes: BarcodeSchema.shape.code.array() });
 export type GeneratedBatch = z.infer<typeof GeneratedBatchSchema>;
 
 export enum InsertSnapshotError {
@@ -43,12 +41,9 @@ export const BarcodeAssignmentErrorSchema = z.nativeEnum(BarcodeAssignmentError)
 
 export const PaperTrailSchema = SnapshotSchema
     .pick({ creation: true, status: true, target: true, remark: true })
-    .extend({
-        category: CategorySchema.shape.name,
-        title: DocumentSchema.shape.title,
-    })
+    .extend({ category: CategorySchema.shape.name })
+    .merge(DocumentSchema.pick({ title: true }))
     .merge(UserSchema.pick({ name: true, email: true, picture: true }));
-
 export type PaperTrail = z.infer<typeof PaperTrailSchema>;
 
 export const InboxEntrySchema = SnapshotSchema
@@ -57,8 +52,8 @@ export const InboxEntrySchema = SnapshotSchema
         doc: DocumentSchema.shape.id,
         title: DocumentSchema.shape.title,
         category: CategorySchema.shape.name,
-    });
-
+    })
+    .merge(DocumentSchema.pick({ title: true }));
 export type InboxEntry = z.infer<typeof InboxEntrySchema>;
 
 export const OutboxEntrySchema = SnapshotSchema
@@ -99,7 +94,6 @@ export const AllCategoriesSchema = z.object({
     active: WithoutActiveSchema,
     retire: WithoutActiveSchema,
 });
-
 export type AllCategories = z.infer<typeof AllCategoriesSchema>;
 
 export const StaffMemberSchema = UserSchema
