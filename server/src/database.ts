@@ -278,7 +278,7 @@ export class Database {
     async getEarliestAvailableBatch(id: Office['id']): Promise<MinBatch | null> {
         // TODO: Add Tests
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`SELECT MIN(b.batch),coalesce(array_agg(b.code),'{}') AS codes
+            .queryObject`SELECT MIN(bar.batch),coalesce(array_agg(bar.code),'{}') AS codes
                 FROM barcode bar
                     LEFT JOIN batch bat ON bar.batch = bat.id
                     LEFT JOIN document doc ON bar.code = doc.id
