@@ -22,7 +22,7 @@ export const currentUser = derived(userSession, session => session === null ? nu
 } as User);
 
 export const userOffices = derived([userSession, allOffices], ([$userSession, $allOffices]) => {
-    if ($userSession === null) return;
+    if ($userSession === null) return {};
     if (Object.entries($userSession.local_perms).length === 0) return {};
     const filterOfficeArr = Object.entries($allOffices).filter(
         ([officeId, _]) => Object.keys($userSession.local_perms).includes(officeId)
