@@ -6,7 +6,7 @@ body {
     color: var(--text-color);
     font-family: 'Open Sans', sans-serif;
     font-size: var(--normal);
-    height: 100vh;
+    height: 100svh;
     margin: 0;
     overflow-y: hidden;
     padding: 0;
