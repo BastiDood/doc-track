@@ -21,11 +21,13 @@ export const currentUser = derived(userSession, session => session === null ? nu
     permission: session.global_perms,
 } as User);
 
-export const userOffices = derived([userSession, allOffices], ([$userSession, $allOffices]) => {
-    if ($userSession === null) return {};
-    if (Object.entries($userSession.local_perms).length === 0) return {};
-    const filterOfficeArr = Object.entries($allOffices).filter(
-        ([officeId, _]) => Object.keys($userSession.local_perms).includes(officeId)
-    );
-    return AllOfficesSchema.parse(Object.fromEntries(filterOfficeArr));
+export const userOffices = derived([ userSession, allOffices ], ([ $userSession, $allOffices ]) => {
+    function* iterator() {
+        if ($userSession === null) return; // don't return anything!
+        for (const id of Object.keys($userSession.local_perms)) {
+            const office = $allOffices[parseInt(id)];
+            if (office !== undefined) yield [ id, office ];
+        }
+    }
+    return Object.fromEntries(iterator());
 });
