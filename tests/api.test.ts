@@ -8,7 +8,7 @@ import {
     assertStrictEquals,
 } from 'asserts';
 import { encode as b64encode } from 'base64url';
-import { equals as bytewiseEquals } from 'bytes';
+import { equals as bytewiseEquals } from 'bytes/equals';
 import { Pool } from 'postgres';
 
 import { Batch } from '~client/api/batch.ts';

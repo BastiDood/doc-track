@@ -544,7 +544,7 @@ export class Database {
         const expires = expiration?.toISOString() || 'infinity';
         const { rowCount } = await this.#client
             .queryArray`INSERT INTO subscription (endpoint,expiration,auth,p256dh)
-                VALUES (${endpoint},${expires},decode(${auth},'base64url'),decode(${p256dh},'base64url'))
+                VALUES (${endpoint},${expires},${auth},${p256dh})
                 ON CONFLICT (endpoint) DO UPDATE SET expiration = ${expires}`;
         assertStrictEquals(rowCount, 1);
     }
