@@ -1,12 +1,11 @@
 <script lang="ts">
-    import { assert } from "../../assert";
+    import { assert } from '../../assert';
     export let options: string[] = [];
     export let index: number | null = null;
     export let value = '';
 
     $: {
-        assert(index !== null);
-        value = options[index] ?? '';
+        if (index) value = options[index] ?? '';
     }
 </script>
 
