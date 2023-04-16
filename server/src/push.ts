@@ -6,6 +6,7 @@ import { concat } from 'bytes/concat';
 import { encode as b64encode } from 'base64url';
 import { HOUR } from 'datetime';
 
+import type { PushNotification } from '~model/api.ts';
 import type { PushSubscription } from '~model/subscription.ts';
 
 import { env } from './env.ts';
@@ -60,7 +61,7 @@ function serializeBytes(bytes: Uint8Array) {
 /** Implements Section 3.4 of RFC 8291 (Message Encryption for Web Push). */
 export async function createPushPayload(
     { endpoint, auth, p256dh }: Omit<PushSubscription, 'expiration'>,
-    payload: Record<string, unknown>
+    payload: PushNotification,
 ): Promise<Request> {
     // Compute the shared secret from the client's public key and the server's (newly generated) private key
     const { privateKey: localPrivateKey, publicKey: localPublicKey } = await crypto.subtle.generateKey(ECDH, true, [ 'deriveKey' ]);

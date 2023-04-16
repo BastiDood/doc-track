@@ -553,6 +553,14 @@ export class Database {
         assertStrictEquals(rowCount, 1);
     }
 
+    async popSubscription(endpoint: PushSubscription['endpoint']): Promise<number> {
+        // TODO: Add Tests
+        const { rowCount } = await this.#client
+            .queryArray`DELETE FROM subscription WHERE endpoint = ${endpoint}`;
+        assert(rowCount !== undefined);
+        return rowCount;
+    }
+
     /** Hooks a subscription to a valid document. Returns `false` if already added previously. */
     async hookSubscription(sub: PushSubscription['endpoint'], doc: Document['id']): Promise<boolean> {
         // TODO: Add Tests with Document Bindings
