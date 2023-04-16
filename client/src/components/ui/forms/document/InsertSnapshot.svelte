@@ -78,6 +78,3 @@
     />
     <Button submit> <Checkmark alt="Submit this Document" /> Submit this Document </Button>
 </form>
-
-
-
