@@ -10,6 +10,7 @@ import { Local } from '~model/permission.ts';
 import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
 
 import { Database } from '../../database.ts';
+import { createPushPayload } from '../../push.ts';
 
 /**
  * Inserts a new document snapshot into the database.

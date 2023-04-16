@@ -112,3 +112,12 @@ export const BarcodeMetricsSchema = z.object({
     pending: z.number().int().nonnegative(),
 });
 export type BarcodeMetrics = z.infer<typeof BarcodeMetricsSchema>;
+
+export const PushNotificationSchema = SnapshotSchema
+    .pick({ creation: true, status: true })
+    .extend({
+        title: DocumentSchema.shape.title,
+        eval: UserSchema.shape.name,
+        target: OfficeSchema.shape.name.nullable(),
+    });
+export type PushNotification = z.infer<typeof PushNotificationSchema>;

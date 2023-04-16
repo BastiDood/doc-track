@@ -14,6 +14,7 @@ import {
     type InboxEntry,
     type MinBatch,
     type PaperTrail,
+    type PushNotification,
     type StaffMember,
     AllCategoriesSchema,
     AllInboxSchema,
@@ -26,6 +27,7 @@ import {
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
+    PushNotificationSchema,
     StaffMemberSchema,
 } from '~model/api.ts';
 
@@ -352,13 +354,15 @@ export class Database {
         }
     }
 
-    async insertSnapshot({ doc, target, evaluator, status, remark }: Omit<Snapshot, 'creation'>): Promise<Snapshot['creation'] | InsertSnapshotError> {
+    async insertSnapshot({ doc, target, evaluator, status, remark }: Omit<Snapshot, 'creation'>): Promise<PushNotification | InsertSnapshotError> {
         try {
             const { rows: [ first, ...rest ] } = await this.#client
-                .queryObject`INSERT INTO snapshot (doc,target,evaluator,status,remark)
-                    VALUES (${doc},${target},${evaluator},${status},${remark}) RETURNING creation`;
+                .queryObject`WITH _ AS (INSERT INTO snapshot (doc,target,evaluator,status,remark)
+                    VALUES (${doc},${target},${evaluator},${status},${remark}) RETURNING *)
+                    SELECT creation,status,d.title,u.name AS eval,o.name AS target
+                    FROM _ INNER JOIN document AS d ON doc = d.id INNER JOIN users AS u ON evaluator = u.id LEFT JOIN office AS o ON target = o.id LIMIT 1`;
             assertStrictEquals(rest.length, 0);
-            return SnapshotSchema.pick({ creation: true }).parse(first).creation;
+            return PushNotificationSchema.parse(first);
         } catch (err) {
             // Lint is ignored due to false positive.
             assertInstanceOf(err, PostgresError);
