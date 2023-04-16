@@ -377,14 +377,19 @@ Deno.test('full OAuth flow', async t => {
         });
 
         // Valid document
-        const creation = await db.insertSnapshot(snapshot);
-        assertInstanceOf(creation, Date);
+        const result = await db.insertSnapshot(snapshot);
+        assert(typeof result !== 'number');
+        assert(result.creation <= new Date);
+        assertStrictEquals(result.status, snapshot.status);
+        assertStrictEquals(result.title, doc.title);
+        assertStrictEquals(result.target, 'Hello');
+        assertStrictEquals(result.eval, USER.name);
 
         await t.step('view latest snapshot in paper trail', async () => {
             const trail = await db.getPaperTrail(chosen);
             assertEquals(trail.at(-1), {
                 status: Status.Send,
-                creation,
+                creation: result.creation,
                 category: randomCategory,
                 remark: snapshot.remark,
                 target: office,
@@ -397,8 +402,8 @@ Deno.test('full OAuth flow', async t => {
 
         await t.step('verify that the outbox only contains one document with the latest snapshot', async () => {
             const inbox = await db.getInbox(office);
-            assertEquals(inbox.pending, [{
-                creation,
+            assertEquals(inbox, [{
+                creation: result.creation,
                 category: randomCategory,
                 doc: doc.id,
                 title: doc.title,
