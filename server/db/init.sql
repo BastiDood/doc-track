@@ -111,7 +111,7 @@ CREATE TABLE subscription(
 );
 
 CREATE TABLE notification(
-    sub Endpoint REFERENCES subscription (endpoint),
+    sub Endpoint REFERENCES subscription (endpoint) ON DELETE CASCADE,
     doc UUID NOT NULL REFERENCES document (id),
     PRIMARY KEY (sub, doc)
 );
