@@ -10,6 +10,7 @@ import {
 import { encode as b64encode } from 'base64url';
 import { equals as bytewiseEquals } from 'bytes/equals';
 import { Pool } from 'postgres';
+import { Status as HttpStatus } from 'http';
 
 import { Batch } from '~client/api/batch.ts';
 import { Category } from '~client/api/category.ts';
@@ -101,6 +102,10 @@ Deno.test('full API integration test', async t => {
     // Mock the `fetch` function and its cookie store
     const origFetch = globalThis.fetch;
     globalThis.fetch = (input, init) => {
+        // This is probably a push notification emulation
+        if (input instanceof Request)
+            return Promise.resolve(new Response(null, { status: HttpStatus.Created }));
+
         const request = new Request('https://doctrack.app' + input, {
             ...init,
             headers: {
