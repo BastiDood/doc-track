@@ -63,10 +63,10 @@
 {#await userOffices.load()}
     Loading user offices
     {:then office}
-        {#if Object.getOwnPropertyNames(office).length !== 0}
-            Select Current Office: <OfficeSelect offices={office} bind:oid={selectedOffice}/>
-        {:else}
+        {#if Object.getOwnPropertyNames(office).length === 0}
             User does not belong to a single Office.
+        {:else}
+            Select Current Office: <OfficeSelect offices={office} bind:oid={selectedOffice}/>
         {/if}
 {/await}
 <br>
