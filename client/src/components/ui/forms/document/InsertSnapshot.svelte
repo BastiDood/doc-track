@@ -22,9 +22,8 @@
     let destOfficeId: SnapshotModel['target'] | null = null;
     
     const statusArr = [Status.Send, Status.Receive, Status.Terminate];
-    $: {
-        if (statusIndex) setStatusTo = statusArr[statusIndex] ?? null;
-    }
+    $: if (statusIndex) setStatusTo = statusArr[statusIndex] ?? null;
+
     async function handleSubmit(this: HTMLFormElement) {
         const node = this.elements.namedItem('snap-remark');
         assert(node instanceof HTMLInputElement);
@@ -41,8 +40,7 @@
                 status: setStatusTo,
                 remark: node.value,
                 target: destOfficeId,
-            }
-            );
+            });
 
             // TODO: Refresh the inbox store
             // TODO: Exit out of the modal.
@@ -76,5 +74,5 @@
         label="Remarks: "
         placeholder="Optional"
     />
-    <Button submit> <Checkmark alt="Submit this Document" /> Submit this Document </Button>
+    <Button submit> <Checkmark alt="Submit this Document" /> Submit this Document</Button>
 </form>

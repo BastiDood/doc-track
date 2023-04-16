@@ -4,9 +4,7 @@
     export let index: number | null = null;
     export let value = '';
 
-    $: {
-        if (index) value = options[index] ?? '';
-    }
+    $: if (index) value = options[index] ?? '';
 </script>
 
 <select bind:value={index}>
