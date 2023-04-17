@@ -1,6 +1,6 @@
 <script lang="ts">
     import { documentTest } from './sample.ts';
-    import { RowEvent, RowType, Events } from '../../../components/types.ts';
+    import { RowEvent, RowType, Events, SnapshotAction } from '../../../components/types.ts';
 
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
@@ -33,7 +33,7 @@
     let showActivateCategory = false;
     let showInsertSnapshot = false;
 
-    let insertSnapshotAction: number | null = null;
+    let insertSnapshotAction: SnapshotAction | null = null;
 
     function overflowClickHandler(e: CustomEvent<RowEvent>) {
         if (!e.detail) return;
@@ -44,14 +44,12 @@
     function contextMenuHandler(e: CustomEvent<RowEvent>) {
         if (!e.detail) return;
         switch (e.type) {
-            case Events.SendDocument: {
-                insertSnapshotAction = 0;
+            case Events.SendDocument:
+                insertSnapshotAction = SnapshotAction.Send;
                 break;
-            }
-            case Events.TerminateDocument: {
-                insertSnapshotAction = 2;
+            case Events.TerminateDocument:
+                insertSnapshotAction = SnapshotAction.Terminate;
                 break;
-            }
             default: break;
         }
         if (selectedOffice) showInsertSnapshot = true;
