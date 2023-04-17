@@ -1,9 +1,6 @@
 import { asyncReadable, derived } from '@square/svelte-store';
 
-import { assert } from '../../../assert.ts';
-
 import { allOffices } from './OfficeStore.ts';
-import { AllOfficesSchema } from '../../../../../model/src/api.ts';
 import { Session } from '../../../api/session.ts';
 import { User } from '~model/user.ts';
 
