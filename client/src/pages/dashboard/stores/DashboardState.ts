@@ -6,16 +6,16 @@ export interface dashboardStateModel {
     // TODO: We can add more states here, like darkmode setting possibly.
 }
 
-export const dashboardState = writable({
+const dashboardModel = writable({
     currentOffice: null,
 } as dashboardStateModel);
 
-export const dashboardSetter = {
-    subscribe: dashboardState.subscribe,
+export const dashboardState = {
+    subscribe: dashboardModel.subscribe,
     // You can use $dashboardState.setOffice(number) to set an office.
     setOffice: (officeId: Office['id']) => {
-        dashboardState.set({
-            ...dashboardState,
+        dashboardModel.set({
+            ...dashboardModel,
             currentOffice: officeId,
         });
     },
