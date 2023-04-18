@@ -1,6 +1,10 @@
 <script lang="ts">
     import { documentTest } from './sample.ts';
     import { RowEvent, RowType, Events, SnapshotAction } from '../../../components/types.ts';
+    import { Office } from "~model/office";
+    import { dashboardState } from "../stores/DashboardState";
+    import { currentUser } from '../stores/UserStore.ts';
+    import { allOffices } from '../stores/OfficeStore.ts';
 
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
@@ -9,10 +13,7 @@
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
-    import { currentUser, userOffices } from '../stores/UserStore.ts';
-    import { allOffices } from '../stores/OfficeStore.ts';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
-    import OfficeSelect from '../../../components/ui/OfficeSelect.svelte';
     import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
     import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
     import RemoveCategory from '../../../components/ui/forms/category/RemoveCategory.svelte';
@@ -20,7 +21,9 @@
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
 
     let currentContext: RowEvent | null = null;
-    let selectedOffice: number | null = null;
+    let currentOffice: Office['id'] | null = null;
+
+    $: $dashboardState.currentOffice ? currentOffice = $dashboardState.currentOffice : null;
 
     let showContextMenu = false;
     let showCreateOffice = false;
@@ -52,22 +55,13 @@
                 break;
             default: break;
         }
-        if (selectedOffice) showInsertSnapshot = true;
+        if (currentOffice) showInsertSnapshot = true;
     }
 
 </script>
 
 <h1>Sandbox</h1>
-{#await userOffices.load()}
-    Loading user offices
-    {:then office}
-        {#if Object.getOwnPropertyNames(office).length === 0}
-            User does not belong to a single Office.
-        {:else}
-            Select Current Office: <OfficeSelect offices={office} bind:oid={selectedOffice} />
-        {/if}
-{/await}
-<br>
+<h2> Current Office ID: {currentOffice}</h2>
 <Button on:click={() => (showPermission = true)}>
     Edit Global Permissions
 </Button>
@@ -107,10 +101,9 @@
 </Modal>
 
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
-    Select an Office: <OfficeSelect bind:oid={selectedOffice} offices={$allOffices}/>
     <br>
-    {#if selectedOffice !== null}
-        <LocalPermissions user={$currentUser} office={selectedOffice} />
+    {#if currentOffice !== null}
+        <LocalPermissions user={$currentUser} office={currentOffice} />
     {:else}
         Current user is not a staff of the selected office.
     {/if}
@@ -127,17 +120,15 @@
 <Modal title="Edit Office" bind:showModal={showEditOffice}>
     <EditOffice/>
 </Modal>
-{#if selectedOffice !== null && currentContext !== null && showInsertSnapshot}
+{#if currentOffice !== null && currentContext !== null && showInsertSnapshot}
     <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
         <InsertSnapshot
             payload={currentContext}
-            userOfficeId={selectedOffice}
+            userOfficeId={currentOffice}
             statusIndex={insertSnapshotAction}
         /> 
     </Modal>
 {/if}
-
-<p>Currently selected: {selectedOffice}</p>
 <div>
     {#each documentTest as doc}
         <InboxRow
