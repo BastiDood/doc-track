@@ -4,8 +4,8 @@
 
     let currentOffice: Office['id'] | null = null;
 
-    // eslint-disable-next-line no-unused-expressions, prefer-destructuring
-    $: $dashboardState.currentOffice ? currentOffice = $dashboardState.currentOffice : null;
+    // eslint-disable-next-line prefer-destructuring
+    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
 </script>
 
 {#if (currentOffice === null)}

@@ -12,8 +12,8 @@
     export let user: User;
     let selectedOffice: Office['id'] | null = null;
 
-    // eslint-disable-next-line no-unused-expressions
-    $: selectedOffice ? dashboardState.setOffice(selectedOffice) : null;
+    $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
+    
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
