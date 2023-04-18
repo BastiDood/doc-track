@@ -2,7 +2,7 @@
     import { assert } from '../../../../assert.ts';
 
     import { Office } from '../../../../api/office.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { userOffices, userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
 
     import TextInput from '../../TextInput.svelte';
@@ -18,8 +18,7 @@
     
         try {
             await Office.create(node.value);
-            await allOffices.reload?.();
-            await userSession.reload?.(); // Reload to get superuser
+            await userOffices.reload?.(); // Reloads all relevant stores
             this.reset();
         } catch (err) {
             // TODO: No permission handler
