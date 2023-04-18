@@ -11,7 +11,8 @@
     export let show = false;
     export let user: User;
     let selectedOffice: Office['id'] | null = null;
- 
+
+    // eslint-disable-next-line no-unused-expressions
     $: selectedOffice ? dashboardSetter.setOffice(selectedOffice) : null;
 </script>
 

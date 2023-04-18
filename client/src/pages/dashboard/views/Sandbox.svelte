@@ -1,8 +1,8 @@
 <script lang="ts">
     import { documentTest } from './sample.ts';
     import { RowEvent, RowType, Events, SnapshotAction } from '../../../components/types.ts';
-    import { Office } from "~model/office";
-    import { dashboardState } from "../stores/DashboardState";
+    import { Office } from '~model/office';
+    import { dashboardState } from '../stores/DashboardState';
     import { currentUser } from '../stores/UserStore.ts';
     import { allOffices } from '../stores/OfficeStore.ts';
 
@@ -20,11 +20,6 @@
     import ActivateCategory from '../../../components/ui/forms/category/ActivateCategory.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
 
-    let currentContext: RowEvent | null = null;
-    let currentOffice: Office['id'] | null = null;
-
-    $: $dashboardState.currentOffice ? currentOffice = $dashboardState.currentOffice : null;
-
     let showContextMenu = false;
     let showCreateOffice = false;
     let showEditOffice = false;
@@ -37,7 +32,11 @@
     let showInsertSnapshot = false;
 
     let insertSnapshotAction: SnapshotAction | null = null;
+    let currentContext: RowEvent | null = null;
+    let currentOffice: Office['id'] | null = null;
 
+    // eslint-disable-next-line no-unused-expressions, prefer-destructuring
+    $: $dashboardState.currentOffice ? currentOffice = $dashboardState.currentOffice : null;
     function overflowClickHandler(e: CustomEvent<RowEvent>) {
         if (!e.detail) return;
         currentContext = e.detail;
