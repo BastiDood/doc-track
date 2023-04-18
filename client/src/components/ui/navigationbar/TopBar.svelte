@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { dashboardState, dashboardSetter } from '../../../pages/dashboard/stores/DashboardState.ts';
+    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
 
     import type { User } from '../../../../../model/src/user.ts';
     import { Office } from '~model/office.ts';
@@ -13,7 +13,7 @@
     let selectedOffice: Office['id'] | null = null;
 
     // eslint-disable-next-line no-unused-expressions
-    $: selectedOffice ? dashboardSetter.setOffice(selectedOffice) : null;
+    $: selectedOffice ? dashboardState.setOffice(selectedOffice) : null;
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
