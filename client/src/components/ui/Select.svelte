@@ -1,9 +1,10 @@
 <script lang="ts">
+    import { assert } from '../../assert';
     export let options: string[] = [];
-    export let index = 0;
+    export let index: number | null = null;
     export let value = '';
 
-    $: value = options[index];
+    $: if (index) value = options[index] ?? '';
 </script>
 
 <select bind:value={index}>

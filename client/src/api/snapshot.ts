@@ -2,8 +2,8 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { Office } from '~model/office.ts';
 
-import { type InsertSnapshotError, InsertSnapshotErrorSchema } from '~model/api.ts';
-import { type Snapshot as SnapshotType, SnapshotSchema } from '~model/snapshot.ts';
+import { type InsertSnapshotError, InsertSnapshotErrorSchema } from '../../../model/src/api.ts';
+import { type Snapshot as SnapshotType, SnapshotSchema } from '../../../model/src/snapshot.ts';
 
 import {
     InsufficientPermissions,
