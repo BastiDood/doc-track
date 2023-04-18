@@ -1,14 +1,14 @@
 import { writable } from '@square/svelte-store';
 import { Office } from '~model/office';
 
-export interface dashboardStateModel {
+export interface DashboardStateModel {
     currentOffice: Office['id'] | null;
     // TODO: We can add more states here, like darkmode setting possibly.
 }
 
 const dashboardModel = writable({
     currentOffice: null,
-} as dashboardStateModel);
+} as DashboardStateModel);
 
 export const dashboardState = {
     subscribe: dashboardModel.subscribe,
