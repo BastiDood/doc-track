@@ -1,15 +1,27 @@
 <script lang="ts">
+    import { dashboardState, dashboardSetter } from '../../../pages/dashboard/stores/DashboardState.ts';
+
     import type { User } from '../../../../../model/src/user.ts';
+    import { Office } from '~model/office.ts';
+    import { userOffices } from '../../../pages/dashboard/stores/UserStore.ts';
 
     import Hamburger from '../../icons/Hamburger.svelte';
+    import OfficeSelect from '../OfficeSelect.svelte';
 
     export let show = false;
     export let user: User;
-
+    let selectedOffice: Office['id'] | null = null;
+ 
+    $: selectedOffice ? dashboardSetter.setOffice(selectedOffice) : null;
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
+    {#if Object.getOwnPropertyNames($userOffices).length === 0}
+        No office detected!
+    {:else}
+        <OfficeSelect offices={$userOffices} bind:oid={selectedOffice}/>
+    {/if}
     <p>DocTrack</p>
     <nav id="profilenav">
         <span>{user.name}</span>
