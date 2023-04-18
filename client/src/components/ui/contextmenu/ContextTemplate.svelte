@@ -27,8 +27,8 @@
     dialog {
         background-color: var(--dashboard-bg);
         border: var(--spacing-tiny) solid black;
-        bottom: -95%;
-        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        bottom: -80vh;
+        border-radius: var(--border-radius);
         position: relative;
         width: 100%;
     }
@@ -38,8 +38,8 @@
     }
 
     @keyframes slide-in {
-        0% { transform: translateY(100vh); }
-        100% { transform: translateY(0%); }
+        0% { transform: translateY(5vh); }
+        100% { transform: translateY(0); }
     }
 </style>
 

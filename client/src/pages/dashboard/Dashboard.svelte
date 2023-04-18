@@ -27,7 +27,7 @@
             <p>Waiting for service worker...</p>
         {:then}
             <SideDrawer show={toggleDrawer} />
-            <section class="router">
+            <section>
                 <Router {routes} />
             </section>
         {:catch error}
@@ -43,17 +43,13 @@
     }
 
     main {
-        height: -webkit-fill-available;
+        height: 100%;
         overflow: hidden;
         position: relative;
     }
 
     section {
         height: 100%;
-        position: relative;
-    }
-
-    .router {
         overflow-y: auto;
     }
 </style>
