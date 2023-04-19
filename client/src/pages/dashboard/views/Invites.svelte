@@ -12,5 +12,5 @@
     You must select an office before accessing the Invites page.
 {:else}
     Invites page of Office ID {currentOffice}.
-    <h1> Invites </h1>
+    <h1>Invites</h1>
 {/if}

@@ -12,9 +12,7 @@
     You must select an office before accessing the Inbox page.
 {:else}
     Inbox page of Office ID {currentOffice}.
-    <h1> Inbox </h1>
-    <h2> To Be Accepted </h2>
-    <h2> Office Inbox </h2>
+    <h1>Inbox</h1>
+    <h2>To Be Accepted</h2>
+    <h2>Office Inbox</h2>
 {/if}
-
-

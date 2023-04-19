@@ -13,7 +13,6 @@
     let selectedOffice: Office['id'] | null = null;
 
     $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
-    
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
@@ -21,7 +20,7 @@
     {#if Object.getOwnPropertyNames($userOffices).length === 0}
         No office detected!
     {:else}
-        <OfficeSelect offices={$userOffices} bind:oid={selectedOffice}/>
+        <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
     {/if}
     <p>DocTrack</p>
     <nav id="profilenav">

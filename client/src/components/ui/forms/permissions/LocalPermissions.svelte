@@ -42,7 +42,7 @@
         }
     }
 </script>
-<p> You are modifying {user.email}'s permissions in Office ID {office}. </p>
+<p>You are modifying {user.email}'s permissions in Office ID {office}.</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     <label>
         <input

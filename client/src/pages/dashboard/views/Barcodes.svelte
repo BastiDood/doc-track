@@ -12,5 +12,5 @@
     You must select an office before accessing the Barcodes page.
 {:else}
     Barcodes page of Office ID {currentOffice}.
-    <h1> Barcodes </h1>
+    <h1>Barcodes</h1>
 {/if}

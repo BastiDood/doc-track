@@ -12,5 +12,5 @@
     You must select an office before accessing the Outbox page.
 {:else}
     Outbox page of Office ID {currentOffice}.
-    <h1> Outbox </h1>
+    <h1>Outbox</h1>
 {/if}
