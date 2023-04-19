@@ -2,7 +2,7 @@
     import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
 
-    import GenerateBatch from '../../../components/ui/forms/batch/GenerateBatch.svelte'
+    import GenerateBatch from '../../../components/ui/forms/batch/GenerateBatch.svelte';
     import FetchEarliestBatch from '../../../components/ui/forms/batch/FetchEarliestBatch.svelte';
 
     import Download from '../../../components/icons/Download.svelte';
