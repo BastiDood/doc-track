@@ -1,6 +1,4 @@
 <script>
-
-    let showModal = false;
     let title = 'Document';
 
 </script>
