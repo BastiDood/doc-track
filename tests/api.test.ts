@@ -203,6 +203,7 @@ Deno.test('full API integration test', async t => {
         assertEquals(await Category.getAll(), origCategories);
     });
 
+    assertStrictEquals(await Batch.getEarliestBatch(oid), null);
     const { id: bid, codes, creation } = await Batch.generate(oid);
     await t.step('Batch API', () => {
         // Create new batch
@@ -222,18 +223,38 @@ Deno.test('full API integration test', async t => {
     assertStrictEquals(rest.length, 9);
 
     await t.step('Document API', async () => {
-        // Document creation
-        const doc = await Document.create(
-            oid,
-            {
-                id: first,
-                title: 'Leave of Absence',
-                category: cid,
-            },
-            'This is a cool remark!'
-        );
-        assertInstanceOf(doc, Date);
-        assert(new Date >= creation);
+        const initial = await Batch.getEarliestBatch(oid);
+        assertInstanceOf(initial?.creation, Date);
+        assert(new Date >= initial.creation);
+        assertStrictEquals(initial.batch, bid);
+        assertEquals(initial.codes, codes);
+
+        for (const code of codes) {
+            const batch = await Batch.getEarliestBatch(oid);
+            assertInstanceOf(batch?.creation, Date);
+            assertEquals(batch.creation, initial.creation);
+            assertStrictEquals(batch.batch, initial.batch);
+
+            const doc = await Document.create(
+                oid,
+                {
+                    id: code,
+                    title: 'Leave of Absence',
+                    category: cid,
+                },
+                'This is a cool remark!'
+            );
+            assertInstanceOf(doc, Date);
+            assert(new Date >= creation);
+
+            const index: number = initial.codes.indexOf(code);
+            assert(index >= 0);
+            const [ extracted, ...rest ]: string[] = initial.codes.splice(index, 1);
+            assertStrictEquals(rest.length, 0);
+            assertStrictEquals(extracted, code);
+        }
+
+        assertStrictEquals(await Batch.getEarliestBatch(oid), null);
     });
 
     await t.step('Snapshot API', async () => {
@@ -249,7 +270,7 @@ Deno.test('full API integration test', async t => {
 
     await t.step('Metrics API', async () => {
         const user = await Metrics.generateUserSummary();
-        assertStrictEquals(user.Register, 1);
+        assertStrictEquals(user.Register, 10);
         assertStrictEquals(user.Send, 1);
         assertStrictEquals(user.Receive, undefined);
         assertStrictEquals(user.Terminate, undefined);
@@ -257,7 +278,7 @@ Deno.test('full API integration test', async t => {
         // TODO: add tests for multiple users in the same office
 
         const local = await Metrics.generateLocalSummary(oid);
-        assertStrictEquals(local.Register, 1);
+        assertStrictEquals(local.Register, 10);
         assertStrictEquals(local.Send, 1);
         assertStrictEquals(local.Receive, undefined);
         assertStrictEquals(local.Terminate, undefined);
