@@ -1,5 +1,8 @@
-<script>
+<script lang="ts">
     import active from 'svelte-spa-router/active';
+    import { Office } from '~model/office.ts';
+    import { userOffices } from '../../../pages/dashboard/stores/UserStore.ts';
+    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
 
     import InboxIcon from '../../icons/DocumentDownload.svelte';
     import OutboxIcon from '../../icons/DocumentExport.svelte';
@@ -10,11 +13,23 @@
     import AdminIcon from '../../icons/PersonInfo.svelte';
     import SettingsIcon from '../../icons/Settings.svelte';
 
+    import OfficeSelect from '../OfficeSelect.svelte';
+
     export let show = false;
+    let selectedOffice: Office['id'] | null = null;
+
+    $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
     <section>
+        <header>
+            {#if Object.getOwnPropertyNames($userOffices).length === 0}
+                No office detected!
+            {:else}
+                <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
+            {/if}
+        </header>
         <a href="#/inbox" use:active><InboxIcon />Inbox</a>
         <a href="#/outbox" use:active><OutboxIcon />Outbox</a>
         <a href="#/drafts" use:active><EventsIcon />Drafts</a>
@@ -51,6 +66,10 @@
         left: 0;
     }
   
+    header {
+        margin: var(--large);
+    }
+    
     a {
         border-right: var(--spacing-small) solid transparent;
         color: initial;
