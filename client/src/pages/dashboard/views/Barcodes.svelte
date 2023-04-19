@@ -1,1 +1,16 @@
-<p>Barcodes!</p>
+<script lang="ts">
+    import { Office } from '~model/office';
+    import { dashboardState } from '../stores/DashboardState';
+
+    let currentOffice: Office['id'] | null = null;
+
+    // eslint-disable-next-line prefer-destructuring
+    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+</script>
+
+{#if currentOffice === null}
+    You must select an office before accessing the Barcodes page.
+{:else}
+    Barcodes page of Office ID {currentOffice}.
+    <h1>Barcodes</h1>
+{/if}
