@@ -8,7 +8,7 @@
     $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
 </script>
 
-{#if (currentOffice === null)}
+{#if currentOffice === null}
     You must select an office before accessing the Staff page.
 {:else}
     Staff page of Office ID {currentOffice}.
