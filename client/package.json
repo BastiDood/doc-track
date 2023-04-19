@@ -4,7 +4,8 @@
     "type": "module",
     "source": [
         "src/pages/index.html",
-        "src/pages/dashboard/index.html"
+        "src/pages/dashboard/index.html",
+        "src/pages/track/index.html"
     ],
     "scripts": {
         "build": "parcel build",
