@@ -1,5 +1,6 @@
 <script lang="ts">
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
+    import { location } from 'svelte-spa-router';
 
     import type { User } from '../../../../../model/src/user.ts';
     import { Office } from '~model/office.ts';
@@ -11,17 +12,22 @@
     export let show = false;
     export let user: User;
     let selectedOffice: Office['id'] | null = null;
+    let currentPage = 'Dashboard';
+    $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
 
     $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
-    <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
-    {#if Object.getOwnPropertyNames($userOffices).length === 0}
-        No office detected!
-    {:else}
-        <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
-    {/if}
+    <span id="leftbar">
+        <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
+        <p>{currentPage}</p>   
+        {#if Object.getOwnPropertyNames($userOffices).length === 0}
+            No office detected!
+        {:else}
+            <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
+        {/if}
+        </span>
     <p>DocTrack</p>
     <nav id="profilenav">
         <span>{user.name}</span>
@@ -45,6 +51,13 @@
         border-radius: 50%;
         display: block;
         height: 2rem;
+    }
+
+    #leftbar {
+        align-content: center;
+        display: flex;
+        gap: var(--spacing-small);
+        align-items: center;
     }
 
     #navcontainer {
