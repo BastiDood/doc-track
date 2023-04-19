@@ -10,6 +10,7 @@
         <line id="middle" x1="0" y1="12" x2="24" y2="12" />
         <line id="bottom" x1="0" y1="22" x2="32" y2="22" />
     </svg>
+
 </button>
 
 <style>

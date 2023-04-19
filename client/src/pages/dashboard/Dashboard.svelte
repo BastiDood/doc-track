@@ -21,7 +21,7 @@
 {#await currentUser.load()}
     <p>Loading user...</p>
 {:then user}
-    <TopBar {user} bind:show={toggleDrawer} />
+    <TopBar {user} bind:show={toggleDrawer} bind:currentPage={currentPage} />
     <main on:click={() => (toggleDrawer &&= false)} on:keydown>
         {#await register()}
             <p>Waiting for service worker...</p>

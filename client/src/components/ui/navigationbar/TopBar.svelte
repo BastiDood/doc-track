@@ -1,14 +1,21 @@
 <script lang="ts">
+    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
+    import { location } from 'svelte-spa-router';
+
     import type { User } from '../../../../../model/src/user.ts';
 
     import Hamburger from '../../icons/Hamburger.svelte';
 
     export let show = false;
     export let user: User;
+    export let currentPage: string;
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
-    <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
+    <nav id="leftbar">
+        <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
+        <p>{currentPage}</p>   
+    </nav>
     <p>DocTrack</p>
     <nav id="profilenav">
         <span>{user.name}</span>
@@ -37,6 +44,13 @@
         border-radius: 50%;
         display: block;
         height: 2rem;
+    }
+
+    #leftbar {
+        align-content: center;
+        display: flex;
+        gap: var(--spacing-small);
+        align-items: center;
     }
 
     #navcontainer {
