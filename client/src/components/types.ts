@@ -4,8 +4,7 @@ import { Staff } from '../../../model/src/staff.ts';
 
 export enum IconColor {
     Default = 'default',
-    Primary = 'primary',
-    Faded = 'faded',
+    Black = 'black'
 }
 
 export enum IconSize {

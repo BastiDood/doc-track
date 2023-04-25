@@ -1,15 +1,11 @@
 @import url('../../pages/vars.css');
 
-.faded {
-    filter: invert(73%) sepia(4%) saturate(555%) hue-rotate(171deg) brightness(95%) contrast(94%);
-}
-
-.primary {
-    filter: invert(26%) sepia(77%) saturate(6805%) hue-rotate(242deg) brightness(97%) contrast(96%);
-}
-
 .default {
-    filter: none;
+    filter: invert(0%) sepia(5%) saturate(7500%) hue-rotate(261deg) brightness(98%) contrast(106%);
+}
+
+.white {
+    filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(138deg) brightness(105%) contrast(101%);
 }
 
 .normal {
