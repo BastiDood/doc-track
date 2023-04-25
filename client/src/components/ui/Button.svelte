@@ -6,7 +6,7 @@
 </script>
 
 <button type={submit ? 'submit' : 'button'} class={type} {disabled} on:click>
-    <span><slot/></span>
+    <slot/>
 </button>
 
 <style>
@@ -17,15 +17,17 @@
         padding: var(--spacing-medium);
         border-radius: var(--border-radius);
         cursor: pointer;
-
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     button:hover {
         filter: contrast(1.5);
     }
 
-    button > span {
-        vertical-align: middle;
+    button > img {
+        padding: 0 var(--spacing-normal) 0 0;
     }
 
     .primary {
