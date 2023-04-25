@@ -6,7 +6,7 @@
 </script>
 
 <button type={submit ? 'submit' : 'button'} class={type} {disabled} on:click>
-    <slot>{type}</slot>
+    <span><slot/></span>
 </button>
 
 <style>
@@ -16,12 +16,32 @@
         margin: var(--spacing-normal);
         padding: var(--spacing-medium);
         border-radius: var(--border-radius);
-        border: 0;
         cursor: pointer;
-        color: white;
+
     }
 
     button:hover {
         filter: contrast(1.5);
     }
+
+    button > span {
+        vertical-align: middle;
+    }
+
+    .primary {
+        color: white;
+        border: 0;
+    }
+
+    .secondary {
+        background-color: white;
+        color: var(--text-color);
+        border-style: solid;
+        border-color: var(--primary-color);
+    }
+
+    .danger {
+        background-color: var(--danger-color);
+    }
+
 </style>
