@@ -22,6 +22,11 @@
     p {
         font-size: var(--large);
         font-weight: bold;
+        color: white;
+    }
+
+    span {
+        color: white;
     }
 
     #icon {
