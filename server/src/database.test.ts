@@ -241,7 +241,10 @@ Deno.test('full OAuth flow', async t => {
     await t.step('office creation with superuser', async () =>
         assertNotStrictEquals(await db.createOfficeWithSuperuser(USER.id, 'Cool Office'), 0));
 
-    const { id: batch, codes } = await db.generateBatch({ office, generator: USER.id });
+    const { id: batch, codes, creation: batchCreation } = await db.generateBatch({
+        office,
+        generator: USER.id,
+    });
     await t.step('batch generation', () => {
         assert(Number.isSafeInteger(batch));
         assert(batch > 0);
@@ -298,6 +301,12 @@ Deno.test('full OAuth flow', async t => {
         // Successful assignment
         const creation = await db.assignBarcodeToDocument(doc, snap);
         assertInstanceOf(creation, Date);
+
+        const info = await db.getEarliestAvailableBatch(office);
+        assert(info !== null);
+        assertEquals(info.creation, batchCreation);
+        assertStrictEquals(info.batch, batch);
+        assertStrictEquals(info.codes.length, 9);
 
         // Paper trail should contain one snapshot
         assertEquals(await db.getPaperTrail(doc.id), [{
@@ -395,6 +404,27 @@ Deno.test('full OAuth flow', async t => {
             assertStrictEquals(global.Receive, undefined);
             assertStrictEquals(global.Terminate, undefined);
         });
+    });
+
+    await t.step('fully populate the batch - cleanup', async () => {
+        // Assign barcodes to documents
+        for (const other of others) {
+            const result = await db.assignBarcodeToDocument(
+                {
+                    id: other,
+                    category,
+                    title: 'Fully Populated Batch',
+                },
+                {
+                    evaluator: USER.id,
+                    remark: 'Filler document.',
+                },
+            );
+            assertInstanceOf(result, Date);
+        }
+
+        // There should be no remaining codes left
+        assertStrictEquals(await db.getEarliestAvailableBatch(office), null);
     });
 
     await t.step('category deprecation and activation', async () => {
