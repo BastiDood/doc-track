@@ -4,6 +4,7 @@
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { IconColor } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -49,7 +50,7 @@
             name="newcat"
             label="New Category Name:"
         />
-        <Button submit><Checkmark alt="Create New Category"/> New Category</Button>
+        <Button submit><Checkmark color={IconColor.White} alt="Create New Category"/> New Category</Button>
     </form>
 </article>
 

@@ -26,10 +26,6 @@
         filter: contrast(1.5);
     }
 
-    button > img {
-        padding: 0 var(--spacing-normal) 0 0;
-    }
-
     .primary {
         color: white;
         border: 0;

@@ -3,6 +3,7 @@
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { IconColor, ButtonType } from '../../../types.ts';
     
     import Button from '../../Button.svelte';
     import Close from '../../../icons/Close.svelte';
@@ -46,7 +47,7 @@
                 <p>Category ID: {currId}</p>
                 <p>Catergory Name: {currName}</p>
                 {#if currName !== null}
-                    <Button submit><Close alt="Edit Category"/> Remove Category</Button>
+                    <Button type={ButtonType.Danger} submit><Close color={IconColor.White} alt="Edit Category"/> Remove Category</Button>
                 {/if}
             {/if}
         </form>

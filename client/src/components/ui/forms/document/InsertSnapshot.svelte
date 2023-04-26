@@ -7,6 +7,7 @@
     import { Office } from '../../../../../../model/src/office.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { ContextPayload } from '../../../types.ts';
+    import { IconColor } from '../../../types.ts';
 
     import OfficeSelect from '../../OfficeSelect.svelte';
     import Select from '../../Select.svelte';
@@ -74,5 +75,5 @@
         label="Remarks: "
         placeholder="Optional"
     />
-    <Button submit> <Checkmark alt="Submit this Document" /> Submit this Document</Button>
+    <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>
 </form>

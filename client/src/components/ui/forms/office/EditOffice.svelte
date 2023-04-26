@@ -6,6 +6,7 @@
     import { Office } from '../../../../api/office.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { IconColor } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -65,7 +66,7 @@
                         name="officename"
                         label="Office Name:"
                     />
-                    <Button submit><Checkmark alt="Edit Office"/> Edit Office</Button> 
+                    <Button submit><Checkmark color={IconColor.White} alt="Edit Office"/> Edit Office</Button> 
                 {/if}
             {/if}
         </form>
