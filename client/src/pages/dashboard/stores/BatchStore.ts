@@ -2,11 +2,11 @@ import { asyncDerived } from '@square/svelte-store';
 import { dashboardState } from './DashboardState';
 import { Batch } from '../../../api/batch';
 
-export const earliestBatch = asyncDerived(dashboardState, async ($dashboardState) => {
+export const earliestBatch = asyncDerived(dashboardState, ($dashboardState) => {
   if ($dashboardState.currentOffice === null){
-    return {}
+    return Promise.resolve({})
   }
-  return await Batch.getEarliestBatch($dashboardState.currentOffice);
+  return Batch.getEarliestBatch($dashboardState.currentOffice);
   }, 
   { reloadable: true }
 );
