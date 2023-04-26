@@ -235,7 +235,6 @@ export class Database {
 
     /** Sets the system-global permissions of a {@linkcode User}. */
     async setUserPermissions(id: User['id'], perms: User['permission']): Promise<boolean> {
-        // TODO: Check if valid permissions
         const { rowCount } = await this.#client
             .queryArray`UPDATE users SET permission = ${perms.toString(2)}::GlobalPermission WHERE id = ${id}`;
         switch (rowCount) {
@@ -275,15 +274,13 @@ export class Database {
     }
 
     /** Returns a list of earliest available {@linkcode Batch} of {@linkcode Barcode} IDs (relative to an {@linkcode Office}). */
-    async getEarliestAvailableBatch(id: Office['id']): Promise<MinBatch | null> {
-        // TODO: Add Tests
+    async getEarliestAvailableBatch(oid: Office['id']): Promise<MinBatch | null> {
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`SELECT MIN(bar.batch),coalesce(array_agg(bar.code),'{}') AS codes
-                FROM barcode bar
-                    LEFT JOIN batch bat ON bar.batch = bat.id
-                    LEFT JOIN document doc ON bar.code = doc.id
-                WHERE doc.id IS NULL AND bat.office = ${id}
-                GROUP BY bar.batch`;
+            .queryObject`WITH _ AS (SELECT id,creation FROM batch WHERE office = ${oid}),
+                candidates AS (SELECT batch,creation, bar.code AS doc
+                    FROM _ INNER JOIN barcode AS bar ON _.id = bar.batch
+                    LEFT JOIN document AS d ON bar.code = d.id WHERE d.id IS NULL)
+                SELECT batch,MIN(creation) AS creation,coalesce(array_agg(doc),'{}') AS codes FROM candidates GROUP by batch`;
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null

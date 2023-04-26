@@ -11,6 +11,7 @@ import { UserSchema } from './user.ts';
 
 export const MinBatchSchema = z.object({
     batch: BatchSchema.shape.id,
+    creation: BatchSchema.shape.creation,
     codes: BarcodeSchema.shape.code.array(),
 });
 
