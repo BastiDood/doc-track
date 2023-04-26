@@ -26,6 +26,7 @@
     // Modals
     import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
     import RevokeInvite from '../../../components/ui/forms/office/RevokeInvite.svelte';
+    import { documentStore } from '../stores/DocumentStore.ts';
 
     let showContextMenu = false;
     let showCreateOffice = false;
@@ -122,6 +123,13 @@
         Unsubscribe to Push Notification
     </Button>
 {/if}
+
+<Button on:click={() => {
+    documentStore.reload()
+    console.log($documentStore)
+}}>
+    Get Inbox Of Selected Office
+</Button>
 
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
     <RenameCategory />
