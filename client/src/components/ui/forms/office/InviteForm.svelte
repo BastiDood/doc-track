@@ -30,12 +30,10 @@
         if (input.value === currName) return;
 
         try {
-            // Create a pseudo-office element
-            await Invite.add({
-                email: input.value,
-                officeId: currId,
-                permission : 'user'
-            });
+            // await Invite.add({
+            //     email: input.value,
+            //     officeId: currId
+            // });
             await allOffices.reload?.();
 
             // eslint-disable-next-line require-atomic-updates
@@ -59,18 +57,16 @@
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currId} offices={$allOffices} />
             <br />
-            {#if typeof currId === 'number'}
                 <p>Office ID: {currId}</p>
                 {#if currName !== null}
                     <TextInput
                         required
                         placeholder={currName}
-                        name="email@up.edu.ph   "
+                        name="email@up.edu.ph"
                         label="Email:"
                     />
-                    <Button submit><Checkmark alt="Invite User"/> Edit Office</Button> 
+                    <Button submit><Checkmark alt="Invite User"/>Invite User</Button> 
                 {/if}
-            {/if}
         </form>
     {/if}
 </article>
