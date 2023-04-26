@@ -32,8 +32,7 @@
             await Batch.generate(currentOffice);
             await earliestBatch.reload?.();
             showGenerateBatch = true;
-        }
-        catch (err) {
+        } catch (err) {
             // TODO: error message
             alert(err);
         }
@@ -45,8 +44,7 @@
         try {
             await earliestBatch.reload?.();
             showDownloadBatch = true;
-        }
-        catch (err) {
+        } catch (err) {
             // TODO: error message
             alert(err);
         }
