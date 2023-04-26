@@ -5,10 +5,10 @@ import { Batch } from '../../../api/batch';
 export const earliestBatch = asyncDerived(
     dashboardState,
     $dashboardState => {
-    const { currentOffice } = $dashboardState;
-    return currentOffice === null
-        ? Promise.resolve({})
-        : Batch.getEarliestBatch(currentOffice);
+        const { currentOffice } = $dashboardState;
+        return currentOffice === null
+            ? Promise.resolve({})
+            : Batch.getEarliestBatch(currentOffice);
     },
     { reloadable: true }
 );

@@ -1,11 +1,11 @@
 <script lang="ts">
     import { Office } from '~model/office';
-    import { dashboardState } from '../stores/DashboardState';
+    import { dashboardState } from '../stores/DashboardState.ts';
     import { Batch } from '../../../api/batch.ts';
     import { earliestBatch } from '../../dashboard/stores/BatchStore.ts';
 
     import GenerateBatch from '../../../components/ui/forms/batch/GenerateBatch.svelte';
-    import FetchEarliestBatch from '../../../components/ui/forms/batch/FetchEarliestBatch.svelte';
+    import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
 
     import Download from '../../../components/icons/Download.svelte';
     import Barcode from '../../../components/icons/Barcode.svelte';
@@ -15,7 +15,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
 
-    import { ButtonType } from '../../../components/types.ts'
+    import { ButtonType } from '../../../components/types.ts';
     
 
     let currentOffice: Office['id'] | null = null;
@@ -28,7 +28,6 @@
 
     async function handleGenerate() {
         if (currentOffice === null) return;
-        
         try {
             await Batch.generate(currentOffice);
             await earliestBatch.reload?.();
@@ -40,11 +39,10 @@
         }
     }
 
-    async function handleDownload() {
+    function handleDownload() {
         if (currentOffice === null) return;
-        
+
         try {
-            console.log($earliestBatch);
             showDownloadBatch = true;
         }
         catch (err) {
@@ -87,7 +85,7 @@
         </Button>
     
         <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
-            <FetchEarliestBatch />
+            <FetchEarliest />
         </Modal>
     
         <Modal title="Generate New Batch" bind:showModal={showGenerateBatch}>
