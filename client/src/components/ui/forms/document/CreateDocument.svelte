@@ -30,14 +30,14 @@
     }
 </script>
 
-{#if $earliestBatch === null}
+{#if $earliestBatch === null || typeof $earliestBatch === "undefined"}
     No available barcodes.
 {:else}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-        <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
-        <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Title"></TextInput>
-        <CategorySelect bind:catId={category} categories={$categoryList.active} />
-        <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark" required={false}></TextInput>
+        <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect> <br>
+        <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Ttle"></TextInput> <br>
+        <CategorySelect bind:catId={category} categories={$categoryList.active} /> <br>
+        <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark" required={false}></TextInput> 
         <Button submit>Create Document</Button>
     </form>
 {/if}
