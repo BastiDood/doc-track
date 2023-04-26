@@ -35,9 +35,9 @@
 {:else}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
-        <TextInput placeholder="Document Title..." name="title" label="Title"></TextInput>
+        <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Title"></TextInput>
         <CategorySelect bind:catId={category} categories={$categoryList.active} />
-        <TextInput placeholder="Remarks..." name="remark" label="Remark" required={false}></TextInput>
+        <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark" required={false}></TextInput>
         <Button submit>Create Document</Button>
     </form>
 {/if}
