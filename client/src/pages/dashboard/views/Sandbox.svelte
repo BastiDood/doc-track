@@ -1,6 +1,6 @@
 <script lang="ts">
     import { documentTest } from './sample.ts';
-    import { RowEvent, RowType, Events, SnapshotAction } from '../../../components/types.ts';
+    import { RowEvent, RowType, Events, SnapshotAction, IconSize } from '../../../components/types.ts';
     import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
     import { currentUser } from '../stores/UserStore.ts';
@@ -136,6 +136,7 @@
             category={doc.category}
             title={doc.title} 
             on:overflowClick={overflowClickHandler}
+            iconSize={IconSize.Large}
         />
     {/each}
 </div>
