@@ -3,6 +3,7 @@
 
     import { register } from './register.ts';
     import { ButtonType, InputType } from '../components/types.ts';
+    
 
     import Google from '../components/icons/Google.svelte';
     import Camera from '../components/icons/Camera.svelte';
@@ -25,7 +26,10 @@
             <div class="search-container">
                 <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="Tracking Number:"/>
                 <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
-                <Button type={ButtonType.Primary}><Search alt="Search specified tracking number. "/></Button>
+                <a href="/track">
+                    <Button type={ButtonType.Primary}><Search alt="Search specified tracking number. "/></Button>
+                </a>
+                
             </div>
         </div>
     {/await}
