@@ -2,6 +2,7 @@
     import { assert } from '../../../../assert.ts';
     import { Document as Api } from '../../../../api/document.ts';
 
+    import { earliestBatch } from '../../../../pages/dashboard/stores/BatchStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
 
@@ -10,6 +11,7 @@
     import type { Snapshot } from '../../../../.../../../../model/src/snapshot.ts';
 
     import Button from '../../Button.svelte';
+    import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
     import TextInput from '../../TextInput.svelte';
 
@@ -24,13 +26,18 @@
 
         const result = await Api.create(oid, { id, title, category }, remark);
         assert(result instanceof Date);
+        // TODO: handle error states
     }
 </script>
 
-<form on:submit|preventDefault|stopPropagation={handleSubmit}>
-    <!-- TODO: Barcode Select -->
-    <TextInput placeholder="Document Title..." name="title" label="Title"></TextInput>
-    <CategorySelect bind:catId={category} categories={$categoryList.active} />
-    <TextInput placeholder="Remarks..." name="remark" label="Remark" required={false}></TextInput>
-    <Button submit>Create Document</Button>
-</form>
+{#if $earliestBatch === null}
+    No available barcodes.
+{:else}
+    <form on:submit|preventDefault|stopPropagation={handleSubmit}>
+        <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
+        <TextInput placeholder="Document Title..." name="title" label="Title"></TextInput>
+        <CategorySelect bind:catId={category} categories={$categoryList.active} />
+        <TextInput placeholder="Remarks..." name="remark" label="Remark" required={false}></TextInput>
+        <Button submit>Create Document</Button>
+    </form>
+{/if}
