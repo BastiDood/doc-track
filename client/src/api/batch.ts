@@ -5,8 +5,8 @@ import {
     type MinBatch,
     GeneratedBatchSchema,
     MinBatchSchema,
-} from '~model/api.ts';
-import type { Office } from '~model/office.ts';
+} from '../../../model/src/api.ts';
+import type { Office } from '../../../model/src/office.ts';
 
 import {
     InsufficientPermissions,
