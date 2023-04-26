@@ -24,8 +24,11 @@
             </a>
             <div class="search-container">
                 <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="Tracking Number:"/>
-                <Button type={ButtonType.Primary}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
-                <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number. "/></Button>
+                <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
+                <a href="/track">
+                    <Button type={ButtonType.Primary}><Search alt="Search specified tracking number. "/></Button>
+                </a>
+                
             </div>
         </div>
     {/await}
