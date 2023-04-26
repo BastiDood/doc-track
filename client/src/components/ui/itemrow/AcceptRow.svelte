@@ -7,7 +7,7 @@
     import { ContextPayload, RowType, IconSize, Events } from '../../types.ts';
     import { Document } from '../../../../../model/src/document.ts';
 
-    export let iconSize = IconSize.Normal;
+    export let iconSize: IconSize;
     export let id: Document['id'];
     export let category: Document['category'];
     export let title: Document['title'];
