@@ -3,8 +3,7 @@
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
-    import { IconColor
-     } from '../../../types.ts';
+    import { IconColor } from '../../../types.ts';
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
