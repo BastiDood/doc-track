@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { type Invitation, InvitationSchema } from '~model/invitation.ts';
+import { type Invitation, InvitationSchema } from '../../../model/src/invitation.ts';
 
 import {
     InsufficientPermissions,

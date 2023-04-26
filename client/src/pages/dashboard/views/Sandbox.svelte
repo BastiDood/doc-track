@@ -21,7 +21,7 @@
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
 
     // Modals
-    import ReceiveDocument from '../../../components/ui/forms/document/ReceivingDocument.svelte';
+    import InviteForm from '../../../components/ui/forms/office/InviteForm.svelte';
 
     let showContextMenu = false;
     let showCreateOffice = false;
@@ -35,7 +35,7 @@
     let showInsertSnapshot = false;
 
     // Receiving document, invites
-    let showReceiveDocument = false;
+    let showInviteForm  = false;
 
     let insertSnapshotAction: SnapshotAction | null = null;
     let currentContext: RowEvent | null = null;
@@ -93,8 +93,8 @@
     Activate a Category
 </Button>
 
-<Button on:click={() => (showReceiveDocument = true)}>
-    Receive a Document
+<Button on:click={() => (showInviteForm = true)}>
+    Invite User
 </Button>
 
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
@@ -131,8 +131,8 @@
     <EditOffice/>
 </Modal>
 
-<Modal title="Receive Document" bind:showModal={showReceiveDocument}>
-    <ReceiveDocument />
+<Modal title="Invite User" bind:showModal={showInviteForm}>
+    <InviteForm />
 </Modal>
 
 {#if currentOffice !== null && currentContext !== null && showInsertSnapshot}
