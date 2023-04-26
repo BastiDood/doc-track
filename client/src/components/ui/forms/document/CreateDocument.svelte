@@ -30,7 +30,7 @@
     }
 </script>
 
-{#if $earliestBatch === null || typeof $earliestBatch === "undefined"}
+{#if $earliestBatch === null || typeof $earliestBatch === 'undefined'}
     No available barcodes.
 {:else}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
