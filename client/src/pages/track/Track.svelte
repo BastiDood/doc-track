@@ -6,14 +6,22 @@
     let docTrackingNumber = '1234567890';
     let docType = "Letter";
     let docFor = "Distribution/disubursement";
-    let dorRemarks = "LGTM!";
-    let dorOriginOffices = 0;
-    let dorCurrOffice = "College of Engineering";
+    let docRemarks = "LGTM!";
+    let docOriginOffices = 0;
+    let docCurrOffice = "College of Engineering";
     
-    let dorStatus = "SENT";
+    let docStatus = "SENT";
 
-    let fileUrl = "https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2020/10/Dropping-Form.pdf"
-    let fileName = "Drop Form.pdf"
+    let fileUrl = "https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2020/10/Dropping-Form.pdf";
+    let fileName = "Drop Form.pdf";
+
+    let trail = [
+        [
+            "Department of Computer Science",
+            "22/12/22",
+        ],
+        []
+    ];
 </script>
 
 
@@ -25,7 +33,10 @@
     </Button>
     <section>
         <table>
-            <th class="table-title">Document Details</th>
+            <tr>
+                <td><b>Overview</b></td>
+                <td></td>
+            </tr>
             <tr>
                 <td><b>Document Tracking Number</b></td>
                 <td>{docTrackingNumber}</td>
@@ -40,19 +51,19 @@
             </tr>
             <tr>
                 <td><b>Remarks</b></td>
-                <td>{dorRemarks}</td>
+                <td>{docRemarks}</td>
             </tr>
             <tr>
                 <td><b>Originating Office</b></td>
-                <td>{dorOriginOffices}</td>
+                <td>{docOriginOffices}</td>
             </tr>
             <tr>
                 <td><b>Current Office</b></td>
-                <td>{dorCurrOffice}</td>
+                <td>{docCurrOffice}</td>
             </tr>
             <tr>
                 <td><b>Status</b></td>
-                <td class="header-color">{dorStatus}</td>
+                <td class="header-color">{docStatus}</td>
             </tr>
         </table>
 
@@ -75,12 +86,12 @@
     @import url('../../pages/vars.css');
     table {
         border: 3px solid;
-        padding: var(--spacing-small);
+        padding: var(--spacing-large);
         left: 1em;
         border-spacing: var(--spacing-small);
+        border-collapse: separate;
         color: var(--color-primary);
         width: 100%;
-        padding: 1em;
     }
     .table-title {
         color: var(--color-primary);
