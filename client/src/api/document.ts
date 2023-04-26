@@ -10,7 +10,7 @@ import {
     BarcodeAssignmentErrorSchema,
     InboxEntrySchema,
     PaperTrailSchema,
-} from '../../../model/src/snapshot.ts';
+} from '../../../model/src/api.ts';
 import { type Snapshot, SnapshotSchema } from '../../../model/src/snapshot.ts';
 
 import {
