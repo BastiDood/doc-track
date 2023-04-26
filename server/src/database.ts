@@ -280,7 +280,7 @@ export class Database {
                 candidates AS (SELECT batch,creation, bar.code AS doc
                     FROM _ INNER JOIN barcode AS bar ON _.id = bar.batch
                     LEFT JOIN document AS d ON bar.code = d.id WHERE d.id IS NULL)
-                SELECT batch,MIN(creation) AS creation,coalesce(array_agg(doc),'{}') AS codes FROM candidates GROUP by batch`;
+                SELECT batch,MIN(creation) AS creation,coalesce(array_agg(doc),'{}') AS codes FROM candidates GROUP by batch LIMIT 1`;
         assertStrictEquals(rest.length, 0);
         return first === undefined
             ? null
