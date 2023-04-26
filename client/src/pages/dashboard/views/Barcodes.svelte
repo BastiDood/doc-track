@@ -1,6 +1,8 @@
 <script lang="ts">
     import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
+    import { Batch } from '../../../api/batch.ts';
+    import { earliestBatch } from '../../dashboard/stores/BatchStore.ts';
 
     import GenerateBatch from '../../../components/ui/forms/batch/GenerateBatch.svelte';
     import FetchEarliestBatch from '../../../components/ui/forms/batch/FetchEarliestBatch.svelte';
@@ -23,6 +25,33 @@
 
     let showGenerateBatch = false;
     let showDownloadBatch = false;
+
+    async function handleGenerate() {
+        if (currentOffice === null) return;
+        
+        try {
+            await Batch.generate(currentOffice);
+            await earliestBatch.reload?.();
+            showGenerateBatch = true;
+        }
+        catch (err) {
+            // TODO: error message
+            alert(err);
+        }
+    }
+
+    async function handleDownload() {
+        if (currentOffice === null) return;
+        
+        try {
+            console.log($earliestBatch);
+            showDownloadBatch = true;
+        }
+        catch (err) {
+            // TODO: error message
+            alert(err);
+        }
+    }
 </script>
 
 {#if currentOffice === null}
@@ -30,45 +59,44 @@
 {:else}
     Barcodes page of Office ID {currentOffice}.
     <h1>Barcodes</h1>
+    <main>
+        <table>
+            <tr>
+                <td>Unused</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Used</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Valid</td>
+                <td>0</td>
+            </tr>
+        </table>
+    
+        <div class="invalidate-container">
+            <TextInput label='id' placeholder='ID' name='invalidate-id'>Invalide ID</TextInput>
+            <Button type={ButtonType.Danger}><Barcode alt='barcode' />Submit</Button>
+        </div>
+        <Button on:click={handleDownload}>
+            <Download alt='download' />Download Stickers
+        </Button>
+        <Button on:click={handleGenerate}>
+            <Add alt='add'/> Generate New Batch
+        </Button>
+    
+        <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
+            <FetchEarliestBatch />
+        </Modal>
+    
+        <Modal title="Generate New Batch" bind:showModal={showGenerateBatch}>
+            <GenerateBatch />
+        </Modal>
+    </main>
 {/if}
 
-<main>
-    <table>
-        <tr>
-            <td>Unused</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>Used</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>Valid</td>
-            <td>0</td>
-        </tr>
-    </table>
 
-    <div class="invalidate-container">
-        <TextInput label='id' placeholder='ID' name='invalidate-id'>Invalide ID</TextInput>
-        <Button type={ButtonType.Danger}><Barcode alt='barcode' />Submit</Button>
-    </div>
-    <Button on:click={() => (showDownloadBatch = true)}>
-        <Download alt='download' />Download Stickers
-    </Button>
-    <Button on:click={() => (showGenerateBatch = true)}>
-        <Add alt='add'/> Generate New Batch
-    </Button>
-
-    <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
-        <FetchEarliestBatch />
-    </Modal>
-
-    <Modal title="Generate New Batch" bind:showModal={showGenerateBatch}>
-        <GenerateBatch />
-    </Modal>
-
-    
-</main>
 
 <style>
     main {
