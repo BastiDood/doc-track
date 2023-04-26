@@ -39,10 +39,11 @@
         }
     }
 
-    function handleDownload() {
+    async function handleDownload() {
         if (currentOffice === null) return;
 
         try {
+            await earliestBatch.reload?.();
             showDownloadBatch = true;
         }
         catch (err) {
