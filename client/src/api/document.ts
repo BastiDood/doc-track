@@ -10,8 +10,8 @@ import {
     BarcodeAssignmentErrorSchema,
     InboxEntrySchema,
     PaperTrailSchema,
-} from '~model/api.ts';
-import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
+} from '../../../model/src/api.ts';
+import { type Snapshot, SnapshotSchema } from '../../../model/src/snapshot.ts';
 
 import {
     InsufficientPermissions,

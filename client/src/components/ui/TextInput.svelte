@@ -1,7 +1,4 @@
 <script lang="ts">
-    import { InputType } from '../types.ts';
-
-    export let type: InputType = InputType.Text;
     export let placeholder = '';
     export let disabled = false;
     export let required = true;
@@ -12,7 +9,7 @@
 
 <label>
     {label}
-    <input {type} {placeholder} {name} {disabled} {required} {value} />
+    <input type="text" {placeholder} {name} {disabled} {required} bind:value />
 </label>
 
 <style>

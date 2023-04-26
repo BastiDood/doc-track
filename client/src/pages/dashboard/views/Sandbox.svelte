@@ -19,6 +19,7 @@
     import RemoveCategory from '../../../components/ui/forms/category/RemoveCategory.svelte';
     import ActivateCategory from '../../../components/ui/forms/category/ActivateCategory.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
+    import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
 
     let showContextMenu = false;
     let showCreateOffice = false;
@@ -30,6 +31,7 @@
     let showRemoveCategory = false;
     let showActivateCategory = false;
     let showInsertSnapshot = false;
+    let showCreateDocument = false;
 
     let insertSnapshotAction: SnapshotAction | null = null;
     let currentContext: RowEvent | null = null;
@@ -86,6 +88,9 @@
 <Button on:click={() => (showActivateCategory = true)}>
     Activate a Category
 </Button>
+<Button on:click={() => (showCreateDocument = true)}>
+    Create a New Document
+</Button>
 
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
     <RenameCategory/>
@@ -127,6 +132,12 @@
             userOfficeId={currentOffice}
             statusIndex={insertSnapshotAction}
         /> 
+    </Modal>
+{/if}
+
+{#if currentOffice !== null }
+    <Modal title="Create Document" bind:showModal={showCreateDocument}>
+        <CreateDocument />
     </Modal>
 {/if}
 <div>

@@ -32,20 +32,19 @@
             await Batch.generate(currentOffice);
             await earliestBatch.reload?.();
             showGenerateBatch = true;
-        }
-        catch (err) {
+        } catch (err) {
             // TODO: error message
             alert(err);
         }
     }
 
-    function handleDownload() {
+    async function handleDownload() {
         if (currentOffice === null) return;
 
         try {
+            await earliestBatch.reload?.();
             showDownloadBatch = true;
-        }
-        catch (err) {
+        } catch (err) {
             // TODO: error message
             alert(err);
         }
