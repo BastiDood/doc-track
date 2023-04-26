@@ -4,6 +4,7 @@
     import { Office } from '../../../../api/office.ts';
     import { userOffices, userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { IconColor } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -43,7 +44,7 @@
             name="officename"
             label="New Office Name:"
         />
-        <Button submit><Checkmark alt="Create New Office"/> New Office</Button>
+        <Button submit><Checkmark color={IconColor.White} alt="Create New Office"/> New Office</Button>
     </form>
 </article>
 

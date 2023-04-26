@@ -3,6 +3,7 @@
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { IconColor } from '../../../types.ts';
     
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
@@ -48,7 +49,7 @@
                 <p>Category ID: {currId}</p>
                 <p>Category Name: {currName}</p>
                 {#if currName !== null}
-                    <Button submit><Edit alt="Reactivate Category"/> Reactivate Category</Button>
+                    <Button submit><Edit color={IconColor.White} alt="Reactivate Category"/> Reactivate Category</Button>
                 {/if}
             {/if}
         </form>

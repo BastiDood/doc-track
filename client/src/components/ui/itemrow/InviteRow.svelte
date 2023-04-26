@@ -6,7 +6,7 @@
 
     import { IconSize, InvitePayload, RowType, Events } from '../../types.ts';
     import { Invitation } from '../../../../../model/src/invitation.ts';
-    export let iconSize = IconSize.Normal;
+    export let iconSize: IconSize;
 
     // From invitation.ts
     export let office: Invitation['office'];

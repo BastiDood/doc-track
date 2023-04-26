@@ -5,6 +5,7 @@
     import type { User as UserModel } from '../../../../../../model/src/user.ts';
     import { Local } from '../../../../../../model/src/permission.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { IconColor } from '../../../types.ts';
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
 
@@ -152,7 +153,7 @@
         />
         View Inbox
     </label>
-    <Button submit><Edit alt="Modify Staff" /> Modify Staff</Button>
+    <Button submit><Edit color={IconColor.White} alt="Modify Staff" /> Modify Staff</Button>
 </form>
 
 <style>

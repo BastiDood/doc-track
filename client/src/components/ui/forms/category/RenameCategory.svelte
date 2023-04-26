@@ -5,6 +5,7 @@
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { IconColor } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -64,7 +65,7 @@
                         name="categoryname"
                         label="Category Name:"
                     />
-                    <Button submit><Edit alt="Edit Category"/> Edit Category</Button>
+                    <Button submit><Edit color={IconColor.White} alt="Edit Category"/> Edit Category</Button>
                 {/if}
             {/if}
         </form>
