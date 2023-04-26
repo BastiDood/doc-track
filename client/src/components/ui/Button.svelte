@@ -6,7 +6,7 @@
 </script>
 
 <button type={submit ? 'submit' : 'button'} class={type} {disabled} on:click>
-    <slot/>
+    <slot />
 </button>
 
 <style>
@@ -41,5 +41,4 @@
     .danger {
         background-color: var(--danger-color);
     }
-
 </style>
