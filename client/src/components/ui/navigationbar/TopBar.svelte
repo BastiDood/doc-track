@@ -4,6 +4,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import { ButtonType, InputType, IconColor } from '../../../components/types.ts';
     import Logout from '../../icons/Logout.svelte';
+    import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
 
     import type { User } from '../../../../../model/src/user.ts';
 
@@ -12,8 +13,11 @@
     export let show = false;
     export let user: User;
     let selectedOffice: Office['id'] | null = null;
+    let currName: OfficeModel['name'] | null = null;
+
     let currentPage = 'Dashboard';
     $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
+    $: currName = $allOffices[selectedOffice] ?? null;
 
     $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
 </script>
@@ -23,7 +27,7 @@
         {#if user !== undefined}
             <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
         {/if}
-        <p>{currentPage}</p>
+        <p>{currentPage} ({selectedOffice})</p>
         <slot></slot>
     </span>
     <span id="middle-logo">
@@ -34,8 +38,8 @@
             <span>{user.name}</span>
             <span><img src={user.picture} alt="{user.name[0]}" /></span>
         {:else}
-        <a href="/auth/login">
-            <Button type={ButtonType.Primary}><Logout color={IconColor.White} alt="Return to the main Login screen"/>Login as Staff</Button>
+        <a href="/">
+            <Button type={ButtonType.Primary}><Logout color={IconColor.White} alt="Return to the main Login screen"/>Back to main</Button>
         </a>
         {/if}
     </nav>

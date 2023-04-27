@@ -14,6 +14,7 @@
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
+    let curEmail = '';
     let currId: OfficeModel['id'] | null = null;
     let currName: OfficeModel['name'] | null = null;
 
@@ -21,19 +22,33 @@
     $: currName = currId === null ? null : $allOffices[currId] ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
-        const input = this.elements.namedItem('officename');
-        assert(input instanceof HTMLInputElement);
-        assert(input.type === 'text');
+        const officeInput = this.elements.namedItem('office');
+
+        // Taken from GlobalPermissions.svelte
+        const permissionSelect = this.elements.namedItem('perms');
+        const emailInput = this.elements.namedItem('email');
+        assert(permissionSelect instanceof RadioNodeList);
+
+        let permsVal = 0;
+        permissionSelect.forEach(perm => {
+            assert(perm instanceof HTMLInputElement);
+            assert(perm.type === 'checkbox');
+            if (perm.checked) permsVal |= parseInt(perm.value, 10);
+        });
+
+        assert(emailInput instanceof HTMLInputElement);
+        assert(emailInput.type === 'text');
 
         if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
-        if (input.value === currName) return;
+        if (emailInput.value === currName) return;
 
         try {
-            // await Invite.add({
-            //     email: input.value,
-            //     officeId: currId
-            // });
+            await Invite.add({
+                email: input.value,
+                officeId: currId,
+                permissions: permsVal
+            });
             await allOffices.reload?.();
 
             // eslint-disable-next-line require-atomic-updates
@@ -47,6 +62,8 @@
             alert(err);
         }
     }
+
+
 </script>
 
 <p>You are currently inviting a user as {$userSession?.email}</p>
@@ -59,14 +76,22 @@
             <br />
                 <p>Office ID: {currId}</p>
                 {#if currName !== null}
-                    <TextInput
-                        required
-                        placeholder={currName}
-                        name="email@up.edu.ph"
-                        label="Email:"
-                    />
+                    <label>
+                        Email
+                        <input type="email" placeholder={"example@up.edu.ph"} required={true} pattern="^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$" bind:value={curEmail} />
+                    </label>
                     <Button submit><Checkmark alt="Invite User"/>Invite User</Button> 
                 {/if}
         </form>
     {/if}
 </article>
+
+<style>
+    @import url('../../../../pages/vars.css');
+    
+    input {
+        border: var(--primary-color) 2px solid;
+        border-radius: var(--border-radius);
+        padding: var(--spacing-small) var(--spacing-normal);
+    }
+</style>

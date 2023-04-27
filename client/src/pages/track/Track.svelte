@@ -133,6 +133,7 @@
     .table-title {
         color: var(--color-primary);
         font-size: var(--font-size-large);
+        text-align: center;
     }
 
     tr {
