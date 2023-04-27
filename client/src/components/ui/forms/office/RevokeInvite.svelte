@@ -28,6 +28,8 @@
 
         try {
             await Invite.revoke({ office: currOid, email: currEmail });
+            currOid = null;
+            currEmail = undefined;
             this.reset();
         } catch (err) {
             // TODO: No permission handler
@@ -36,36 +38,30 @@
     }
 </script>
 
-<p>You are currently inviting a user as {$userSession?.email}</p>
+<p>You are currently revoking invites as {$userSession?.email}</p>
 <article>
     {#if Object.getOwnPropertyNames($allOffices).length === 0}
         Invite unavailable as there are no offices available.
     {:else}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currOid} offices={$allOffices} />
-            {#if typeof currOid === 'number'}
+            {#if currOid !== null}
                 <br />
-                <section>
-                    <!-- TODO: We probably want to put this in a dedicated cache/store. -->
-                    {#await Invite.getList(currOid)}
-                        <span>Loading invites...</span>
-                    {:then invites}
-                        <InviteSelect {invites} bind:value={currEmail} />
-                    {/await}
-                </section>
+                <!-- TODO: We probably want to put this in a dedicated cache/store. -->
+                {#await Invite.getList(currOid)}
+                    <span>Loading invites...</span>
+                {:then invites}
+                    <InviteSelect {invites} bind:value={currEmail} />
+                {/await}
                 <br />
+                <p>Current deleting: <input type="email" name="inputemail" readonly={true} value={currEmail ?? 'None'} /></p>
                 <Button submit><Checkmark alt="Revoke Invite" />Revoke Invite</Button> 
             {/if}
-        </form>
+    </form>
     {/if}
 </article>
 
 <style>
     @import url('../../../../pages/vars.css');
 
-    section {
-        overflow-y: scroll;
-        border: var(--spacing-tiny) solid;
-        height: 50vh;
-    }
 </style>
