@@ -93,7 +93,7 @@
             <tr><b>Remarks</b></tr>
             <tr><b>Date</b></tr>
         </table>
-
+        <br>
         <table>
             <th class="table-title">Paper Trail</th>
             <tr>
