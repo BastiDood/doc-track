@@ -93,7 +93,10 @@ CREATE TABLE snapshot(
     creation TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     doc UUID NOT NULL REFERENCES document (id),
     evaluator GoogleUserId NOT NULL REFERENCES users (id),
-    target SMALLINT REFERENCES office (id) DEFAULT NULL CHECK((status = 'Send' AND target IS NOT NULL) OR (status != 'Send' AND target IS NULL)),
+    target SMALLINT
+        REFERENCES office (id)
+        DEFAULT NULL
+        CHECK((status IN ('Send', 'Receive') AND target IS NOT NULL) OR (status NOT IN ('Send', 'Receive') AND target IS NULL)),
     status DocStatus NOT NULL DEFAULT 'Register',
     remark VARCHAR(32) NOT NULL,
     PRIMARY KEY (creation, doc)
