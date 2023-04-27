@@ -54,7 +54,7 @@
 
 <main>
     
-    <TopBar show={true} currentPage={`Tracking: ${docTrackingNumber}`}> 
+    <TopBar open currentPage={`Tracking: ${docTrackingNumber}`}>
         <nav>
             <TextInput type={InputType.Primary} placeholder='Enter tracking number here...' label=''/>
             <Button type={ButtonType.Primary}><Camera alt='Take/select an image.' /></Button>

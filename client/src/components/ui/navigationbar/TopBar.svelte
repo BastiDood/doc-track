@@ -1,47 +1,45 @@
 <script lang="ts">
-    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
-    import { location } from 'svelte-spa-router';
-    import Button from '../../../components/ui/Button.svelte';
-    import { ButtonType, IconColor } from '../../../components/types.ts';
-    import Logout from '../../icons/Logout.svelte';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
-    import { Office } from '../../../../../model/src/office.ts';
+    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
 
+    import Button from '../../../components/ui/Button.svelte';
+    import Hamburger from '../../icons/Hamburger.svelte';
+    import Logout from '../../icons/Logout.svelte';
+
+    import { ButtonType, IconColor } from '../../../components/types.ts';
+    import type { Office } from '../../../../../model/src/office.ts';
     import type { User } from '../../../../../model/src/user.ts';
 
-    import Hamburger from '../../icons/Hamburger.svelte';
-
-    export let show = false;
+    export let open = false;
     export let user: User;
-    let selectedOffice: Office['id'] | null = null;
+    export let currentPage: string;
+
     export let currName: Office['name'] | null = null;
+    $: if (selectedOffice !== null) currName = $allOffices[selectedOffice] ?? null;
 
-    let currentPage = 'Dashboard';
+    let selectedOffice: Office['id'] | null = null;
     $: if ($dashboardState.currentOffice !== null) selectedOffice = $dashboardState.currentOffice;
-    $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
-    $: currName = $allOffices[selectedOffice === null ? 0 : selectedOffice] ?? 'No office';
-
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="leftbar">
         {#if typeof user !== 'undefined'} 
-            <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
+            <span id="icon"><Hamburger bind:open on:click={() => (open = !open)} /></span>
         {/if}
-        <p>{currentPage} {`(${currName})`}</p>
+        <p>{currentPage} ({currName})</p>
         <slot></slot>
     </span>
-    <span id="middle-logo">
-        DocTrack
-    </span>
+    <span id="middle-logo">DocTrack</span>
     <nav id="profilenav">
         {#if typeof user !== 'undefined'} 
             <span>{user.name}</span>
-            <span><img src={user.picture} alt="{user.name[0]}" /></span>
+            <span><img src={user.picture} alt="Profile Picture for {user.name}" /></span>
         {:else}
-        <a href="/">
-            <Button type={ButtonType.Primary}><Logout color={IconColor.White} alt="Return to the main Login screen"/>Back to main</Button>
-        </a>
+            <a href="/">
+                <Button type={ButtonType.Primary}>
+                    <Logout color={IconColor.White} alt="Return to the main Login screen" /> Back to Main Page
+                </Button>
+            </a>
         {/if}
     </nav>
 </nav>
