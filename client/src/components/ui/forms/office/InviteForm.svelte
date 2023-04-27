@@ -17,7 +17,7 @@
     $: currName = currId === null ? null : $allOffices[currId] ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
-        
+
         // Computes permissions
         let permsVal = 0;
         const permissionSelect = this.elements.namedItem('perms');
@@ -85,14 +85,6 @@
                     <input type='email' placeholder={'example@up.edu.ph'} required={true} pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' bind:value={curEmail} />
                 </label>
                 <br>
-                <section>
-                    {#each Object.entries($allOffices) as [id, name] (id)}
-                        <p>{id}: {name}</p>
-                    {:else}
-                        No offices available
-                    {/each}
-                </section>
-                <br>
                 <p><b>Permissions:</b></p>
                 {#each permStrings as perm, i}
                     <label>
@@ -114,11 +106,5 @@
         border: var(--primary-color) 2px solid;
         border-radius: var(--border-radius);
         padding: var(--spacing-small) var(--spacing-normal);
-    }
-
-    section {
-        overflow-y: scroll;
-        border: var(--spacing-tiny) solid;
-        height: 50vh;
     }
 </style>
