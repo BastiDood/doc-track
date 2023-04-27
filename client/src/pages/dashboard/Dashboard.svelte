@@ -24,12 +24,12 @@
     {#if user === null}
         <span>No user available...</span>
     {:else}
-        <TopBar {user} bind:open={toggleDrawer} bind:currName={currentOffice} />
+        <TopBar {user} bind:open={toggleDrawer} />
         <main on:click={() => (toggleDrawer &&= false)} on:keydown>
             {#await register()}
                 <p>Waiting for service worker...</p>
             {:then}
-                <SideDrawer show={toggleDrawer} />
+                <SideDrawer show={toggleDrawer} bind:currName={currentOffice} />
                 <section>
                     <Router {routes} />
                 </section>
