@@ -12,6 +12,11 @@
     function offModal() {
         showModal = false;
     }
+
+    document.body.addEventListener('click', handleMenuClose)
+    function handleMenuClose(e: MouseEvent) {
+        if (e.target === dialog) showModal = false;
+    }
 </script>
 
 <dialog on:close bind:this={dialog}>

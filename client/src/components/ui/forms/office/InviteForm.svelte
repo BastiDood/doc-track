@@ -1,15 +1,10 @@
 <script lang='ts'>
     import { assert } from '../../../../assert.ts';
-
     import { Office as OfficeModel } from '../../../../../../model/src/office.ts';
-
-    import { Office } from '../../../../api/office.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-
     import { Invite } from '../../../../api/invite.ts';
 
-    import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
@@ -22,10 +17,8 @@
     $: currName = currId === null ? null : $allOffices[currId] ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
-        const officeInput = this.elements.namedItem('office');
-
-        // Taken from GlobalPermissions.svelte
-        // Permissions
+        
+        // Computes permissions
         let permsVal = 0;
         const permissionSelect = this.elements.namedItem('perms');
         assert(permissionSelect instanceof RadioNodeList);
@@ -51,7 +44,6 @@
                 office: currId,
                 permission: permsVal,
             });
-            await allOffices.reload?.();
 
             // eslint-disable-next-line require-atomic-updates
             currId = null;
@@ -86,23 +78,31 @@
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currId} offices={$allOffices} />
             <br />
-                <p>Office ID: {currId}</p>
-                {#if currName !== null}
+            <p>Office ID: {currId}</p>
+            {#if currName !== null}
+                <label>
+                    Email
+                    <input type='email' placeholder={'example@up.edu.ph'} required={true} pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' bind:value={curEmail} />
+                </label>
+                <br>
+                <section>
+                    {#each Object.entries($allOffices) as [id, name] (id)}
+                        <p>{id}: {name}</p>
+                    {:else}
+                        No offices available
+                    {/each}
+                </section>
+                <br>
+                <p><b>Permissions:</b></p>
+                {#each permStrings as perm, i}
                     <label>
-                        Email
-                        <input type='email' placeholder={'example@up.edu.ph'} required={true} pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' bind:value={curEmail} />
+                        <input type='checkbox' name='perms' value={2 ** i} />
+                        {perm}
                     </label>
                     <br>
-                    <p><b>Permissions:</b></p>
-                    {#each permStrings as perm, i}
-                        <label>
-                            <input type='checkbox' name='perms' value={2 ** i} />
-                            {perm}
-                        </label>
-                        <br>
-                    {/each}
-                    <Button submit><Checkmark alt='Invite User'/>Invite User</Button> 
-                {/if}
+                {/each}
+                <Button submit><Checkmark alt='Invite User'/>Invite User</Button> 
+            {/if}
         </form>
     {/if}
 </article>
@@ -114,5 +114,11 @@
         border: var(--primary-color) 2px solid;
         border-radius: var(--border-radius);
         padding: var(--spacing-small) var(--spacing-normal);
+    }
+
+    section {
+        overflow-y: scroll;
+        border: var(--spacing-tiny) solid;
+        height: 50vh;
     }
 </style>
