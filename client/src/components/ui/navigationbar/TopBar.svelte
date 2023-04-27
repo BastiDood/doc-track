@@ -1,5 +1,6 @@
 <script lang="ts">
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
+    import { currentPage } from '../../../pages/dashboard/stores/CurrentPage.ts';
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
 
     import Button from '../../../components/ui/Button.svelte';
@@ -12,7 +13,6 @@
 
     export let open = false;
     export let user: User;
-    export let currentPage: string;
 
     export let currName: Office['name'] | null = null;
     $: if (selectedOffice !== null) currName = $allOffices[selectedOffice] ?? null;
@@ -26,7 +26,7 @@
         {#if typeof user !== 'undefined'} 
             <span id="icon"><Hamburger bind:open on:click={() => (open = !open)} /></span>
         {/if}
-        <p>{currentPage} ({currName})</p>
+        <p>{$currentPage} ({currName})</p>
         <slot></slot>
     </span>
     <span id="middle-logo">DocTrack</span>

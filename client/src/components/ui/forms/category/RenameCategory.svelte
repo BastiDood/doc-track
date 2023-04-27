@@ -14,31 +14,15 @@
 
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | null = null;
-
     $: currName = $categoryList.active.find(cat => cat.id === currId)?.name ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
-        const input = this.elements.namedItem('categoryname');
-        assert(input instanceof HTMLInputElement);
-        assert(input.type === 'text');
-
-        if (currId === null || typeof currName !== 'string') return;
+        if (currId === null || currName === null) return;
         if (!this.reportValidity()) return;
-        if (input.value === currName) return;
 
         try {
-            await Category.rename({
-                id: currId,
-                name: input.value,
-            });
-
+            await Category.rename({ id: currId, name: currName });
             await categoryList.reload?.();
-
-            // eslint-disable-next-line require-atomic-updates
-            currId = null;
-            // eslint-disable-next-line require-atomic-updates
-            currName = null;
-
             this.reset();
         } catch (err) {
             // TODO: No permission handler
@@ -54,18 +38,18 @@
         No categories to edit.
     {:else}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catId={currId} categories={$categoryList.active}/>
-            <br/>
+            <CategorySelect bind:catId={currId} categories={$categoryList.active} />
+            <br />
             {#if typeof currId === 'number'}
-                <p>Category ID: {currId}</p>
                 {#if currName !== null}
                     <TextInput
                         required
-                        placeholder={currName}
+                        placeholder="Name"
                         name="categoryname"
                         label="Category Name:"
+                        bind:value={currName}
                     />
-                    <Button submit><Edit color={IconColor.White} alt="Edit Category"/> Edit Category</Button>
+                    <Button submit><Edit color={IconColor.White} alt="Edit Category" /> Edit Category</Button>
                 {/if}
             {/if}
         </form>

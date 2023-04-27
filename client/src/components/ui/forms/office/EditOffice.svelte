@@ -35,12 +35,6 @@
                 name: input.value,
             });
             await allOffices.reload?.();
-
-            // eslint-disable-next-line require-atomic-updates
-            currId = null;
-            // eslint-disable-next-line require-atomic-updates
-            currName = null;
-
             this.reset();
         } catch (err) {
             // TODO: No permission handler
@@ -57,18 +51,13 @@
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currId} offices={$allOffices} />
             <br />
-            {#if typeof currId === 'number'}
-                <p>Office ID: {currId}</p>
-                {#if currName !== null}
-                    <TextInput
-                        required
-                        placeholder={currName}
-                        name="officename"
-                        label="Office Name:"
-                    />
-                    <Button submit><Checkmark color={IconColor.White} alt="Edit Office"/> Edit Office</Button> 
-                {/if}
-            {/if}
+            <TextInput
+                required
+                placeholder="Name"
+                name="officename"
+                label="Office Name:"
+            />
+            <Button submit><Checkmark color={IconColor.White} alt="Edit Office" /> Edit Office</Button> 
         </form>
     {/if}
 </article>

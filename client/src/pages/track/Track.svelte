@@ -1,11 +1,12 @@
 <script>
+    import { ButtonType, InputType } from '../../components/types.ts';
+
     import Notification from '../../components/icons/Notification.svelte';
     import Button from '../../components/ui/Button.svelte';
     import TextInput from '../../components/ui/TextInput.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import Camera from '../../components/icons/Camera.svelte';
     import Search from '../../components/icons/Search.svelte';
-    import { ButtonType, InputType } from '../../components/types.ts';
 
     // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
     const docTrackingNumber = '1234567890';
@@ -51,15 +52,13 @@
     <title>DocTrack | {docTitle}</title>
 </svelte:head>
 
-
 <main>
-    
-    <TopBar open currentPage={`Tracking: ${docTrackingNumber}`}>
+    <TopBar open>
         <nav>
-            <TextInput type={InputType.Primary} placeholder='Enter tracking number here...' label=''/>
-            <Button type={ButtonType.Primary}><Camera alt='Take/select an image.' /></Button>
-            <a href='/track'>
-                <Button type={ButtonType.Primary}><Search alt='Search specified tracking number. '/></Button>
+            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="" />
+            <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
+            <a href="/track">
+                <Button type={ButtonType.Primary}><Search alt="Search specified tracking number." /></Button>
             </a>
         </nav>
     </TopBar>
@@ -71,31 +70,31 @@
     <section>
         <table>
             <tr>
-                <td><p class='header-color'><b>Overview</b></p></td>
+                <td><p class="header-color"><b>Overview</b></p></td>
                 <td></td>
             </tr>
-            {#each Object.keys(overview) as key}
+            {#each Object.entries(overview) as [key, value] (key)}
                 <tr>
                     <td><b>{key}</b></td>
-                    <td>{overview[key]}</td>
+                    <td>{value}</td>
                 </tr>
             {/each}
         </table>
         <br>
         <table>
-            <th class='table-title'>Files</th>
+            <th class="table-title">Files</th>
             <tr><a href={fileUrl}>{fileName}</a></tr>
         </table>
         <br>
         <table>
-            <th class='table-title'>History</th>
+            <th class="table-title">History</th>
             <tr><b>Office</b></tr>
             <tr><b>Remarks</b></tr>
             <tr><b>Date</b></tr>
         </table>
         <br>
         <table>
-            <th class='table-title'>Paper Trail</th>
+            <th class="table-title">Paper Trail</th>
             <tr>
                 {#each Object.keys(trail[0]) as key}
                     <td><b>{key}</b></td>

@@ -12,9 +12,6 @@
 
     let currEmail = '';
     let currId: OfficeModel['id'] | null = null;
-    let currName: OfficeModel['name'] | null = null;
-
-    $: if (currId !== null) currName = $allOffices[currId] ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
         // Computes permissions
@@ -28,7 +25,7 @@
         });
 
         // Checks validity of office
-        if (currId === null || typeof currName !== 'string') return;
+        if (currId === null) return;
         if (!this.reportValidity()) return;
 
         try {
@@ -37,12 +34,6 @@
                 office: currId,
                 permission: permsVal,
             });
-
-            // eslint-disable-next-line require-atomic-updates
-            currId = null;
-            // eslint-disable-next-line require-atomic-updates
-            currName = null;
-
             this.reset();
         } catch (err) {
             // TODO: No permission handler

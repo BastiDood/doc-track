@@ -1,44 +1,32 @@
 <script lang='ts'>
     import { assert } from '../../../../assert.ts';
-    import { Office as OfficeModel } from '../../../../../../model/src/office.ts';
+    import { Invite } from '../../../../api/invite.ts';
+
+    import type { Office as OfficeModel } from '../../../../../../model/src/office.ts';
+    import type { User } from '../../../../../../model/src/user.ts';
+
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { Invite } from '../../../../api/invite.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    let curEmail = 'None selected';
-    let currId: OfficeModel['id'] | null = null;
-    let currName: OfficeModel['name'] | null;
-
-    // eslint-disable-next-line no-extra-parens
-    $: currName = currId === null ? null : $allOffices[currId] ?? '';
-    $: curEmail = curEmail; // updates whenever referenced
+    let currOid: OfficeModel['id'] | null = null;
+    let currEmail: User['email'] | null = null;
 
     async function handleSubmit(this: HTMLFormElement) {
         // Email validation
         const emailInput = this.elements.namedItem('inputemail');
         assert(emailInput instanceof HTMLInputElement);
         assert(emailInput.type === 'email');
-        assert(curEmail !== 'None selected');
 
         // Checks validity of office
-        if (currId === null || typeof currName !== 'string') return;
+        if (currOid === null || currEmail === null) return;
         if (!this.reportValidity()) return;
 
         try {
-            await Invite.revoke({
-                email: curEmail,
-                office: currId,
-            });
-
-            // eslint-disable-next-line require-atomic-updates
-            currId = null;
-            // eslint-disable-next-line require-atomic-updates
-            currName = null;
-
+            await Invite.revoke({ office: currOid, email: currEmail });
             this.reset();
         } catch (err) {
             // TODO: No permission handler
@@ -53,29 +41,28 @@
         Invite unavailable as there are no offices available.
     {:else}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
-            <OfficeSelect bind:oid={currId} offices={$allOffices} />
-            <br />
-            <p>Office ID: {currId}</p>
-            {#if currName !== null}
+            <OfficeSelect bind:oid={currOid} offices={$allOffices} />
+            {#if typeof currOid === 'number'}
+                <br />
                 <section>
-                    {#await Invite.getInvitedList(currId)}
-                        Loading invites...
+                    {#await Invite.getList(currOid)}
+                        <span>Loading invites...</span>
                     {:then invites}
                         {#each invites as invite (invite.email)}
-                            <div class="select-mail" on:click={() => {curEmail = invite.email;}} on:keydown>
+                            <div class="select-mail" on:click={() => (currEmail = invite.email)} on:keydown>
                                 <p>{invite.email} (Permission: {invite.permission.toString(2).padStart(9, '0')})</p>
                             </div>
                         {:else}
-                            No invites available
+                            No invites available...
                         {/each}
                     {/await}
                 </section>
-                <br>
+                <br />
                 <label>
                     Email
-                    <input type='email' name='inputemail' pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' placeholder={'None selected'} required={true} readonly={true} bind:value={curEmail} />
+                    <input type="email" name="inputemail" placeholder="email@example.com" required readonly bind:value={currEmail} />
                 </label>
-                <Button submit><Checkmark alt='Revoke invite'/>Revoke Invite</Button> 
+                <Button submit><Checkmark alt="Revoke invite" />Revoke Invite</Button> 
             {/if}
         </form>
     {/if}
@@ -104,5 +91,4 @@
     .select-mail:hover {
         background-color: lightgray;
     }
-
 </style>
