@@ -14,25 +14,17 @@
     import OfficeSelect from '../../OfficeSelect.svelte';
 
     let currId: OfficeModel['id'] | null = null;
-    let currName: OfficeModel['name'] | null = null;
-
-    // eslint-disable-next-line no-extra-parens
-    $: currName = currId === null ? null : $allOffices[currId] ?? null;
+    let currName: OfficeModel['name'] | undefined;
 
     async function handleSubmit(this: HTMLFormElement) {
-        const input = this.elements.namedItem('officename');
-        assert(input instanceof HTMLInputElement);
-        assert(input.type === 'text');
-
         if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
-        if (input.value === currName) return;
 
         try {
             // Create a pseudo-office element
             await Office.update({
                 id: currId,
-                name: input.value,
+                name: currName,
             });
             await allOffices.reload?.();
             this.reset();
@@ -56,6 +48,7 @@
                 placeholder="Name"
                 name="officename"
                 label="Office Name:"
+                bind:value={currName}
             />
             <Button submit><Checkmark color={IconColor.White} alt="Edit Office" /> Edit Office</Button> 
         </form>

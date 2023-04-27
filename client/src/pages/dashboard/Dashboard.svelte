@@ -1,6 +1,7 @@
 <script lang="ts">
     import Router from 'svelte-spa-router';
 
+    import { currentPage } from './stores/CurrentPage.ts';
     import { currentUser } from './stores/UserStore.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
@@ -9,14 +10,12 @@
     import routes from './views/index.ts';
     import { register } from '../register.ts';
 
-    export let currentPage: string;
-
     let toggleDrawer = false;
     let currentOffice = 'No Office';
 </script>
 
 <svelte:head>
-    <title>{currentPage} ({currentOffice})</title>
+    <title>{$currentPage} ({currentOffice})</title>
 </svelte:head>
 
 {#await currentUser.load()}
@@ -25,7 +24,7 @@
     {#if user === null}
         <span>No user available...</span>
     {:else}
-        <TopBar {user} bind:open={toggleDrawer} bind:currentPage bind:currName={currentOffice} />
+        <TopBar {user} bind:open={toggleDrawer} bind:currName={currentOffice} />
         <main on:click={() => (toggleDrawer &&= false)} on:keydown>
             {#await register()}
                 <p>Waiting for service worker...</p>

@@ -1,6 +1,5 @@
 <script lang="ts">
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
-    import { currentPage } from '../../../pages/dashboard/stores/CurrentPage.ts';
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
 
     import Button from '../../../components/ui/Button.svelte';
@@ -22,14 +21,7 @@
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
-    <span id="leftbar">
-        {#if typeof user !== 'undefined'} 
-            <span id="icon"><Hamburger bind:open on:click={() => (open = !open)} /></span>
-        {/if}
-        <p>{$currentPage} ({currName})</p>
-        <slot></slot>
-    </span>
-    <span id="middle-logo">DocTrack</span>
+    <span id="icon"><Hamburger bind:open on:click={() => (open = !open)} /> DocTrack</span>
     <nav id="profilenav">
         {#if typeof user !== 'undefined'} 
             <span>{user.name}</span>
@@ -53,25 +45,15 @@
 
     #icon {
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-small);
     }
 
     img {
         border-radius: 50%;
         display: block;
         height: 2rem;
-    }
-
-    #leftbar {
-        align-content: center;
-        display: flex;
-        gap: var(--spacing-small);
-        align-items: center;
-    }
-
-    #middle-logo {
-        font-size: var(--large);
-        font-weight: bold;
-        color: white;
     }
 
     #navcontainer {
