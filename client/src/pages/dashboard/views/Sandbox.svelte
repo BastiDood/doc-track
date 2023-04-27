@@ -24,9 +24,6 @@
     // Modals
     import InviteForm from '../../../components/ui/forms/office/InviteForm.svelte';
 
-    // Modals
-    import InviteForm from '../../../components/ui/forms/office/InviteForm.svelte';
-
     let showContextMenu = false;
     let showCreateOffice = false;
     let showEditOffice = false;

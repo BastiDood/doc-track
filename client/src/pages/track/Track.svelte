@@ -1,9 +1,13 @@
 <script>
+
+    // TODO: Add API calls to get document details using the Tracking Number
     import Notification from '../../components/icons/Notification.svelte';
     import Button from '../../components/ui/Button.svelte';
+    import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
+
+    let docTrackingNumber = '1234567890';
     
     let docTitle = 'Document';
-    let docTrackingNumber = '1234567890';
     let docType = "Letter";
     let docFor = "Distribution/disubursement";
     let docRemarks = "LGTM!";
@@ -26,6 +30,10 @@
 
 
 <main>
+    <title>DocTrack | {docTitle}</title>
+    <TopBar show={true} currentPage={"Tracking View"}> 
+        Test
+    </TopBar>
     <h2>Document {docTitle}</h2>
 
     <Button>

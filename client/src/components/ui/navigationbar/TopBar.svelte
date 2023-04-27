@@ -17,13 +17,20 @@
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="leftbar">
-        <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
+        {#if user !== undefined}
+            <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
+        {/if}
         <p>{currentPage}</p>
+        <slot></slot>
         </span>
     <p>DocTrack</p>
     <nav id="profilenav">
-        <span>{user.name}</span>
-        <span><img src={user.picture} alt="{user.name[0]}" /></span>
+        {#if user !== undefined}
+            <span>{user.name}</span>
+            <span><img src={user.picture} alt="{user.name[0]}" /></span>
+        {:else}
+            <span>Guest View</span>
+        {/if}
     </nav>
 </nav>
 
