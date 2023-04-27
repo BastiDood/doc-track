@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import Router from 'svelte-spa-router';
 
     import { currentPage } from './stores/CurrentPage.ts';
