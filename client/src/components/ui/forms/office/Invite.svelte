@@ -1,20 +1,20 @@
 <script lang='ts'>
     import { assert } from '../../../../assert.ts';
+    import { Invite } from '../../../../api/invite.ts';
     import { Office as OfficeModel } from '../../../../../../model/src/office.ts';
+    import { Global } from '../../../../../../model/src/permission.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { Invite } from '../../../../api/invite.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    let curEmail = '';
+    let currEmail = '';
     let currId: OfficeModel['id'] | null = null;
     let currName: OfficeModel['name'] | null = null;
 
-    // eslint-disable-next-line no-extra-parens
-    $: currName = currId === null ? null : $allOffices[currId] ?? null;
+    $: if (currId !== null) currName = $allOffices[currId] ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
         // Computes permissions
@@ -27,18 +27,13 @@
             if (perm.checked) permsVal += parseInt(perm.value, 10);
         });
 
-        // Email validation
-        const emailInput = this.elements.namedItem('inputemail');
-        assert(emailInput instanceof HTMLInputElement);
-        assert(emailInput.type === 'email');
-
         // Checks validity of office
         if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
 
         try {
             await Invite.add({
-                email: curEmail,
+                email: currEmail,
                 office: currId,
                 permission: permsVal,
             });
@@ -54,18 +49,6 @@
             alert(err);
         }
     }
-    const permStrings = [
-        'Get Offices',
-        'Create Office',
-        'Update Office',
-        'Update User',
-        'Create Category',
-        'Update Category',
-        'Delete Category',
-        'Activate Category',
-        'View Metrics',
-    ];
-
 </script>
 
 <p>You are currently inviting a user as {$userSession?.email}</p>
@@ -77,29 +60,65 @@
             <OfficeSelect bind:oid={currId} offices={$allOffices} />
             <br />
             <p>Office ID: {currId}</p>
-            {#if currName !== null}
-                <label>
-                    Email
-                    <input type='email' name='inputemail' placeholder={'example@up.edu.ph'} required={true} pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' bind:value={curEmail} />
-                </label>
-                <br>
-                <p><b>Permissions:</b></p>
-                {#each permStrings as perm, i}
-                    <label>
-                        <input type='checkbox' name='perms' value={2 ** i} />
-                        {perm}
-                    </label>
-                    <br>
-                {/each}
-                <Button submit><Checkmark alt='Invite User'/>Invite User</Button> 
-            {/if}
+            <label>
+                Email
+                <input required type="email" name="inputemail" placeholder="example@up.edu.ph" bind:value={currEmail} />
+            </label>
+            <br>
+            <p><b>Permissions:</b></p>
+            <label>
+                <input required type="checkbox" name="perms" value={Global.GetOffices} />
+                Get Office
+            </label>
+            <br />
+            <label>
+                <input required type="checkbox" name="perms" value={Global.CreateOffice} />
+                Create Office
+            </label>
+            <br />
+            <label>
+                <input required type="checkbox" name="perms" value={Global.UpdateOffice} />
+                Update Office
+            </label>
+            <br />
+            <label>
+                <input required type="checkbox" name="perms" value={Global.UpdateUser} />
+                Update User
+            </label>
+            <br />
+            <label>
+                <input required type="checkbox" name="perms" value={Global.CreateCategory} />
+                Create Category
+            </label>
+            <br />
+            <label>
+                <input required type="checkbox" name="perms" value={Global.UpdateCategory} />
+                Update Category
+            </label>
+            <br />
+            <label>
+                <input required type="checkbox" name="perms" value={Global.DeleteCategory} />
+                Delete Category
+            </label>
+            <br />
+            <label>
+                <input required type="checkbox" name="perms" value={Global.ActivateCategory} />
+                Activate Category
+            </label>
+            <br />
+            <label>
+                <input required type="checkbox" name="perms" value={Global.ViewMetrics} />
+                View Metrics
+            </label>
+            <br />
+            <Button submit><Checkmark alt="Invite User" />Invite User</Button> 
         </form>
     {/if}
 </article>
 
 <style>
     @import url('../../../../pages/vars.css');
-    
+
     input {
         border: var(--primary-color) 2px solid;
         border-radius: var(--border-radius);
