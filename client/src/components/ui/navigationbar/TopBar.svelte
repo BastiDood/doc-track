@@ -1,23 +1,13 @@
 <script lang="ts">
-    import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
-    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
-
     import Button from '../../../components/ui/Button.svelte';
     import Hamburger from '../../icons/Hamburger.svelte';
     import Logout from '../../icons/Logout.svelte';
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
-    import type { Office } from '../../../../../model/src/office.ts';
     import type { User } from '../../../../../model/src/user.ts';
 
     export let open = false;
     export let user: User;
-
-    export let currName: Office['name'] | null = null;
-    $: if (selectedOffice !== null) currName = $allOffices[selectedOffice] ?? null;
-
-    let selectedOffice: Office['id'] | null = null;
-    $: if ($dashboardState.currentOffice !== null) selectedOffice = $dashboardState.currentOffice;
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
