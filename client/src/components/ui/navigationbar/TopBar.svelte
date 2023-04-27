@@ -1,6 +1,9 @@
 <script lang="ts">
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
     import { location } from 'svelte-spa-router';
+    import Button from '../../../components/ui/Button.svelte';
+    import { ButtonType, InputType, IconColor } from '../../../components/types.ts';
+    import Logout from '../../icons/Logout.svelte';
 
     import type { User } from '../../../../../model/src/user.ts';
 
@@ -31,7 +34,9 @@
             <span>{user.name}</span>
             <span><img src={user.picture} alt="{user.name[0]}" /></span>
         {:else}
-            <span>Guest View</span>
+        <a href="/auth/login">
+            <Button type={ButtonType.Primary}><Logout color={IconColor.White} alt="Return to the main Login screen"/>Login as Staff</Button>
+        </a>
         {/if}
     </nav>
 </nav>
