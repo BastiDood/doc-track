@@ -3,7 +3,11 @@
     // TODO: Add API calls to get document details using the Tracking Number
     import Notification from '../../components/icons/Notification.svelte';
     import Button from '../../components/ui/Button.svelte';
+    import TextInput from '../../components/ui/TextInput.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
+    import Camera from '../../components/icons/Camera.svelte';
+    import Search from '../../components/icons/Search.svelte';
+    import { ButtonType, IconColor, InputType } from '../../components/types.ts';
 
     let docTrackingNumber = '1234567890';
     
@@ -32,7 +36,11 @@
 <main>
     <title>DocTrack | {docTitle}</title>
     <TopBar show={true} currentPage={"Tracking View"}> 
-        Test
+        <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label=""/>
+        <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
+        <a href="/track">
+            <Button type={ButtonType.Primary}><Search alt="Search specified tracking number. "/></Button>
+        </a>
     </TopBar>
     <h2>Document {docTitle}</h2>
 
