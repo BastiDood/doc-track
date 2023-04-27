@@ -20,6 +20,8 @@
     import ActivateCategory from '../../../components/ui/forms/category/ActivateCategory.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
+    import SubscribePushNotification from '../../../components/ui/forms/pushnotification/SubscribePushNotification.svelte';
+    import UnsubscribePushNotification from '../../../components/ui/forms/pushnotification/UnsubscribePushNotification.svelte';
 
     // Modals
     import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
@@ -36,6 +38,8 @@
     let showActivateCategory = false;
     let showInsertSnapshot = false;
     let showCreateDocument = false;
+    let showSubscribePushNotification = false;
+    let showUnsubscribePushNotification = false;
 
     // Receiving document, invites
     let showInviteForm = false;
@@ -44,6 +48,7 @@
     let insertSnapshotAction: SnapshotAction | null = null;
     let currentContext: RowEvent | null = null;
     let currentOffice: Office['id'] | null = null;
+    let isSubscribed = false;
 
     // eslint-disable-next-line prefer-destructuring
     $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
@@ -104,6 +109,16 @@
 <Button on:click={() => (showRevokeInvite = true)}>
     Revoke Invite
 </Button>
+
+{#if !isSubscribed}
+    <Button on:click={() => (showSubscribePushNotification= true)}>
+        Subscribe to Push Notification
+    </Button>
+    {:else}
+    <Button on:click={() => (showUnsubscribePushNotification= true)}>
+        Unsubscribe to Push Notification
+    </Button>
+{/if}
 
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
     <RenameCategory/>
@@ -168,6 +183,14 @@
             statusIndex={insertSnapshotAction}
         /> 
     {/if}
+</Modal>
+
+<Modal title="Subscribe to Push Notification" bind:showModal={showSubscribePushNotification}>
+    <SubscribePushNotification on:subscribe={(e) => isSubscribed = e.detail.isSubscribed}/>
+</Modal>
+
+<Modal title="Unsubscribe to Push Notification" bind:showModal={showUnsubscribePushNotification}>
+    <UnsubscribePushNotification on:unsubscribe={(e) => isSubscribed = e.detail.isSubscribed} />
 </Modal>
 
 <Modal title="Create Document" bind:showModal={showCreateDocument}>
