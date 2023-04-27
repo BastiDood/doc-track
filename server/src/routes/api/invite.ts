@@ -102,18 +102,22 @@ export async function handleAddInvitation(pool: Pool, req: Request, params: URLS
  * - Accepts the `email` and `permission` via JSON in the {@linkcode Request} body.
  *
  * # Outputs
- * - `200` => returns the plaintext `creation` (in milliseconds) of the added {@linkcode Invitation}
+ * - `200` => returns a list of {@linkcode Invitation} objects as JSON in the {@linkcode Response} body
  * - `400` => office query parameter or request body is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `406` => content negotiation failed
- * - `409` => `email` already exists for some valid user
  */
 export async function handleGetInvitedList(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Invite] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Invite] Content negotiation failed for for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const input = params.get('office');
@@ -131,22 +135,20 @@ export async function handleGetInvitedList(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        if ((staff.permission & Local.RevokeInvite) === 0) {
+        if ((staff.permission & (Local.AddInvite | Local.RevokeInvite)) === 0) {
             error(`[Invite] User ${staff.user_id} cannot get invitations for office ${office}`);
             return new Response(null, { status: Status.Forbidden });
         }
+
         const invitations = await db.getInvitationList(office);
         info(`[Invite] User ${staff.user_id} retrieved ${invitations.length} invitations for office ${office}`);
         return new Response(JSON.stringify(invitations), {
             headers: { 'Content-Type': 'application/json' },
-            status: Status.OK,
         });
     } finally {
         db.release();
     }
 }
-
-
 
 /**
  * Revokes a pre-existing email invitation in the office.
