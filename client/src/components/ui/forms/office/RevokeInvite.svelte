@@ -10,10 +10,11 @@
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
+    import InviteSelect from '../../InviteSelect.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
     let currOid: OfficeModel['id'] | null = null;
-    let currEmail: User['email'] | null = null;
+    let currEmail: User['email'] | undefined;
 
     async function handleSubmit(this: HTMLFormElement) {
         // Email validation
@@ -22,7 +23,7 @@
         assert(emailInput.type === 'email');
 
         // Checks validity of office
-        if (currOid === null || currEmail === null) return;
+        if (currOid === null || typeof currEmail === 'undefined') return;
         if (!this.reportValidity()) return;
 
         try {
@@ -45,24 +46,15 @@
             {#if typeof currOid === 'number'}
                 <br />
                 <section>
+                    <!-- TODO: We probably want to put this in a dedicated cache/store. -->
                     {#await Invite.getList(currOid)}
                         <span>Loading invites...</span>
                     {:then invites}
-                        {#each invites as invite (invite.email)}
-                            <div class="select-mail" on:click={() => (currEmail = invite.email)} on:keydown>
-                                <p>{invite.email} (Permission: {invite.permission.toString(2).padStart(9, '0')})</p>
-                            </div>
-                        {:else}
-                            No invites available...
-                        {/each}
+                        <InviteSelect {invites} bind:value={currEmail} />
                     {/await}
                 </section>
                 <br />
-                <label>
-                    Email
-                    <input type="email" name="inputemail" placeholder="email@example.com" required readonly bind:value={currEmail} />
-                </label>
-                <Button submit><Checkmark alt="Revoke invite" />Revoke Invite</Button> 
+                <Button submit><Checkmark alt="Revoke Invite" />Revoke Invite</Button> 
             {/if}
         </form>
     {/if}
@@ -71,24 +63,9 @@
 <style>
     @import url('../../../../pages/vars.css');
 
-    input {
-        border: var(--primary-color) 2px solid;
-        border-radius: var(--border-radius);
-        padding: var(--spacing-small) var(--spacing-normal);
-    }
-    
     section {
         overflow-y: scroll;
         border: var(--spacing-tiny) solid;
         height: 50vh;
-    }
-
-    .select-mail {
-        padding: var(--spacing-tiny);
-        margin: var(--spacing-tiny);
-    }
-
-    .select-mail:hover {
-        background-color: lightgray;
     }
 </style>
