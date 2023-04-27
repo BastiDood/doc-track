@@ -35,7 +35,7 @@ async function handleGet(pool: Pool, req: Request) {
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/api/document': return handleGetPaperTrail(pool, req, searchParams);
         case '/api/inbox': return handleGetInbox(pool, req, searchParams);
-        case '/api/invite': return handleGetInvitedList(pool, req, searchParams);
+        case '/api/invites': return handleGetInvitedList(pool, req, searchParams);
         case '/api/metrics/office': return handleGenerateLocalSummary(pool, req, searchParams);
         case '/api/metrics/system': return handleGenerateGlobalSummary(pool, req);
         case '/api/metrics/user': return handleGenerateUserSummary(pool, req);

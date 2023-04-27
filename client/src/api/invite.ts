@@ -13,7 +13,7 @@ import {
 
 export namespace Invite {
     export async function getList(oid: Office['id']): Promise<Invitation[]> {
-        const res = await fetch(`/api/invite?office=${oid}`, {
+        const res = await fetch(`/api/invites?office=${oid}`, {
             credentials: 'same-origin',
             headers: { 'Accept': 'application/json' },
         });
