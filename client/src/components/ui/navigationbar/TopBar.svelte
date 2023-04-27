@@ -8,14 +8,23 @@
 
     export let show = false;
     export let user: User;
-    export let currentPage: string;
+    let selectedOffice: Office['id'] | null = null;
+    let currentPage = 'Dashboard';
+    $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
+
+    $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
-    <nav id="leftbar">
+    <span id="leftbar">
         <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
         <p>{currentPage}</p>   
-    </nav>
+        {#if Object.getOwnPropertyNames($userOffices).length === 0}
+            No office detected!
+        {:else}
+            <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
+        {/if}
+        </span>
     <p>DocTrack</p>
     <nav id="profilenav">
         <span>{user.name}</span>

@@ -24,6 +24,9 @@
     // Modals
     import InviteForm from '../../../components/ui/forms/office/InviteForm.svelte';
 
+    // Modals
+    import InviteForm from '../../../components/ui/forms/office/InviteForm.svelte';
+
     let showContextMenu = false;
     let showCreateOffice = false;
     let showEditOffice = false;
@@ -35,6 +38,9 @@
     let showActivateCategory = false;
     let showInsertSnapshot = false;
     let showCreateDocument = false;
+
+    // Receiving document, invites
+    let showInviteForm  = false;
 
     // Receiving document, invites
     let showInviteForm  = false;
@@ -96,6 +102,10 @@
 </Button>
 <Button on:click={() => (showCreateDocument = true)}>
     Create a New Document
+</Button>
+
+<Button on:click={() => (showInviteForm = true)}>
+    Invite User
 </Button>
 
 <Button on:click={() => (showInviteForm = true)}>
