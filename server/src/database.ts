@@ -133,13 +133,12 @@ export class Database {
 
     /** Gets the invitation list given office and returns the list of invited emails */
     async getInvitationList(office: Office['id']): Promise<Invitation[]> {
-        const emails = [];
         const { rows } = await this.#client
             .queryObject`SELECT * FROM invitation WHERE office = ${office}`;
-        for (const row of rows) {
-            emails.push(InvitationSchema.extend({ permission: z.string().transform(p => parseInt(p, 2)) }).parse(row));
-        }
-        return emails;
+        return InvitationSchema
+            .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
+            .array()
+            .parse(rows);
     }
 
     /** Upserts a user to the invite list and returns the creation date. */
