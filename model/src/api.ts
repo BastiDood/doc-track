@@ -59,6 +59,16 @@ export const InboxEntrySchema = SnapshotSchema
 
 export type InboxEntry = z.infer<typeof InboxEntrySchema>;
 
+export const OutboxEntrySchema = SnapshotSchema
+    .pick({ creation: true, status: true, target: true})
+    .extend({
+        doc: DocumentSchema.shape.id,
+        category: CategorySchema.shape.name
+    })
+    .and(DocumentSchema.pick({ title: true }));
+
+export type OutboxEntry = z.infer<typeof OutboxEntrySchema>
+
 export const AllOfficesSchema = z.record(OfficeSchema.shape.id, OfficeSchema.shape.name);
 export type AllOffices = z.infer<typeof AllOfficesSchema>;
 
