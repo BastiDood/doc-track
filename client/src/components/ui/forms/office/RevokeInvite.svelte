@@ -73,7 +73,7 @@
                 <br>
                 <label>
                     Email
-                    <input type='email' name='inputemail' placeholder={'None selected'} required={true} readonly={true} bind:value={curEmail} />
+                    <input type='email' name='inputemail' pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' placeholder={'None selected'} required={true} readonly={true} bind:value={curEmail} />
                 </label>
                 <Button submit><Checkmark alt='Revoke invite'/>Revoke Invite</Button> 
             {/if}
