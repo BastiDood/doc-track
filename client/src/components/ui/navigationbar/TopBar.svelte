@@ -2,7 +2,7 @@
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
     import { location } from 'svelte-spa-router';
     import Button from '../../../components/ui/Button.svelte';
-    import { ButtonType, InputType, IconColor } from '../../../components/types.ts';
+    import { ButtonType, IconColor } from '../../../components/types.ts';
     import Logout from '../../icons/Logout.svelte';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { Office, OfficeModel } from '../../../../../model/src/office.ts';
@@ -19,16 +19,16 @@
     let currentPage = 'Dashboard';
     $: if ($dashboardState.currentOffice !== null) selectedOffice = $dashboardState.currentOffice;
     $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
-    $: currName = $allOffices[selectedOffice == null ? 0 : selectedOffice] ?? null;
+    $: currName = $allOffices[selectedOffice === null ? 0 : selectedOffice] ?? null;
 
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="leftbar">
-        {#if user !== undefined}
+        {#if user !== undefined} 
             <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
         {/if}
-        <p>{currentPage} {selectedOffice == null ? '' : `(${currName})`}</p>
+        <p>{currentPage} {selectedOffice === null ? '' : `(${currName})`}</p>
         <slot></slot>
     </span>
     <span id="middle-logo">

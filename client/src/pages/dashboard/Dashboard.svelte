@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-    <title>{currentPage} {currentOffice == null ? '' : `(${currentOffice})`}</title>
+    <title>{currentPage} {currentOffice === null ? '' : `(${currentOffice})`}</title>
 </svelte:head>
 
 {#await currentUser.load()}

@@ -58,7 +58,7 @@
             // eslint-disable-next-line require-atomic-updates
             currName = null;
 
-            this.submit();
+            this.reset();
         } catch (err) {
             // TODO: No permission handler
             alert(err);
@@ -81,7 +81,7 @@
 <p>You are currently inviting a user as {$userSession?.email}</p>
 <article>
     {#if Object.getOwnPropertyNames($allOffices).length === 0}
-        No offices to edit.
+        Invite unavailable as there are no offices available.
     {:else}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currId} offices={$allOffices} />
