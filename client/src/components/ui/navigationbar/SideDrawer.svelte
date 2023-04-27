@@ -40,7 +40,6 @@
         <a href="#/admin" use:active><AdminIcon />Admin</a>
         <a href="#/settings" use:active><SettingsIcon />Settings</a>
         <a href="#/sandbox" use:active><SettingsIcon />Sandbox</a>
-        <a href="#/trackingview" use:active><SettingsIcon />Tracking View</a>
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />

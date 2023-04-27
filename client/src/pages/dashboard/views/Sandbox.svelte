@@ -42,9 +42,6 @@
     // Receiving document, invites
     let showInviteForm  = false;
 
-    // Receiving document, invites
-    let showInviteForm  = false;
-
     let insertSnapshotAction: SnapshotAction | null = null;
     let currentContext: RowEvent | null = null;
     let currentOffice: Office['id'] | null = null;

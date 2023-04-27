@@ -18,12 +18,7 @@
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="leftbar">
         <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
-        <p>{currentPage}</p>   
-        {#if Object.getOwnPropertyNames($userOffices).length === 0}
-            No office detected!
-        {:else}
-            <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
-        {/if}
+        <p>{currentPage}</p>
         </span>
     <p>DocTrack</p>
     <nav id="profilenav">
