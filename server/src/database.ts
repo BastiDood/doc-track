@@ -131,6 +131,18 @@ export class Database {
         return { valid: false, data: pending };
     }
 
+    /** Gets the invitation list given office and returns the list of invited emails */
+    async getInvitationList(office: Office['id']): Promise<Invitation[]> {
+        let emails = [];
+        const { rows } = await this.#client
+            .queryObject`SELECT * FROM invitation WHERE office = ${office}`;
+        assert(rows.length > 0);
+        for (const row of rows) {
+            emails.push(InvitationSchema.extend({ permission: z.string().transform(p => parseInt(p, 2)) }).parse(row));
+        }
+        return emails;
+    }
+
     /** Upserts a user to the invite list and returns the creation date. */
     async upsertInvitation({ office, email, permission }: Omit<Invitation, 'creation'>): Promise<Invitation['creation'] | null> {
         const permBits = permission.toString(2);

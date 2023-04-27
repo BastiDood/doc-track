@@ -15,7 +15,7 @@ import {
     handleActivateCategory,
 } from './api/category.ts';
 import { handleCreateDocument, handleGetInbox, handleGetPaperTrail } from './api/document.ts';
-import { handleAddInvitation, handleRevokeInvitation } from './api/invite.ts';
+import { handleAddInvitation, handleRevokeInvitation, handleGetInvitedList } from './api/invite.ts';
 import { handleGenerateGlobalSummary, handleGenerateLocalSummary, handleGenerateUserSummary } from './api/metrics.ts';
 import { handleCreateOffice, handleGetAllOffices, handleUpdateOffice } from './api/office.ts';
 import { handleGetUserFromSession } from './api/session.ts';
@@ -35,6 +35,7 @@ async function handleGet(pool: Pool, req: Request) {
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/api/document': return handleGetPaperTrail(pool, req, searchParams);
         case '/api/inbox': return handleGetInbox(pool, req, searchParams);
+        case '/api/invite': return handleGetInvitedList(pool, req, searchParams);
         case '/api/metrics/office': return handleGenerateLocalSummary(pool, req, searchParams);
         case '/api/metrics/system': return handleGenerateGlobalSummary(pool, req);
         case '/api/metrics/user': return handleGenerateUserSummary(pool, req);
