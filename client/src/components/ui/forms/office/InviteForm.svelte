@@ -17,7 +17,6 @@
     $: currName = currId === null ? null : $allOffices[currId] ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
-
         // Computes permissions
         let permsVal = 0;
         const permissionSelect = this.elements.namedItem('perms');
