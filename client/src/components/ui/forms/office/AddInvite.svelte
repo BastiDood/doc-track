@@ -50,7 +50,6 @@
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currId} offices={$allOffices} />
             <br />
-            <p>Office ID: {currId}</p>
             <label>
                 Email
                 <input required type="email" name="inputemail" placeholder="example@up.edu.ph" bind:value={currEmail} />

@@ -99,11 +99,9 @@
 <Button on:click={() => (showCreateDocument = true)}>
     Create a New Document
 </Button>
-
 <Button on:click={() => (showInviteForm = true)}>
     Invite User
 </Button>
-
 <Button on:click={() => (showRevokeInvite = true)}>
     Revoke Invite
 </Button>
@@ -122,16 +120,19 @@
 </Modal>
 
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
-    <br>
-    {#if currentOffice !== null}
-        <LocalPermissions user={$currentUser} office={currentOffice} />
-    {:else}
+    {#if currentOffice === null || $currentUser === null}
         Current user is not a staff of the selected office.
+    {:else}
+        <LocalPermissions user={$currentUser} office={currentOffice} />
     {/if}
 </Modal>
 
 <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
-    <GlobalPermissions user={$currentUser} />
+    {#if $currentUser === null}
+        Current user is not valid.
+    {:else}
+        <GlobalPermissions user={$currentUser} />
+    {/if}
 </Modal>
 
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>
