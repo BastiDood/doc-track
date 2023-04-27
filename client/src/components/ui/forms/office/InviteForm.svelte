@@ -14,7 +14,7 @@
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    let curEmail = '';
+    let curEmail: string = "";
     let currId: OfficeModel['id'] | null = null;
     let currName: OfficeModel['name'] | null = null;
 
@@ -25,29 +25,31 @@
         const officeInput = this.elements.namedItem('office');
 
         // Taken from GlobalPermissions.svelte
-        const permissionSelect = this.elements.namedItem('perms');
-        const emailInput = this.elements.namedItem('email');
-        assert(permissionSelect instanceof RadioNodeList);
-
+        // Permissions
         let permsVal = 0;
+        const permissionSelect = this.elements.namedItem('perms');
+        assert(permissionSelect instanceof RadioNodeList);
         permissionSelect.forEach(perm => {
             assert(perm instanceof HTMLInputElement);
             assert(perm.type === 'checkbox');
-            if (perm.checked) permsVal |= parseInt(perm.value, 10);
+            if (perm.checked) permsVal += parseInt(perm.value, 10);
         });
 
+        // Email validation
+        const emailInput = this.elements.namedItem('email');
         assert(emailInput instanceof HTMLInputElement);
         assert(emailInput.type === 'text');
 
+        // Checks validity of office
         if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
         if (emailInput.value === currName) return;
 
         try {
             await Invite.add({
-                email: input.value,
-                officeId: currId,
-                permissions: permsVal
+                email: curEmail,
+                office: currId,
+                permission: permsVal
             });
             await allOffices.reload?.();
 
@@ -62,7 +64,17 @@
             alert(err);
         }
     }
-
+    let permStrings = [
+        "Get Offices",
+        "Create Office",
+        "Update Office",
+        "Update User",
+        "Create Category",
+        "Update Category",
+        "Delete Category",
+        "Activate Category",
+        "View Metrics"
+    ]
 
 </script>
 
@@ -80,6 +92,15 @@
                         Email
                         <input type="email" placeholder={"example@up.edu.ph"} required={true} pattern="^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$" bind:value={curEmail} />
                     </label>
+                    <br>
+                    {#each permStrings as perm, i}
+                        <br>
+                        <label>
+                            <input type="checkbox" name="perms" value={2**i} />
+                            {perm}
+                        </label>
+                    {/each}
+                    <br>
                     <Button submit><Checkmark alt="Invite User"/>Invite User</Button> 
                 {/if}
         </form>
