@@ -26,7 +26,8 @@
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
     
-        assert(typeof status !== 'undefined');
+        if (setStatusTo === Status.Receive) destOfficeId = userOfficeId;
+        
         assert(destOfficeId !== null);
         assert(userOfficeId !== null);
         assert(docId);
