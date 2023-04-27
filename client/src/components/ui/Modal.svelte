@@ -12,7 +12,6 @@
     function offModal() {
         showModal = false;
     }
-
 </script>
 
 <dialog on:close bind:this={dialog}>
