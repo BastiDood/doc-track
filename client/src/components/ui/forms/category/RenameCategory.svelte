@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { assert } from '../../../../assert.ts';
-
     import { Category as CategoryModel } from '~model/category.ts';
     import { Category } from '../../../../api/category.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
@@ -13,11 +11,11 @@
     import CategorySelect from '../../CategorySelect.svelte';
 
     let currId: CategoryModel['id'] | null = null;
-    let currName: CategoryModel['name'] | null = null;
-    $: currName = $categoryList.active.find(cat => cat.id === currId)?.name ?? null;
+    let currName: CategoryModel['name'] | undefined;
+    $: currName = $categoryList.active.find(cat => cat.id === currId)?.name;
 
     async function handleSubmit(this: HTMLFormElement) {
-        if (currId === null || currName === null) return;
+        if (currId === null || typeof currName === 'undefined') return;
         if (!this.reportValidity()) return;
 
         try {
@@ -40,18 +38,14 @@
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
             <CategorySelect bind:catId={currId} categories={$categoryList.active} />
             <br />
-            {#if typeof currId === 'number'}
-                {#if currName !== null}
-                    <TextInput
-                        required
-                        placeholder="Name"
-                        name="categoryname"
-                        label="Category Name:"
-                        bind:value={currName}
-                    />
-                    <Button submit><Edit color={IconColor.White} alt="Edit Category" /> Edit Category</Button>
-                {/if}
-            {/if}
+            <TextInput
+                required
+                placeholder="Name"
+                name="categoryname"
+                label="Category Name:"
+                bind:value={currName}
+            />
+            <Button submit><Edit color={IconColor.White} alt="Edit Category" /> Edit Category</Button>
         </form>
     {/if}
 </article>
