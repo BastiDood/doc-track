@@ -28,9 +28,9 @@
         });
 
         // Email validation
-        const emailInput = this.elements.namedItem('email');
+        const emailInput = this.elements.namedItem('inputemail');
         assert(emailInput instanceof HTMLInputElement);
-        assert(emailInput.type === 'text');
+        assert(emailInput.type === 'email');
 
         // Checks validity of office
         if (currId === null || typeof currName !== 'string') return;
@@ -81,7 +81,7 @@
             {#if currName !== null}
                 <label>
                     Email
-                    <input type='email' placeholder={'example@up.edu.ph'} required={true} pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' bind:value={curEmail} />
+                    <input type='email' name='inputemail' placeholder={'example@up.edu.ph'} required={true} pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' bind:value={curEmail} />
                 </label>
                 <br>
                 <p><b>Permissions:</b></p>

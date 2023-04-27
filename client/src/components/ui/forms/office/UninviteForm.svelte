@@ -9,7 +9,7 @@
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    let curEmail = '';
+    const curEmail = '';
     let currId: OfficeModel['id'] | null = null;
     let currName: OfficeModel['name'] | null = null;
 
@@ -17,7 +17,6 @@
     $: currName = currId === null ? null : $allOffices[currId] ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
-
         // Computes permissions
         let permsVal = 0;
         const permissionSelect = this.elements.namedItem('perms');

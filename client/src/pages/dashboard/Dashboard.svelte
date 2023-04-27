@@ -11,12 +11,12 @@
 
     let toggleDrawer = false;
     let currentPage = 'Dashboard';
-    let currentOffice = null;
+    let currentOffice = 'No office';
     $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
 </script>
 
 <svelte:head>
-    <title>{currentPage} {currentOffice === null ? '' : `(${currentOffice})`}</title>
+    <title>{currentPage} {`(${currentOffice})`}</title>
 </svelte:head>
 
 {#await currentUser.load()}
