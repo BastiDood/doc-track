@@ -9,33 +9,24 @@
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    const curEmail = '';
+    let curEmail = 'None selected';
     let currId: OfficeModel['id'] | null = null;
-    let currName: OfficeModel['name'] | null = null;
+    let currName: OfficeModel['name'] | null;
 
     // eslint-disable-next-line no-extra-parens
-    $: currName = currId === null ? null : $allOffices[currId] ?? null;
+    $: currName = currId === null ? null : $allOffices[currId] ?? '';
+    $: curEmail = curEmail; // updates whenever referenced
 
     async function handleSubmit(this: HTMLFormElement) {
-        // Computes permissions
-        let permsVal = 0;
-        const permissionSelect = this.elements.namedItem('perms');
-        assert(permissionSelect instanceof RadioNodeList);
-        permissionSelect.forEach(perm => {
-            assert(perm instanceof HTMLInputElement);
-            assert(perm.type === 'checkbox');
-            if (perm.checked) permsVal += parseInt(perm.value, 10);
-        });
-
         // Email validation
-        const emailInput = this.elements.namedItem('email');
+        const emailInput = this.elements.namedItem('inputemail');
         assert(emailInput instanceof HTMLInputElement);
-        assert(emailInput.type === 'text');
+        assert(emailInput.type === 'email');
+        assert(curEmail !== 'None selected');
 
         // Checks validity of office
         if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
-
 
         try {
             await Invite.revoke({
@@ -54,7 +45,6 @@
             alert(err);
         }
     }
-
 </script>
 
 <p>You are currently inviting a user as {$userSession?.email}</p>
@@ -72,13 +62,19 @@
                         Loading invites...
                     {:then invites}
                         {#each invites as invite (invite.email)}
-                            <p>{invite.email}</p>
+                            <div class="select-mail" on:click={() => {curEmail = invite.email}} on:keydown>
+                                <p>{invite.email} (Permission: {invite.permission.toString(2).padStart(9, '0')})</p>
+                            </div>
                         {:else}
                             No invites available
                         {/each}
                     {/await}
                 </section>
                 <br>
+                <label>
+                    Email
+                    <input type='email' name='inputemail' placeholder={'None selected'} required={true} readonly={true} bind:value={curEmail} />
+                </label>
                 <Button submit><Checkmark alt='Revoke invite'/>Revoke Invite</Button> 
             {/if}
         </form>
@@ -87,10 +83,26 @@
 
 <style>
     @import url('../../../../pages/vars.css');
+
+    input {
+        border: var(--primary-color) 2px solid;
+        border-radius: var(--border-radius);
+        padding: var(--spacing-small) var(--spacing-normal);
+    }
     
     section {
         overflow-y: scroll;
         border: var(--spacing-tiny) solid;
         height: 50vh;
     }
+
+    .select-mail {
+        padding: var(--spacing-tiny);
+        margin: var(--spacing-tiny);
+    }
+
+    .select-mail:hover {
+        background-color: lightgray;
+    }
+
 </style>
