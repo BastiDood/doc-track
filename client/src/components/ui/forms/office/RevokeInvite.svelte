@@ -28,8 +28,6 @@
 
         try {
             await Invite.revoke({ office: currOid, email: currEmail });
-            currOid = null;
-            currEmail = undefined;
             this.reset();
         } catch (err) {
             // TODO: No permission handler
