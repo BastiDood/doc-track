@@ -23,15 +23,15 @@
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon"><Hamburger bind:open on:click={() => (open = !open)} /> DocTrack</span>
     <nav id="profilenav">
-        {#if typeof user !== 'undefined'} 
-            <span>{user.name}</span>
-            <span><img src={user.picture} alt="Profile Picture for {user.name}" /></span>
-        {:else}
+        {#if typeof user === 'undefined'} 
             <a href="/">
                 <Button type={ButtonType.Primary}>
                     <Logout color={IconColor.White} alt="Return to the main Login screen" /> Back to Main Page
                 </Button>
             </a>
+        {:else}
+            <span>{user.name}</span>
+            <span><img src={user.picture} alt="Profile Picture for {user.name}" /></span>
         {/if}
     </nav>
 </nav>
