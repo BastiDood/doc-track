@@ -52,52 +52,52 @@
             <br />
             <label>
                 Email
-                <input required type="email" name="inputemail" placeholder="example@up.edu.ph" bind:value={currEmail} />
+                <input type="email" name="inputemail" placeholder="example@up.edu.ph" bind:value={currEmail} />
             </label>
             <br>
             <p><b>Permissions:</b></p>
             <label>
-                <input required type="checkbox" name="perms" value={Global.GetOffices} />
+                <input type="checkbox" name="perms" value={Global.GetOffices} />
                 Get Office
             </label>
             <br />
             <label>
-                <input required type="checkbox" name="perms" value={Global.CreateOffice} />
+                <input type="checkbox" name="perms" value={Global.CreateOffice} />
                 Create Office
             </label>
             <br />
             <label>
-                <input required type="checkbox" name="perms" value={Global.UpdateOffice} />
+                <input type="checkbox" name="perms" value={Global.UpdateOffice} />
                 Update Office
             </label>
             <br />
             <label>
-                <input required type="checkbox" name="perms" value={Global.UpdateUser} />
+                <input type="checkbox" name="perms" value={Global.UpdateUser} />
                 Update User
             </label>
             <br />
             <label>
-                <input required type="checkbox" name="perms" value={Global.CreateCategory} />
+                <input type="checkbox" name="perms" value={Global.CreateCategory} />
                 Create Category
             </label>
             <br />
             <label>
-                <input required type="checkbox" name="perms" value={Global.UpdateCategory} />
+                <input type="checkbox" name="perms" value={Global.UpdateCategory} />
                 Update Category
             </label>
             <br />
             <label>
-                <input required type="checkbox" name="perms" value={Global.DeleteCategory} />
+                <input type="checkbox" name="perms" value={Global.DeleteCategory} />
                 Delete Category
             </label>
             <br />
             <label>
-                <input required type="checkbox" name="perms" value={Global.ActivateCategory} />
+                <input type="checkbox" name="perms" value={Global.ActivateCategory} />
                 Activate Category
             </label>
             <br />
             <label>
-                <input required type="checkbox" name="perms" value={Global.ViewMetrics} />
+                <input type="checkbox" name="perms" value={Global.ViewMetrics} />
                 View Metrics
             </label>
             <br />

@@ -11,7 +11,7 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
-    let currentOffice = 'No Office';
+    let currentOffice = '';
 </script>
 
 <svelte:head>
