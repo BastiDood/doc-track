@@ -5,6 +5,7 @@
     import { ButtonType, InputType, IconColor } from '../../../components/types.ts';
     import Logout from '../../icons/Logout.svelte';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
+    import { Office, OfficeModel } from '../../../../../model/src/office.ts';
 
     import type { User } from '../../../../../model/src/user.ts';
 
@@ -13,13 +14,13 @@
     export let show = false;
     export let user: User;
     let selectedOffice: Office['id'] | null = null;
-    let currName: OfficeModel['name'] | null = null;
+    export let currName: OfficeModel['name'] | null = null;
 
     let currentPage = 'Dashboard';
+    $: if ($dashboardState.currentOffice !== null) selectedOffice = $dashboardState.currentOffice;
     $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
-    $: currName = $allOffices[selectedOffice] ?? null;
+    $: currName = $allOffices[selectedOffice == null ? 0 : selectedOffice] ?? null;
 
-    $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
@@ -27,7 +28,7 @@
         {#if user !== undefined}
             <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
         {/if}
-        <p>{currentPage} ({selectedOffice})</p>
+        <p>{currentPage} {selectedOffice == null ? '' : `(${currName})`}</p>
         <slot></slot>
     </span>
     <span id="middle-logo">

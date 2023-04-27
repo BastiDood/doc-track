@@ -5,45 +5,45 @@
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import Camera from '../../components/icons/Camera.svelte';
     import Search from '../../components/icons/Search.svelte';
-    import { ButtonType, IconColor, InputType } from '../../components/types.ts';
+    import { ButtonType, InputType } from '../../components/types.ts';
 
     // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
-    let docTrackingNumber = '1234567890';
+    const docTrackingNumber = '1234567890';
     
     // TODO: Populate based on API calls (SPRINT 4)
-    let docTitle = 'Document';
+    const docTitle = 'Document';
 
-    let fileUrl = "https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2020/10/Dropping-Form.pdf";
-    let fileName = "Drop Form.pdf";
+    const fileUrl = 'https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2020/10/Dropping-Form.pdf';
+    const fileName = 'Drop Form.pdf';
 
-    let trail = [ // Contains dictionary with keys Office, In, Out, Elapsed Time, Action, Remarks
+    const trail = [ // Contains dictionary with keys Office, In, Out, Elapsed Time, Action, Remarks
         {
-            "Office": "Department of Computer Science",
-            "In": "2021-04-20 12:00:00", // Should be a DateTime object (SPRINT 4)
-            "Out": "2021-04-20 12:00:00",
-            "Elapsed Time": "30s",
-            "Action": "SENT",
-            "Remarks": "Done"
+            'Office': 'Department of Computer Science',
+            'In': '2021-04-20 12:00:00', // Should be a DateTime object (SPRINT 4)
+            'Out': '2021-04-20 12:00:00',
+            'Elapsed Time': '30s',
+            'Action': 'SENT',
+            'Remarks': 'Done',
         },
         { // College of Engineering
-            "Office": "College of Engineering",
-            "In": "2021-04-20 12:00:00",
-            "Out": "",
-            "Elapsed Time": "",
-            "Action": "RECEIVED",
-            "Remarks": "Processing"
-        }
+            'Office': 'College of Engineering',
+            'In': '2021-04-20 12:00:00',
+            'Out': '',
+            'Elapsed Time': '',
+            'Action': 'RECEIVED',
+            'Remarks': 'Processing',
+        },
     ];
 
-    let overview = {
-        "Document Title": "Document",
-        "Document Tracking Number": docTrackingNumber,
-        "Document Type": "Letter",
-        "Document For": "Distribution/disubursement",
-        "Document Remarks": "LGTM!",
-        "Originating Office": "Department of Computer Science", // TODO: Given ID, get office name
-        "Current Office": "College of Engineering", 
-        "Document Status": "SENT",
+    const overview = {
+        'Document Title': 'Document',
+        'Document Tracking Number': docTrackingNumber,
+        'Document Type': 'Letter',
+        'Document For': 'Distribution/disubursement',
+        'Document Remarks': 'LGTM!',
+        'Originating Office': 'Department of Computer Science', // TODO: Given ID, get office name
+        'Current Office': 'College of Engineering',
+        'Document Status': 'SENT',
     };
 </script>
 
@@ -54,12 +54,12 @@
 
 <main>
     
-    <TopBar show={true} currentPage={"Tracking: " + {docTrackingNumber}}> 
+    <TopBar show={true} currentPage={`Tracking: ${docTrackingNumber}`}> 
         <nav>
-            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label=""/>
-            <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
-            <a href="/track">
-                <Button type={ButtonType.Primary}><Search alt="Search specified tracking number. "/></Button>
+            <TextInput type={InputType.Primary} placeholder='Enter tracking number here...' label=''/>
+            <Button type={ButtonType.Primary}><Camera alt='Take/select an image.' /></Button>
+            <a href='/track'>
+                <Button type={ButtonType.Primary}><Search alt='Search specified tracking number. '/></Button>
             </a>
         </nav>
     </TopBar>
@@ -71,7 +71,7 @@
     <section>
         <table>
             <tr>
-                <td><p class="header-color"><b>Overview</b></p></td>
+                <td><p class='header-color'><b>Overview</b></p></td>
                 <td></td>
             </tr>
             {#each Object.keys(overview) as key}
@@ -83,19 +83,19 @@
         </table>
         <br>
         <table>
-            <th class="table-title">Files</th>
+            <th class='table-title'>Files</th>
             <tr><a href={fileUrl}>{fileName}</a></tr>
         </table>
         <br>
         <table>
-            <th class="table-title">History</th>
+            <th class='table-title'>History</th>
             <tr><b>Office</b></tr>
             <tr><b>Remarks</b></tr>
             <tr><b>Date</b></tr>
         </table>
         <br>
         <table>
-            <th class="table-title">Paper Trail</th>
+            <th class='table-title'>Paper Trail</th>
             <tr>
                 {#each Object.keys(trail[0]) as key}
                     <td><b>{key}</b></td>

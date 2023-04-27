@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
     import { assert } from '../../../../assert.ts';
 
     import { Office as OfficeModel } from '../../../../../../model/src/office.ts';
@@ -14,7 +14,7 @@
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
 
-    let curEmail: string = "";
+    let curEmail = '';
     let currId: OfficeModel['id'] | null = null;
     let currName: OfficeModel['name'] | null = null;
 
@@ -49,7 +49,7 @@
             await Invite.add({
                 email: curEmail,
                 office: currId,
-                permission: permsVal
+                permission: permsVal,
             });
             await allOffices.reload?.();
 
@@ -58,23 +58,23 @@
             // eslint-disable-next-line require-atomic-updates
             currName = null;
 
-            this.reset();
+            this.submit();
         } catch (err) {
             // TODO: No permission handler
             alert(err);
         }
     }
-    let permStrings = [
-        "Get Offices",
-        "Create Office",
-        "Update Office",
-        "Update User",
-        "Create Category",
-        "Update Category",
-        "Delete Category",
-        "Activate Category",
-        "View Metrics"
-    ]
+    const permStrings = [
+        'Get Offices',
+        'Create Office',
+        'Update Office',
+        'Update User',
+        'Create Category',
+        'Update Category',
+        'Delete Category',
+        'Activate Category',
+        'View Metrics',
+    ];
 
 </script>
 
@@ -90,18 +90,18 @@
                 {#if currName !== null}
                     <label>
                         Email
-                        <input type="email" placeholder={"example@up.edu.ph"} required={true} pattern="^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$" bind:value={curEmail} />
+                        <input type='email' placeholder={'example@up.edu.ph'} required={true} pattern='^[a-zA-Z0-9._%+-]+@up[d]?.edu.ph$' bind:value={curEmail} />
                     </label>
                     <br>
+                    <p><b>Permissions:</b></p>
                     {#each permStrings as perm, i}
-                        <br>
                         <label>
-                            <input type="checkbox" name="perms" value={2**i} />
+                            <input type='checkbox' name='perms' value={2 ** i} />
                             {perm}
                         </label>
+                        <br>
                     {/each}
-                    <br>
-                    <Button submit><Checkmark alt="Invite User"/>Invite User</Button> 
+                    <Button submit><Checkmark alt='Invite User'/>Invite User</Button> 
                 {/if}
         </form>
     {/if}

@@ -37,7 +37,7 @@
     let showCreateDocument = false;
 
     // Receiving document, invites
-    let showInviteForm  = false;
+    let showInviteForm = false;
 
     let insertSnapshotAction: SnapshotAction | null = null;
     let currentContext: RowEvent | null = null;
@@ -96,10 +96,6 @@
 </Button>
 <Button on:click={() => (showCreateDocument = true)}>
     Create a New Document
-</Button>
-
-<Button on:click={() => (showInviteForm = true)}>
-    Invite User
 </Button>
 
 <Button on:click={() => (showInviteForm = true)}>

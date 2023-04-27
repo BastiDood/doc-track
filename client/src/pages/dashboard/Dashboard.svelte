@@ -11,17 +11,18 @@
 
     let toggleDrawer = false;
     let currentPage = 'Dashboard';
+    let currentOffice = null;
     $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
 </script>
 
 <svelte:head>
-    <title>{currentPage}</title>
+    <title>{currentPage} {currentOffice == null ? '' : `(${currentOffice})`}</title>
 </svelte:head>
 
 {#await currentUser.load()}
     <p>Loading user...</p>
 {:then user}
-    <TopBar {user} bind:show={toggleDrawer} bind:currentPage={currentPage} />
+    <TopBar {user} bind:show={toggleDrawer} bind:currentPage={currentPage} bind:currName={currentOffice} />
     <main on:click={() => (toggleDrawer &&= false)} on:keydown>
         {#await register()}
             <p>Waiting for service worker...</p>
