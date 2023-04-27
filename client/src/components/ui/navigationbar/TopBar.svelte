@@ -22,8 +22,10 @@
         {/if}
         <p>{currentPage}</p>
         <slot></slot>
-        </span>
-    <p>DocTrack</p>
+    </span>
+    <span id="middle-logo">
+        DocTrack
+    </span>
     <nav id="profilenav">
         {#if user !== undefined}
             <span>{user.name}</span>
@@ -36,12 +38,6 @@
 
 <style>
     @import url('../../../pages/vars.css');
-
-    p {
-        font-size: var(--large);
-        font-weight: bold;
-        color: white;
-    }
 
     span {
         color: white;
@@ -62,6 +58,12 @@
         display: flex;
         gap: var(--spacing-small);
         align-items: center;
+    }
+
+    #middle-logo {
+        font-size: var(--large);
+        font-weight: bold;
+        color: white;
     }
 
     #navcontainer {

@@ -28,7 +28,6 @@
                 <a href="/track">
                     <Button type={ButtonType.Primary}><Search alt="Search specified tracking number. "/></Button>
                 </a>
-                
             </div>
         </div>
     {/await}
