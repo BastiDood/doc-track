@@ -22,7 +22,7 @@
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
 
     // Modals
-    import InviteForm from '../../../components/ui/forms/office/Invite.svelte';
+    import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
     import RevokeInvite from '../../../components/ui/forms/office/RevokeInvite.svelte';
 
     let showContextMenu = false;
