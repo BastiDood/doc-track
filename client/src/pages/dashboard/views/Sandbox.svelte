@@ -71,7 +71,6 @@
 </script>
 
 <h1>Sandbox</h1>
-<h2> Current Office ID: {currentOffice}</h2>
 <Button on:click={() => (showPermission = true)}>
     Edit Global Permissions
 </Button>
@@ -151,21 +150,25 @@
     <RevokeInvite />
 </Modal>
 
-{#if currentOffice !== null && currentContext !== null && showInsertSnapshot}
-    <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
+<Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
+    {#if currentOffice === null || currentContext === null || showInsertSnapshot}
+        No office selected.
+    {:else}
         <InsertSnapshot
             payload={currentContext}
             userOfficeId={currentOffice}
             statusIndex={insertSnapshotAction}
         /> 
-    </Modal>
-{/if}
+    {/if}
+</Modal>
 
-{#if currentOffice !== null }
-    <Modal title="Create Document" bind:showModal={showCreateDocument}>
+<Modal title="Create Document" bind:showModal={showCreateDocument}>
+    {#if currentOffice === null }
+        No office selected.
+    {:else}
         <CreateDocument />
-    </Modal>
-{/if}
+    {/if}
+</Modal>
 <div>
     {#each documentTest as doc}
         <InboxRow
