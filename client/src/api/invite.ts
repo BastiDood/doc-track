@@ -52,4 +52,22 @@ export namespace Invite {
             default: throw new UnexpectedStatusCode;
         }
     }
+
+    export async function getInvitedList(office: string): Promise<Invitation[]> {
+        const res = await fetch(`/api/invite?office=${office}`, {
+            credentials: 'same-origin',
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+        switch (res.status) {
+            case StatusCodes.OK: return InvitationSchema.array().parse(await res.json());
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
 }

@@ -35,13 +35,12 @@
         // Checks validity of office
         if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
-        if (emailInput.value === currName) return;
+
 
         try {
-            await Invite.add({
+            await Invite.revoke({
                 email: curEmail,
                 office: currId,
-                permission: permsVal,
             });
 
             // eslint-disable-next-line require-atomic-updates
@@ -68,6 +67,18 @@
             <br />
             <p>Office ID: {currId}</p>
             {#if currName !== null}
+                <section>
+                    {#await Invite.getInvitedList(currId)}
+                        Loading invites...
+                    {:then invites}
+                        {#each invites as invite (invite.email)}
+                            <p>{invite.email}</p>
+                        {:else}
+                            No invites available
+                        {/each}
+                    {/await}
+                </section>
+                <br>
                 <Button submit><Checkmark alt='Revoke invite'/>Revoke Invite</Button> 
             {/if}
         </form>
@@ -77,9 +88,9 @@
 <style>
     @import url('../../../../pages/vars.css');
     
-    input {
-        border: var(--primary-color) 2px solid;
-        border-radius: var(--border-radius);
-        padding: var(--spacing-small) var(--spacing-normal);
+    section {
+        overflow-y: scroll;
+        border: var(--spacing-tiny) solid;
+        height: 50vh;
     }
 </style>

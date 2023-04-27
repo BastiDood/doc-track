@@ -22,7 +22,8 @@
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
 
     // Modals
-    import InviteForm from '../../../components/ui/forms/office/InviteForm.svelte';
+    import InviteForm from '../../../components/ui/forms/office/Invite.svelte';
+    import RevokeInvite from '../../../components/ui/forms/office/RevokeInvite.svelte';
 
     let showContextMenu = false;
     let showCreateOffice = false;
@@ -38,6 +39,7 @@
 
     // Receiving document, invites
     let showInviteForm = false;
+    let showRevokeInvite = false;
 
     let insertSnapshotAction: SnapshotAction | null = null;
     let currentContext: RowEvent | null = null;
@@ -102,6 +104,10 @@
     Invite User
 </Button>
 
+<Button on:click={() => (showRevokeInvite = true)}>
+    Revoke Invite
+</Button>
+
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
     <RenameCategory/>
 </Modal>
@@ -138,6 +144,10 @@
 
 <Modal title="Invite User" bind:showModal={showInviteForm}>
     <InviteForm />
+</Modal>
+
+<Modal title="Revoke Invite" bind:showModal={showRevokeInvite}>
+    <RevokeInvite />
 </Modal>
 
 {#if currentOffice !== null && currentContext !== null && showInsertSnapshot}

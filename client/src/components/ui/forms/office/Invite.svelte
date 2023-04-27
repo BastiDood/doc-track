@@ -35,7 +35,6 @@
         // Checks validity of office
         if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
-        if (emailInput.value === currName) return;
 
         try {
             await Invite.add({
