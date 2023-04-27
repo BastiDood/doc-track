@@ -18,7 +18,7 @@
 
     async function handleSubmit(this: HTMLFormElement) {
         // Computes permissions
-        let permsVal : number = 0;
+        let permsVal = 0;
         const permissionSelect = this.elements.namedItem('perms');
         assert(permissionSelect instanceof RadioNodeList);
         permissionSelect.forEach(perm => {

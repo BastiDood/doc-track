@@ -62,7 +62,7 @@
                         Loading invites...
                     {:then invites}
                         {#each invites as invite (invite.email)}
-                            <div class="select-mail" on:click={() => {curEmail = invite.email}} on:keydown>
+                            <div class="select-mail" on:click={() => {curEmail = invite.email;}} on:keydown>
                                 <p>{invite.email} (Permission: {invite.permission.toString(2).padStart(9, '0')})</p>
                             </div>
                         {:else}

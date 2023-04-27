@@ -133,10 +133,9 @@ export class Database {
 
     /** Gets the invitation list given office and returns the list of invited emails */
     async getInvitationList(office: Office['id']): Promise<Invitation[]> {
-        let emails = [];
+        const emails = [];
         const { rows } = await this.#client
             .queryObject`SELECT * FROM invitation WHERE office = ${office}`;
-        assert(rows.length > 0);
         for (const row of rows) {
             emails.push(InvitationSchema.extend({ permission: z.string().transform(p => parseInt(p, 2)) }).parse(row));
         }
