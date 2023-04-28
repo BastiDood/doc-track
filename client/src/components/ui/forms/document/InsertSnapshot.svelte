@@ -20,7 +20,6 @@
     let docId: SnapshotModel['doc'] = payload.id;
 
     let destOfficeId: SnapshotModel['target'] | null = null;
-    
 
     async function handleSubmit(this: HTMLFormElement) {
         const node = this.elements.namedItem('snap-remark');
@@ -60,15 +59,15 @@
 </p>
 
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-    <TextInput
-        required
-        name="snap-docId"
-        label="Document Barcode ID: "
-        bind:value={docId}
-    />
+    Document Barcode ID: {docId}
     <br>
-    Set Target Office:
-    <OfficeSelect offices={$allOffices} bind:oid={destOfficeId}/>
+    {#if status == Status.Terminate || status == Status.Receive}
+        Set Target Office: This Office.
+    {:else}
+        Set Target Office:
+        <OfficeSelect offices={$allOffices} bind:oid={destOfficeId}/>
+    {/if}
+    
     <br>
     Set Status As:
     <select required bind:value={status}>
