@@ -6,6 +6,7 @@
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { Office } from '../../../../../../model/src/office.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
     import { ContextPayload, IconColor } from '../../../types.ts';
 
     import OfficeSelect from '../../OfficeSelect.svelte';
@@ -15,7 +16,7 @@
     
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
-    export let status: Status | undefined;
+    export let status: Status | null;
     let docId: SnapshotModel['doc'] = payload.id;
 
     let destOfficeId: SnapshotModel['target'] | null = null;
@@ -26,10 +27,14 @@
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
     
-        if (setStatusTo === Status.Receive) destOfficeId = userOfficeId;
-        
-        assert(destOfficeId !== null);
+        if (status === Status.Receive) destOfficeId = userOfficeId;
+        if (status === Status.Terminate)
+            destOfficeId = null;
+        else
+            assert(destOfficeId !== null);
+    
         assert(userOfficeId !== null);
+        assert(status !== null);
         assert(docId);
 
         try {
@@ -40,7 +45,8 @@
                 target: destOfficeId,
             });
 
-            // TODO: Refresh the inbox store
+            await documentInbox.reload?.();
+            await documentOutbox.reload?.();
             // TODO: Exit out of the modal.
         } catch (err) {
             // TODO: No permission handler
