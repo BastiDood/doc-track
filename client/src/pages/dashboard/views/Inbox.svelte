@@ -97,16 +97,16 @@
     {/await}
     
     {#if currentContext?.ty === RowType.Inbox}
-    <InboxContext bind:show={showInboxContextMenu} payload={currentContext} 
-        on:sendDocument={contextMenuHandler}
-        on:terminateDocument={contextMenuHandler}   
-    />
+        <InboxContext bind:show={showInboxContextMenu} payload={currentContext} 
+            on:sendDocument={contextMenuHandler}
+            on:terminateDocument={contextMenuHandler}   
+        />
     {/if}
     {#if currentContext?.ty === RowType.AcceptDocument}
-    <AcceptContext bind:show={showAcceptContextMenu} payload={currentContext} 
-        on:acceptDocument={contextMenuHandler}
-        on:declineDocument={contextMenuHandler}   
-    />
+        <AcceptContext bind:show={showAcceptContextMenu} payload={currentContext} 
+            on:acceptDocument={contextMenuHandler}
+            on:declineDocument={contextMenuHandler}   
+        />
     {/if}
     <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
         {#if currentOffice === null || currentContext === null || !showInsertSnapshot}

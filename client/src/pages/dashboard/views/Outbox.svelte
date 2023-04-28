@@ -4,7 +4,6 @@
     import { dashboardState } from '../stores/DashboardState';
     import { documentOutbox } from '../stores/DocumentStore';
     
-
     import { IconSize, Events, RowType, ContextPayload } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
@@ -59,7 +58,7 @@
             Register and Stage a New Document
         </Button>
 
-        <h2> Staged Registered Documents </h2>
+        <h2>Staged Registered Documents</h2>
         {#if $documentOutbox.ready.length === 0 }
             No staged registered documents.
         {:else}
@@ -71,9 +70,9 @@
                 />
             {/each}
         {/if}
-        <h2> Sent Documents </h2>
+        <h2>Sent Documents</h2>
         {#if $documentOutbox.pending.length === 0 }
-        No documents pending in outbox.
+            No documents pending in outbox.
         {:else}
             {#each $documentOutbox.pending as pending (pending.doc)}
                 <SendRow iconSize = {IconSize.Large} {...pending} />
