@@ -4,7 +4,7 @@
     export let oid: number | null = null;
 </script>
 
-<select bind:value={oid}>
+<select required bind:value={oid}>
     {#each Object.entries(offices) as [id, office] (id)}
         <option value={id}>{office}</option>
     {/each}
