@@ -6,9 +6,11 @@
     export let send: MetricsModel['Send'];
     export let receive: MetricsModel['Receive'];
     export let terminal: MetricsModel['Terminate'];
+
+    export let selectedMetrics: string;
 </script>
 
-<p>You successfully fetched the metrics as {$userSession?.email}</p>
+<p>You successfully fetched the {selectedMetrics} as {$userSession?.email}</p>
 <ul>
     <li>Registerd: {register}</li>
     <li>Send: {send}</li>
