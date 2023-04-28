@@ -112,7 +112,7 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
  * - Accepts the target office ID via the `office` query parameter.
  *
  * # Outputs
- * - `200` => returns array of {@linkcode InboxEntry} as JSON in the {@linkcode Response} body
+ * - `200` => returns a {@linkcode AllInbox} object as JSON in the {@linkcode Response} body.
  * - `400` => provided office ID or document information is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
@@ -160,6 +160,20 @@ export async function handleGetInbox(pool: Pool, req: Request, params: URLSearch
     }
 }
 
+/**
+ * Gets the outbox of the current office.
+ *
+ * # Inputs
+ * - Requires a valid session ID.
+ * - Accepts the target office ID via the `office` query parameter.
+ *
+ * # Outputs
+ * - `200` => returns a {@linkcode AllOutbox} object as JSON in the {@linkcode Response} body.
+ * - `400` => provided office ID or document information is unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `406` => content negotiation failed
+ */
 export async function handleGetOutbox(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
