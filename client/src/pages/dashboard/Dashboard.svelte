@@ -2,7 +2,7 @@
     import Router from 'svelte-spa-router';
 
     import { currentPage } from './stores/CurrentPage.ts';
-    import { currentUser, userOffices } from './stores/UserStore.ts';
+    import { currentUser } from './stores/UserStore.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
