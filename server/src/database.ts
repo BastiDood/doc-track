@@ -11,7 +11,8 @@ import {
     type AllOffices,
     type FullSession,
     type GeneratedBatch,
-    type InboxEntry,
+    type AllInbox,
+    type AllOutbox,
     type MinBatch,
     type PaperTrail,
     AllCategoriesSchema,
@@ -24,6 +25,7 @@ import {
     MinBatchSchema,
     PaperTrailSchema,
 } from '~model/api.ts';
+
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
@@ -376,8 +378,8 @@ export class Database {
         return PaperTrailSchema.array().parse(rows);
     }
 
-    async getInbox(oid: Office['id']): Promise<AllInboxSchema> {
-        const { rows } = await this.#client
+    async getInbox(oid: Office['id']): Promise<AllInbox> {
+        const { rows: [first, ...rest] } = await this.#client
             .queryObject`
             WITH snap AS (
                 SELECT doc, MAX(creation) as creation, status, target FROM snapshot
@@ -396,11 +398,12 @@ export class Database {
                 'pending', coalesce((SELECT info FROM tup WHERE status = 'Send'),'[]'),
                 'accept', coalesce((SELECT info FROM tup WHERE status = 'Receive'),'[]')
             ) AS result`;
-        return AllInboxSchema.array().parse(rows);
+        assertStrictEquals(rest.length, 0)
+        return z.object({ result: AllInboxSchema }).parse(first).result;
     }
 
-    async getOutbox(oid: Office['id']): Promise<AllOutboxSchema> {
-        const { rows } = await this.#client
+    async getOutbox(oid: Office['id']): Promise<AllOutbox> {
+        const { rows : [first, ...rest] } = await this.#client
             .queryObject`
             WITH mostRecentSnaps AS (
                 SELECT doc, MAX(creation) as creation, status, target FROM snapshot
@@ -430,7 +433,8 @@ export class Database {
                 'pending', coalesce((SELECT info FROM backwardResolve WHERE status = 'Send'), '[]')
             ) as result
             `;
-        return AllOutboxSchema.array().parse(rows);
+        assertStrictEquals(rest.length, 0)
+        return z.object({ result: AllOutboxSchema }).parse(first).result;
     }
     /**
      * # Assumption
