@@ -13,12 +13,8 @@
     export let target: number | null;
 
     $: target ??= 0;
-    
 </script>
 
-<RowTemplate
-    title={`${title} ID: ${doc} Category: ${category} Sent to Office: ${target}`}
-    {iconSize} 
->
+<RowTemplate {iconSize} title={`${title} ID: ${doc} Category: ${category} Sent to Office: ${target}`}>
     <DocumentExport size={iconSize} slot="icon" alt ="An sent document" />
 </RowTemplate>

@@ -14,7 +14,6 @@
     import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
     import RemoveCategory from '../../../components/ui/forms/category/RemoveCategory.svelte';
     import ActivateCategory from '../../../components/ui/forms/category/ActivateCategory.svelte';
-    import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import SubscribePushNotification from '../../../components/ui/forms/pushnotification/SubscribePushNotification.svelte';
     import UnsubscribePushNotification from '../../../components/ui/forms/pushnotification/UnsubscribePushNotification.svelte';
@@ -32,7 +31,6 @@
     let showEditCategory = false;
     let showRemoveCategory = false;
     let showActivateCategory = false;
-    const showInsertSnapshot = false;
     let showCreateDocument = false;
     let showSubscribePushNotification = false;
     let showUnsubscribePushNotification = false;
@@ -96,14 +94,14 @@
     </Button>
 {/if}
 
-<Button on:click={async() => {
+<Button on:click={async () => {
     await documentInbox.reload?.();
     console.log($documentInbox);
 }}>
     Get Inbox Of Selected Office
 </Button>
 
-<Button on:click={async() => {
+<Button on:click={async () => {
     await documentOutbox.reload?.();
     console.log($documentOutbox);
 }}>
@@ -140,11 +138,11 @@
 </Modal>
 
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>
-    <NewOffice/>
+    <NewOffice />
 </Modal>
 
 <Modal title="Edit Office" bind:showModal={showEditOffice}>
-    <EditOffice/>
+    <EditOffice />
 </Modal>
 
 <Modal title="Invite User" bind:showModal={showInviteForm}>
@@ -164,7 +162,7 @@
 </Modal>
 
 <Modal title="Subscribe to Push Notification" bind:showModal={showSubscribePushNotification}>
-    <SubscribePushNotification on:subscribe={handleIsSubscribed}/>
+    <SubscribePushNotification on:subscribe={handleIsSubscribed} />
 </Modal>
 
 <Modal title="Unsubscribe to Push Notification" bind:showModal={showUnsubscribePushNotification}>

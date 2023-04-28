@@ -424,7 +424,7 @@ Deno.test('full OAuth flow', async t => {
                 {
                     evaluator: USER.id,
                     remark: 'Filler document.',
-                    target: office
+                    target: office,
                 },
             );
             assertInstanceOf(result, Date);

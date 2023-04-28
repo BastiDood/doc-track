@@ -83,7 +83,7 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
         const barcodeResult: Date | BarcodeAssignmentError = await db.assignBarcodeToDocument(doc, {
             remark,
             evaluator: staff.user_id,
-            target: oid
+            target: oid,
         });
 
         if (barcodeResult instanceof Date) {
