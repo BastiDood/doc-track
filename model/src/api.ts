@@ -69,6 +69,18 @@ export const OutboxEntrySchema = SnapshotSchema
 
 export type OutboxEntry = z.infer<typeof OutboxEntrySchema>
 
+export const AllInboxSchema = z.object({
+    pending: InboxEntrySchema.array(),
+    accept: InboxEntrySchema.array()
+})
+export type AllInbox = z.infer<typeof AllInboxSchema>
+
+export const AllOutboxSchema = z.object({
+    ready: OutboxEntrySchema.array(),
+    accept: OutboxEntrySchema.array()
+})
+export type AllOutbox = z.infer<typeof AllOutboxSchema>
+
 export const AllOfficesSchema = z.record(OfficeSchema.shape.id, OfficeSchema.shape.name);
 export type AllOffices = z.infer<typeof AllOfficesSchema>;
 
