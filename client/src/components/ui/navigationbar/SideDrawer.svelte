@@ -21,11 +21,8 @@
 
     $: if (selectedOffice !== null ) {
         dashboardState.setOffice(selectedOffice);
-        // eslint-disable-next-line no-unused-expressions
-        async() => {
-            await documentInbox.reload?.();
-            await documentOutbox.reload?.();
-        };
+        documentInbox.reload?.();
+        documentOutbox.reload?.();
     }
 </script>
 
