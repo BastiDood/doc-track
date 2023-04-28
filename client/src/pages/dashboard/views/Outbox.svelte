@@ -62,7 +62,7 @@
         {#each $documentOutbox.ready as register (register.doc)}
             <RegisterRow 
                 {...register}
-                iconSize = {IconSize.Large} 
+                iconSize={IconSize.Large} 
                 on:overflowClick = {overflowClickHandler}
             />
         {/each}
@@ -77,7 +77,9 @@
     {/if}
     
     {#if currentContext?.ty === RowType.Inbox}
-        <InboxContext bind:show={showContextMenu} payload={currentContext} 
+        <InboxContext
+            bind:show={showContextMenu}
+            payload={currentContext} 
             on:sendDocument={contextMenuHandler}
             on:terminateDocument={contextMenuHandler}   
         />
