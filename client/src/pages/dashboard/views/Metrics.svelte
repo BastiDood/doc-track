@@ -8,6 +8,7 @@
     import Download from '../../../components/icons/Download.svelte';
     import PrintMetrics from '../../../components/ui/forms/metrics/PrintMetrics.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
+    import Select from '../../../components/ui/Select.svelte';
 
     let currentOffice: Office['id'] | null = null;
 
@@ -20,28 +21,38 @@
     let terminal: MetricsModel['Terminate'] = 0;
 
     let showPrintMetrics = false;
+    let selectedMetrics: string;
+    let metric: MetricsModel | null = null;
     
     async function loadMetrics() {
         if (currentOffice === null) return;
-        let localMetric = await Metrics.generateLocalSummary(currentOffice);
-        register = localMetric.Register === undefined ? 0 : localMetric.Register;
-        send = localMetric.Send  === undefined ? 0 : localMetric.Send;
-        receive = localMetric.Receive  === undefined ? 0 : localMetric.Receive;
-        terminal = localMetric.Terminate  === undefined ? 0 : localMetric.Terminate;
+
+        if (selectedMetrics === 'User Summary') metric = await Metrics.generateUserSummary();
+        else if (selectedMetrics === 'Office Summary') metric = await Metrics.generateLocalSummary(currentOffice);
+        else if (selectedMetrics === 'Global Summary') metric = await Metrics.generateGlobalSummary();
+        else return;
+
+        register = metric.Register ?? 0;
+        send = metric.Send  ?? 0;
+        receive = metric.Receive ?? 0;
+        terminal = metric.Terminate ?? 0;
     }
 
     $: {
         currentOffice;
+        selectedMetrics;
         loadMetrics();
     }
 </script>
 
 {#if currentOffice === null}
-    You must select an office before accessing the Barcodes page.
+    You must select an office before accessing the Metrics page.
 {:else}
+    <h1>Metrics</h1>
     <main>
         <div class='header'>
             <h3>Report</h3>
+            <Select bind:value={selectedMetrics} options={['User Summary', 'Office Summary', 'Global Summary']} index={0} />
             <Button on:click={() => showPrintMetrics = true}>
                 <Download alt='download' />Print Report
             </Button>
@@ -67,7 +78,7 @@
         </table>
 
         <Modal title="Print Metrics" bind:showModal={showPrintMetrics}>
-            <PrintMetrics register={register} send={send} receive={receive} terminal={terminal} />
+            <PrintMetrics selectedMetrics={selectedMetrics} register={register} send={send} receive={receive} terminal={terminal} />
         </Modal>
     </main>
 {/if}
@@ -83,10 +94,13 @@
     .header {
         display: flex;
         align-items: baseline;
+        justify-content: space-between;
+        width: 50vw;
     }
 
     table {
         border-collapse: collapse;
+        width: 50vw;
     }
 
     table, td {
