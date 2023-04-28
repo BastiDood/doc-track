@@ -1,20 +1,31 @@
-import { asyncDerived } from "@square/svelte-store";
-import { dashboardState } from "./DashboardState.ts";
-import { Document } from "../../../api/document";
+import { asyncDerived } from '@square/svelte-store';
+import { dashboardState } from './DashboardState.ts';
+import { Document } from '../../../api/document';
 
-const fetchDocuments = asyncDerived(
+export const documentInbox = asyncDerived(
     dashboardState,
     $dashboardState => {
         const { currentOffice } = $dashboardState;
-        console.log(currentOffice)
         return currentOffice === null
-            ? Promise.resolve(null)
+            ? Promise.resolve({
+                pending: [],
+                accept: [],
+            })
             : Document.getInbox(currentOffice);
     },
-    {reloadable: true}
-)
+    { reloadable: true }
+);
 
-export const documentStore = {
-    reload: fetchDocuments?.reload,
-    subscribe: fetchDocuments.subscribe,
-}
+export const documentOutbox = asyncDerived(
+    dashboardState,
+    $dashboardState => {
+        const { currentOffice } = $dashboardState;
+        return currentOffice === null
+            ? Promise.resolve({
+                pending: [],
+                ready: [],
+            })
+            : Document.getOutbox(currentOffice);
+    },
+    { reloadable: true }
+);
