@@ -9,35 +9,32 @@
     import { ContextPayload, IconColor } from '../../../types.ts';
 
     import OfficeSelect from '../../OfficeSelect.svelte';
-    import Select from '../../Select.svelte';
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
     
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
-    export let statusIndex: number | null = null;
+    export let status: Status | undefined;
     let docId: SnapshotModel['doc'] = payload.id;
-    let setStatusTo: SnapshotModel['status'] | null = null;
+
     let destOfficeId: SnapshotModel['target'] | null = null;
     
-    const statusArr = [Status.Send, Status.Receive, Status.Terminate];
-    $: if (statusIndex) setStatusTo = statusArr[statusIndex] ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
         const node = this.elements.namedItem('snap-remark');
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
     
+        assert(status !== undefined);
         assert(destOfficeId !== null);
-        assert(setStatusTo !== null);
         assert(userOfficeId !== null);
         assert(docId);
 
         try {
             await Snapshot.insert( userOfficeId,{
                 doc: docId,
-                status: setStatusTo,
+                status,
                 remark: node.value,
                 target: destOfficeId,
             });
@@ -67,7 +64,11 @@
     <OfficeSelect offices={$allOffices} bind:oid={destOfficeId}/>
     <br>
     Set Status As:
-    <Select options={statusArr} bind:index={statusIndex} />
+    <select required bind:value={status}>
+        <option value={Status.Send}>Send</option>
+        <option value={Status.Receive}>Receive</option>
+        <option value={Status.Terminate}>Terminate</option>
+    </select>
     <br>
     <TextInput
         name="snap-remark"

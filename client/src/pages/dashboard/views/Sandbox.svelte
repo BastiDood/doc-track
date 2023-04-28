@@ -183,7 +183,7 @@
         <InsertSnapshot
             payload={currentContext}
             userOfficeId={currentOffice}
-            statusIndex={insertSnapshotAction}
+            status={insertSnapshotAction}
         /> 
     {/if}
 </Modal>
