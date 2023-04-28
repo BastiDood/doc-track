@@ -12,7 +12,6 @@
 
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | undefined;
-    $: currName = $categoryList?.active.find(cat => cat.id === currId)?.name;
 
     async function handleSubmit(this: HTMLFormElement) {
         if (currId === null || typeof currName === 'undefined') return;
