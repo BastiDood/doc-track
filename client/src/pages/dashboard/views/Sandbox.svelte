@@ -1,13 +1,9 @@
 <script lang="ts">
-    import { documentTest } from './sample.ts';
-    import { RowEvent, RowType, Events, SnapshotAction, IconSize } from '../../../components/types.ts';
     import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
     import { currentUser } from '../stores/UserStore.ts';
     import { allOffices } from '../stores/OfficeStore.ts';
 
-    import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
-    import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
@@ -26,9 +22,8 @@
     // Modals
     import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
     import RevokeInvite from '../../../components/ui/forms/office/RevokeInvite.svelte';
-    import { documentStore } from '../stores/DocumentStore.ts';
+    import { documentInbox, documentOutbox } from '../stores/DocumentStore.ts';
 
-    let showContextMenu = false;
     let showCreateOffice = false;
     let showEditOffice = false;
     let showLocalPermission = false;
@@ -37,7 +32,7 @@
     let showEditCategory = false;
     let showRemoveCategory = false;
     let showActivateCategory = false;
-    let showInsertSnapshot = false;
+    const showInsertSnapshot = false;
     let showCreateDocument = false;
     let showSubscribePushNotification = false;
     let showUnsubscribePushNotification = false;
@@ -45,34 +40,11 @@
     // Receiving document, invites
     let showInviteForm = false;
     let showRevokeInvite = false;
-
-    let insertSnapshotAction: SnapshotAction | null = null;
-    let currentContext: RowEvent | null = null;
     let currentOffice: Office['id'] | null = null;
     let isSubscribed = false;
 
     // eslint-disable-next-line prefer-destructuring
     $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
-    
-    function overflowClickHandler(e: CustomEvent<RowEvent>) {
-        if (!e.detail) return;
-        currentContext = e.detail;
-        showContextMenu = true;
-    }
-
-    function contextMenuHandler(e: CustomEvent<RowEvent>) {
-        if (!e.detail) return;
-        switch (e.type) {
-            case Events.SendDocument:
-                insertSnapshotAction = SnapshotAction.Send;
-                break;
-            case Events.TerminateDocument:
-                insertSnapshotAction = SnapshotAction.Terminate;
-                break;
-            default: break;
-        }
-        if (currentOffice) showInsertSnapshot = true;
-    }
 
     function handleIsSubscribed(e: CustomEvent<boolean>) {
         isSubscribed = e.detail;
@@ -124,11 +96,18 @@
     </Button>
 {/if}
 
-<Button on:click={() => {
-    documentStore.reload()
-    console.log($documentStore)
+<Button on:click={async() => {
+    await documentInbox.reload?.();
+    console.log($documentInbox);
 }}>
     Get Inbox Of Selected Office
+</Button>
+
+<Button on:click={async() => {
+    await documentOutbox.reload?.();
+    console.log($documentOutbox);
+}}>
+    Get Outbox Of Selected Office
 </Button>
 
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
@@ -184,18 +163,6 @@
     {/if}
 </Modal>
 
-<Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
-    {#if currentOffice === null || currentContext === null || showInsertSnapshot}
-        No office selected.
-    {:else}
-        <InsertSnapshot
-            payload={currentContext}
-            userOfficeId={currentOffice}
-            status={insertSnapshotAction}
-        /> 
-    {/if}
-</Modal>
-
 <Modal title="Subscribe to Push Notification" bind:showModal={showSubscribePushNotification}>
     <SubscribePushNotification on:subscribe={handleIsSubscribed}/>
 </Modal>
@@ -211,27 +178,3 @@
         <CreateDocument />
     {/if}
 </Modal>
-<div>
-    {#each documentTest as doc}
-        <InboxRow
-            id={doc.id}
-            category={doc.category}
-            title={doc.title} 
-            on:overflowClick={overflowClickHandler}
-            iconSize={IconSize.Large}
-        />
-    {/each}
-</div>
-
-{#if currentContext?.ty === RowType.Inbox}
-    <InboxContext bind:show={showContextMenu} payload={currentContext} 
-        on:sendDocument={contextMenuHandler}
-        on:terminateDocument={contextMenuHandler}   
-    />
-{/if}
-
-<style>
-    h1 {
-        margin: 0;
-    }
-</style>
