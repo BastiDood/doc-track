@@ -143,11 +143,19 @@
 </Modal>
 
 <Modal title="Invite User" bind:showModal={showInviteForm}>
-    <InviteForm />
+    {#if $dashboardState.currentOffice === null}
+        <span>No selected office.</span>
+    {:else}
+        <InviteForm />
+    {/if}
 </Modal>
 
 <Modal title="Revoke Invite" bind:showModal={showRevokeInvite}>
-    <RevokeInvite />
+    {#if $dashboardState.currentOffice === null}
+        <span>No selected office.</span>
+    {:else}
+        <RevokeInvite />
+    {/if}
 </Modal>
 
 <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>

@@ -1,39 +1,36 @@
 <script lang='ts'>
     import { assert } from '../../../../assert.ts';
     import { Invite } from '../../../../api/invite.ts';
-    import { Office as OfficeModel } from '../../../../../../model/src/office.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
+    import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
-    import OfficeSelect from '../../OfficeSelect.svelte';
+    import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
 
-    let currEmail = '';
-    let currId: OfficeModel['id'] | null = null;
+    let email = '';
 
     async function handleSubmit(this: HTMLFormElement) {
         // Computes permissions
-        let permsVal = 0;
+        let permission = 0;
         const permissionSelect = this.elements.namedItem('perms');
         assert(permissionSelect instanceof RadioNodeList);
         permissionSelect.forEach(perm => {
             assert(perm instanceof HTMLInputElement);
             assert(perm.type === 'checkbox');
-            if (perm.checked) permsVal += parseInt(perm.value, 10);
+            if (perm.checked) permission += parseInt(perm.value, 10);
         });
 
+        const office = $dashboardState.currentOffice;
+        assert(office !== null);
+
         // Checks validity of office
-        if (currId === null) return;
         if (!this.reportValidity()) return;
 
         try {
-            await Invite.add({
-                email: currEmail,
-                office: currId,
-                permission: permsVal,
-            });
+            await Invite.add({ email, office, permission });
+            await inviteList.reload?.();
             this.reset();
         } catch (err) {
             // TODO: No permission handler
@@ -44,66 +41,61 @@
 
 <p>You are currently inviting a user as {$userSession?.email}</p>
 <article>
-    {#if Object.getOwnPropertyNames($allOffices).length === 0}
-        Invite unavailable as there are no offices available.
-    {:else}
-        <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
-            <OfficeSelect bind:oid={currId} offices={$allOffices} />
-            <br />
-            <label>
-                Email
-                <input type="email" name="inputemail" placeholder="example@up.edu.ph" bind:value={currEmail} />
-            </label>
-            <br />
-            <p><b>Permissions:</b></p>
-            <label>
-                <input type="checkbox" name="perms" value={Global.GetOffices} />
-                Get Office
-            </label>
-            <br />
-            <label>
-                <input type="checkbox" name="perms" value={Global.CreateOffice} />
-                Create Office
-            </label>
-            <br />
-            <label>
-                <input type="checkbox" name="perms" value={Global.UpdateOffice} />
-                Update Office
-            </label>
-            <br />
-            <label>
-                <input type="checkbox" name="perms" value={Global.UpdateUser} />
-                Update User
-            </label>
-            <br />
-            <label>
-                <input type="checkbox" name="perms" value={Global.CreateCategory} />
-                Create Category
-            </label>
-            <br />
-            <label>
-                <input type="checkbox" name="perms" value={Global.UpdateCategory} />
-                Update Category
-            </label>
-            <br />
-            <label>
-                <input type="checkbox" name="perms" value={Global.DeleteCategory} />
-                Delete Category
-            </label>
-            <br />
-            <label>
-                <input type="checkbox" name="perms" value={Global.ActivateCategory} />
-                Activate Category
-            </label>
-            <br />
-            <label>
-                <input type="checkbox" name="perms" value={Global.ViewMetrics} />
-                View Metrics
-            </label>
-            <br />
-            <Button submit><Checkmark alt="Invite User" />Invite User</Button> 
-        </form>
-    {/if}
+    <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
+        <br />
+        <label>
+            Email
+            <input type="email" name="inputemail" placeholder="example@up.edu.ph" bind:value={email} />
+        </label>
+        <br />
+        <p><b>Permissions:</b></p>
+        <label>
+            <input type="checkbox" name="perms" value={Global.GetOffices} />
+            Get Office
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" name="perms" value={Global.CreateOffice} />
+            Create Office
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" name="perms" value={Global.UpdateOffice} />
+            Update Office
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" name="perms" value={Global.UpdateUser} />
+            Update User
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" name="perms" value={Global.CreateCategory} />
+            Create Category
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" name="perms" value={Global.UpdateCategory} />
+            Update Category
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" name="perms" value={Global.DeleteCategory} />
+            Delete Category
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" name="perms" value={Global.ActivateCategory} />
+            Activate Category
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" name="perms" value={Global.ViewMetrics} />
+            View Metrics
+        </label>
+        <br />
+        <Button submit><Checkmark alt="Invite User" />Invite User</Button> 
+    </form>
 </article>
 
 <style>

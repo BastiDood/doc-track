@@ -18,7 +18,7 @@ export namespace Invite {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case StatusCodes.OK: return InvitationSchema.array().parse(await res.json());
+            case StatusCodes.OK:; return InvitationSchema.array().parse(await res.json());
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;

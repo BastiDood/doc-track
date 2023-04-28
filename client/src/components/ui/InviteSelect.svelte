@@ -6,10 +6,10 @@
 
 <section>
     {#each invites as { email, permission } (email)}
-        <label id={`invite-${email}`}>
+        <label>
             <input type="radio" name="selected-invite" bind:group={value} value={email}>{email} ({permission.toString(2).padStart(9, '0')})
         </label>
-        <br>
+        <br />
     {/each}
 </section>
 
