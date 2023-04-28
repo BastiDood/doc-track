@@ -3,8 +3,6 @@
     import { Invite } from '../../../../api/invite.ts';
 
     import type { User } from '../../../../../../model/src/user.ts';
-
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
@@ -14,7 +12,6 @@
     import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
 
     let email: User['email'] | undefined;
-
     async function handleSubmit(this: HTMLFormElement) {
         // Email validation
         const emailInput = this.elements.namedItem('inputemail');
@@ -40,8 +37,18 @@
 <p>You are currently revoking invites as {$userSession?.email}</p>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
-        <InviteSelect invites={$inviteList} bind:value={email} />
-        <p>Current deleting: <input type="email" name="inputemail" readonly={true} value={email ?? 'None'} /></p>
-        <Button submit><Checkmark alt="Revoke Invite" />Revoke Invite</Button> 
+        {#await inviteList.reload?.()}
+            Loading invite list.
+        {:then} 
+            {#if $inviteList.length === 0}
+                No one available to revoke invites from.
+            {:else}
+                <InviteSelect invites={$inviteList} bind:value={email} />
+                <p>Current deleting: <input type="email" name="inputemail" readonly={true} value={email ?? 'None'} /></p>
+                <Button submit><Checkmark alt="Revoke Invite" />Revoke Invite</Button> 
+           {/if}
+        {/await}
+        
+        
     </form>
 </article>
