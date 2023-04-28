@@ -399,7 +399,7 @@ export class Database {
                 'pending', coalesce((SELECT info FROM tup WHERE status = 'Send'),'[]'),
                 'accept', coalesce((SELECT info FROM tup WHERE status = 'Receive'),'[]')
             ) AS result`;
-        assertStrictEquals(rest.length, 0)
+        assertStrictEquals(rest.length, 0);
         return z.object({ result: AllInboxSchema }).parse(first).result;
     }
 
@@ -440,7 +440,7 @@ export class Database {
                 'pending', coalesce((SELECT info FROM backwardResolve WHERE status = 'Send'), '[]')
             ) as result
             `;
-        assertStrictEquals(rest.length, 0)
+        assertStrictEquals(rest.length, 0);
         return z.object({ result: AllOutboxSchema }).parse(first).result;
     }
     /**
