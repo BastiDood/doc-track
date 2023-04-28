@@ -16,7 +16,6 @@
     import Modal from '../../../components/ui/Modal.svelte';
 
     import { ButtonType } from '../../../components/types.ts';
-    
 
     let currentOffice: Office['id'] | null = null;
 

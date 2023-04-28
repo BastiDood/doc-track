@@ -14,33 +14,19 @@
     import OfficeSelect from '../../OfficeSelect.svelte';
 
     let currId: OfficeModel['id'] | null = null;
-    let currName: OfficeModel['name'] | null = null;
-
-    // eslint-disable-next-line no-extra-parens
-    $: currName = currId === null ? null : $allOffices[currId] ?? null;
+    let currName: OfficeModel['name'] | undefined;
 
     async function handleSubmit(this: HTMLFormElement) {
-        const input = this.elements.namedItem('officename');
-        assert(input instanceof HTMLInputElement);
-        assert(input.type === 'text');
-
         if (currId === null || typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
-        if (input.value === currName) return;
 
         try {
             // Create a pseudo-office element
             await Office.update({
                 id: currId,
-                name: input.value,
+                name: currName,
             });
             await allOffices.reload?.();
-
-            // eslint-disable-next-line require-atomic-updates
-            currId = null;
-            // eslint-disable-next-line require-atomic-updates
-            currName = null;
-
             this.reset();
         } catch (err) {
             // TODO: No permission handler
@@ -57,18 +43,14 @@
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
             <OfficeSelect bind:oid={currId} offices={$allOffices} />
             <br />
-            {#if typeof currId === 'number'}
-                <p>Office ID: {currId}</p>
-                {#if currName !== null}
-                    <TextInput
-                        required
-                        placeholder={currName}
-                        name="officename"
-                        label="Office Name:"
-                    />
-                    <Button submit><Checkmark color={IconColor.White} alt="Edit Office"/> Edit Office</Button> 
-                {/if}
-            {/if}
+            <TextInput
+                required
+                placeholder="Name"
+                name="officename"
+                label="Office Name:"
+                bind:value={currName}
+            />
+            <Button submit><Checkmark color={IconColor.White} alt="Edit Office" /> Edit Office</Button> 
         </form>
     {/if}
 </article>

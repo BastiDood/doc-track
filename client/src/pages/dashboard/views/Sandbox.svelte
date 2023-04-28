@@ -21,6 +21,10 @@
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
 
+    // Modals
+    import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
+    import RevokeInvite from '../../../components/ui/forms/office/RevokeInvite.svelte';
+
     let showContextMenu = false;
     let showCreateOffice = false;
     let showEditOffice = false;
@@ -32,6 +36,10 @@
     let showActivateCategory = false;
     let showInsertSnapshot = false;
     let showCreateDocument = false;
+
+    // Receiving document, invites
+    let showInviteForm = false;
+    let showRevokeInvite = false;
 
     let insertSnapshotAction: SnapshotAction | null = null;
     let currentContext: RowEvent | null = null;
@@ -63,7 +71,6 @@
 </script>
 
 <h1>Sandbox</h1>
-<h2> Current Office ID: {currentOffice}</h2>
 <Button on:click={() => (showPermission = true)}>
     Edit Global Permissions
 </Button>
@@ -91,6 +98,12 @@
 <Button on:click={() => (showCreateDocument = true)}>
     Create a New Document
 </Button>
+<Button on:click={() => (showInviteForm = true)}>
+    Invite User
+</Button>
+<Button on:click={() => (showRevokeInvite = true)}>
+    Revoke Invite
+</Button>
 
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
     <RenameCategory/>
@@ -106,16 +119,19 @@
 </Modal>
 
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
-    <br>
-    {#if currentOffice !== null}
-        <LocalPermissions user={$currentUser} office={currentOffice} />
-    {:else}
+    {#if currentOffice === null || $currentUser === null}
         Current user is not a staff of the selected office.
+    {:else}
+        <LocalPermissions user={$currentUser} office={currentOffice} />
     {/if}
 </Modal>
 
 <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
-    <GlobalPermissions user={$currentUser} />
+    {#if $currentUser === null}
+        Current user is not valid.
+    {:else}
+        <GlobalPermissions user={$currentUser} />
+    {/if}
 </Modal>
 
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>
@@ -125,21 +141,42 @@
 <Modal title="Edit Office" bind:showModal={showEditOffice}>
     <EditOffice/>
 </Modal>
-{#if currentOffice !== null && currentContext !== null && showInsertSnapshot}
-    <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
+
+<Modal title="Invite User" bind:showModal={showInviteForm}>
+    {#if $dashboardState.currentOffice === null}
+        <span>No selected office.</span>
+    {:else}
+        <InviteForm />
+    {/if}
+</Modal>
+
+<Modal title="Revoke Invite" bind:showModal={showRevokeInvite}>
+    {#if $dashboardState.currentOffice === null}
+        <span>No selected office.</span>
+    {:else}
+        <RevokeInvite />
+    {/if}
+</Modal>
+
+<Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
+    {#if currentOffice === null || currentContext === null || showInsertSnapshot}
+        No office selected.
+    {:else}
         <InsertSnapshot
             payload={currentContext}
             userOfficeId={currentOffice}
             statusIndex={insertSnapshotAction}
         /> 
-    </Modal>
-{/if}
+    {/if}
+</Modal>
 
-{#if currentOffice !== null }
-    <Modal title="Create Document" bind:showModal={showCreateDocument}>
+<Modal title="Create Document" bind:showModal={showCreateDocument}>
+    {#if currentOffice === null }
+        No office selected.
+    {:else}
         <CreateDocument />
-    </Modal>
-{/if}
+    {/if}
+</Modal>
 <div>
     {#each documentTest as doc}
         <InboxRow

@@ -20,7 +20,6 @@
         try {
             await Category.create(node.value);
             await categoryList.reload?.();
-    
             this.reset();
         } catch (err) {
             alert(err);

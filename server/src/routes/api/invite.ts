@@ -94,6 +94,63 @@ export async function handleAddInvitation(pool: Pool, req: Request, params: URLS
 }
 
 /**
+ * Gets list of invited emails for the office.
+ *
+ * # Inputs
+ * - Requires a valid session ID of an office administrator.
+ * - Accepts the admin's current {@linkcode Office} ID via the `office` query parameter.
+ * - Accepts the `email` and `permission` via JSON in the {@linkcode Request} body.
+ *
+ * # Outputs
+ * - `200` => returns a list of {@linkcode Invitation} objects as JSON in the {@linkcode Response} body
+ * - `400` => office query parameter or request body is unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `406` => content negotiation failed
+ */
+export async function handleGetInvitedList(pool: Pool, req: Request, params: URLSearchParams) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Invite] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Invite] Content negotiation failed for for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const input = params.get('office');
+    const office = input ? parseInt(input, 10) : NaN;
+    if (isNaN(office)) {
+        error(`[Invite] Empty office name in the query for session ${sid}`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const staff = await db.getStaffFromSession(sid, office);
+        if (staff === null) {
+            error(`[Invite] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((staff.permission & (Local.AddInvite | Local.RevokeInvite)) === 0) {
+            error(`[Invite] User ${staff.user_id} cannot get invitations for office ${office}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const invitations = await db.getInvitationList(office);
+        info(`[Invite] User ${staff.user_id} retrieved ${invitations.length} invitations for office ${office}`);
+        return new Response(JSON.stringify(invitations), {
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } finally {
+        db.release();
+    }
+}
+
+/**
  * Revokes a pre-existing email invitation in the office.
  *
  * # Inputs

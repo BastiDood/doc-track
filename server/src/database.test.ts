@@ -59,10 +59,12 @@ Deno.test('full OAuth flow', async t => {
             permission,
         });
         assert(creation !== null);
+        assertEquals(await db.getInvitationList(office), [ { creation, office, email, permission } ]);
 
         const result = await db.revokeInvitation(office, email);
         assert(result !== null);
         assertEquals(result, { permission, creation });
+        assertEquals(await db.getInvitationList(office), [ ]);
     });
 
     // Randomly generate an email for uniqueness
@@ -93,6 +95,7 @@ Deno.test('full OAuth flow', async t => {
         };
         const creation = await db.upsertInvitation(invite);
         assert(creation !== null);
+        assertEquals(await db.getInvitationList(office), [ { creation, office, email: USER.email, permission: USER.permission } ]);
 
         await t.step('invalid revocation of invites', async () => {
             // Non-existent office and email
@@ -135,6 +138,7 @@ Deno.test('full OAuth flow', async t => {
             const result = await db.insertInvitedUser(USER);
             assert(result !== null);
             assertArrayIncludes(result, [ { office: invite.office, permission: invite.permission } ]);
+            assertEquals(await db.getInvitationList(office), [ ]);
             assertStrictEquals(await db.upsertInvitation({
                 office,
                 email: USER.email,

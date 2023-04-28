@@ -1,29 +1,33 @@
 <script lang="ts">
+    import Button from '../../../components/ui/Button.svelte';
+    import Hamburger from '../../icons/Hamburger.svelte';
+    import Logout from '../../icons/Logout.svelte';
+
+    import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
 
-    import Hamburger from '../../icons/Hamburger.svelte';
-
-    export let show = false;
+    export let open = false;
     export let user: User;
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
-    <span id="icon"><Hamburger bind:open={show} on:click={() => (show = !show)} /></span>
-    <p>DocTrack</p>
+    <span id="icon"><Hamburger bind:open on:click={() => (open = !open)} /> DocTrack</span>
     <nav id="profilenav">
-        <span>{user.name}</span>
-        <span><img src={user.picture} alt="{user.name[0]}" /></span>
+        {#if typeof user === 'undefined'} 
+            <a href="/">
+                <Button type={ButtonType.Primary}>
+                    <Logout color={IconColor.White} alt="Return to the main Login screen" /> Back to Main Page
+                </Button>
+            </a>
+        {:else}
+            <span>{user.name}</span>
+            <span><img src={user.picture} alt="Profile Picture for {user.name}" /></span>
+        {/if}
     </nav>
 </nav>
 
 <style>
     @import url('../../../pages/vars.css');
-
-    p {
-        font-size: var(--large);
-        font-weight: bold;
-        color: white;
-    }
 
     span {
         color: white;
@@ -31,6 +35,9 @@
 
     #icon {
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-small);
     }
 
     img {

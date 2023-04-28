@@ -20,14 +20,7 @@
 
         try {
             await Category.activate(currId);
-
             await categoryList.reload?.();
-
-            // eslint-disable-next-line require-atomic-updates
-            currId = null;
-            // eslint-disable-next-line require-atomic-updates
-            currName = null;
-
             this.reset();
         } catch (err) {
             // TODO: No permission handler

@@ -11,21 +11,14 @@
 
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | null = null;
-
     $: currName = $categoryList.active.find(cat => cat.id === currId)?.name ?? null;
 
     async function handleSubmit(this: HTMLFormElement) {
-        if (currId === null || typeof currName !== 'string') return;
+        if (currId === null || currName === null) return;
 
         try {
             await Category.remove(currId);
             await categoryList.reload?.();
-
-            // eslint-disable-next-line require-atomic-updates
-            currId = null;
-            // eslint-disable-next-line require-atomic-updates
-            currName = null;
-
             this.reset();
         } catch (err) {
             // TODO: No permission handler
@@ -41,15 +34,9 @@
         No categories to edit.
     {:else}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catId={currId} categories={$categoryList.active}/>
+            <CategorySelect bind:catId={currId} categories={$categoryList.active} />
             <br/>
-            {#if typeof currId === 'number'}
-                <p>Category ID: {currId}</p>
-                <p>Catergory Name: {currName}</p>
-                {#if currName !== null}
-                    <Button type={ButtonType.Danger} submit><Close color={IconColor.White} alt="Edit Category"/> Remove Category</Button>
-                {/if}
-            {/if}
+            <Button type={ButtonType.Danger} submit><Close color={IconColor.White} alt="Edit Category" /> Remove Category</Button>
         </form>
     {/if}
 </article>

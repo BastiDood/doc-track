@@ -1,7 +1,8 @@
 <script>
-    import Router, { location } from 'svelte-spa-router';
+    import Router from 'svelte-spa-router';
 
-    import { currentUser } from './stores/UserStore.ts';
+    import { currentPage } from './stores/CurrentPage.ts';
+    import { currentUser, userOffices } from './stores/UserStore.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
@@ -10,30 +11,32 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
-    let currentPage = 'Dashboard';
-    $: currentPage = `${$location.charAt(1).toUpperCase()}${$location.slice(2)}`;
 </script>
 
 <svelte:head>
-    <title>{currentPage}</title>
+    <title>{$currentPage}</title>
 </svelte:head>
 
 {#await currentUser.load()}
     <p>Loading user...</p>
 {:then user}
-    <TopBar {user} bind:show={toggleDrawer} />
-    <main on:click={() => (toggleDrawer &&= false)} on:keydown>
-        {#await register()}
-            <p>Waiting for service worker...</p>
-        {:then}
-            <SideDrawer show={toggleDrawer} />
-            <section>
-                <Router {routes} />
-            </section>
-        {:catch error}
-            <p>{error} <a href="/auth/login">Try logging in again?</a></p>
-        {/await}
-    </main>
+    {#if user === null}
+        <span>No user available...</span>
+    {:else}
+        <TopBar {user} bind:open={toggleDrawer} />
+        <main on:click={() => (toggleDrawer &&= false)} on:keydown>
+            {#await register()}
+                <p>Waiting for service worker...</p>
+            {:then}
+                <SideDrawer show={toggleDrawer} />
+                <section>
+                    <Router {routes} />
+                </section>
+            {:catch error}
+                <p>{error} <a href="/auth/login">Try logging in again?</a></p>
+            {/await}
+        </main>
+    {/if}
 {/await}
 
 <style>

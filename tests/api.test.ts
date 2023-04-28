@@ -152,12 +152,16 @@ Deno.test('full API integration test', async t => {
             office: oid,
             permission: Local.AddStaff,
         });
-        assertNotStrictEquals(creation, null);
+        assert(creation !== null);
+
+        // List one invitation
+        assertEquals(await Invite.getList(oid), [ { office: oid, creation, email, permission: Local.AddStaff } ]);
 
         // Revoke invitation
         const result = await Invite.revoke({ email, office: oid });
         assertStrictEquals(result?.permission, Local.AddStaff);
         assertEquals(result.creation, creation);
+        assertEquals(await Invite.getList(oid), [ ]);
     });
 
     await t.step('Staff API - setting permissions', async () =>
