@@ -2,7 +2,8 @@
     import Router from 'svelte-spa-router';
 
     import { currentPage } from './stores/CurrentPage.ts';
-    import { currentUser } from './stores/UserStore.ts';
+    import { currentUser, allOffices } from './stores/UserStore.ts';
+    import { dashboardState } from './stores/DashboardState.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
@@ -11,11 +12,11 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
-    let currentOffice = '';
+    $: currName = $allOffices[$dashboardState.currentOffice ?? 0] ?? 'No office selected';
 </script>
 
 <svelte:head>
-    <title>{$currentPage} ({currentOffice})</title>
+    <title>{$currentPage} ({currName})</title>
 </svelte:head>
 
 {#await currentUser.load()}
@@ -29,7 +30,7 @@
             {#await register()}
                 <p>Waiting for service worker...</p>
             {:then}
-                <SideDrawer show={toggleDrawer} bind:currName={currentOffice} />
+                <SideDrawer show={toggleDrawer} />
                 <section>
                     <Router {routes} />
                 </section>

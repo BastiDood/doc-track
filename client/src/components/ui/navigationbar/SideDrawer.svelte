@@ -16,11 +16,9 @@
     import OfficeSelect from '../OfficeSelect.svelte';
 
     export let show = false;
-    export let currName;
     let selectedOffice: Office['id'] | null = null;
 
     $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
-    $: currName = $userOffices[selectedOffice ?? 0] ?? 'No office selected';
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
