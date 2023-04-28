@@ -2,7 +2,8 @@
     import Router from 'svelte-spa-router';
 
     import { currentPage } from './stores/CurrentPage.ts';
-    import { currentUser, allOffices } from './stores/UserStore.ts';
+    import { currentUser } from './stores/UserStore.ts';
+    import { allOffices } from './stores/OfficeStore.ts';
     import { dashboardState } from './stores/DashboardState.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
@@ -12,6 +13,7 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
+    let currName = 'No office selected';
     $: currName = $allOffices[$dashboardState.currentOffice ?? 0] ?? 'No office selected';
 </script>
 
