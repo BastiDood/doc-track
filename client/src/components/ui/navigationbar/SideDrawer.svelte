@@ -14,11 +14,19 @@
     import SettingsIcon from '../../icons/Settings.svelte';
 
     import OfficeSelect from '../OfficeSelect.svelte';
+    import { documentInbox, documentOutbox } from '../../../pages/dashboard/stores/DocumentStore.ts';
 
     export let show = false;
     let selectedOffice: Office['id'] | null = null;
 
-    $: if (selectedOffice !== null ) dashboardState.setOffice(selectedOffice);
+    $: if (selectedOffice !== null ) {
+        dashboardState.setOffice(selectedOffice);
+        // eslint-disable-next-line no-unused-expressions
+        async() => {
+            await documentInbox.reload?.();
+            await documentOutbox.reload?.();
+        };
+    }
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>
