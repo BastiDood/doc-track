@@ -94,14 +94,14 @@
     </Button>
 {/if}
 
-<Button on:click={async () => {
+<Button on:click={async() => {
     await documentInbox.reload?.();
     console.log($documentInbox);
 }}>
     Get Inbox Of Selected Office
 </Button>
 
-<Button on:click={async () => {
+<Button on:click={async() => {
     await documentOutbox.reload?.();
     console.log($documentOutbox);
 }}>
