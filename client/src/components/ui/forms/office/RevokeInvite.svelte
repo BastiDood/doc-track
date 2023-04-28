@@ -28,6 +28,7 @@
 
         try {
             await Invite.revoke({ office: currOid, email: currEmail });
+            document.getElementById('invite-' + currEmail)?.remove();
             this.reset();
         } catch (err) {
             // TODO: No permission handler
