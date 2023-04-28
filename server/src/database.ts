@@ -383,7 +383,7 @@ export class Database {
             .queryObject`
             WITH mostRecentSnap AS (
                 SELECT doc, MAX(creation) as creation FROM snapshot
-                GROUP BY doc, creation
+                GROUP BY doc
             ), incoming AS (
                 SELECT m.doc, m.creation, d.title, c.name AS category, status, target FROM mostRecentSnap AS m
                     INNER JOIN snapshot as s ON m.creation = s.creation
