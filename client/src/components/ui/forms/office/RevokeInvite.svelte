@@ -37,18 +37,12 @@
 <p>You are currently revoking invites as {$userSession?.email}</p>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
-        {#await inviteList.reload?.()}
-            Loading invite list.
-        {:then} 
-            {#if $inviteList.length === 0}
-                No one available to revoke invites from.
-            {:else}
-                <InviteSelect invites={$inviteList} bind:value={email} />
-                <p>Current deleting: <input type="email" name="inputemail" readonly={true} value={email ?? 'None'} /></p>
-                <Button submit><Checkmark alt="Revoke Invite" />Revoke Invite</Button> 
-           {/if}
-        {/await}
-        
-        
+        {#if $inviteList.length === 0}
+            No one available to revoke invites from.
+        {:else}
+            <InviteSelect invites={$inviteList} bind:value={email} />
+            <p>Current deleting: <input type="email" name="inputemail" readonly value={email ?? 'None'} /></p>
+            <Button submit><Checkmark alt="Revoke Invite" /> Revoke Invite</Button> 
+       {/if}
     </form>
 </article>
