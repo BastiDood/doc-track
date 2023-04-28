@@ -111,11 +111,11 @@
 </Button>
 
 {#if !isSubscribed}
-    <Button on:click={() => (showSubscribePushNotification= true)}>
+    <Button on:click={() => (showSubscribePushNotification = true)}>
         Subscribe to Push Notification
     </Button>
     {:else}
-    <Button on:click={() => (showUnsubscribePushNotification= true)}>
+    <Button on:click={() => (showUnsubscribePushNotification = true)}>
         Unsubscribe to Push Notification
     </Button>
 {/if}
@@ -186,11 +186,11 @@
 </Modal>
 
 <Modal title="Subscribe to Push Notification" bind:showModal={showSubscribePushNotification}>
-    <SubscribePushNotification on:subscribe={(e) => isSubscribed = e.detail.isSubscribed}/>
+    <SubscribePushNotification on:subscribe={(e) => (isSubscribed = e.detail)}/>
 </Modal>
 
 <Modal title="Unsubscribe to Push Notification" bind:showModal={showUnsubscribePushNotification}>
-    <UnsubscribePushNotification on:unsubscribe={(e) => isSubscribed = e.detail.isSubscribed} />
+    <UnsubscribePushNotification on:unsubscribe={(e) => (isSubscribed = e.detail)} />
 </Modal>
 
 <Modal title="Create Document" bind:showModal={showCreateDocument}>

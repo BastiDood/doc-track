@@ -6,16 +6,10 @@
 
     import { IconColor } from '../../../types.ts';
 
-	const dispatch = createEventDispatcher();
-
-    function subscribe() {
-        dispatch('subscribe', {
-			isSubscribed: true 
-		});
-    }
+    const dispatch = createEventDispatcher();
 </script>
 
 <p>Do you want to Subscribe to Push Notification?</p>
-<Button on:click={subscribe}>
+<Button on:click={() => dispatch('subscribe', true)}>
     <Checkmark color={IconColor.White} alt="Accept Push Notification"/>Subcribe
 </Button>

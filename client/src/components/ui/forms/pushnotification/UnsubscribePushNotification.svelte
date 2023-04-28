@@ -7,16 +7,10 @@
     import { IconColor } from '../../../types.ts';
 
     const dispatch = createEventDispatcher();
-
-    function unsubscribe() {
-        dispatch('unsubscribe', {
-            isSubscribed: false 
-        });
-    }
 </script>
 
 <p>Do you want to Unsubscribe to Push Notification?</p>
-<Button on:click={unsubscribe}>
+<Button on:click={() => dispatch('unsubscribe', false)}>
     <Checkmark color={IconColor.White} alt="Accept Push Notification" on:click/>Unsubscribe
 </Button>
 
