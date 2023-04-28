@@ -12,22 +12,15 @@
     import StaffIcon from '../../icons/PersonMail.svelte';
     import AdminIcon from '../../icons/PersonInfo.svelte';
     import SettingsIcon from '../../icons/Settings.svelte';
-
     import OfficeSelect from '../OfficeSelect.svelte';
-    import { documentInbox, documentOutbox } from '../../../pages/dashboard/stores/DocumentStore.ts';
 
     export let show = false;
-    let selectedOffice: Office['id'] | null = null;
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    $: if (selectedOffice !== null ) (async() => {
-        dashboardState.setOffice(selectedOffice);
-        await documentInbox.reload?.();
-        await documentOutbox.reload?.();
-    })();
+    let selectedOffice: Office['id'] | null = null;
+    $: if (selectedOffice !== null) dashboardState.setOffice(selectedOffice);
 </script>
 
-<nav class:show={show} on:click|stopPropagation on:keypress>
+<nav class:show on:click|stopPropagation on:keypress>
     <section>
         <header>
             {#if Object.getOwnPropertyNames($userOffices).length === 0}
