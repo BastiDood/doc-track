@@ -37,7 +37,7 @@
 <p>You are currently revoking invites as {$userSession?.email}</p>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
-        {#if $inviteList.length === 0}
+        {#if typeof $inviteList === 'undefined' || $inviteList.length === 0}
             No one available to revoke invites from.
         {:else}
             <InviteSelect invites={$inviteList} bind:value={email} />
