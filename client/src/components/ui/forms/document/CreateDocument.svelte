@@ -39,9 +39,6 @@
 </script>
 
 {#if $earliestBatch === null || typeof $earliestBatch === 'undefined'}
-    {#await earliestBatch.reload?.()}
-        Loading loading barcodes.
-    {/await}
     No available barcodes.
 {:else}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
