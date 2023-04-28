@@ -39,7 +39,11 @@ Deno.test('full OAuth flow', async t => {
 
     await t.step('invalid inbox', async () => {
         const inbox = await db.getInbox(0);
-        assertStrictEquals(inbox.length, 0);
+        const outbox = await db.getOutbox(0)
+        assertStrictEquals(inbox.pending.length, 0);
+        assertStrictEquals(inbox.accept.length, 0);
+        assertStrictEquals(outbox.ready.length, 0);
+        assertStrictEquals(outbox.pending.length, 0);
     });
 
     const office = await db.createOffice('Test');
@@ -290,7 +294,7 @@ Deno.test('full OAuth flow', async t => {
 
     await t.step('document creation', async () => {
         // TODO: Test if we are indeed the minimum batch
-        const snap = { evaluator: USER.id, remark: 'Hello' };
+        const snap = { evaluator: USER.id, remark: 'Hello', target: office };
         const uuid = crypto.randomUUID();
 
         // Non-existent barcode
@@ -312,13 +316,13 @@ Deno.test('full OAuth flow', async t => {
         assertStrictEquals(info.batch, batch);
         assertStrictEquals(info.codes.length, 9);
 
-        // Paper trail should contain one snapshot
+        // Paper trail should contain one 
         assertEquals(await db.getPaperTrail(doc.id), [{
             status: Status.Register,
             creation,
             category: randomCategory,
             remark: snap.remark,
-            target: null,
+            target: snap.target,
             name: USER.name,
             email: USER.email,
             picture: USER.picture,
@@ -353,8 +357,6 @@ Deno.test('full OAuth flow', async t => {
             assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Send, target: null }), InsertSnapshotError.InvalidStatus);
 
             // `Send` status with non-null target
-            assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Register }), InsertSnapshotError.InvalidStatus);
-            assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Receive }), InsertSnapshotError.InvalidStatus);
             assertEquals(await db.insertSnapshot({ ...snapshot, status: Status.Terminate }), InsertSnapshotError.InvalidStatus);
         });
 
@@ -377,9 +379,9 @@ Deno.test('full OAuth flow', async t => {
             });
         })
 
-        await t.step('verify that the inbox only contains one document with the latest snapshot', async () => {
+        await t.step('verify that the outbox only contains one document with the latest snapshot', async () => {
             const inbox = await db.getInbox(office);
-            assertEquals(inbox, [{
+            assertEquals(inbox.pending, [{
                 creation,
                 category: randomCategory,
                 doc: doc.id,
@@ -422,6 +424,7 @@ Deno.test('full OAuth flow', async t => {
                 {
                     evaluator: USER.id,
                     remark: 'Filler document.',
+                    target: office,
                 },
             );
             assertInstanceOf(result, Date);

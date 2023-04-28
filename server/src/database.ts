@@ -11,18 +11,21 @@ import {
     type AllOffices,
     type FullSession,
     type GeneratedBatch,
-    type InboxEntry,
+    type AllInbox,
+    type AllOutbox,
     type MinBatch,
     type PaperTrail,
     AllCategoriesSchema,
     AllOfficesSchema,
     BarcodeAssignmentError,
     FullSessionSchema,
-    InboxEntrySchema,
+    AllInboxSchema,
+    AllOutboxSchema,
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
 } from '~model/api.ts';
+
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
@@ -304,13 +307,13 @@ export class Database {
      */
     async assignBarcodeToDocument(
         { id, category, title }: Document,
-        { evaluator, remark }: Pick<Snapshot, 'evaluator' | 'remark'>,
+        { evaluator, remark, target }: Pick<Snapshot, 'evaluator' | 'remark' | 'target'>,
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
         // TODO: Do Actual Document Upload
         try {
             const { rows: [ first, ...rest ] } = await this.#client
                 .queryObject`WITH results AS (INSERT INTO document (id,category,title) VALUES (${id},${category},${title}) RETURNING id)
-                    INSERT INTO snapshot (doc,evaluator,remark) VALUES ((SELECT id from results),${evaluator},${remark}) RETURNING creation`;
+                    INSERT INTO snapshot (doc,evaluator,remark,target) VALUES ((SELECT id from results),${evaluator},${remark},${target}) RETURNING creation`;
             assertStrictEquals(rest.length, 0);
             return SnapshotSchema.pick({ creation: true }).parse(first).creation;
         } catch (err) {
@@ -375,17 +378,70 @@ export class Database {
         return PaperTrailSchema.array().parse(rows);
     }
 
-    async getInbox(oid: Office['id']): Promise<InboxEntry[]> {
-        const { rows } = await this.#client
+    async getInbox(oid: Office['id']): Promise<AllInbox> {
+        const { rows: [first, ...rest] } = await this.#client
             .queryObject`
-                WITH snaps AS (SELECT doc,MAX(creation) AS creation FROM snapshot WHERE target = ${oid} GROUP BY doc)
-                SELECT s.doc,s.creation,d.title,c.name AS category FROM snaps AS s
+            WITH mostRecentSnap AS (
+                SELECT doc, MAX(creation) AS creation FROM snapshot
+                GROUP BY doc
+            ), incoming AS (
+                SELECT m.doc, m.creation, d.title, c.name AS category, status, target FROM mostRecentSnap AS m
+                    INNER JOIN snapshot AS s ON m.creation = s.creation
                     INNER JOIN document AS d ON s.doc = d.id
                     INNER JOIN category AS c ON d.category = c.id
-                ORDER BY s.creation DESC`;
-        return InboxEntrySchema.array().parse(rows);
+                WHERE target = ${oid} AND (status = 'Send' OR status = 'Receive')
+                ORDER BY s.creation DESC
+            ), tup AS (
+                SELECT status, json_agg(json_build_object('doc', doc, 'creation', creation, 'title', title, 'category', category)) AS info from incoming 
+                GROUP BY status
+            )
+            SELECT json_build_object(
+                'pending', coalesce((SELECT info FROM tup WHERE status = 'Send'),'[]'),
+                'accept', coalesce((SELECT info FROM tup WHERE status = 'Receive'),'[]')
+            ) AS result`;
+        assertStrictEquals(rest.length, 0);
+        return z.object({ result: AllInboxSchema }).parse(first).result;
     }
 
+    async getOutbox(oid: Office['id']): Promise<AllOutbox> {
+        const { rows : [first, ...rest] } = await this.#client
+            .queryObject`
+            WITH mostRecentSnaps AS (
+                SELECT doc, MAX(creation) AS creation FROM snapshot
+                GROUP BY doc
+            ), register AS (
+                SELECT status, json_agg(json_build_object('doc', m.doc, 'creation', m.creation, 'title', d.title, 'category', c.name ,'status', status, 'target', target)) AS info FROM mostRecentSnaps as m
+                    INNER JOIN snapshot AS s ON m.creation = s.creation
+                    INNER JOIN document AS d ON m.doc = d.id
+                    INNER JOIN category AS c ON d.category = c.id
+                WHERE status = 'Register' AND target = ${oid}
+                GROUP BY status
+            ), notAccept AS (
+                SELECT s.doc, s.creation, status, target FROM mostRecentSnaps as m
+                    INNER JOIN snapshot AS s ON m.creation = s.creation 
+                WHERE status = 'Send' AND target != ${oid}
+            ), mostRecentRecieved AS (
+                SELECT doc, MAX(creation) AS creation, status FROM snapshot
+                WHERE status = 'Receive' OR status = 'Register'
+                GROUP BY doc, creation, status
+            ),  mostRecentRecievedSnap AS (
+                SELECT m.doc, m.creation, m.status, s.target FROM mostRecentRecieved as m
+                    INNER JOIN snapshot as s ON m.creation = s.creation
+                WHERE target = ${oid}
+            ), backwardResolve AS (
+                SELECT n.status AS status, json_agg(json_build_object('doc', m.doc, 'creation', n.creation, 'title', d.title, 'category', c.name, 'status', n.status, 'target', n.target)) AS info FROM mostRecentRecievedSnap AS m
+                    INNER JOIN notAccept AS n ON n.doc = m.doc
+                    INNER JOIN document AS d ON m.doc = d.id
+                    INNER JOIN category AS c ON d.category = c.id
+                GROUP BY n.status
+            )
+            SELECT json_build_object(
+                'ready', coalesce((SELECT info FROM register WHERE status = 'Register'), '[]'),
+                'pending', coalesce((SELECT info FROM backwardResolve WHERE status = 'Send'), '[]')
+            ) as result`;
+        assertStrictEquals(rest.length, 0);
+        return z.object({ result: AllOutboxSchema }).parse(first).result;
+    }
     /**
      * # Assumption
      * The user has sufficient permissions to add a new system-wide category.

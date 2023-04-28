@@ -14,6 +14,7 @@
     import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
     import TextInput from '../../TextInput.svelte';
+    import { documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
 
     let id: Document['id'] | null = null;
     let category: Category['id'] | null = null;
@@ -24,8 +25,15 @@
         const oid = $dashboardState.currentOffice;
         if (oid === null || id === null || category === null) return;
 
-        const result = await Api.create(oid, { id, title, category }, remark);
-        assert(result instanceof Date);
+        try {
+            const result = await Api.create(oid, { id, title, category }, remark);
+            assert(result instanceof Date);
+            await earliestBatch.reload?.();
+            await documentOutbox.reload?.();
+            this.reset();
+        } catch (err) {
+            alert(err);
+        }
         // TODO: handle error states
     }
 </script>
@@ -34,10 +42,13 @@
     No available barcodes.
 {:else}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-        <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect> <br>
-        <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Ttle"></TextInput> <br>
-        <CategorySelect bind:catId={category} categories={$categoryList.active} /> <br>
-        <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark" required={false}></TextInput> 
+        Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
+        <br />
+        <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
+        <br />
+        Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
+        <br />
+        <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark:" required={false}></TextInput> 
         <Button submit>Create Document</Button>
     </form>
 {/if}

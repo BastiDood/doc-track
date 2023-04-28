@@ -46,12 +46,6 @@ export enum Events {
     EditUser = 'editUser',
 }
 
-export enum SnapshotAction {
-    Send,
-    Recieve,
-    Terminate,
-}
-
 export interface ContextPayload {
     ty: RowType.AcceptDocument | RowType.Inbox;
     id: Document['id'];
@@ -68,5 +62,3 @@ export interface PersonPayload {
     id: Staff['user_id'];
     office: Staff['office'];
 }
-
-export type RowEvent = ContextPayload | InvitePayload | PersonPayload;

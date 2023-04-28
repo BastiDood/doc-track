@@ -19,7 +19,7 @@ export type MinBatch = z.infer<typeof MinBatchSchema>;
 
 export const GeneratedBatchSchema = BatchSchema
     .omit({ office: true, generator: true })
-    .and(z.object({ codes: BarcodeSchema.shape.code.array() }))
+    .extend({ codes: BarcodeSchema.shape.code.array() })
 
 export type GeneratedBatch = z.infer<typeof GeneratedBatchSchema>;
 
@@ -43,9 +43,11 @@ export const BarcodeAssignmentErrorSchema = z.nativeEnum(BarcodeAssignmentError)
 
 export const PaperTrailSchema = SnapshotSchema
     .pick({ creation: true, status: true, target: true, remark: true })
-    .extend({ category: CategorySchema.shape.name })
-    .and(DocumentSchema.pick({ title: true }))
-    .and(UserSchema.pick({ name: true, email: true, picture: true }));
+    .extend({
+        category: CategorySchema.shape.name,
+        title: DocumentSchema.shape.title,
+    })
+    .merge(UserSchema.pick({ name: true, email: true, picture: true }));
 
 export type PaperTrail = z.infer<typeof PaperTrailSchema>;
 
@@ -53,11 +55,33 @@ export const InboxEntrySchema = SnapshotSchema
     .pick({ creation: true })
     .extend({
         doc: DocumentSchema.shape.id,
+        title: DocumentSchema.shape.title,
         category: CategorySchema.shape.name,
-    })
-    .and(DocumentSchema.pick({ title: true }));
+    });
 
 export type InboxEntry = z.infer<typeof InboxEntrySchema>;
+
+export const OutboxEntrySchema = SnapshotSchema
+    .pick({ creation: true, status: true, target: true})
+    .extend({
+        doc: DocumentSchema.shape.id,
+        title: DocumentSchema.shape.title,
+        category: CategorySchema.shape.name,
+    });
+
+export type OutboxEntry = z.infer<typeof OutboxEntrySchema>
+
+export const AllInboxSchema = z.object({
+    pending: InboxEntrySchema.array(),
+    accept: InboxEntrySchema.array()
+})
+export type AllInbox = z.infer<typeof AllInboxSchema>
+
+export const AllOutboxSchema = z.object({
+    ready: OutboxEntrySchema.array(),
+    pending: OutboxEntrySchema.array()
+})
+export type AllOutbox = z.infer<typeof AllOutboxSchema>
 
 export const AllOfficesSchema = z.record(OfficeSchema.shape.id, OfficeSchema.shape.name);
 export type AllOffices = z.infer<typeof AllOfficesSchema>;
