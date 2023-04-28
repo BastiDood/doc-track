@@ -77,7 +77,7 @@ export type AllInbox = z.infer<typeof AllInboxSchema>
 
 export const AllOutboxSchema = z.object({
     ready: OutboxEntrySchema.array(),
-    accept: OutboxEntrySchema.array()
+    pending: OutboxEntrySchema.array()
 })
 export type AllOutbox = z.infer<typeof AllOutboxSchema>
 
