@@ -18,7 +18,8 @@ import {
     AllOfficesSchema,
     BarcodeAssignmentError,
     FullSessionSchema,
-    InboxEntrySchema,
+    AllInboxSchema,
+    AllOutboxSchema,
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
@@ -375,31 +376,62 @@ export class Database {
         return PaperTrailSchema.array().parse(rows);
     }
 
-    async getInbox(oid: Office['id']): Promise<InboxEntry[]> {
+    async getInbox(oid: Office['id']): Promise<AllInboxSchema> {
         const { rows } = await this.#client
             .queryObject`
-            WITH _ (SELECT doc, MAX(creation) AS creation, status FROM snapshot HAVING status = 'Send' OR status = 'Register' GROUP BY doc, status)
-                SELECT json_build_object(
-                    'active', coalesce((SELECT ))
-                ) AS result
-            `
-            `
-            WITH _ AS (SELECT active, json_agg(json_build_object('id', id, 'name', name)) AS info FROM category GROUP BY active)
-                SELECT json_build_object(
-                    'active', coalesce((SELECT info FROM _ WHERE active), '[]'),
-                    'retire', coalesce((SELECT info FROM _ WHERE NOT active), '[]')
-                ) AS result
-            
-            `
-            .queryObject`
-                WITH snaps AS (SELECT doc,MAX(creation) AS creation FROM snapshot WHERE target = ${oid} GROUP BY doc)
-                SELECT s.doc,s.creation,d.title,c.name AS category FROM snaps AS s
-                    INNER JOIN document AS d ON s.doc = d.id
-                    INNER JOIN category AS c ON d.category = c.id
-                ORDER BY s.creation DESC`;
-        return InboxEntrySchema.array().parse(rows);
+            WITH snap AS (
+                SELECT doc, MAX(creation) as creation, status, target FROM snapshot
+                GROUP BY doc, creation, target, status
+            ), incoming AS (
+                SELECT s.doc, s.creation, d.title, c.name AS category, status, target FROM snap AS s
+                    INNER JOIN document as d ON s.doc = d.id
+                    INNER JOIN category as c ON d.category = c.id
+                WHERE target = ${oid} AND (status = 'Send' OR status = 'Receive')
+                ORDER BY s.creation DESC
+            ), tup AS (
+                SELECT status, json_agg(json_build_object('doc', doc, 'creation', creation, 'title', title, 'category', category)) AS info from incoming 
+                GROUP BY status
+            )
+            SELECT json_build_object(
+                'pending', coalesce((SELECT info FROM tup WHERE status = 'Send'),'[]'),
+                'accept', coalesce((SELECT info FROM tup WHERE status = 'Receive'),'[]')
+            ) AS result`;
+        return AllInboxSchema.array().parse(rows);
     }
 
+    async getOutbox(oid: Office['id']): Promise<AllOutboxSchema> {
+        const { rows } = await this.#client
+            .queryObject`
+            WITH mostRecentSnaps AS (
+                SELECT doc, MAX(creation) as creation, status, target FROM snapshot
+                GROUP BY doc, creation, status, target
+            ), register AS (
+                SELECT m.status, json_agg(json_build_object('doc', doc, 'creation', creation, 'title', d.title, 'category', c.name ,'status', status, 'target', target)) AS info FROM mostRecentSnaps as m
+                    INNER JOIN document as d ON doc = d.id
+                    INNER JOIN category as c ON d.category = c.id
+                WHERE status = 'Register' AND target = ${oid}
+                GROUP BY m.status
+            ), notAccept AS (
+                SELECT doc, creation, status, target FROM mostRecentSnaps
+                WHERE status = 'Send' AND target != ${oid}
+            ), mostRecentRecieved AS (
+                SELECT doc, MAX(creation) as creation, status, target FROM snapshot
+                WHERE status = 'Receive' AND target = ${oid}
+                GROUP BY doc, creation, status, target
+            ), backwardResolve AS (
+                SELECT n.status AS status, json_agg(json_build_object('doc', m.doc, 'creation', n.creation, 'title', d.title, 'category', c.name, 'status', n.status, 'target', n.target)) AS info FROM mostRecentRecieved as m, notAccept as n
+                    INNER JOIN document as d ON doc = d.id
+                    INNER JOIN category as c ON d.category = c.id
+                WHERE n.doc = m.doc
+                GROUP BY n.status
+            )
+            SELECT json_build_object(
+                'ready', coalesce((SELECT info FROM register WHERE status = 'Register'), '[]'),
+                'pending', coalesce((SELECT info FROM backwardResolve WHERE status = 'Send'), '[]')
+            ) as result
+            `;
+        return AllOutboxSchema.array().parse(rows);
+    }
     /**
      * # Assumption
      * The user has sufficient permissions to add a new system-wide category.
