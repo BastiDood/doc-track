@@ -73,6 +73,9 @@
         if (currentOffice) showInsertSnapshot = true;
     }
 
+    function handleIsSubscribed(e: CustomEvent<boolean>) {
+        isSubscribed = e.detail;
+    }
 </script>
 
 <h1>Sandbox</h1>
@@ -121,16 +124,16 @@
 {/if}
 
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
-    <RenameCategory/>
+    <RenameCategory />
 </Modal>
 <Modal title="Remove a Category" bind:showModal={showRemoveCategory}>
-    <RemoveCategory/>
+    <RemoveCategory />
 </Modal>
 <Modal title="Activate a Category" bind:showModal={showActivateCategory}>
-    <ActivateCategory/>
+    <ActivateCategory />
 </Modal>
 <Modal title="Create a Category" bind:showModal={showCreateCategory}>
-    <CreateCategory/>
+    <CreateCategory />
 </Modal>
 
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
@@ -186,11 +189,11 @@
 </Modal>
 
 <Modal title="Subscribe to Push Notification" bind:showModal={showSubscribePushNotification}>
-    <SubscribePushNotification on:subscribe={(e) => (isSubscribed = e.detail)}/>
+    <SubscribePushNotification on:subscribe={handleIsSubscribed}/>
 </Modal>
 
 <Modal title="Unsubscribe to Push Notification" bind:showModal={showUnsubscribePushNotification}>
-    <UnsubscribePushNotification on:unsubscribe={(e) => (isSubscribed = e.detail)} />
+    <UnsubscribePushNotification on:unsubscribe={handleIsSubscribed} />
 </Modal>
 
 <Modal title="Create Document" bind:showModal={showCreateDocument}>
