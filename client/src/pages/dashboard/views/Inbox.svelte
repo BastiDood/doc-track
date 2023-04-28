@@ -67,10 +67,10 @@
     </Button>
 
     <h2>Pending Acceptance</h2>
-    {#if $documentInbox.pending.length === 0}
+    {#if $documentInbox?.pending.length === 0}
         No incoming documents.
     {:else}
-        {#each $documentInbox.pending as pending (pending.doc)}
+        {#each $documentInbox?.pending as pending (pending.doc)}
             <AcceptRow
                 {...pending}
                 iconSize = {IconSize.Large}
@@ -80,10 +80,10 @@
     {/if}
 
     <h2>Office Inbox</h2>
-    {#if $documentInbox.accept.length === 0 }
+    {#if $documentInbox?.accept.length === 0 }
         No accepted documents in Inbox
     {:else}
-        {#each $documentInbox.accept as accepted (accepted.doc)}
+        {#each $documentInbox?.accept as accepted (accepted.doc)}
             <InboxRow
                 {...accepted}
                 iconSize = {IconSize.Large}

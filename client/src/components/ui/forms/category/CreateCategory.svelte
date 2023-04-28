@@ -31,15 +31,16 @@
 <p>You are currently adding a category as {$userSession?.email}</p>
 
 <section>
-    {#if $categoryList.active.length !== 0 || $categoryList.retire.length !== 0 }
+    {#if $categoryList.active.length === 0 || $categoryList.retire.length === 0 }
+        No categories available.
+    {:else}
         {#each $categoryList.active as category (category.id)}
             <p>{category.id}: {category.name} [ACTIVE]</p>
         {/each}
         {#each $categoryList.retire as category (category.id)}
             <p>{category.id}: {category.name} [RETIRED]</p>
         {/each}
-    {:else}
-        No categories available.
+        
     {/if}
 </section>
 <article>

@@ -56,10 +56,10 @@
     </Button>
 
     <h2>Staged Registered Documents</h2>
-    {#if $documentOutbox.ready.length === 0 }
+    {#if $documentOutbox?.ready.length === 0 }
         No staged registered documents.
     {:else}
-        {#each $documentOutbox.ready as register (register.doc)}
+        {#each $documentOutbox?.ready as register (register.doc)}
             <RegisterRow 
                 {...register}
                 iconSize={IconSize.Large} 
@@ -68,10 +68,10 @@
         {/each}
     {/if}
     <h2>Sent Documents</h2>
-    {#if $documentOutbox.pending.length === 0 }
+    {#if $documentOutbox?.pending.length === 0 }
         No documents pending in outbox.
     {:else}
-        {#each $documentOutbox.pending as pending (pending.doc)}
+        {#each $documentOutbox?.pending as pending (pending.doc)}
             <SendRow iconSize={IconSize.Large} {...pending} />
         {/each}
     {/if}

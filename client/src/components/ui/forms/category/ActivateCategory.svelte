@@ -12,7 +12,7 @@
     let currId: CategoryModel['id'] | null = null;
     let currName: CategoryModel['name'] | null = null;
 
-    $: currName = $categoryList.retire.find(cat => cat.id === currId)?.name ?? null;
+    $: currName = $categoryList?.retire.find(cat => cat.id === currId)?.name ?? null;
     
     async function handleSubmit(this: HTMLFormElement) {
         if (currId === null) return;
