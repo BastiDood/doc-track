@@ -381,11 +381,12 @@ export class Database {
     async getInbox(oid: Office['id']): Promise<AllInbox> {
         const { rows: [first, ...rest] } = await this.#client
             .queryObject`
-            WITH snap AS (
-                SELECT doc, MAX(creation) as creation, status, target FROM snapshot
-                GROUP BY doc, creation, target, status
+            WITH mostRecentSnap AS (
+                SELECT doc, MAX(creation) as creation FROM snapshot
+                GROUP BY doc, creation
             ), incoming AS (
-                SELECT s.doc, s.creation, d.title, c.name AS category, status, target FROM snap AS s
+                SELECT m.doc, m.creation, d.title, c.name AS category, status, target FROM mostRecentSnap AS m
+                    INNER JOIN snapshot as s ON m.creation = s.creation
                     INNER JOIN document as d ON s.doc = d.id
                     INNER JOIN category as c ON d.category = c.id
                 WHERE target = ${oid} AND (status = 'Send' OR status = 'Receive')
@@ -406,26 +407,32 @@ export class Database {
         const { rows : [first, ...rest] } = await this.#client
             .queryObject`
             WITH mostRecentSnaps AS (
-                SELECT doc, MAX(creation) as creation, status, target FROM snapshot
-                GROUP BY doc, creation, status, target
+                SELECT doc, MAX(creation) as creation FROM snapshot
+                GROUP BY doc
             ), register AS (
-                SELECT m.status, json_agg(json_build_object('doc', doc, 'creation', creation, 'title', d.title, 'category', c.name ,'status', status, 'target', target)) AS info FROM mostRecentSnaps as m
-                    INNER JOIN document as d ON doc = d.id
+                SELECT status, json_agg(json_build_object('doc', m.doc, 'creation', m.creation, 'title', d.title, 'category', c.name ,'status', status, 'target', target)) AS info FROM mostRecentSnaps as m
+                    INNER JOIN snapshot as s ON m.creation = s.creation
+                    INNER JOIN document as d ON m.doc = d.id
                     INNER JOIN category as c ON d.category = c.id
                 WHERE status = 'Register' AND target = ${oid}
-                GROUP BY m.status
+                GROUP BY status
             ), notAccept AS (
-                SELECT doc, creation, status, target FROM mostRecentSnaps
+                SELECT s.doc, s.creation, status, target FROM mostRecentSnaps as m
+                    INNER JOIN snapshot as s ON m.creation = s.creation 
                 WHERE status = 'Send' AND target != ${oid}
             ), mostRecentRecieved AS (
-                SELECT doc, MAX(creation) as creation, status, target FROM snapshot
-                WHERE status = 'Receive' AND target = ${oid}
-                GROUP BY doc, creation, status, target
+                SELECT doc, MAX(creation) as creation, status FROM snapshot
+                WHERE status = 'Receive' OR status = 'Register'
+                GROUP BY doc, creation, status
+            ),  mostRecentRecievedSnap AS (
+                SELECT m.doc, m.creation, m.status, s.target FROM mostRecentRecieved as m
+                    INNER JOIN snapshot as s ON m.creation = s.creation
+                WHERE target = ${oid}
             ), backwardResolve AS (
-                SELECT n.status AS status, json_agg(json_build_object('doc', m.doc, 'creation', n.creation, 'title', d.title, 'category', c.name, 'status', n.status, 'target', n.target)) AS info FROM mostRecentRecieved as m, notAccept as n
-                    INNER JOIN document as d ON doc = d.id
+                SELECT n.status AS status, json_agg(json_build_object('doc', m.doc, 'creation', n.creation, 'title', d.title, 'category', c.name, 'status', n.status, 'target', n.target)) AS info FROM mostRecentRecievedSnap as m
+                    INNER JOIN notAccept AS n ON n.doc = m.doc
+                    INNER JOIN document AS d ON m.doc = d.id
                     INNER JOIN category as c ON d.category = c.id
-                WHERE n.doc = m.doc
                 GROUP BY n.status
             )
             SELECT json_build_object(
