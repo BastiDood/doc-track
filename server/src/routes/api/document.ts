@@ -5,7 +5,7 @@ import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
-import type { BarcodeAssignmentError, InboxEntry, PaperTrail } from '~model/api.ts';
+import type { BarcodeAssignmentError, AllInbox, AllOutbox, PaperTrail } from '~model/api.ts';
 import { Local } from '~model/permission.ts';
 
 import { DocumentSchema } from '~model/document.ts';
@@ -150,7 +150,7 @@ export async function handleGetInbox(pool: Pool, req: Request, params: URLSearch
             return new Response(null, { status: Status.Forbidden });
         }
 
-        const inbox: InboxEntry[] = await db.getInbox(oid);
+        const inbox: AllInbox = await db.getInbox(oid);
         info(`[Document] User ${staff.user_id} retrieved the inbox for office ${oid}`);
         return new Response(JSON.stringify(inbox), {
             headers: { 'Content-Type': 'application/json' },
@@ -160,6 +160,47 @@ export async function handleGetInbox(pool: Pool, req: Request, params: URLSearch
     }
 }
 
+export async function handleGetOutbox(pool: Pool, req: Request, params: URLSearchParams) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Document] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    const office = params.get('office');
+    const oid = office ? parseInt(office, 10) : NaN;
+    if (isNaN(oid)) {
+        error(`[Document] Session ${sid} provided invalid office ID`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Document] Content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
+            error(`[Document] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((staff.permission & Local.ViewInbox) === 0) {
+            error(`[Document] User ${staff.user_id} cannot retrieve the inbox for office ${oid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const inbox: AllOutbox = await db.getOutbox(oid);
+        info(`[Document] User ${staff.user_id} retrieved the inbox for office ${oid}`);
+        return new Response(JSON.stringify(inbox), {
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } finally {
+        db.release();
+    }
+}
 /**
  * Creates a new document by assigning it an available barcode.
  *
