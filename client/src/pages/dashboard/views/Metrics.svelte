@@ -3,6 +3,7 @@
     import { dashboardState } from '../stores/DashboardState.ts';
     import { Metrics } from '../../../api/metrics.ts';
     import { Metrics as MetricsModel } from '~model/metrics.ts';
+    import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
 
     import Button from '../../../components/ui/Button.svelte';
     import Download from '../../../components/icons/Download.svelte';
@@ -24,25 +25,29 @@
     let selectedMetrics: string;
     let metric: MetricsModel | null = null;
     
-    async function loadMetrics() {
+    function loadMetrics() {
         if (currentOffice === null) return;
+        try {
+            if (selectedMetrics === 'User Summary') metric = $userSummary;
+            else if (selectedMetrics === 'Office Summary') metric = $localSummary;
+            else if (selectedMetrics === 'Global Summary') metric = $globalSummary;
+            else return;
 
-        if (selectedMetrics === 'User Summary') metric = await Metrics.generateUserSummary();
-        else if (selectedMetrics === 'Office Summary') metric = await Metrics.generateLocalSummary(currentOffice);
-        else if (selectedMetrics === 'Global Summary') metric = await Metrics.generateGlobalSummary();
-        else return;
-
-        register = metric.Register ?? 0;
-        send = metric.Send  ?? 0;
-        receive = metric.Receive ?? 0;
-        terminal = metric.Terminate ?? 0;
+            register = metric === null ? 0 : metric.Register ?? 0;
+            send = metric === null ? 0 : metric.Send ?? 0;
+            receive = metric === null ? 0 : metric.Receive ?? 0;
+            terminal = metric === null ? 0 : metric.Terminate ?? 0;
+        } catch (err) {
+            // TODO: error message
+            alert(err);
+        }
     }
 
-    $: {
-        currentOffice;
-        selectedMetrics;
+    function update(...args: any) {
         loadMetrics();
     }
+
+    $: update(currentOffice, selectedMetrics);
 </script>
 
 {#if currentOffice === null}
@@ -53,7 +58,7 @@
         <div class='header'>
             <h3>Report</h3>
             <Select bind:value={selectedMetrics} options={['User Summary', 'Office Summary', 'Global Summary']} index={0} />
-            <Button on:click={() => showPrintMetrics = true}>
+            <Button on:click={() => (showPrintMetrics = true)}>
                 <Download alt='download' />Print Report
             </Button>
         </div>
