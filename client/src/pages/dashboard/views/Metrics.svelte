@@ -1,53 +1,29 @@
 <script lang="ts">
-    import { Office } from '~model/office';
+    import type { Metrics as MetricsModel } from '~model/metrics.ts';
+
     import { dashboardState } from '../stores/DashboardState.ts';
-    import { Metrics } from '../../../api/metrics.ts';
-    import { Metrics as MetricsModel } from '~model/metrics.ts';
     import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
 
-    import Button from '../../../components/ui/Button.svelte';
-    import Download from '../../../components/icons/Download.svelte';
-    import PrintMetrics from '../../../components/ui/forms/metrics/PrintMetrics.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
-    import Select from '../../../components/ui/Select.svelte';
-
-    let currentOffice: Office['id'] | null = null;
-
     // eslint-disable-next-line prefer-destructuring
-    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+    $: currentOffice = $dashboardState.currentOffice;
 
-    let register: MetricsModel['Register'] = 0;
-    let send: MetricsModel['Send'] = 0;
-    let receive: MetricsModel['Receive'] = 0;
-    let terminal: MetricsModel['Terminate'] = 0;
-
-    let showPrintMetrics = false;
-    let selectedMetrics: string;
+    let metricsMode: 'user' | 'local' | 'global' | undefined;
     let metric: MetricsModel | null = null;
-    
-    function loadMetrics() {
-        if (currentOffice === null) return;
-        try {
-            if (selectedMetrics === 'User Summary') metric = $userSummary;
-            else if (selectedMetrics === 'Office Summary') metric = $localSummary;
-            else if (selectedMetrics === 'Global Summary') metric = $globalSummary;
-            else return;
 
-            register = metric === null ? 0 : metric.Register ?? 0;
-            send = metric === null ? 0 : metric.Send ?? 0;
-            receive = metric === null ? 0 : metric.Receive ?? 0;
-            terminal = metric === null ? 0 : metric.Terminate ?? 0;
-        } catch (err) {
-            // TODO: error message
-            alert(err);
-        }
+    $: switch (metricsMode) {
+        case 'user':
+            metric = $userSummary;
+            break;
+        case 'local':
+            metric = $localSummary;
+            break;
+        case 'global':
+            metric = $globalSummary;
+            break;
+        default:
+            metric = null;
+            break;
     }
-
-    function update(...args: any) {
-        loadMetrics();
-    }
-
-    $: update(currentOffice, selectedMetrics);
 </script>
 
 {#if currentOffice === null}
@@ -57,34 +33,31 @@
     <main>
         <div class='header'>
             <h3>Report</h3>
-            <Select bind:value={selectedMetrics} options={['User Summary', 'Office Summary', 'Global Summary']} index={0} />
-            <Button on:click={() => (showPrintMetrics = true)}>
-                <Download alt='download' />Print Report
-            </Button>
+            <select required bind:value={metricsMode}>
+                <option value="user">User Summary</option>
+                <option value="local">Local Summary</option>
+                <option value="global">Global Summary</option>
+            </select>
         </div>
 
         <table>
             <tr>
                 <td>Registered</td>
-                <td>{register}</td>
+                <td>{metric?.Register ?? 0}</td>
             </tr>
             <tr>
                 <td>Sent</td>
-                <td>{send}</td>
+                <td>{metric?.Send ?? 0}</td>
             </tr>
             <tr>
                 <td>Received</td>
-                <td>{receive}</td>
+                <td>{metric?.Receive ?? 0}</td>
             </tr>
             <tr>
                 <td>Tagged as Terminal</td>
-                <td>{terminal}</td>
+                <td>{metric?.Terminate ?? 0}</td>
             </tr>
         </table>
-
-        <Modal title="Print Metrics" bind:showModal={showPrintMetrics}>
-            <PrintMetrics selectedMetrics={selectedMetrics} register={register} send={send} receive={receive} terminal={terminal} />
-        </Modal>
     </main>
 {/if}
 
