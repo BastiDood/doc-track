@@ -4,12 +4,13 @@
 
     import { IconSize } from '../../types.ts';
     import { Document } from '../../../../../model/src/document.ts';
+    import { Category } from '~model/category.ts';
     
     export let iconSize: IconSize;
     export let doc: Document['id'];
-    export let category: Document['category'];
+    export let category: Category['name'];
     export let title: Document['title'];
-    export let target: number;
+    export let target: number | null;
 
 </script>
 

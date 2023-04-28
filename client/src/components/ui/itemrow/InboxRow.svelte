@@ -6,21 +6,22 @@
 
     import { IconSize, ContextPayload, RowType, Events } from '../../types.ts';
     import { Document } from '../../../../../model/src/document.ts';
+    import { Category } from '~model/category.ts';
 
     export let iconSize: IconSize;
-    export let id: Document['id'];
-    export let category: Document['category'];
+    export let doc: Document['id'];
+    export let category: Category['name'];
     export let title: Document['title'];
 
     const dispatch = createEventDispatcher();
     const rowEvent: ContextPayload = {
         ty: RowType.Inbox,
-        id,
+        id: doc,
     };
 </script>
 
 <RowTemplate
-    title={`${title} ID: ${id} Category: ${category}`}
+    title={`${title} ID: ${doc} Category: ${category}`}
     {iconSize} 
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
 >
