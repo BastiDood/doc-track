@@ -304,13 +304,13 @@ export class Database {
      */
     async assignBarcodeToDocument(
         { id, category, title }: Document,
-        { evaluator, remark }: Pick<Snapshot, 'evaluator' | 'remark'>,
+        { evaluator, remark, target }: Pick<Snapshot, 'evaluator' | 'remark' | 'target'>,
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
         // TODO: Do Actual Document Upload
         try {
             const { rows: [ first, ...rest ] } = await this.#client
                 .queryObject`WITH results AS (INSERT INTO document (id,category,title) VALUES (${id},${category},${title}) RETURNING id)
-                    INSERT INTO snapshot (doc,evaluator,remark) VALUES ((SELECT id from results),${evaluator},${remark}) RETURNING creation`;
+                    INSERT INTO snapshot (doc,evaluator,remark,target) VALUES ((SELECT id from results),${evaluator},${remark},${target}) RETURNING creation`;
             assertStrictEquals(rest.length, 0);
             return SnapshotSchema.pick({ creation: true }).parse(first).creation;
         } catch (err) {
@@ -377,6 +377,20 @@ export class Database {
 
     async getInbox(oid: Office['id']): Promise<InboxEntry[]> {
         const { rows } = await this.#client
+            .queryObject`
+            WITH _ (SELECT doc, MAX(creation) AS creation, status FROM snapshot HAVING status = 'Send' OR status = 'Register' GROUP BY doc, status)
+                SELECT json_build_object(
+                    'active', coalesce((SELECT ))
+                ) AS result
+            `
+            `
+            WITH _ AS (SELECT active, json_agg(json_build_object('id', id, 'name', name)) AS info FROM category GROUP BY active)
+                SELECT json_build_object(
+                    'active', coalesce((SELECT info FROM _ WHERE active), '[]'),
+                    'retire', coalesce((SELECT info FROM _ WHERE NOT active), '[]')
+                ) AS result
+            
+            `
             .queryObject`
                 WITH snaps AS (SELECT doc,MAX(creation) AS creation FROM snapshot WHERE target = ${oid} GROUP BY doc)
                 SELECT s.doc,s.creation,d.title,c.name AS category FROM snaps AS s

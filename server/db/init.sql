@@ -96,7 +96,7 @@ CREATE TABLE snapshot(
     target SMALLINT
         REFERENCES office (id)
         DEFAULT NULL
-        CHECK((status IN ('Terminate') AND target is NULL) OR (status NOT IN ('Send', 'Receive', 'Register') AND target is NOT NULL)),
+        CHECK((status != 'Terminate' AND target is NOT NULL) or (status = 'Terminate' AND target is NULL)),
     status DocStatus NOT NULL DEFAULT 'Register',
     remark VARCHAR(32) NOT NULL,
     PRIMARY KEY (creation, doc)
