@@ -11,7 +11,7 @@ import {
     BarcodeAssignmentErrorSchema,
     PaperTrailSchema,
     AllInboxSchema,
-    AllOutboxSchema
+    AllOutboxSchema,
 } from '../../../model/src/api.ts';
 import { type Snapshot, SnapshotSchema } from '../../../model/src/snapshot.ts';
 
