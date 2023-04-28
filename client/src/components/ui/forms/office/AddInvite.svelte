@@ -54,7 +54,7 @@
                 Email
                 <input type="email" name="inputemail" placeholder="example@up.edu.ph" bind:value={currEmail} />
             </label>
-            <br>
+            <br />
             <p><b>Permissions:</b></p>
             <label>
                 <input type="checkbox" name="perms" value={Global.GetOffices} />

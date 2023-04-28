@@ -1,8 +1,7 @@
 <script lang="ts">
     import type { Invitation } from '../../../../model/src/invitation.ts';
     export let invites: Pick<Invitation, 'email' | 'permission'>[];
-    export let value: string | undefined;
-
+    export let value: Invitation['email'] | undefined;
 </script>
 
 <section>
@@ -13,8 +12,6 @@
         <br>
     {/each}
 </section>
-
-
 
 <style>
     @import url('../../pages/vars.css');
