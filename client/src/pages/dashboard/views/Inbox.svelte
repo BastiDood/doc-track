@@ -60,41 +60,37 @@
 {#if currentOffice === null}
     You must select an office before accessing the Inbox page.
 {:else}
-    {#await documentInbox.reload?.()}
-        Loading document inbox.
-    {:then} 
-        <h1>Inbox</h1>
+    <h1>Inbox</h1>
 
-        <Button on:click={() => (showCreateDocument = true)}>
-            Register and Stage a New Document
-        </Button>
+    <Button on:click={() => (showCreateDocument = true)}>
+        Register and Stage a New Document
+    </Button>
 
-        <h2>Pending Acceptance</h2>
-        {#if $documentInbox.pending.length === 0}
-            No incoming documents.
-        {:else}
-            {#each $documentInbox.pending as pending (pending.doc)}
-                <AcceptRow
-                    {...pending}
-                    iconSize = {IconSize.Large}
-                    on:overflowClick = {overflowClickHandler}
-                />
-            {/each}
-        {/if}
+    <h2>Pending Acceptance</h2>
+    {#if $documentInbox.pending.length === 0}
+        No incoming documents.
+    {:else}
+        {#each $documentInbox.pending as pending (pending.doc)}
+            <AcceptRow
+                {...pending}
+                iconSize = {IconSize.Large}
+                on:overflowClick = {overflowClickHandler}
+            />
+        {/each}
+    {/if}
 
-        <h2>Office Inbox</h2>
-        {#if $documentInbox.accept.length === 0 }
-            No accepted documents in Inbox
-        {:else}
-            {#each $documentInbox.accept as accepted (accepted.doc)}
-                <InboxRow
-                    {...accepted}
-                    iconSize = {IconSize.Large}
-                    on:overflowClick = {overflowClickHandler}
-                />
-            {/each}
-        {/if}
-    {/await}
+    <h2>Office Inbox</h2>
+    {#if $documentInbox.accept.length === 0 }
+        No accepted documents in Inbox
+    {:else}
+        {#each $documentInbox.accept as accepted (accepted.doc)}
+            <InboxRow
+                {...accepted}
+                iconSize = {IconSize.Large}
+                on:overflowClick = {overflowClickHandler}
+            />
+        {/each}
+    {/if}
     
     {#if currentContext?.ty === RowType.Inbox}
         <InboxContext bind:show={showInboxContextMenu} payload={currentContext} 
