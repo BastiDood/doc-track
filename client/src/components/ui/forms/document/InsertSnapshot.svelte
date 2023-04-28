@@ -26,7 +26,7 @@
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
     
-        assert(status !== undefined);
+        assert(typeof status !== 'undefined');
         assert(destOfficeId !== null);
         assert(userOfficeId !== null);
         assert(docId);
