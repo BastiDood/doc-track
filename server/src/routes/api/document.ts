@@ -188,12 +188,12 @@ export async function handleGetOutbox(pool: Pool, req: Request, params: URLSearc
         }
 
         if ((staff.permission & Local.ViewInbox) === 0) {
-            error(`[Document] User ${staff.user_id} cannot retrieve the inbox for office ${oid}`);
+            error(`[Document] User ${staff.user_id} cannot retrieve the outbox for office ${oid}`);
             return new Response(null, { status: Status.Forbidden });
         }
 
         const inbox: AllOutbox = await db.getOutbox(oid);
-        info(`[Document] User ${staff.user_id} retrieved the inbox for office ${oid}`);
+        info(`[Document] User ${staff.user_id} retrieved the outbox for office ${oid}`);
         return new Response(JSON.stringify(inbox), {
             headers: { 'Content-Type': 'application/json' },
         });
