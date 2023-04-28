@@ -61,7 +61,6 @@
     </main>
 {/if}
 
-
 <style>
     main {
         display: flex;

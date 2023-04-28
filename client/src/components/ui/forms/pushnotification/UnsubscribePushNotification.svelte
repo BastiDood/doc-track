@@ -13,4 +13,3 @@
 <Button on:click={() => dispatch('unsubscribe', false)}>
     <Checkmark color={IconColor.White} alt="Accept Push Notification" on:click/>Unsubscribe
 </Button>
-
