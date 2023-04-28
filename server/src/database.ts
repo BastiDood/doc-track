@@ -382,13 +382,13 @@ export class Database {
         const { rows: [first, ...rest] } = await this.#client
             .queryObject`
             WITH mostRecentSnap AS (
-                SELECT doc, MAX(creation) as creation FROM snapshot
+                SELECT doc, MAX(creation) AS creation FROM snapshot
                 GROUP BY doc
             ), incoming AS (
                 SELECT m.doc, m.creation, d.title, c.name AS category, status, target FROM mostRecentSnap AS m
-                    INNER JOIN snapshot as s ON m.creation = s.creation
-                    INNER JOIN document as d ON s.doc = d.id
-                    INNER JOIN category as c ON d.category = c.id
+                    INNER JOIN snapshot AS s ON m.creation = s.creation
+                    INNER JOIN document AS d ON s.doc = d.id
+                    INNER JOIN category AS c ON d.category = c.id
                 WHERE target = ${oid} AND (status = 'Send' OR status = 'Receive')
                 ORDER BY s.creation DESC
             ), tup AS (
@@ -407,21 +407,21 @@ export class Database {
         const { rows : [first, ...rest] } = await this.#client
             .queryObject`
             WITH mostRecentSnaps AS (
-                SELECT doc, MAX(creation) as creation FROM snapshot
+                SELECT doc, MAX(creation) AS creation FROM snapshot
                 GROUP BY doc
             ), register AS (
                 SELECT status, json_agg(json_build_object('doc', m.doc, 'creation', m.creation, 'title', d.title, 'category', c.name ,'status', status, 'target', target)) AS info FROM mostRecentSnaps as m
-                    INNER JOIN snapshot as s ON m.creation = s.creation
-                    INNER JOIN document as d ON m.doc = d.id
-                    INNER JOIN category as c ON d.category = c.id
+                    INNER JOIN snapshot AS s ON m.creation = s.creation
+                    INNER JOIN document AS d ON m.doc = d.id
+                    INNER JOIN category AS c ON d.category = c.id
                 WHERE status = 'Register' AND target = ${oid}
                 GROUP BY status
             ), notAccept AS (
                 SELECT s.doc, s.creation, status, target FROM mostRecentSnaps as m
-                    INNER JOIN snapshot as s ON m.creation = s.creation 
+                    INNER JOIN snapshot AS s ON m.creation = s.creation 
                 WHERE status = 'Send' AND target != ${oid}
             ), mostRecentRecieved AS (
-                SELECT doc, MAX(creation) as creation, status FROM snapshot
+                SELECT doc, MAX(creation) AS creation, status FROM snapshot
                 WHERE status = 'Receive' OR status = 'Register'
                 GROUP BY doc, creation, status
             ),  mostRecentRecievedSnap AS (
@@ -429,17 +429,16 @@ export class Database {
                     INNER JOIN snapshot as s ON m.creation = s.creation
                 WHERE target = ${oid}
             ), backwardResolve AS (
-                SELECT n.status AS status, json_agg(json_build_object('doc', m.doc, 'creation', n.creation, 'title', d.title, 'category', c.name, 'status', n.status, 'target', n.target)) AS info FROM mostRecentRecievedSnap as m
+                SELECT n.status AS status, json_agg(json_build_object('doc', m.doc, 'creation', n.creation, 'title', d.title, 'category', c.name, 'status', n.status, 'target', n.target)) AS info FROM mostRecentRecievedSnap AS m
                     INNER JOIN notAccept AS n ON n.doc = m.doc
                     INNER JOIN document AS d ON m.doc = d.id
-                    INNER JOIN category as c ON d.category = c.id
+                    INNER JOIN category AS c ON d.category = c.id
                 GROUP BY n.status
             )
             SELECT json_build_object(
                 'ready', coalesce((SELECT info FROM register WHERE status = 'Register'), '[]'),
                 'pending', coalesce((SELECT info FROM backwardResolve WHERE status = 'Send'), '[]')
-            ) as result
-            `;
+            ) as result`;
         assertStrictEquals(rest.length, 0);
         return z.object({ result: AllOutboxSchema }).parse(first).result;
     }
