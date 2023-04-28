@@ -12,6 +12,8 @@
     export let title: Document['title'];
     export let target: number | null;
 
+    $: target ??= 0;
+    
 </script>
 
 <RowTemplate

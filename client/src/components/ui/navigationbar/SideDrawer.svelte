@@ -19,11 +19,12 @@
     export let show = false;
     let selectedOffice: Office['id'] | null = null;
 
-    $: if (selectedOffice !== null ) {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    $: if (selectedOffice !== null ) (async() => {
         dashboardState.setOffice(selectedOffice);
-        documentInbox.reload?.();
-        documentOutbox.reload?.();
-    }
+        await documentInbox.reload?.();
+        await documentOutbox.reload?.();
+    })();
 </script>
 
 <nav class:show={show} on:click|stopPropagation on:keypress>

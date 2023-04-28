@@ -61,14 +61,14 @@
 
         <h2> Staged Registered Documents </h2>
         {#if $documentOutbox.ready.length === 0 }
-        No staged registered documents.
+            No staged registered documents.
         {:else}
             {#each $documentOutbox.ready as register (register.doc)}
                 <RegisterRow 
                     {...register}
                     iconSize = {IconSize.Large} 
                     on:overflowClick = {overflowClickHandler}
-                     />
+                />
             {/each}
         {/if}
         <h2> Sent Documents </h2>

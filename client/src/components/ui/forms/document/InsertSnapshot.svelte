@@ -17,7 +17,7 @@
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
     export let status: Status | null;
-    let docId: SnapshotModel['doc'] = payload.id;
+    const docId: SnapshotModel['doc'] = payload.id;
 
     let destOfficeId: SnapshotModel['target'] | null = null;
 
@@ -61,7 +61,7 @@
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     Document Barcode ID: {docId}
     <br>
-    {#if status == Status.Terminate || status == Status.Receive}
+    {#if status === Status.Terminate || status === Status.Receive}
         Set Target Office: This Office.
     {:else}
         Set Target Office:
