@@ -16,8 +16,7 @@
     
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
-    export let status: Status | null;
-    const docId: SnapshotModel['doc'] = payload.id;
+    export let status: Status | null = null;
 
     let destOfficeId: SnapshotModel['target'] | null = null;
 
@@ -34,16 +33,15 @@
     
         assert(userOfficeId !== null);
         assert(status !== null);
-        assert(docId);
+        assert(payload.id);
 
         try {
             await Snapshot.insert( userOfficeId,{
-                doc: docId,
+                doc: payload.id,
                 status,
                 remark: node.value,
                 target: destOfficeId,
             });
-
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
             // TODO: Exit out of the modal.
@@ -54,13 +52,10 @@
     }
 </script>
 
-<p>
-    You are currently adding a snapshot as {$userSession?.email} in office {userOfficeId}.
-</p>
-
+<p>You are currently adding a snapshot as {$userSession?.email} in office {userOfficeId}.</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-    Document Barcode ID: {docId}
-    <br>
+    Document Barcode ID: {payload.id}
+    <br />
     {#if status === Status.Terminate || status === Status.Receive}
         Set Target Office: This Office.
     {:else}
@@ -68,18 +63,14 @@
         <OfficeSelect offices={$allOffices} bind:oid={destOfficeId}/>
     {/if}
     
-    <br>
+    <br />
     Set Status As:
     <select required bind:value={status}>
         <option value={Status.Send}>Send</option>
         <option value={Status.Receive}>Receive</option>
         <option value={Status.Terminate}>Terminate</option>
     </select>
-    <br>
-    <TextInput
-        name="snap-remark"
-        label="Remarks: "
-        placeholder="Optional"
-    />
+    <br />
+    <TextInput name="snap-remark" label="Remarks: " placeholder="Optional" />
     <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>
 </form>
