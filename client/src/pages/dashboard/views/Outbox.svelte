@@ -49,36 +49,32 @@
 {#if currentOffice === null}
     You must select an office before accessing the Outbox page.
 {:else}
-    {#await documentOutbox.reload?.()}
-        Loading document outbox.
-    {:then} 
-        <h1>Outbox</h1>
-        
-        <Button on:click={() => (showCreateDocument = true)}>
-            Register and Stage a New Document
-        </Button>
+    <h1>Outbox</h1>
+    
+    <Button on:click={() => (showCreateDocument = true)}>
+        Register and Stage a New Document
+    </Button>
 
-        <h2>Staged Registered Documents</h2>
-        {#if $documentOutbox.ready.length === 0 }
-            No staged registered documents.
-        {:else}
-            {#each $documentOutbox.ready as register (register.doc)}
-                <RegisterRow 
-                    {...register}
-                    iconSize = {IconSize.Large} 
-                    on:overflowClick = {overflowClickHandler}
-                />
-            {/each}
-        {/if}
-        <h2>Sent Documents</h2>
-        {#if $documentOutbox.pending.length === 0 }
-            No documents pending in outbox.
-        {:else}
-            {#each $documentOutbox.pending as pending (pending.doc)}
-                <SendRow iconSize = {IconSize.Large} {...pending} />
-            {/each}
-        {/if}
-    {/await}
+    <h2>Staged Registered Documents</h2>
+    {#if $documentOutbox.ready.length === 0 }
+        No staged registered documents.
+    {:else}
+        {#each $documentOutbox.ready as register (register.doc)}
+            <RegisterRow 
+                {...register}
+                iconSize = {IconSize.Large} 
+                on:overflowClick = {overflowClickHandler}
+            />
+        {/each}
+    {/if}
+    <h2>Sent Documents</h2>
+    {#if $documentOutbox.pending.length === 0 }
+        No documents pending in outbox.
+    {:else}
+        {#each $documentOutbox.pending as pending (pending.doc)}
+            <SendRow iconSize={IconSize.Large} {...pending} />
+        {/each}
+    {/if}
     
     {#if currentContext?.ty === RowType.Inbox}
         <InboxContext bind:show={showContextMenu} payload={currentContext} 
