@@ -45,9 +45,12 @@
     No available barcodes.
 {:else}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-        Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect> <br>
-        <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput> <br>
-        Category: <CategorySelect bind:catId={category} categories={$categoryList.active} /> <br>
+        Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
+        <br />
+        <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
+        <br />
+        Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
+        <br />
         <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark:" required={false}></TextInput> 
         <Button submit>Create Document</Button>
     </form>
