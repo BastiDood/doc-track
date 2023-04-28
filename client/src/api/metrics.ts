@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { type Metrics as MetricsType, MetricsSchema } from '~model/metrics.ts';
-import type { Office } from '~model/office.ts';
+import { type Metrics as MetricsType, MetricsSchema } from '../../../model/src/metrics.ts';
+import type { Office } from '../../../model/src/office.ts';
 
 import {
     InsufficientPermissions,

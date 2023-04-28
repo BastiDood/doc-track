@@ -20,6 +20,8 @@
     import ActivateCategory from '../../../components/ui/forms/category/ActivateCategory.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
+    import SubscribePushNotification from '../../../components/ui/forms/pushnotification/SubscribePushNotification.svelte';
+    import UnsubscribePushNotification from '../../../components/ui/forms/pushnotification/UnsubscribePushNotification.svelte';
 
     // Modals
     import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
@@ -36,6 +38,8 @@
     let showActivateCategory = false;
     let showInsertSnapshot = false;
     let showCreateDocument = false;
+    let showSubscribePushNotification = false;
+    let showUnsubscribePushNotification = false;
 
     // Receiving document, invites
     let showInviteForm = false;
@@ -44,6 +48,7 @@
     let insertSnapshotAction: SnapshotAction | null = null;
     let currentContext: RowEvent | null = null;
     let currentOffice: Office['id'] | null = null;
+    let isSubscribed = false;
 
     // eslint-disable-next-line prefer-destructuring
     $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
@@ -68,6 +73,9 @@
         if (currentOffice) showInsertSnapshot = true;
     }
 
+    function handleIsSubscribed(e: CustomEvent<boolean>) {
+        isSubscribed = e.detail;
+    }
 </script>
 
 <h1>Sandbox</h1>
@@ -105,17 +113,27 @@
     Revoke Invite
 </Button>
 
+{#if !isSubscribed}
+    <Button on:click={() => (showSubscribePushNotification = true)}>
+        Subscribe to Push Notification
+    </Button>
+    {:else}
+    <Button on:click={() => (showUnsubscribePushNotification = true)}>
+        Unsubscribe to Push Notification
+    </Button>
+{/if}
+
 <Modal title="Rename a Category" bind:showModal={showEditCategory}>
-    <RenameCategory/>
+    <RenameCategory />
 </Modal>
 <Modal title="Remove a Category" bind:showModal={showRemoveCategory}>
-    <RemoveCategory/>
+    <RemoveCategory />
 </Modal>
 <Modal title="Activate a Category" bind:showModal={showActivateCategory}>
-    <ActivateCategory/>
+    <ActivateCategory />
 </Modal>
 <Modal title="Create a Category" bind:showModal={showCreateCategory}>
-    <CreateCategory/>
+    <CreateCategory />
 </Modal>
 
 <Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
@@ -165,9 +183,17 @@
         <InsertSnapshot
             payload={currentContext}
             userOfficeId={currentOffice}
-            statusIndex={insertSnapshotAction}
+            status={insertSnapshotAction}
         /> 
     {/if}
+</Modal>
+
+<Modal title="Subscribe to Push Notification" bind:showModal={showSubscribePushNotification}>
+    <SubscribePushNotification on:subscribe={handleIsSubscribed}/>
+</Modal>
+
+<Modal title="Unsubscribe to Push Notification" bind:showModal={showUnsubscribePushNotification}>
+    <UnsubscribePushNotification on:unsubscribe={handleIsSubscribed} />
 </Modal>
 
 <Modal title="Create Document" bind:showModal={showCreateDocument}>
