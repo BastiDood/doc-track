@@ -4,8 +4,7 @@
     import { dashboardState } from '../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
 
-    // eslint-disable-next-line prefer-destructuring
-    $: currentOffice = $dashboardState.currentOffice;
+    $: ({ currentOffice } = $dashboardState);
 
     let metricsMode: 'user' | 'local' | 'global' | undefined;
     let metric: MetricsModel | null = null;

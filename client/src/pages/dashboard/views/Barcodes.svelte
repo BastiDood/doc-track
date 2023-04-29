@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState.ts';
     import { Batch } from '../../../api/batch.ts';
     import { earliestBatch } from '../../dashboard/stores/BatchStore.ts';
@@ -17,10 +16,7 @@
 
     import { ButtonType } from '../../../components/types.ts';
 
-    let currentOffice: Office['id'] | null = null;
-
-    // eslint-disable-next-line prefer-destructuring
-    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+    $: ({ currentOffice } = $dashboardState);
 
     let showGenerateBatch = false;
     let showDownloadBatch = false;
@@ -28,7 +24,9 @@
     async function handleGenerate() {
         if (currentOffice === null) return;
         try {
-            await Batch.generate(currentOffice);
+            // HACK: Type-cast is necessary here because for some reason,
+            // ESLint resolves the `currentOffice` as `any` type.
+            await Batch.generate(currentOffice as number);
             await earliestBatch.reload?.();
             showGenerateBatch = true;
         } catch (err) {
@@ -39,7 +37,6 @@
 
     async function handleDownload() {
         if (currentOffice === null) return;
-
         try {
             await earliestBatch.reload?.();
             showDownloadBatch = true;
@@ -91,8 +88,6 @@
         </Modal>
     </main>
 {/if}
-
-
 
 <style>
     main {

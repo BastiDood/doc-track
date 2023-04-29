@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Office } from '~model/office';
     import { Status } from '../../../../../model/src/snapshot.ts';
     import { dashboardState } from '../stores/DashboardState';
     import { documentOutbox } from '../stores/DocumentStore';
@@ -13,10 +12,7 @@
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
 
-    let currentOffice: Office['id'] | null = null;
-
-    // eslint-disable-next-line prefer-destructuring
-    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+    $: ({ currentOffice } = $dashboardState);
 
     let showContextMenu = false;
     let showInsertSnapshot = false;
