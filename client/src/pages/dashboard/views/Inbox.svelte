@@ -18,8 +18,8 @@
     let showAcceptContextMenu = false;
     let showInboxContextMenu = false;
 
-    let insertSnapshotAction: Status | null = null;
-    let currentContext: ContextPayload | null = null;
+    let insertSnapshotAction = null as Status | null;
+    let currentContext = null as ContextPayload | null;
     $: ({ currentOffice } = $dashboardState);
 
     function overflowClickHandler(e: CustomEvent<ContextPayload>) {
@@ -96,8 +96,8 @@
         />
     {/if}
     <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
-        {#if currentOffice === null || currentContext === null || !showInsertSnapshot}
-            No office selected.
+        {#if insertSnapshotAction === null || currentContext === null || !showInsertSnapshot}
+            Invalid parameters.
         {:else}
             <InsertSnapshot
                 payload={currentContext}

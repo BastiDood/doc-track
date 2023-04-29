@@ -22,17 +22,15 @@
     let showInsertSnapshot = false;
     let showCreateDocument = false;
 
-    let insertSnapshotAction: Status| null = null;
-    let currentContext: ContextPayload | null = null;
+    let insertSnapshotAction = null as Status | null;
+    let currentContext = null as ContextPayload | null;
 
     function overflowClickHandler(e: CustomEvent<ContextPayload>) {
-        if (!e.detail) return;
         currentContext = e.detail;
         showContextMenu = true;
     }
 
     function contextMenuHandler(e: CustomEvent<ContextPayload>) {
-        if (!e.detail) return;
         switch (e.type) {
             case Events.SendDocument:
                 insertSnapshotAction = Status.Send;
@@ -86,8 +84,8 @@
     {/if}
 
     <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
-        {#if currentOffice === null || currentContext === null || !showInsertSnapshot}
-            No office selected.
+        {#if insertSnapshotAction === null || currentContext === null || !showInsertSnapshot}
+            Invalid parameters.
         {:else}
             <InsertSnapshot
                 payload={currentContext}
@@ -97,10 +95,6 @@
         {/if}
     </Modal>
     <Modal title="Create Document" bind:showModal={showCreateDocument}>
-        {#if currentOffice === null }
-            No office selected.
-        {:else}
-            <CreateDocument />
-        {/if}
+        <CreateDocument />
     </Modal>
 {/if}

@@ -1,8 +1,8 @@
 <script lang="ts">
     import { ButtonType } from '../types.ts';
     export let type: ButtonType = ButtonType.Primary;
-    export let submit = false;
-    export let disabled = false;
+    export let submit = false as boolean;
+    export let disabled = false as boolean;
 </script>
 
 <button type={submit ? 'submit' : 'button'} class={type} {disabled} on:click>
