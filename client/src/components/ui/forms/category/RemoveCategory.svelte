@@ -9,15 +9,14 @@
     import Close from '../../../icons/Close.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
 
-    let currId: CategoryModel['id'] | null = null;
-    let currName: CategoryModel['name'] | null = null;
-    $: currName = $categoryList?.active.find(cat => cat.id === currId)?.name ?? null;
+    let catId: CategoryModel['id'] | null = null;
 
     async function handleSubmit(this: HTMLFormElement) {
-        if (currId === null || currName === null) return;
+        if (catId === null) return;
+        if (!this.reportValidity()) return;
 
         try {
-            await Category.remove(currId);
+            await Category.remove(catId);
             await categoryList.reload?.();
             this.reset();
         } catch (err) {
@@ -30,13 +29,13 @@
 <p>You are currently removing a category as {$userSession?.email}</p>
 
 <article>
-    {#if $categoryList.active.length === 0}
-        No categories to edit.
-    {:else}
+    {#await categoryList.load()}
+        Loading list of removable categories...
+    {:then { active: categories }}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catId={currId} categories={$categoryList.active} />
-            <br/>
+            <CategorySelect bind:catId {categories} />
+            <br />
             <Button type={ButtonType.Danger} submit><Close color={IconColor.White} alt="Edit Category" /> Remove Category</Button>
         </form>
-    {/if}
+    {/await}
 </article>

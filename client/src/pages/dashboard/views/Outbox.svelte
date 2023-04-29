@@ -53,27 +53,24 @@
         Register and Stage a New Document
     </Button>
 
-    <h2>Staged Registered Documents</h2>
-    {#if $documentOutbox?.ready.length === 0 }
-        No staged registered documents.
-    {:else}
-        {#each $documentOutbox?.ready as register (register.doc)}
+    {#await documentOutbox.load()}
+        <p>Loading outbox...</p>
+    {:then { pending, ready }}
+        <h2>Staged Registered Documents</h2>
+        {#each ready as entry (entry.doc)}
             <RegisterRow 
-                {...register}
+                {...entry}
                 iconSize={IconSize.Large} 
                 on:overflowClick = {overflowClickHandler}
             />
         {/each}
-    {/if}
-    <h2>Sent Documents</h2>
-    {#if $documentOutbox?.pending.length === 0 }
-        No documents pending in outbox.
-    {:else}
-        {#each $documentOutbox?.pending as pending (pending.doc)}
-            <SendRow iconSize={IconSize.Large} {...pending} />
+
+        <h2>Sent Documents</h2>
+        {#each pending as entry (entry.doc)}
+            <SendRow iconSize={IconSize.Large} {...entry} />
         {/each}
-    {/if}
-    
+    {/await}
+
     {#if currentContext?.ty === RowType.Inbox}
         <InboxContext
             bind:show={showContextMenu}
