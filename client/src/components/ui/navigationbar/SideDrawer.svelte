@@ -17,7 +17,7 @@
     export let show = false;
 
     let selectedOffice: Office['id'] | null = null;
-    $: if (selectedOffice !== null) dashboardState.setOffice(selectedOffice);
+    $: dashboardState.setOffice(selectedOffice);
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
