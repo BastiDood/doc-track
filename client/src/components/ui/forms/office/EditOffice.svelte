@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { assert } from '../../../../assert.ts';
-
     import { Office as OfficeModel } from '../../../../../../model/src/office.ts';
 
     import { Office } from '../../../../api/office.ts';
