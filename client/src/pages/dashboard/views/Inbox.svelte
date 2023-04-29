@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
     import { documentInbox } from '../stores/DocumentStore';
 
@@ -19,25 +18,17 @@
     let showAcceptContextMenu = false;
     let showInboxContextMenu = false;
 
-    let currentOffice: Office['id'] | null = null;
-
-    let insertSnapshotAction: Status| null = null;
+    let insertSnapshotAction: Status | null = null;
     let currentContext: ContextPayload | null = null;
-
-    // eslint-disable-next-line prefer-destructuring
-    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+    $: ({ currentOffice } = $dashboardState);
 
     function overflowClickHandler(e: CustomEvent<ContextPayload>) {
-        if (!e.detail) return;
-
         currentContext = e.detail;
-
-        showInboxContextMenu = e.detail.ty === RowType.Inbox;
-        showAcceptContextMenu = e.detail.ty === RowType.AcceptDocument;
+        showInboxContextMenu = currentContext.ty === RowType.Inbox;
+        showAcceptContextMenu = currentContext.ty === RowType.AcceptDocument;
     }
 
     function contextMenuHandler(e: CustomEvent<ContextPayload>) {
-        if (!e.detail) return;
         switch (e.type) {
             case Events.AcceptDocument:
                 insertSnapshotAction = Status.Receive;
@@ -86,8 +77,8 @@
         {#each $documentInbox?.accept as accepted (accepted.doc)}
             <InboxRow
                 {...accepted}
-                iconSize = {IconSize.Large}
-                on:overflowClick = {overflowClickHandler}
+                iconSize={IconSize.Large}
+                on:overflowClick={overflowClickHandler}
             />
         {/each}
     {/if}
