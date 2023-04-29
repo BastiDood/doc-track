@@ -1,7 +1,9 @@
-<script>
+<script lang="ts">
     import Router from 'svelte-spa-router';
 
     import { currentPage } from './stores/CurrentPage.ts';
+    import { dashboardState } from './stores/DashboardState.ts';
+    import { allOffices } from './stores/OfficeStore.ts';
     import { currentUser } from './stores/UserStore.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
@@ -11,10 +13,16 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
+
+    $: pageName = $currentPage || 'DocTrack';
+    $: maybeOfficeName = $dashboardState.currentOffice === null
+        ? null
+        : $allOffices[$dashboardState.currentOffice];
+    $: officeName = maybeOfficeName ?? '[No Office]';
 </script>
 
 <svelte:head>
-    <title>{$currentPage}</title>
+    <title>{pageName} - {officeName}</title>
 </svelte:head>
 
 {#await currentUser.load()}
