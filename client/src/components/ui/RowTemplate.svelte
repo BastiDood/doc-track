@@ -25,14 +25,13 @@
 </article>
 
 <style>
-    @import url('../../pages/vars.css');
-
     article {
+        align-items: center;
         display: flex;
         border-style: solid;
         border-width: var(--spacing-tiny);
         border-radius: var(--border-radius);
-        margin: var(--spacing-small);
+        gap: var(--spacing-normal);
         padding: var(--spacing-small);
     }
 
