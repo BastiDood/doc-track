@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Status } from '~model/snapshot.ts';
+    import { Status } from '../../../../model/src/snapshot';
     export let value: Status | undefined;
 </script>
 
