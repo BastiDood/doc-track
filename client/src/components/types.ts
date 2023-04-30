@@ -2,6 +2,12 @@ import { Document } from '../../../model/src/document.ts';
 import { Invitation } from '../../../model/src/invitation.ts';
 import { Staff } from '../../../model/src/staff.ts';
 
+export enum MetricsMode {
+    User,
+    Local,
+    Global,
+}
+
 export enum IconColor {
     Default = 'default',
     White = 'white'

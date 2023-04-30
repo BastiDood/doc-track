@@ -1,21 +1,22 @@
 <script lang="ts">
     import type { Metrics as MetricsModel } from '~model/metrics.ts';
 
-    import MetricsSelect, { Mode } from '../../../components/ui/MetricsSelect.svelte';
+    import MetricsSelect from '../../../components/ui/MetricsSelect.svelte';
+    import { MetricsMode } from '../../../components/types.ts';
 
     import { dashboardState } from '../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
 
-    function selectSummary(mode?: Mode): MetricsModel {
+    function selectSummary(mode?: MetricsMode): MetricsModel {
         switch (mode) {
-            case Mode.User: return $userSummary;
-            case Mode.Local: return $localSummary;
-            case Mode.Global: return $globalSummary;
+            case MetricsMode.User: return $userSummary;
+            case MetricsMode.Local: return $localSummary;
+            case MetricsMode.Global: return $globalSummary;
             default: return { };
         }
     }
 
-    let mode: Mode | undefined;
+    let mode: MetricsMode | undefined;
 
     $: ({ currentOffice } = $dashboardState);
     $: metric = selectSummary(mode);

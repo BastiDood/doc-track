@@ -1,19 +1,12 @@
-<script lang="ts" context="module">
-    export enum Mode {
-        User,
-        Local,
-        Global,
-    }
-</script>
-
 <script lang="ts">
-    export let value: Mode | undefined;
+    import { MetricsMode } from '../types.ts';
+    export let value: MetricsMode | undefined;
 </script>
 
 <select required bind:value>
-    <option value={Mode.User}>User Summary</option>
-    <option value={Mode.Local}>Local Summary</option>
-    <option value={Mode.Global}>Global Summary</option>
+    <option value={MetricsMode.User}>User Summary</option>
+    <option value={MetricsMode.Local}>Local Summary</option>
+    <option value={MetricsMode.Global}>Global Summary</option>
 </select>
 
 <style>
