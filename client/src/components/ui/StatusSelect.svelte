@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Status } from '~model/snapshot.ts';
-    export let value: number | undefined;
+    export let value: Status | undefined;
 </script>
 
 <select required bind:value>
