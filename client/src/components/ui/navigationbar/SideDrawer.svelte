@@ -29,17 +29,17 @@
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
         </header>
-        <a href="#/inbox" use:active><InboxIcon />Inbox</a>
-        <a href="#/outbox" use:active><OutboxIcon />Outbox</a>
-        <a href="#/drafts" use:active><EventsIcon />Drafts</a>
-        <a href="#/metrics" use:active><EventsIcon />Metrics</a>
-        <a href="#/barcodes" use:active><BarcodesIcon />Barcodes</a>
-        <a href="#/invites" use:active><InvitesIcon />Invites</a>
-        <a href="#/staff" use:active><StaffIcon />Staff</a>
-        <a href="#/users" use:active><AdminIcon />Users</a>
-        <a href="#/categories" use:active><SettingsIcon />Categories</a>
-        <a href="#/settings" use:active><SettingsIcon />Settings</a>
-        <a href="#/sandbox" use:active><SettingsIcon />Sandbox</a>
+        <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
+        <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
+        <a href="#/drafts" use:active><EventsIcon alt="Go to Drafts" />Drafts</a>
+        <a href="#/metrics" use:active><EventsIcon alt="Go to Metrics" />Metrics</a>
+        <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
+        <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
+        <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
+        <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
+        <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
+        <a href="#/settings" use:active><SettingsIcon alt="Go to Settings" />Settings</a>
+        <a href="#/sandbox" use:active><SettingsIcon alt="Go to Development Sandbox" />Sandbox</a>
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
