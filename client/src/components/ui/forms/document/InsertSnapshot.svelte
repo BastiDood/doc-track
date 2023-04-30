@@ -55,7 +55,7 @@
     {#if status === Status.Terminate || status === Status.Receive}
         Set Target Office: This Office.
     {:else}
-        Set Target Office: <OfficeSelect offices={$allOffices} bind:oid={destOfficeId}/>
+        Set Target Office: <OfficeSelect offices={$allOffices} bind:oid={destOfficeId} />
     {/if}
     
     <br />
