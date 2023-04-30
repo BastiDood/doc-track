@@ -9,17 +9,14 @@
     import Edit from '../../../icons/Edit.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
 
-    let currId: CategoryModel['id'] | null = null;
-    let currName: CategoryModel['name'] | null = null;
+    let catId: CategoryModel['id'] | null = null;
 
-    $: currName = $categoryList?.retire.find(cat => cat.id === currId)?.name ?? null;
-    
     async function handleSubmit(this: HTMLFormElement) {
-        if (currId === null) return;
+        if (catId === null) return;
         if (!this.reportValidity()) return;
 
         try {
-            await Category.activate(currId);
+            await Category.activate(catId);
             await categoryList.reload?.();
             this.reset();
         } catch (err) {
@@ -32,19 +29,15 @@
 <p>You are currently reactivating a category as {$userSession?.email}</p>
 
 <article>
-    {#if $categoryList.retire.length === 0}
-        No categories to edit.
-    {:else}
+    {#await categoryList.load()}
+        Loading list of retired categories...
+    {:then { retire: categories }}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catId={currId} categories={$categoryList.retire}/>
-            <br/>
-            {#if typeof currId === 'number'}
-                <p>Category ID: {currId}</p>
-                <p>Category Name: {currName}</p>
-                {#if currName !== null}
-                    <Button submit><Edit color={IconColor.White} alt="Reactivate Category"/> Reactivate Category</Button>
-                {/if}
+            <CategorySelect bind:catId {categories} />
+            <br />
+            {#if typeof catId === 'number'}
+                <Button submit><Edit color={IconColor.White} alt="Reactivate Category" /> Reactivate Category</Button>
             {/if}
         </form>
-    {/if}
+    {/await}
 </article>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import Close from '../icons/Close.svelte';
 
-    export let showModal = false;
+    export let showModal = false as boolean;
     export let title: string;
 
     let dialog: HTMLDialogElement | null = null;

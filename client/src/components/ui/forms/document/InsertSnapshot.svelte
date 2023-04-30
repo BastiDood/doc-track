@@ -16,7 +16,7 @@
     
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
-    export let status: Status | null = null;
+    export let status: Status;
 
     let destOfficeId: SnapshotModel['target'] | null = null;
 
@@ -26,13 +26,8 @@
         assert(node.type === 'text');
     
         if (status === Status.Receive) destOfficeId = userOfficeId;
-        if (status === Status.Terminate)
-            destOfficeId = null;
-        else
-            assert(destOfficeId !== null);
-    
-        assert(userOfficeId !== null);
-        assert(status !== null);
+        if (status === Status.Terminate) destOfficeId = null;
+        else assert(destOfficeId !== null);
         assert(payload.id);
 
         try {

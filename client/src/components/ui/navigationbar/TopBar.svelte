@@ -5,13 +5,25 @@
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
+    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
+    import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
 
     export let open = false;
     export let user: User;
+
+    $: maybeOfficeName = $dashboardState.currentOffice === null
+        ? null
+        : $allOffices[$dashboardState.currentOffice];
+    $: officeName = maybeOfficeName ?? '';
 </script>
 
 <nav id="navcontainer" on:click|stopPropagation on:keypress>
-    <span id="icon"><Hamburger bind:open on:click={() => (open = !open)} /> DocTrack</span>
+    <span id="icon">
+        <Hamburger bind:open on:click={() => (open = !open)} /> DocTrack 
+        {#if officeName}
+            <span> - {officeName}</span>
+        {/if}
+    </span>
     <nav id="profilenav">
         {#if typeof user === 'undefined'} 
             <a href="/">

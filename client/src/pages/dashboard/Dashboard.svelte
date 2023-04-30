@@ -2,6 +2,8 @@
     import Router from 'svelte-spa-router';
 
     import { currentPage } from './stores/CurrentPage.ts';
+    import { dashboardState } from './stores/DashboardState.ts';
+    import { allOffices } from './stores/OfficeStore.ts';
     import { currentUser } from './stores/UserStore.ts';
 
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
@@ -11,33 +13,35 @@
     import { register } from '../register.ts';
 
     let toggleDrawer = false;
+
+    $: pageName = $currentPage || 'DocTrack';
+    $: maybeOfficeName = $dashboardState.currentOffice === null
+        ? null
+        : $allOffices[$dashboardState.currentOffice];
+    $: officeName = maybeOfficeName ?? '[No Office]';
 </script>
 
 <svelte:head>
-    <title>{$currentPage}</title>
+    <title>{pageName} - {officeName}</title>
 </svelte:head>
 
-{#await currentUser.load()}
+{#if $currentUser === null}
     <p>Loading user...</p>
-{:then user}
-    {#if user === null}
-        <span>No user available...</span>
-    {:else}
-        <TopBar {user} bind:open={toggleDrawer} />
-        <main on:click={() => (toggleDrawer &&= false)} on:keydown>
-            {#await register()}
-                <p>Waiting for service worker...</p>
-            {:then}
-                <SideDrawer show={toggleDrawer} />
-                <section>
-                    <Router {routes} />
-                </section>
-            {:catch error}
-                <p>{error} <a href="/auth/login">Try logging in again?</a></p>
-            {/await}
-        </main>
-    {/if}
-{/await}
+{:else}
+    <TopBar user={$currentUser} bind:open={toggleDrawer} />
+    <main on:click={() => (toggleDrawer &&= false)} on:keydown>
+        {#await register()}
+            <p>Waiting for service worker...</p>
+        {:then}
+            <SideDrawer show={toggleDrawer} />
+            <section>
+                <Router {routes} />
+            </section>
+        {:catch error}
+            <p>{error} <a href="/auth/login">Try logging in again?</a></p>
+        {/await}
+    </main>
+{/if}
 
 <style>
     :global(body) {

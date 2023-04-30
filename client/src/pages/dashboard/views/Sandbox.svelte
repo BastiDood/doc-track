@@ -41,8 +41,7 @@
     let currentOffice: Office['id'] | null = null;
     let isSubscribed = false;
 
-    // eslint-disable-next-line prefer-destructuring
-    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+    $: ({ currentOffice } = $dashboardState);
 
     function handleIsSubscribed(e: CustomEvent<boolean>) {
         isSubscribed = e.detail;

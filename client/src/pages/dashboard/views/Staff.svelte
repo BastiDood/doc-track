@@ -1,11 +1,7 @@
 <script lang="ts">
-    import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
 
-    let currentOffice: Office['id'] | null = null;
-
-    // eslint-disable-next-line prefer-destructuring
-    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+    $: ({ currentOffice } = $dashboardState);
 </script>
 
 {#if currentOffice === null}

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { checkPerms } from './util.ts';
     import { assert } from '../../../../assert.ts';
 
     import { User } from '../../../../api/user.ts';
@@ -48,7 +49,7 @@
             type="checkbox"
             name="perms"
             value={Global.GetOffices}
-            checked={(user.permission & Global.GetOffices) === Global.GetOffices}
+            checked={checkPerms(user.permission, Global.GetOffices)}
         />
         Get Offices
     </label>
@@ -57,7 +58,7 @@
             type="checkbox"
             name="perms"
             value={Global.CreateOffice}
-            checked={(user.permission & Global.CreateOffice) === Global.CreateOffice}
+            checked={checkPerms(user.permission, Global.CreateOffice)}
         />
         Create Office
     </label>
@@ -66,7 +67,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateOffice}
-            checked={(user.permission & Global.UpdateOffice) === Global.UpdateOffice}
+            checked={checkPerms(user.permission, Global.UpdateOffice)}
         />
         Update Office
     </label>
@@ -75,7 +76,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateUser}
-            checked={(user.permission & Global.UpdateUser) === Global.UpdateUser}
+            checked={checkPerms(user.permission, Global.UpdateUser)}
         />
         Update User
     </label>
@@ -84,7 +85,7 @@
             type="checkbox"
             name="perms"
             value={Global.CreateCategory}
-            checked={(user.permission & Global.CreateCategory) === Global.CreateCategory}
+            checked={checkPerms(user.permission, Global.CreateCategory)}
         />
         Create Category
     </label>
@@ -93,7 +94,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateCategory}
-            checked={(user.permission & Global.UpdateCategory) === Global.UpdateCategory}
+            checked={checkPerms(user.permission, Global.UpdateCategory)}
         />
         Update Category
     </label>
@@ -102,7 +103,7 @@
             type="checkbox"
             name="perms"
             value={Global.DeleteCategory}
-            checked={(user.permission & Global.DeleteCategory) === Global.DeleteCategory}
+            checked={checkPerms(user.permission, Global.DeleteCategory)}
         />
         Delete Category
     </label>
@@ -111,7 +112,7 @@
             type="checkbox"
             name="perms"
             value={Global.ActivateCategory}
-            checked={(user.permission & Global.ActivateCategory) === Global.ActivateCategory}
+            checked={checkPerms(user.permission, Global.ActivateCategory)}
         />
         Activate Category
     </label>
@@ -120,7 +121,7 @@
             type="checkbox"
             name="perms"
             value={Global.ViewMetrics}
-            checked={(user.permission & Global.ViewMetrics) === Global.ViewMetrics}
+            checked={checkPerms(user.permission, Global.ViewMetrics)}
         />
         View Metrics
     </label>

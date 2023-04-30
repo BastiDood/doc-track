@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Office } from '~model/office';
     import { Status } from '../../../../../model/src/snapshot.ts';
     import { dashboardState } from '../stores/DashboardState';
     import { documentOutbox } from '../stores/DocumentStore';
@@ -13,26 +12,21 @@
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
 
-    let currentOffice: Office['id'] | null = null;
-
-    // eslint-disable-next-line prefer-destructuring
-    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+    $: ({ currentOffice } = $dashboardState);
 
     let showContextMenu = false;
     let showInsertSnapshot = false;
     let showCreateDocument = false;
 
-    let insertSnapshotAction: Status| null = null;
-    let currentContext: ContextPayload | null = null;
+    let insertSnapshotAction = null as Status | null;
+    let currentContext = null as ContextPayload | null;
 
     function overflowClickHandler(e: CustomEvent<ContextPayload>) {
-        if (!e.detail) return;
         currentContext = e.detail;
         showContextMenu = true;
     }
 
     function contextMenuHandler(e: CustomEvent<ContextPayload>) {
-        if (!e.detail) return;
         switch (e.type) {
             case Events.SendDocument:
                 insertSnapshotAction = Status.Send;
@@ -55,27 +49,24 @@
         Register and Stage a New Document
     </Button>
 
-    <h2>Staged Registered Documents</h2>
-    {#if $documentOutbox?.ready.length === 0 }
-        No staged registered documents.
-    {:else}
-        {#each $documentOutbox?.ready as register (register.doc)}
+    {#await documentOutbox.load()}
+        <p>Loading outbox...</p>
+    {:then { pending, ready }}
+        <h2>Staged Registered Documents</h2>
+        {#each ready as entry (entry.doc)}
             <RegisterRow 
-                {...register}
+                {...entry}
                 iconSize={IconSize.Large} 
                 on:overflowClick = {overflowClickHandler}
             />
         {/each}
-    {/if}
-    <h2>Sent Documents</h2>
-    {#if $documentOutbox?.pending.length === 0 }
-        No documents pending in outbox.
-    {:else}
-        {#each $documentOutbox?.pending as pending (pending.doc)}
-            <SendRow iconSize={IconSize.Large} {...pending} />
+
+        <h2>Sent Documents</h2>
+        {#each pending as entry (entry.doc)}
+            <SendRow iconSize={IconSize.Large} {...entry} />
         {/each}
-    {/if}
-    
+    {/await}
+
     {#if currentContext?.ty === RowType.Inbox}
         <InboxContext
             bind:show={showContextMenu}
@@ -86,8 +77,8 @@
     {/if}
 
     <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
-        {#if currentOffice === null || currentContext === null || !showInsertSnapshot}
-            No office selected.
+        {#if insertSnapshotAction === null || currentContext === null || !showInsertSnapshot}
+            Invalid parameters.
         {:else}
             <InsertSnapshot
                 payload={currentContext}
@@ -97,10 +88,6 @@
         {/if}
     </Modal>
     <Modal title="Create Document" bind:showModal={showCreateDocument}>
-        {#if currentOffice === null }
-            No office selected.
-        {:else}
-            <CreateDocument />
-        {/if}
+        <CreateDocument />
     </Modal>
 {/if}

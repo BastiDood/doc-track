@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
     import { documentInbox } from '../stores/DocumentStore';
 
@@ -19,25 +18,17 @@
     let showAcceptContextMenu = false;
     let showInboxContextMenu = false;
 
-    let currentOffice: Office['id'] | null = null;
-
-    let insertSnapshotAction: Status| null = null;
-    let currentContext: ContextPayload | null = null;
-
-    // eslint-disable-next-line prefer-destructuring
-    $: if ($dashboardState.currentOffice !== null) currentOffice = $dashboardState.currentOffice;
+    let insertSnapshotAction = null as Status | null;
+    let currentContext = null as ContextPayload | null;
+    $: ({ currentOffice } = $dashboardState);
 
     function overflowClickHandler(e: CustomEvent<ContextPayload>) {
-        if (!e.detail) return;
-
         currentContext = e.detail;
-
-        showInboxContextMenu = e.detail.ty === RowType.Inbox;
-        showAcceptContextMenu = e.detail.ty === RowType.AcceptDocument;
+        showInboxContextMenu = currentContext.ty === RowType.Inbox;
+        showAcceptContextMenu = currentContext.ty === RowType.AcceptDocument;
     }
 
     function contextMenuHandler(e: CustomEvent<ContextPayload>) {
-        if (!e.detail) return;
         switch (e.type) {
             case Events.AcceptDocument:
                 insertSnapshotAction = Status.Receive;
@@ -66,32 +57,28 @@
         Register and Stage a New Document
     </Button>
 
-    <h2>Pending Acceptance</h2>
-    {#if $documentInbox?.pending.length === 0}
-        No incoming documents.
-    {:else}
-        {#each $documentInbox?.pending as pending (pending.doc)}
+    {#await documentInbox.load()}
+        <p>Loading inbox...</p>
+    {:then { pending, accept }}
+        <h2>Pending Acceptance</h2>
+        {#each pending as entry (entry.doc)}
             <AcceptRow
-                {...pending}
+                {...entry}
                 iconSize = {IconSize.Large}
                 on:overflowClick = {overflowClickHandler}
             />
         {/each}
-    {/if}
 
-    <h2>Office Inbox</h2>
-    {#if $documentInbox?.accept.length === 0 }
-        No accepted documents in Inbox
-    {:else}
-        {#each $documentInbox?.accept as accepted (accepted.doc)}
+        <h2>Office Inbox</h2>
+        {#each accept as entry (entry.doc)}
             <InboxRow
-                {...accepted}
-                iconSize = {IconSize.Large}
-                on:overflowClick = {overflowClickHandler}
+                {...entry}
+                iconSize={IconSize.Large}
+                on:overflowClick={overflowClickHandler}
             />
         {/each}
-    {/if}
-    
+    {/await}
+
     {#if currentContext?.ty === RowType.Inbox}
         <InboxContext bind:show={showInboxContextMenu} payload={currentContext} 
             on:sendDocument={contextMenuHandler}
@@ -105,8 +92,8 @@
         />
     {/if}
     <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
-        {#if currentOffice === null || currentContext === null || !showInsertSnapshot}
-            No office selected.
+        {#if insertSnapshotAction === null || currentContext === null || !showInsertSnapshot}
+            Invalid parameters.
         {:else}
             <InsertSnapshot
                 payload={currentContext}
@@ -116,10 +103,6 @@
         {/if}
     </Modal>
     <Modal title="Create Document" bind:showModal={showCreateDocument}>
-        {#if currentOffice === null }
-            No office selected.
-        {:else}
-            <CreateDocument />
-        {/if}
+        <CreateDocument />
     </Modal>
 {/if}

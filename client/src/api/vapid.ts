@@ -7,7 +7,7 @@ export namespace Vapid {
     /** @returns VAPID public key of the server as raw bytes */
     export async function getVapidPublicKey(): Promise<ArrayBuffer> {
         const res = await fetch('/api/vapid', { headers: { 'Accept': 'application/octet-stream' } });
-        if (res.status === StatusCodes.OK) return res.arrayBuffer();
+        if (res.status === Number(StatusCodes.OK)) return res.arrayBuffer();
         throw new UnexpectedStatusCode;
     }
 
@@ -30,7 +30,7 @@ export namespace Vapid {
             }),
         });
 
-        if (res.status === StatusCodes.CREATED) return;
+        if (res.status === Number(StatusCodes.CREATED)) return;
         throw new UnexpectedStatusCode;
     }
 }
