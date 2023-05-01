@@ -18,8 +18,8 @@
     const dispatch = createEventDispatcher();
     const rowEvent: InvitePayload = {
         ty: RowType.Invite,
-        email: email,
-        office: office,
+        email,
+        office,
     };
 
     const targetName = $allOffices[office] ?? 'No office.';
