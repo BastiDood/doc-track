@@ -31,9 +31,9 @@
 <article>
     {#await categoryList.load()}
         Loading list of retired categories...
-    {:then { retire: categories }}
+    {:then}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catId {categories} />
+            <CategorySelect bind:catId categories={$categoryList.retire} />
             <br />
             {#if typeof catId === 'number'}
                 <Button submit><Edit color={IconColor.White} alt="Reactivate Category" /> Reactivate Category</Button>

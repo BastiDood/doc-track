@@ -31,9 +31,9 @@
 <article>
     {#await categoryList.load()}
         Loading list of removable categories...
-    {:then { active: categories }}
+    {:then}
         <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-            <CategorySelect bind:catId {categories} />
+            <CategorySelect bind:catId categories={$categoryList.active} />
             <br />
             <Button type={ButtonType.Danger} submit><Close color={IconColor.White} alt="Edit Category" /> Remove Category</Button>
         </form>
