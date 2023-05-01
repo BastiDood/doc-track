@@ -72,6 +72,6 @@ export interface PersonPayload {
 }
 
 export interface GlobalPersonPayload {
-    ty: RowType.Person
-    id: User['id']
+    ty: RowType.Person;
+    id: User['id'];
 }
