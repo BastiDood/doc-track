@@ -20,8 +20,9 @@
     export let title: Document['title'];
     export let target: Office['id'];
     export let creation: Snapshot['creation'];
-
-    const targetName = $allOffices[target] ?? 'No office.';
+    let targetName: Office['name'];
+    
+    $: targetName = $allOffices[target] ?? 'No office.';
 </script>
 
 <RowTemplate {iconSize} showOverflowIcon={false}

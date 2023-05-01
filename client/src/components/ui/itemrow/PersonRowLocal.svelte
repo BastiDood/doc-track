@@ -8,6 +8,8 @@
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { User } from '../../../../../model/src/user.ts';
     import { Staff } from '../../../../../model/src/staff.ts';
+    import { Office } from '~model/office.ts';
+    
     export let iconSize: IconSize;
     
     // From user.ts
@@ -27,7 +29,9 @@
         office,
     };
 
-    const officeName = $allOffices[office] ?? 'No office.';
+    let officeName: Office['name'];
+    
+    $: officeName = $allOffices[office] ?? 'No office.';
 </script>
 
 <RowTemplate 

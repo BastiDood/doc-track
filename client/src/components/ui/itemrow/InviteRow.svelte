@@ -6,6 +6,7 @@
 
     import { IconSize, InvitePayload, RowType, Events } from '../../types.ts';
     import { Invitation } from '../../../../../model/src/invitation.ts';
+    import { Office } from '~model/office.ts';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     export let iconSize: IconSize;
 
@@ -14,6 +15,7 @@
     export let email: Invitation['email'];
     export let permission: Invitation['permission'];
     export let creation: Invitation['creation'];
+    let targetName: Office['name'];
     
     const dispatch = createEventDispatcher();
     const rowEvent: InvitePayload = {
@@ -22,7 +24,7 @@
         office,
     };
 
-    const targetName = $allOffices[office] ?? 'No office.';
+    $: targetName = $allOffices[office] ?? 'No office.';
 </script>
 
 <RowTemplate
