@@ -9,6 +9,7 @@
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
+    import { redirectHandler } from './util.ts';
     
     export let iconSize: IconSize;
     export let doc: Document['id'];
@@ -21,16 +22,12 @@
         ty: RowType.Inbox,
         id: doc,
     };
-
-    function redirectHandler() {
-        window.location.href = `/track?id=${doc}`;
-    }
 </script>
 
 <RowTemplate
     {iconSize} 
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
-    on:rowContainerClick={redirectHandler}
+    on:rowContainerClick={() => redirectHandler(doc)}
 >
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>

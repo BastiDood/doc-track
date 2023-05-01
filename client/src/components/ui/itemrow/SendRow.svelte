@@ -5,6 +5,7 @@
     import type { Category } from '~model/category.ts';
     import type { Snapshot } from '~model/snapshot.ts';
     import type { Office } from '~model/office.ts';
+    import { redirectHandler } from './util.ts';
 
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
 
@@ -20,15 +21,11 @@
     export let target: Office['id'];
     export let creation: Snapshot['creation'];
 
-    function redirectHandler() {
-        window.location.href = `/track?id=${doc}`;
-    }
-
     const targetName = $allOffices[target] ?? 'No office.';
 </script>
 
 <RowTemplate {iconSize} showOverflowIcon={false}
-    on:rowContainerClick={redirectHandler}
+    on:rowContainerClick={() => redirectHandler(doc)}
 >
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>
