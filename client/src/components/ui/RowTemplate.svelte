@@ -41,7 +41,7 @@
     }
 
     #middle {
-        flex: 0 1 auto;
+        flex: 1 0 auto;
     }
 
     .subtext {
