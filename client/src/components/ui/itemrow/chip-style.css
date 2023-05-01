@@ -14,12 +14,14 @@ img .rounded {
 }
 
 span > span {
-    display: block;
+    display: inline-block;
+    flex: 0 0 content;
 }
 
 .chipcontainer {
     display: flex;
     flex-wrap: wrap;
+    gap: var(--spacing-small);
 }
 
 .doc {

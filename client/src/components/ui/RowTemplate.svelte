@@ -13,8 +13,10 @@
 
 <article on:keydown on:click|stopPropagation={() => dispatch(Events.RowContainerClick)}>
     <div class="icon"><slot name="icon" /></div>
-    <div class="header"><slot/></div>
-    <div class="subtext"><slot name="secondary"/></div>
+    <div id="middle">
+        <div><slot/></div>
+        <div class="subtext"><slot name="secondary"/></div>
+    </div>
     {#if showOverflowIcon}
         <div class="overflow" on:keydown on:click|stopPropagation={() => dispatch(Events.OverflowClick)}>
             <OverflowMenuVertical size={iconSize} alt="Show overflow menu" />
@@ -26,35 +28,23 @@
     @import url('../../pages/vars.css');
 
     article {
-        display: grid;
+        display: flex;
         border-style: solid;
         border-width: var(--spacing-tiny);
         border-radius: var(--border-radius);
         margin: var(--spacing-small);
         padding: var(--spacing-small);
-        grid-row-gap: var(--spacing-small);
-        justify-content: space-between;
-        grid-template-areas: 
-            "a b b b b b c"
-            "a d d d d d c";
     }
 
-    .icon {
-        grid-area: a;
-        align-self: start;
+    article > div {
+        flex: 0 1 auto;
     }
 
-    .overflow {
-        grid-area: c;
-        align-self: start;
-    }
-    
-    .header {
-        grid-area: b;
+    #middle {
+        flex: 0 0 auto;
     }
 
     .subtext {
-        grid-area: d;
         font-size: var(--small);
     }
 </style>
