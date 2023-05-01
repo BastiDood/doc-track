@@ -41,5 +41,5 @@
         <span class="chip doc">User ID: {id}</span>
         <span class="chip permission">Permissions: {permission.toString(2).padStart(12, '0')}</span>
     </span>
-    <img class={iconSize} src={picture} alt={name} slot="icon" />
+    <img class="{iconSize} rounded" src={picture} alt={name} slot="icon" />
 </RowTemplate>
