@@ -14,8 +14,8 @@
 <article on:keydown on:click|stopPropagation={() => dispatch(Events.RowContainerClick)}>
     <div class="icon"><slot name="icon" /></div>
     <div id="middle">
-        <div><slot/></div>
-        <div class="subtext"><slot name="secondary"/></div>
+        <div><slot></slot></div>
+        <div class="subtext"><slot name="secondary"></slot></div>
     </div>
     {#if showOverflowIcon}
         <div class="overflow" on:keydown on:click|stopPropagation={() => dispatch(Events.OverflowClick)}>
