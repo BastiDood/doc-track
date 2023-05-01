@@ -1,6 +1,7 @@
 import { Document } from '../../../model/src/document.ts';
 import { Invitation } from '../../../model/src/invitation.ts';
 import { Staff } from '../../../model/src/staff.ts';
+import { User } from '~model/user.ts';
 
 export enum MetricsMode {
     User,
@@ -50,6 +51,7 @@ export enum Events {
     ShowUserInfo = 'showUserInfo',
     DeleteUser = 'deleteUser',
     EditUser = 'editUser',
+    RowContainerClick = 'rowContainerClick',
 }
 
 export interface ContextPayload {
@@ -67,4 +69,9 @@ export interface PersonPayload {
     ty: RowType.Person;
     id: Staff['user_id'];
     office: Staff['office'];
+}
+
+export interface GlobalPersonPayload {
+    ty: RowType.Person
+    id: User['id']
 }
