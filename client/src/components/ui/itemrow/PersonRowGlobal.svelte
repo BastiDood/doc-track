@@ -4,9 +4,8 @@
 
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { PersonPayload, IconSize, Events, RowType } from '../../types.ts';
+    import { GlobalPersonPayload, IconSize, Events, RowType } from '../../types.ts';
     import { User } from '../../../../../model/src/user.ts';
-    import { Staff } from '../../../../../model/src/staff.ts';
     export let iconSize: IconSize;
     
     // From user.ts
@@ -14,30 +13,25 @@
     export let name: User['name'];
     export let email: User['email'];
     export let picture: User['picture'];
-    export let globalPermission: User['permission'];
-
-    // From staff.ts
-    export let office: Staff['office'];
-    export let localPermission: Staff['permission'];
+    export let permission: User['permission'];
 
     const dispatch = createEventDispatcher();
-    const rowEvent: PersonPayload = {
+    const rowEvent: GlobalPersonPayload = {
         ty: RowType.Person,
         id,
-        office,
     };
 </script>
 
 <RowTemplate 
-    title={`${name} ID: ${id} Email: ${email} Office: ${office} Global Perms: ${globalPermission} Local Perms: ${localPermission}`}
     {iconSize} 
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
 >
+    <span class="chip office">Operator</span>
+    <span class="title">{name}</span>    
+    <span slot="secondary">
+        <span class="chip email">User Email: {email}</span>
+        <span class="chip doc">User ID: {id}</span>
+        <span class="chip permission">Permissions: {permission.toString(2).padStart(9, '0')}</span>
+    </span>
     <img class={iconSize} src={picture} alt={name} slot="icon" />
 </RowTemplate>
-
-<style>
-    img {
-        border-radius: 50%;
-    }
-</style>
