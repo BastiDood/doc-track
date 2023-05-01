@@ -27,7 +27,7 @@
         office,
     };
 
-    const officeName = office ? $allOffices[office] : '';
+    const officeName = $allOffices[office] ?? 'No office.';
 </script>
 
 <RowTemplate 

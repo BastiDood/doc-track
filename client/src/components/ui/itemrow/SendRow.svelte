@@ -4,6 +4,7 @@
     import type { Document } from '~model/document.ts';
     import type { Category } from '~model/category.ts';
     import type { Snapshot } from '~model/snapshot.ts';
+    import type { Office } from '~model/office.ts';
 
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
 
@@ -16,14 +17,14 @@
     export let doc: Document['id'];
     export let category: Category['name'];
     export let title: Document['title'];
-    export let target: Snapshot['target'];
+    export let target: Office['id'];
     export let creation: Snapshot['creation'];
 
     function redirectHandler() {
         window.location.href = `/track?id=${doc}`;
     }
 
-    const targetName = target ? $allOffices[target] : '';
+    const targetName = $allOffices[target] ?? 'No office.';
 </script>
 
 <RowTemplate {iconSize} showOverflowIcon={false}
