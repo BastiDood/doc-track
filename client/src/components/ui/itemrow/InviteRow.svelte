@@ -29,7 +29,7 @@
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
 >
     <span class="title">{email}</span>
-    <span slot="secondary">
+    <span slot="secondary" class="chipcontainer">
         <span class="chip permission">Permission: {permission.toString(2).padStart(9, '0')}</span>
         <span class="chip target">Invite to: {targetName}</span>
         <span class="chip timestamp">Created on: {creation.toLocaleString()}</span>

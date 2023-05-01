@@ -35,7 +35,7 @@
 >
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>
-    <span slot="secondary">
+    <span slot="secondary" class="chipcontainer">
         <span class="chip doc">Document UUID: {docDisplay}</span>
         <span class="chip timestamp">Recieved on: {creation.toLocaleString()}</span>
     </span>

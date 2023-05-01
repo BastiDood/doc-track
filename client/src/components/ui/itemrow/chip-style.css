@@ -7,9 +7,19 @@ img .rounded {
 .title {
     font-weight: bolder;
 }
+
 .chip {
     border-radius: var(--border-radius);
     padding: var(--spacing-tiny) var(--spacing-normal) var(--spacing-tiny) var(--spacing-normal);
+}
+
+span > span {
+    display: block;
+}
+
+.chipcontainer {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .doc {

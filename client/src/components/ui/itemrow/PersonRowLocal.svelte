@@ -36,7 +36,7 @@
 >
     <span class="chip office">{officeName}</span>
     <span class="title">{name}</span>    
-    <span slot="secondary">
+    <span slot="secondary" class="chipcontainer">
         <span class="chip email">User Email: {email}</span>
         <span class="chip doc">User ID: {id}</span>
         <span class="chip permission">Permissions: {permission.toString(2).padStart(12, '0')}</span>
