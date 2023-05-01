@@ -6,12 +6,12 @@
     import OverflowMenuVertical from '../icons/OverflowMenuVertical.svelte';
 
     export let iconSize: IconSize = IconSize.Large;
-    export let showOverflowIcon: boolean = true;
+    export let showOverflowIcon = true;
 
     const dispatch = createEventDispatcher();
 </script>
 
-<article>
+<article on:keydown on:click|stopPropagation={() => dispatch(Events.RowContainerClick)}>
     <div class="icon"><slot name="icon" /></div>
     <div class="header"><slot/></div>
     <div class="subtext"><slot name="secondary"/></div>

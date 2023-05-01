@@ -6,6 +6,7 @@
 
     import { IconSize, InvitePayload, RowType, Events } from '../../types.ts';
     import { Invitation } from '../../../../../model/src/invitation.ts';
+    import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     export let iconSize: IconSize;
 
     // From invitation.ts
@@ -20,12 +21,18 @@
         email: email,
         office: office,
     };
+
+    const targetName = office ? $allOffices[office] : '';
 </script>
 
 <RowTemplate
-    title={`${email} Office: ${office} Permission: ${permission} Created on: ${creation.toDateString()}`}
-    {iconSize}
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
 >
+    <span class="title">{email}</span>
+    <span slot="secondary">
+        <span class="chip permission">Permission: {permission.toString(2).padStart(9, '0')}</span>
+        <span class="chip target">Invite to: {targetName}</span>
+        <span class="chip timestamp">Created on: {creation.toLocaleString()}</span>
+    </span>
     <PersonMail size={iconSize} slot="icon" alt="An invited person" />
 </RowTemplate>
