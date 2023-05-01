@@ -11,6 +11,7 @@ img .rounded {
 .chip {
     border-radius: var(--border-radius);
     padding: var(--spacing-tiny) var(--spacing-normal) var(--spacing-tiny) var(--spacing-normal);
+    text-overflow: ellipsis;
 }
 
 span > span {

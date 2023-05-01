@@ -24,8 +24,6 @@
     function redirectHandler() {
         window.location.href = `/track?id=${doc}`;
     }
-    
-    const docDisplay = `${doc.slice(0,5)}...${doc.slice(-5)}`;
 </script>
 
 <RowTemplate
@@ -36,7 +34,7 @@
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>
     <span slot="secondary" class="chipcontainer">
-        <span class="chip doc">#{docDisplay}</span>
+        <span class="chip doc">#{doc}</span>
         <span class="chip timestamp">{creation.toLocaleString()}</span>
     </span>
     <DocumentImport size={iconSize} slot="icon" alt="A pending document" />

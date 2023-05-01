@@ -24,7 +24,6 @@
     }
 
     const targetName = target ? $allOffices[target] : '';
-    const docDisplay = `${doc.slice(0,5)}...${doc.slice(-5)}`;
 </script>
 
 <RowTemplate {iconSize} showOverflowIcon={false}
@@ -33,7 +32,7 @@
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>
     <span slot="secondary" class="chipcontainer">
-        <span class="chip doc">#{docDisplay}</span>
+        <span class="chip doc">#{doc}</span>
         <span class="chip timestamp">{creation.toLocaleString()}</span>
         <span class="chip target">Sent to: {targetName}</span>
     </span>
