@@ -1,0 +1,57 @@
+@import url(../../../pages/vars.css);
+
+img .rounded {
+    border-radius: 50%;
+}
+
+.title {
+    font-weight: bolder;
+}
+
+.chip {
+    border-radius: var(--border-radius);
+    padding: var(--spacing-tiny) var(--spacing-normal) var(--spacing-tiny) var(--spacing-normal);
+    text-overflow: ellipsis;
+}
+
+span > span {
+    display: inline-block;
+    flex: 0 0 content;
+}
+
+.chipcontainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-small);
+}
+
+.doc {
+    border: solid var(--secondary-color) var(--spacing-tiny);
+    background-color: var(--gray-color);
+}
+
+.category {
+    background-color: var(--primary-color);
+    font-style: bold;
+    color: white;
+}
+
+.target {
+    border: solid orangered 1px;
+}
+
+.timestamp {
+    border: solid orange 1px;
+}
+
+.office {
+    border: solid olivedrab 1px;
+}
+
+.permission {
+    border: solid violet 1px;
+}
+
+.email {
+    border: solid brown 1px
+}

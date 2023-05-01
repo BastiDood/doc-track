@@ -59,9 +59,9 @@
 
     {#await documentInbox.load()}
         <p>Loading inbox...</p>
-    {:then { pending, accept }}
+    {:then}
         <h2>Pending Acceptance</h2>
-        {#each pending as entry (entry.doc)}
+        {#each $documentInbox.pending as entry (entry.doc)}
             <AcceptRow
                 {...entry}
                 iconSize = {IconSize.Large}
@@ -70,7 +70,7 @@
         {/each}
 
         <h2>Office Inbox</h2>
-        {#each accept as entry (entry.doc)}
+        {#each $documentInbox.accept as entry (entry.doc)}
             <InboxRow
                 {...entry}
                 iconSize={IconSize.Large}

@@ -19,6 +19,6 @@
 }
 
 .large {
-    width: var(--large);
-    height: var(--large);
+    width: var(--x-large);
+    height: var(--x-large);
 }

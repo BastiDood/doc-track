@@ -51,9 +51,9 @@
 
     {#await documentOutbox.load()}
         <p>Loading outbox...</p>
-    {:then { pending, ready }}
+    {:then}
         <h2>Staged Registered Documents</h2>
-        {#each ready as entry (entry.doc)}
+        {#each $documentOutbox.ready as entry (entry.doc)}
             <RegisterRow 
                 {...entry}
                 iconSize={IconSize.Large} 
@@ -62,7 +62,7 @@
         {/each}
 
         <h2>Sent Documents</h2>
-        {#each pending as entry (entry.doc)}
+        {#each $documentOutbox.pending as entry (entry.doc)}
             <SendRow iconSize={IconSize.Large} {...entry} />
         {/each}
     {/await}
