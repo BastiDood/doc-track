@@ -7,6 +7,7 @@
     import { Office } from '../../../../../../model/src/office.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
+    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
     import { ContextPayload, IconColor } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
@@ -40,6 +41,7 @@
             });
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
+            await reloadMetrics();
             // TODO: Exit out of the modal.
         } catch (err) {
             // TODO: No permission handler
