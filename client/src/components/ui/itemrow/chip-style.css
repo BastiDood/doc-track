@@ -1,5 +1,9 @@
 @import url(../../../pages/vars.css);
 
+img {
+    border-radius: 50%;
+}
+
 .title {
     font-weight: bolder;
 }
@@ -20,9 +24,21 @@
 }
 
 .target {
-    border: solid red 1px;
+    border: solid orangered 1px;
 }
 
 .timestamp {
     border: solid orange 1px;
+}
+
+.office {
+    border: solid olivedrab 1px;
+}
+
+.permission {
+    border: solid violet 1px;
+}
+
+.email {
+    border: solid brown 1px
 }
