@@ -32,7 +32,7 @@
 <RowTemplate
     {iconSize} 
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
-    on:rowContainerClick={ () => redirectHandler()}
+    on:rowContainerClick={redirectHandler}
 >
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>

@@ -27,8 +27,8 @@
     const docDisplay = `${doc.slice(0,5)}...${doc.slice(-5)}`;
 </script>
 
-<RowTemplate {iconSize} showOverflowIcon = {false}
-    on:rowContainerClick={ () => redirectHandler()}
+<RowTemplate {iconSize} showOverflowIcon={false}
+    on:rowContainerClick={redirectHandler}
 >
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>
