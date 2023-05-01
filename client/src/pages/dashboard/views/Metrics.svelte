@@ -1,28 +1,25 @@
 <script lang="ts">
     import type { Metrics as MetricsModel } from '~model/metrics.ts';
 
+    import MetricsSelect from '../../../components/ui/MetricsSelect.svelte';
+    import { MetricsMode } from '../../../components/types.ts';
+
     import { dashboardState } from '../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
 
-    $: ({ currentOffice } = $dashboardState);
-
-    let metricsMode: 'user' | 'local' | 'global' | undefined;
-    let metric: MetricsModel | null = null;
-
-    $: switch (metricsMode) {
-        case 'user':
-            metric = $userSummary;
-            break;
-        case 'local':
-            metric = $localSummary;
-            break;
-        case 'global':
-            metric = $globalSummary;
-            break;
-        default:
-            metric = null;
-            break;
+    function selectSummary(mode?: MetricsMode): MetricsModel {
+        switch (mode) {
+            case MetricsMode.User: return $userSummary;
+            case MetricsMode.Local: return $localSummary;
+            case MetricsMode.Global: return $globalSummary;
+            default: return { };
+        }
     }
+
+    let mode: MetricsMode | undefined;
+
+    $: ({ currentOffice } = $dashboardState);
+    $: metric = selectSummary(mode);
 </script>
 
 {#if currentOffice === null}
@@ -32,29 +29,24 @@
     <main>
         <div class='header'>
             <h3>Report</h3>
-            <select required bind:value={metricsMode}>
-                <option value="user">User Summary</option>
-                <option value="local">Local Summary</option>
-                <option value="global">Global Summary</option>
-            </select>
+            <MetricsSelect bind:value={mode} />
         </div>
-
         <table>
             <tr>
                 <td>Registered</td>
-                <td>{metric?.Register ?? 0}</td>
+                <td>{metric.Register ?? 0}</td>
             </tr>
             <tr>
                 <td>Sent</td>
-                <td>{metric?.Send ?? 0}</td>
+                <td>{metric.Send ?? 0}</td>
             </tr>
             <tr>
                 <td>Received</td>
-                <td>{metric?.Receive ?? 0}</td>
+                <td>{metric.Receive ?? 0}</td>
             </tr>
             <tr>
                 <td>Tagged as Terminal</td>
-                <td>{metric?.Terminate ?? 0}</td>
+                <td>{metric.Terminate ?? 0}</td>
             </tr>
         </table>
     </main>

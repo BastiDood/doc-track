@@ -9,10 +9,11 @@
     import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
     import { ContextPayload, IconColor } from '../../../types.ts';
 
-    import OfficeSelect from '../../OfficeSelect.svelte';
-    import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
+    import OfficeSelect from '../../OfficeSelect.svelte';
+    import StatusSelect from '../../StatusSelect.svelte';
+    import TextInput from '../../TextInput.svelte';
     
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
@@ -31,7 +32,7 @@
         assert(payload.id);
 
         try {
-            await Snapshot.insert( userOfficeId,{
+            await Snapshot.insert(userOfficeId,{
                 doc: payload.id,
                 status,
                 remark: node.value,
@@ -54,17 +55,11 @@
     {#if status === Status.Terminate || status === Status.Receive}
         Set Target Office: This Office.
     {:else}
-        Set Target Office:
-        <OfficeSelect offices={$allOffices} bind:oid={destOfficeId}/>
+        Set Target Office: <OfficeSelect offices={$allOffices} bind:oid={destOfficeId} />
     {/if}
     
     <br />
-    Set Status As:
-    <select required bind:value={status}>
-        <option value={Status.Send}>Send</option>
-        <option value={Status.Receive}>Receive</option>
-        <option value={Status.Terminate}>Terminate</option>
-    </select>
+    Set Status As: <StatusSelect bind:value={status} />
     <br />
     <TextInput name="snap-remark" label="Remarks: " placeholder="Optional" />
     <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>
