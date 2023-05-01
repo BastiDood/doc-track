@@ -1,0 +1,28 @@
+@import url(../../../pages/vars.css);
+
+.title {
+    font-weight: bolder;
+}
+.chip {
+    border-radius: var(--border-radius);
+    padding: var(--spacing-tiny) var(--spacing-normal) var(--spacing-tiny) var(--spacing-normal);
+}
+
+.doc {
+    border: solid var(--secondary-color) var(--spacing-tiny);
+    background-color: var(--gray-color);
+}
+
+.category {
+    background-color: var(--primary-color);
+    font-style: bold;
+    color: white;
+}
+
+.target {
+    border: solid red 1px;
+}
+
+.timestamp {
+    border: solid orange 1px;
+}
