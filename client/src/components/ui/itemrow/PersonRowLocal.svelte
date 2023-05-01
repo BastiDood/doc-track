@@ -28,8 +28,6 @@
         id,
         office,
     };
-
-    let officeName: Office['name'];
     
     $: officeName = $allOffices[office] ?? 'No office.';
 </script>

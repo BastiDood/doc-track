@@ -20,7 +20,6 @@
     export let title: Document['title'];
     export let target: Office['id'];
     export let creation: Snapshot['creation'];
-    let targetName: Office['name'];
     
     $: targetName = $allOffices[target] ?? 'No office.';
 </script>
