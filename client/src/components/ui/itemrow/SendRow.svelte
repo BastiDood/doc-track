@@ -5,7 +5,7 @@
     import type { Category } from '~model/category.ts';
     import type { Snapshot } from '~model/snapshot.ts';
     import type { Office } from '~model/office.ts';
-    import { redirectHandler } from './util.ts';
+    import { goToTrackingPage } from './util.ts';
 
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
 
@@ -26,7 +26,7 @@
 </script>
 
 <RowTemplate {iconSize} showOverflowIcon={false}
-    on:rowContainerClick={() => redirectHandler(doc)}
+    on:rowContainerClick={() => goToTrackingPage(doc)}
 >
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>

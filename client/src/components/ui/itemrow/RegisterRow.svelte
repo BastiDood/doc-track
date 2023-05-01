@@ -9,7 +9,7 @@
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
-    import { redirectHandler } from './util.ts';
+    import { goToTrackingPage } from './util.ts';
     
     export let iconSize: IconSize;
     export let doc: Document['id'];
@@ -27,7 +27,7 @@
 <RowTemplate
     {iconSize} 
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
-    on:rowContainerClick={() => redirectHandler(doc)}
+    on:rowContainerClick={() => goToTrackingPage(doc)}
 >
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>

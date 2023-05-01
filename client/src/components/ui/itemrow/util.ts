@@ -1,5 +1,5 @@
 import { Document } from '~model/document';
 
-export function redirectHandler(id: Document['id']) {
+export function goToTrackingPage(id: Document['id']) {
     window.location.href = `/track?id=${id}`;
 }
