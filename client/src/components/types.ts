@@ -1,7 +1,7 @@
 import { Document } from '../../../model/src/document.ts';
 import { Invitation } from '../../../model/src/invitation.ts';
 import { Staff } from '../../../model/src/staff.ts';
-import { User } from '~model/user.ts';
+import { User } from '../../../model/src/user.ts';
 
 export enum MetricsMode {
     User,
