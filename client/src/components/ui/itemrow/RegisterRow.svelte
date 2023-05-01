@@ -35,5 +35,5 @@
         <span class="chip doc">#{doc}</span>
         <span class="chip timestamp">{creation.toLocaleString()}</span>
     </span>
-    <DocumentBlank size={iconSize} slot="icon" alt ="A registered document" />
+    <DocumentBlank size={iconSize} slot="icon" alt="A registered document" />
 </RowTemplate>
