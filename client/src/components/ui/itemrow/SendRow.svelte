@@ -33,8 +33,8 @@
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>
     <span slot="secondary" class="chipcontainer">
-        <span class="chip doc">Document UUID: {docDisplay}</span>
-        <span class="chip timestamp">Sent on: {creation.toLocaleString()}</span>
+        <span class="chip doc">#{docDisplay}</span>
+        <span class="chip timestamp">{creation.toLocaleString()}</span>
         <span class="chip target">Sent to: {targetName}</span>
     </span>
     <DocumentExport size={iconSize} slot="icon" alt ="An sent document" />

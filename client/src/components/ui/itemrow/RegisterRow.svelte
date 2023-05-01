@@ -37,8 +37,8 @@
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>
     <span slot="secondary" class="chipcontainer">
-        <span class="chip doc">Document UUID: {docDisplay}</span>
-        <span class="chip timestamp">Registered on: {creation.toLocaleString()}</span>
+        <span class="chip doc">#{docDisplay}</span>
+        <span class="chip timestamp">{creation.toLocaleString()}</span>
     </span>
     <DocumentBlank size={iconSize} slot="icon" alt ="An registered document" />
 </RowTemplate>

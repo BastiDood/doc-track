@@ -31,8 +31,8 @@
     <span class="title">{email}</span>
     <span slot="secondary" class="chipcontainer">
         <span class="chip permission">Permission: {permission.toString(2).padStart(9, '0')}</span>
-        <span class="chip target">Invite to: {targetName}</span>
-        <span class="chip timestamp">Created on: {creation.toLocaleString()}</span>
+        <span class="chip target">{targetName}</span>
+        <span class="chip timestamp">{creation.toLocaleString()}</span>
     </span>
     <PersonMail size={iconSize} slot="icon" alt="An invited person" />
 </RowTemplate>
