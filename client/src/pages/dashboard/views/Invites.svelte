@@ -27,7 +27,6 @@
         {/if}
     </Modal>
     {#if typeof $inviteList === 'undefined' || $inviteList.length === 0}
-            <br>
             <h3>No invite backlogs, yay!</h3>
     {:else}
         {#each $inviteList as { email, permission, creation } (email)}
