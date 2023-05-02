@@ -5,9 +5,9 @@
     import Button from '../../../components/ui/Button.svelte';
     import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
     import { inviteList } from '../../../pages/dashboard/stores/InviteStore.ts';
+    import PersonAdd from '../../../components/icons/PersonMail.svelte';
 
-    import type { Invitation } from '../../../../model/src/invitation.ts';
-    import { IconSize } from '../../../components/types.ts';
+    import { IconColor, IconSize } from '../../../components/types.ts';
 
     let showInviteForm = false;
     $: ({ currentOffice } = $dashboardState);
@@ -17,7 +17,7 @@
     You must select an office before accessing the Invites page.
 {:else}
     <Button on:click={() => (showInviteForm = true)}>
-        Invite User
+        <PersonAdd color={IconColor.Default} size={IconSize.Normal} alt="Invite person" />Invite User
     </Button>
     <Modal title="Invite User" bind:showModal={showInviteForm}>
         {#if $dashboardState.currentOffice === null}
@@ -27,7 +27,8 @@
         {/if}
     </Modal>
     {#if typeof $inviteList === 'undefined' || $inviteList.length === 0}
-            No invite backlogs, yay!
+            <br>
+            <h3>No invite backlogs, yay!</h3>
     {:else}
         {#each $inviteList as { email, permission, creation } (email)}
             <InviteRow
