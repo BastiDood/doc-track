@@ -7,6 +7,7 @@
     import type { User } from '../../../../../model/src/user.ts';
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
+    import { isOnline } from '../../../pages/dashboard/stores/NetState.ts';
 
     export let open = false;
     export let user: User;
@@ -17,9 +18,10 @@
     $: officeName = maybeOfficeName ?? '';
 </script>
 
-<nav id="navcontainer" on:click|stopPropagation on:keypress>
+<nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon">
-        <Hamburger bind:open on:click={() => (open = !open)} /> DocTrack 
+        <Hamburger bind:open on:click={() => (open = !open)} /> 
+        <span class:offline={!$isOnline} id="title">DocTrack</span>
         {#if officeName}
             <span> - {officeName}</span>
         {/if}
@@ -70,9 +72,17 @@
         z-index: 10;
     }
 
+    #navcontainer.offline {
+        background-color: var(--offline-color);
+    }
+
+    #title.offline::after {
+        content: ' *';
+    }
+
     #profilenav {
         align-content: center;
-        background-color: var(--primary-color);
+        background-color: inherit;
         display: flex;
         justify-content: flex-end;
         gap: var(--spacing-small);
