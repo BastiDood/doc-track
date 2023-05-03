@@ -17,24 +17,17 @@
 </script>
 
 <ContextTemplate bind:show={show}>
-    <ContextElement on:click={() => dispatch(Events.ShowUserInfo, payload)}>
+    <ContextElement on:click={() => dispatch(Events.EditLocalPermission, payload)}>
         <div slot="contextIcon">
-            <Search size={iconSize} alt="View User Details" />
-            View User Details
+            <Edit size={iconSize} alt="Edit Local Permissions" />
+            Edit Local Permissions
         </div>
     </ContextElement>
     <ContextDivider />
-    <ContextElement on:click={() => dispatch(Events.EditUser, payload)}>
+    <ContextElement on:click={() => dispatch(Events.RemoveStaff, payload)}>
         <div slot="contextIcon">
-            <Edit size={iconSize} alt="Edit User Details" />
-            Edit User Details
-        </div>
-    </ContextElement>
-    <ContextDivider />
-    <ContextElement on:click={() => dispatch(Events.DeleteUser, payload)}>
-        <div slot="contextIcon">
-            <Close size={iconSize} alt="Delete User" />
-            Delete User
+            <Close size={iconSize} alt="Remove Staff" />
+            Remove Staff
         </div>
     </ContextElement>
 </ContextTemplate>
