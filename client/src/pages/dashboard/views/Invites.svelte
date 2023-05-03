@@ -1,17 +1,15 @@
 <script lang="ts">
-    import { dashboardState } from '../stores/DashboardState';
-    import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
     import Button from '../../../components/ui/Button.svelte';
-    import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
-    import { inviteList } from '../../../pages/dashboard/stores/InviteStore.ts';
-    import PersonAdd from '../../../components/icons/PersonAdd.svelte';
-    import { RowType, InvitePayload, Events } from '../../../components/types.ts'; 
     import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
-
-    import { IconColor, IconSize } from '../../../components/types.ts';
-    import { assert } from '../../../assert.ts';
+    import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
+    import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
+    import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import { Invite } from '../../../api/invite.ts';
+    import { RowType, InvitePayload, Events, IconColor, IconSize } from '../../../components/types.ts';
+    import { assert } from '../../../assert.ts';
+    import { dashboardState } from '../stores/DashboardState';
+    import { inviteList } from '../../../pages/dashboard/stores/InviteStore.ts';
 
     let showInviteForm = false;
     let showRevokeInviteContextMenu = false;
@@ -31,10 +29,10 @@
                 try {
                     await Invite.revoke({
                         office: currentContext.office,
-                        email: e.detail.email
+                        email: e.detail.email,
                     });
                     await inviteList.reload?.();
-                } catch(err) {
+                } catch (err) {
                     alert(err);
                 }
                 break;

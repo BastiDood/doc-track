@@ -33,8 +33,6 @@
     let showUnsubscribePushNotification = false;
 
     // Receiving document, invites
-    let showInviteForm = false;
-    let showRevokeInvite = false;
     let currentOffice: Office['id'] | null = null;
     let isSubscribed = false;
 
