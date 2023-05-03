@@ -40,5 +40,6 @@
 
     .danger {
         background-color: var(--danger-color);
+        color: white;
     }
 </style>
