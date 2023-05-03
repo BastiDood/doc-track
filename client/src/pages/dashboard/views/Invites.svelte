@@ -5,12 +5,29 @@
     import Button from '../../../components/ui/Button.svelte';
     import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
     import { inviteList } from '../../../pages/dashboard/stores/InviteStore.ts';
-    import PersonAdd from '../../../components/icons/PersonMail.svelte';
+    import PersonAdd from '../../../components/icons/PersonAdd.svelte';
+    import { RowType, ContextPayload, Events } from '../../../components/types.ts'; 
+    import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
 
     import { IconColor, IconSize } from '../../../components/types.ts';
 
     let showInviteForm = false;
+    let showRevokeInviteContextMenu = false;
+    let currentContext = null as ContextPayload | null;
     $: ({ currentOffice } = $dashboardState);
+
+    function overflowClickHandler(e: CustomEvent<ContextPayload>) {
+        currentContext = e.detail;
+        showRevokeInviteContextMenu = currentContext.ty === RowType.Invite;
+    }
+
+    function contextMenuHandler(e: CustomEvent<ContextPayload>) {
+        switch (e.type) {
+            case Events.RemoveInvitation:
+                break;
+            default: break;
+        }
+    }
 </script>
 
 {#if currentOffice === null}
@@ -36,7 +53,11 @@
                 permission={permission}
                 iconSize={IconSize.Large}
                 creation={creation}
+                on:overflowClick={overflowClickHandler}
             />
         {/each}
+        {#if currentContext?.ty === RowType.Invite}
+            <InviteContext on:contextmenu={contextMenuHandler} />
+        {/if}
     {/if}
 {/if}
