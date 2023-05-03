@@ -14,7 +14,7 @@
     export let iconSize = IconSize.Normal;
 </script>
 
-<ContextTemplate bind:show={show}>
+<ContextTemplate bind:show>
     <ContextDivider />
     <ContextElement on:click={() => dispatch(Events.RemoveInvitation, payload)}>
         <div slot="contextIcon">
