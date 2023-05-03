@@ -1,12 +1,70 @@
 import { getCookies } from 'cookie';
 import { Status } from 'http';
 import { error, info } from 'log';
+import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
 import { Local } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
+
+/**
+ * Gets a list of the current staff members in an office.
+ *
+ * # Inputs
+ * - Requires a valid session ID of an office staff member.
+ * - Accepts the office ID of the session via the `office` query parameter.
+ *
+ * # Outputs
+ * - `200` => list of resolved users
+ * - `400` => `office` parameter is unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `406` => content negotiation failed
+ */
+export async function handleGetStaff(pool: Pool, req: Request, params: URLSearchParams) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Staff] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Staff] Session ${sid} cannot accept JSON`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const office = params.get('office');
+    const oid = office ? parseInt(office, 10) : NaN;
+    if (isNaN(oid)) {
+        error(`[Staff] Session ${sid} provided invalid office ID`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
+            error(`[Staff] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        const mask = Local.AddStaff | Local.UpdateStaff | Local.RemoveStaff;
+        if ((staff.permission & mask) === 0) {
+            error(`[Category] User ${staff.user_id} cannot read the staff list in office ${oid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const members = await db.getStaff(oid);
+        return new Response(JSON.stringify(members), {
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } finally {
+        db.release();
+    }
+
+}
 
 /**
  * Sets the new permissions for a staff member.

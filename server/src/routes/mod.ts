@@ -20,7 +20,7 @@ import { handleGenerateGlobalSummary, handleGenerateLocalSummary, handleGenerate
 import { handleCreateOffice, handleGetAllOffices, handleUpdateOffice } from './api/office.ts';
 import { handleGetUserFromSession } from './api/session.ts';
 import { handleInsertSnapshot } from './api/snapshot.ts';
-import { handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
+import { handleGetStaff, handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
 import { handleSetUserPermissions } from './api/user.ts';
 import { handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
@@ -42,6 +42,7 @@ async function handleGet(pool: Pool, req: Request) {
         case '/api/metrics/user': return handleGenerateUserSummary(pool, req);
         case '/api/offices': return handleGetAllOffices(pool, req);
         case '/api/session': return handleGetUserFromSession(pool, req);
+        case '/api/staffs': return handleGetStaff(pool, req, searchParams);
         case '/api/vapid': return handleVapidPublicKey();
         case '/auth/login': return handleLogin(pool, req);
         case '/auth/callback': return handleCallback(pool, req, searchParams);

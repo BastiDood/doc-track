@@ -101,3 +101,8 @@ export const AllCategoriesSchema = z.object({
 });
 
 export type AllCategories = z.infer<typeof AllCategoriesSchema>;
+
+export const StaffMemberSchema = UserSchema
+    .pick({ id: true, name: true, email: true, picture: true })
+    .merge(StaffSchema.pick({ permission: true }));
+export type StaffMember = z.infer<typeof StaffMemberSchema>;

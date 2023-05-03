@@ -4,7 +4,7 @@ import {
     assertEquals,
     assertInstanceOf,
     assertNotStrictEquals,
-    assertStrictEquals
+    assertStrictEquals,
 } from 'asserts';
 import { encode as b64encode } from 'base64url';
 import { equals as bytewiseEquals } from 'bytes';
@@ -13,6 +13,7 @@ import { Pool } from 'postgres';
 import { Batch } from '~client/api/batch.ts';
 import { Category } from '~client/api/category.ts';
 import { Document } from '~client/api/document.ts';
+import { InsufficientPermissions } from '~client/api/error.ts';
 import { Invite } from '~client/api/invite.ts';
 import { Metrics } from '~client/api/metrics.ts';
 import { Office } from '~client/api/office.ts';
@@ -313,11 +314,20 @@ Deno.test('full API integration test', async t => {
     });
 
     await t.step('Staff API - retirement', async () => {
+        assertEquals(await Staff.get(oid), [ { ...user, permission: 4095 } ]);
         const result = await Staff.remove({
             office: oid,
             user_id: user.id,
         });
         assertStrictEquals(result, false);
+
+        // Staff is now retired; must still be in the staff list with zeroed permissions
+        try {
+            // Should throw because we no longer have permissions
+            await Staff.get(oid);
+        } catch (err) {
+            assertInstanceOf(err, InsufficientPermissions);
+        }
 
         // TODO: Test full removal of user
     });
