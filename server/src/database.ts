@@ -15,6 +15,7 @@ import {
     type AllOutbox,
     type MinBatch,
     type PaperTrail,
+    type StaffMember,
     AllCategoriesSchema,
     AllOfficesSchema,
     BarcodeAssignmentError,
@@ -24,6 +25,7 @@ import {
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
+    StaffMemberSchema,
 } from '~model/api.ts';
 
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
@@ -215,6 +217,16 @@ export class Database {
 
         await transaction.commit();
         return invites;
+    }
+
+    /** Gets all of the current staff members for a given office ID. */
+    async getStaff(oid: Office['id']): Promise<StaffMember[]> {
+        const { rows } = await this.#client
+            .queryObject`SELECT u.id,u.name,u.email,u.picture,s.permission FROM staff AS s INNER JOIN users AS u ON s.user_id = u.id WHERE s.office = ${oid}`;
+        return StaffMemberSchema
+            .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
+            .array()
+            .parse(rows);
     }
 
     /**
