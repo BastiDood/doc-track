@@ -148,6 +148,8 @@ Deno.test('full OAuth flow', async t => {
                 email: USER.email,
                 permission: USER.permission,
             }), null);
+
+            assertEquals(await db.getStaff(invite.office), [ { ...USER, permission: invite.permission } ]);
         });
     });
 
