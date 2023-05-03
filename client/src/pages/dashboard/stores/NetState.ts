@@ -1,5 +1,5 @@
 import { writable } from '@square/svelte-store';
-import { sendNotification } from '../../../notification';
+import { sendNotification } from '../../../notification.ts';
 
 const { subscribe, set } = writable(navigator.onLine);
 
@@ -11,6 +11,7 @@ addEventListener('online', async() => {
         tag: 'net-status',
     });
 });
+
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 addEventListener('offline', async() => {
     set(false);
