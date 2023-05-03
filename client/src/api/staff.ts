@@ -1,8 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { type StaffMember, StaffMemberSchema } from '~model/api.ts';
-import type { Office } from '~model/office.ts';
-import type { Staff as StaffType } from '~model/staff.ts';
+import { type StaffMember, StaffMemberSchema } from '../../../model/src/api.ts';
+import type { Office } from '../../../model/src/office.ts';
+import type { Staff as StaffType } from '../../../model/src/staff.ts';
 
 import {
     InsufficientPermissions,
