@@ -60,7 +60,7 @@
                 <InviteContext
                     bind:show={showRevokeInviteContextMenu}
                     payload={currentContext}
-                    on:removeInvitation={()=> showRevokeInviteModal = true} />
+                    on:removeInvitation={()=> { showRevokeInviteModal = true; }}/>
             {/if}
             <Modal title="Remove Invitation" bind:showModal={showRevokeInviteModal}>
                 {#if currentContext === null }
