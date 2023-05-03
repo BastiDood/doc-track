@@ -15,12 +15,11 @@
 </script>
 
 <ContextTemplate bind:show={show}>
-    <p>You are removing the invitation for <b>{payload.email}.</b></p>
     <ContextDivider />
     <ContextElement on:click={() => dispatch(Events.RemoveInvitation, payload)}>
         <div slot="contextIcon">
             <Close size={iconSize} alt="Cancel Invitation" />
-            Revoke invite
+            Revoke invite of <b>{payload.email}</b>
         </div>
     </ContextElement>
     <ContextDivider />
