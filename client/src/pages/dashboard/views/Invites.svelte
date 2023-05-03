@@ -10,6 +10,8 @@
     import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
 
     import { IconColor, IconSize } from '../../../components/types.ts';
+    import { assert } from '../../../assert.ts';
+    import { Invite } from '../../../api/invite.ts';
 
     let showInviteForm = false;
     let showRevokeInviteContextMenu = false;
@@ -21,9 +23,20 @@
         showRevokeInviteContextMenu = currentContext.ty === RowType.Invite;
     }
 
-    function contextMenuHandler(e: CustomEvent<InvitePayload>) {
+    async function removeInviteHandler(e: CustomEvent<InvitePayload>) {
         switch (e.type) {
             case Events.RemoveInvitation:
+                assert(currentContext !== null);
+                assert(e.detail.email !== 'undefined');
+                try {
+                    await Invite.revoke({
+                        office: currentContext.office,
+                        email: e.detail.email
+                    });
+                    await inviteList.reload?.();
+                } catch(err) {
+                    alert(err);
+                }
                 break;
             default: break;
         }
@@ -60,7 +73,7 @@
             <InviteContext
                 bind:show={showRevokeInviteContextMenu}
                 payload={currentContext}
-                on:contextmenu={contextMenuHandler} />
+                on:removeInvitation={removeInviteHandler} />
         {/if}
     {/if}
 {/if}
