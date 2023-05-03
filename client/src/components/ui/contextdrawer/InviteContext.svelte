@@ -2,8 +2,9 @@
     import { createEventDispatcher } from 'svelte';
 
     import { Events, InvitePayload, IconSize } from '../../types.ts';
-    import ContextTemplate from '../contextMenu/ContextTemplate.svelte';
+    import ContextTemplate from '../contextmenu/ContextTemplate.svelte';
     import ContextElement from '../contextmenu/ContextElement.svelte';
+    import ContextDivider from '../contextmenu/ContextDivider.svelte';
 
     import Close from '../../icons/Close.svelte';
 
@@ -13,11 +14,11 @@
     export let iconSize = IconSize.Normal;
 </script>
 
-<ContextTemplate bind:show={show}>
+<ContextTemplate bind:show>
     <ContextElement on:click={() => dispatch(Events.RemoveInvitation, payload)}>
         <div slot="contextIcon">
             <Close size={iconSize} alt="Cancel Invitation" />
-            Cancel Invitation
+            Revoke invite of <b>{payload.email}</b>
         </div>
     </ContextElement>
 </ContextTemplate>

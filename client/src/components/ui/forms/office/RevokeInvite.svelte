@@ -1,48 +1,43 @@
-<script lang='ts'>
+<script lang="ts">
+    import { Invitation } from '~model/invitation';
+    import { Office } from '~model/office';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore';
     import { assert } from '../../../../assert.ts';
     import { Invite } from '../../../../api/invite.ts';
-
-    import type { User } from '../../../../../../model/src/user.ts';
     import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { ButtonType, IconColor } from '../../../types.ts';
+    import { createEventDispatcher } from 'svelte';
 
     import Button from '../../Button.svelte';
-    import Checkmark from '../../../icons/Checkmark.svelte';
-    import InviteSelect from '../../InviteSelect.svelte';
-    import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
+    import PersonDelete from '../../../icons/PersonDelete.svelte';
+    import Close from '../../../icons/Close.svelte';
 
-    let email: User['email'] | undefined;
-    async function handleSubmit(this: HTMLFormElement) {
-        // Email validation
-        const emailInput = this.elements.namedItem('inputemail');
-        assert(emailInput instanceof HTMLInputElement);
-        assert(emailInput.type === 'email');
+    export let email: Invitation['email'];
+    export let office: Office['id'];
 
-        // Checks validity of office
-        const office = $dashboardState.currentOffice;
-        if (office === null || typeof email === 'undefined') return;
-        if (!this.reportValidity()) return;
+    $: officeName = $allOffices[office] ?? 'No office name.';
+
+    const dispatch = createEventDispatcher();
+
+    async function removeInviteHandler() {
+        assert(email !== null);
+        assert(office !== null);
 
         try {
-            await Invite.revoke({ office, email });
+            await Invite.revoke({
+                office,
+                email,
+            });
             await inviteList.reload?.();
-            this.reset();
         } catch (err) {
-            // TODO: No permission handler
             alert(err);
         }
     }
+
 </script>
 
-<p>You are currently revoking invites as {$userSession?.email}</p>
-<article>
-    <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
-        {#if typeof $inviteList === 'undefined' || $inviteList.length === 0}
-            No one available to revoke invites from.
-        {:else}
-            <InviteSelect invites={$inviteList} bind:value={email} />
-            <p>Current deleting: <input type="email" name="inputemail" readonly value={email ?? 'None'} /></p>
-            <Button submit><Checkmark alt="Revoke Invite" /> Revoke Invite</Button> 
-       {/if}
-    </form>
-</article>
+<p> Are you sure you want to remove the invitation for {email} in {officeName}?</p>
+<Button type={ButtonType.Danger} 
+    on:click={() => removeInviteHandler()}>
+    <PersonDelete color={IconColor.White} alt="Remove invitation"/> Remove Invitation
+</Button>
