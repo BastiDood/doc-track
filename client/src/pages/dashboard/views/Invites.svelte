@@ -6,22 +6,22 @@
     import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
     import { inviteList } from '../../../pages/dashboard/stores/InviteStore.ts';
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
-    import { RowType, ContextPayload, Events } from '../../../components/types.ts'; 
+    import { RowType, InvitePayload, Events } from '../../../components/types.ts'; 
     import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
 
     import { IconColor, IconSize } from '../../../components/types.ts';
 
     let showInviteForm = false;
     let showRevokeInviteContextMenu = false;
-    let currentContext = null as ContextPayload | null;
+    let currentContext = null as InvitePayload | null;
     $: ({ currentOffice } = $dashboardState);
 
-    function overflowClickHandler(e: CustomEvent<ContextPayload>) {
+    function overflowClickHandler(e: CustomEvent<InvitePayload>) {
         currentContext = e.detail;
         showRevokeInviteContextMenu = currentContext.ty === RowType.Invite;
     }
 
-    function contextMenuHandler(e: CustomEvent<ContextPayload>) {
+    function contextMenuHandler(e: CustomEvent<InvitePayload>) {
         switch (e.type) {
             case Events.RemoveInvitation:
                 break;
@@ -57,7 +57,10 @@
             />
         {/each}
         {#if currentContext?.ty === RowType.Invite}
-            <InviteContext on:contextmenu={contextMenuHandler} />
+            <InviteContext
+                bind:show={showRevokeInviteContextMenu}
+                payload={currentContext}
+                on:contextmenu={contextMenuHandler} />
         {/if}
     {/if}
 {/if}
