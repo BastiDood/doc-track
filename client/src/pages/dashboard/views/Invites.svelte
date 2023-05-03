@@ -24,7 +24,6 @@
         showRevokeInviteContextMenu = currentContext.ty === RowType.Invite;
     }
 
-
 </script>
 
 {#if currentOffice === null}
@@ -44,13 +43,13 @@
     {#await inviteList.load()}
         Loading invite list.
     {:then}
-        {#if typeof $inviteList === 'undefined' || $inviteList.length === 0}
+        {#if typeof $inviteList === 'undefined' || $inviteList.length === 0 || currentOffice !== null}
                 <h3>No invite backlogs, yay!</h3>
         {:else}
             {#each $inviteList as { email, permission, creation } (email)}
                 <InviteRow
                     email={email}
-                    office={$dashboardState.currentOffice ?? 0}
+                    office={$dashboardState.currentOffice}
                     permission={permission}
                     iconSize={IconSize.Large}
                     creation={creation}
