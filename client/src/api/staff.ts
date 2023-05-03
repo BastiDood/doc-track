@@ -1,5 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
+import { type StaffMember, StaffMemberSchema } from '~model/api.ts';
+import type { Office } from '~model/office.ts';
 import type { Staff as StaffType } from '~model/staff.ts';
 
 import {
@@ -11,6 +13,21 @@ import {
 } from './error.ts';
 
 export namespace Staff {
+    export async function get(oid: Office['id']): Promise<StaffMember[]> {
+        const res = await fetch(`/api/staffs?office=${oid}`, {
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json' },
+        });
+        switch (res.status) {
+            case StatusCodes.OK: return StaffMemberSchema.array().parse(await res.json());
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
+
     export async function setPermission({ office, user_id, permission }: Omit<StaffType, 'active'>): Promise<boolean> {
         const res = await fetch(`/api/staff?office=${office}&perms=${permission}`, {
             credentials: 'same-origin',
