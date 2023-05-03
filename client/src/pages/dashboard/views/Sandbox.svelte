@@ -18,9 +18,6 @@
     import SubscribePushNotification from '../../../components/ui/forms/pushnotification/SubscribePushNotification.svelte';
     import UnsubscribePushNotification from '../../../components/ui/forms/pushnotification/UnsubscribePushNotification.svelte';
 
-    // Modals
-    import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
-    import RevokeInvite from '../../../components/ui/forms/office/RevokeInvite.svelte';
     import { documentInbox, documentOutbox } from '../stores/DocumentStore.ts';
 
     let showCreateOffice = false;
@@ -75,12 +72,6 @@
 </Button>
 <Button on:click={() => (showCreateDocument = true)}>
     Create a New Document
-</Button>
-<Button on:click={() => (showInviteForm = true)}>
-    Invite User
-</Button>
-<Button on:click={() => (showRevokeInvite = true)}>
-    Revoke Invite
 </Button>
 
 {#if !isSubscribed}
@@ -144,21 +135,6 @@
     <EditOffice />
 </Modal>
 
-<Modal title="Invite User" bind:showModal={showInviteForm}>
-    {#if $dashboardState.currentOffice === null}
-        <span>No selected office.</span>
-    {:else}
-        <InviteForm />
-    {/if}
-</Modal>
-
-<Modal title="Revoke Invite" bind:showModal={showRevokeInvite}>
-    {#if $dashboardState.currentOffice === null}
-        <span>No selected office.</span>
-    {:else}
-        <RevokeInvite />
-    {/if}
-</Modal>
 
 <Modal title="Subscribe to Push Notification" bind:showModal={showSubscribePushNotification}>
     <SubscribePushNotification on:subscribe={handleIsSubscribed} />
