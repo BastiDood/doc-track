@@ -1,5 +1,6 @@
 <script lang="ts">
-    import './row-element.css';
+    // import './row-element.css';
+    import './chip-style.css';
     import { createEventDispatcher } from 'svelte';
 
     import RowTemplate from '../RowTemplate.svelte';
@@ -27,6 +28,8 @@
         ty: RowType.Person,
         id,
         office,
+        email,
+        permission,
     };
     
     $: officeName = $allOffices[office] ?? 'No office.';
