@@ -9,7 +9,6 @@
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
-    import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
     import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
     import RemoveCategory from '../../../components/ui/forms/category/RemoveCategory.svelte';
@@ -22,7 +21,6 @@
 
     let showCreateOffice = false;
     let showEditOffice = false;
-    let showLocalPermission = false;
     let showPermission = false;
     let showCreateCategory = false;
     let showEditCategory = false;
@@ -52,9 +50,6 @@
 </Button>
 <Button on:click={() => (showEditOffice = true)}>
     Edit an Office
-</Button>
-<Button on:click={() => (showLocalPermission = true)} disabled={Object.getOwnPropertyNames($allOffices).length === 0}>
-    Edit Local Permission
 </Button>
 <Button on:click={() => (showCreateCategory = true)}>
     Create a Category
@@ -107,14 +102,6 @@
 </Modal>
 <Modal title="Create a Category" bind:showModal={showCreateCategory}>
     <CreateCategory />
-</Modal>
-
-<Modal title="Edit Local Permissions" bind:showModal={showLocalPermission}>
-    {#if currentOffice === null || $currentUser === null}
-        Current user is not a staff of the selected office.
-    {:else}
-        <LocalPermissions user={$currentUser} office={currentOffice} />
-    {/if}
 </Modal>
 
 <Modal title="Edit Global Permissions" bind:showModal={showPermission}>
