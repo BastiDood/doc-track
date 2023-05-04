@@ -6,9 +6,8 @@
     import ContextElement from '../contextmenu/ContextElement.svelte';
     import ContextDivider from '../contextmenu/ContextDivider.svelte';
 
-    import Search from '../../icons/Search.svelte';
     import Edit from '../../icons/Edit.svelte';
-    import Close from '../../icons/Close.svelte';
+    import PersonDelete from '../../icons/PersonDelete.svelte'
 
     const dispatch = createEventDispatcher();
     export let show = false;
@@ -26,7 +25,7 @@
     <ContextDivider />
     <ContextElement on:click={() => dispatch(Events.RemoveStaff, payload)}>
         <div slot="contextIcon">
-            <Close size={iconSize} alt="Remove Staff" />
+            <PersonDelete size={iconSize} alt="Remove Staff" />
             Remove Staff
         </div>
     </ContextElement>
