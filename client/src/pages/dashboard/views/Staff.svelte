@@ -47,14 +47,14 @@
             No staff belonging in {officeName}
         {:else}
             {#each $staffList as staff}
-                <!--Filtering removed staff-->
+                <!-- Filtering removed staff -->
                 {#if staff.permission !== 0}
-                <PersonRowLocal
-                    {...staff}
-                    office={currentOffice}
-                    iconSize={IconSize.Large} 
-                    on:overflowClick={overflowClickHandler} 
-                />
+                    <PersonRowLocal
+                        {...staff}
+                        office={currentOffice}
+                        iconSize={IconSize.Large} 
+                        on:overflowClick={overflowClickHandler} 
+                    />
                 {/if}
             {/each}
         {/if}
