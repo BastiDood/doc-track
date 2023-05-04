@@ -1,19 +1,17 @@
 <script lang="ts">
     import { checkPerms } from './util.ts';
     import { assert } from '../../../../assert.ts';
-    import { IconColor } from '../../../types.ts';
+    import { IconColor, PersonPayload } from '../../../types.ts';
     import { Staff } from '../../../../api/staff.ts';
-
     import { Local } from '../../../../../../model/src/permission.ts';
-    import type { User as UserModel } from '../../../../../../model/src/user.ts';
 
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { staffList } from '../../../../pages/dashboard/stores/StaffStore.ts';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
 
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
 
-    export let user: UserModel;
-    export let office: number;
+    export let payload: PersonPayload;
 
     async function handleSubmit(this: HTMLFormElement) {
         // Recompute permissions before submitting
@@ -28,32 +26,32 @@
         });
 
         // No point in handling no-changes.
-        if (user.permission === permsVal) return;
+        if (payload.permission === permsVal) return;
 
         try {
             // Rebuild pseudo-user object
             await Staff.setPermission({
-                office,
-                user_id: user.id,
+                office: payload.office,
+                user_id: payload.id,
                 permission: permsVal,
             });
 
-            // Might be editing own session, might be not, reload anyway
-            await userSession.reload?.();
+            // Reload the staffList store
+            await staffList.reload?.();
         } catch (err) {
             // TODO: No permission handler
             alert(err);
         }
     }
 </script>
-<p>You are modifying {user.email}'s permissions in Office ID {office}.</p>
+<p>You are modifying {payload.email}'s permissions in {$allOffices[payload.office]}.</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     <label>
         <input
             type="checkbox"
             name="perms"
             value={Local.AddStaff}
-            checked={checkPerms(user.permission, Local.AddStaff)}
+            checked={checkPerms(payload.permission, Local.AddStaff)}
         />
         Add Staff
     </label>
@@ -62,7 +60,7 @@
             type="checkbox"
             name="perms"
             value={Local.RemoveStaff}
-            checked={checkPerms(user.permission, Local.RemoveStaff)}
+            checked={checkPerms(payload.permission, Local.RemoveStaff)}
         />
         Remove Staff
     </label>
@@ -71,7 +69,7 @@
             type="checkbox"
             name="perms"
             value={Local.UpdateStaff}
-            checked={checkPerms(user.permission, Local.UpdateStaff)}
+            checked={checkPerms(payload.permission, Local.UpdateStaff)}
         />
         Update Staff
     </label>
@@ -80,7 +78,7 @@
             type="checkbox"
             name="perms"
             value={Local.AddInvite}
-            checked={checkPerms(user.permission, Local.AddInvite)}
+            checked={checkPerms(payload.permission, Local.AddInvite)}
         />
         Add Invite
     </label>
@@ -89,7 +87,7 @@
             type="checkbox"
             name="perms"
             value={Local.RevokeInvite}
-            checked={checkPerms(user.permission, Local.RevokeInvite)}
+            checked={checkPerms(payload.permission, Local.RevokeInvite)}
         />
         Revoke Invite
     </label>
@@ -98,7 +96,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewBatch}
-            checked={checkPerms(user.permission, Local.ViewBatch)}
+            checked={checkPerms(payload.permission, Local.ViewBatch)}
         />
         View Batch
     </label>
@@ -107,7 +105,7 @@
             type="checkbox"
             name="perms"
             value={Local.GenerateBatch}
-            checked={checkPerms(user.permission, Local.GenerateBatch)}
+            checked={checkPerms(payload.permission, Local.GenerateBatch)}
         />
         Generate Batch
     </label>
@@ -116,7 +114,7 @@
             type="checkbox"
             name="perms"
             value={Local.InvalidateBatch}
-            checked={checkPerms(user.permission, Local.InvalidateBatch)}
+            checked={checkPerms(payload.permission, Local.InvalidateBatch)}
         />
         Invalidate Batch
     </label>
@@ -125,7 +123,7 @@
             type="checkbox"
             name="perms"
             value={Local.CreateDocument}
-            checked={checkPerms(user.permission, Local.CreateDocument)}
+            checked={checkPerms(payload.permission, Local.CreateDocument)}
         />
         Create Document
     </label>
@@ -134,7 +132,7 @@
             type="checkbox"
             name="perms"
             value={Local.InsertSnapshot}
-            checked={checkPerms(user.permission, Local.InsertSnapshot)}
+            checked={checkPerms(payload.permission, Local.InsertSnapshot)}
         />
         Insert Snapshot
     </label>
@@ -143,7 +141,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewMetrics}
-            checked={checkPerms(user.permission, Local.ViewMetrics)}
+            checked={checkPerms(payload.permission, Local.ViewMetrics)}
         />
         View Metrics
     </label>
@@ -152,7 +150,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewInbox}
-            checked={checkPerms(user.permission, Local.ViewInbox)}
+            checked={checkPerms(payload.permission, Local.ViewInbox)}
         />
         View Inbox
     </label>

@@ -23,7 +23,6 @@
         currentContext = e.detail;
         showRevokeInviteContextMenu = currentContext.ty === RowType.Invite;
     }
-
 </script>
 
 {#if currentOffice === null}
@@ -43,7 +42,7 @@
     {#await inviteList.load()}
         Loading invite list.
     {:then}
-        {#if $inviteList.length === 0 || currentOffice !== null}
+        {#if $inviteList.length === 0 || currentOffice === null}
                 <h3>No invite backlogs, yay!</h3>
         {:else}
             {#each $inviteList as { email, permission, creation } (email)}

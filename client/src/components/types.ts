@@ -48,10 +48,9 @@ export enum Events {
     TerminateDocument = 'terminateDocument',
     CreateInvitation = 'createInvitation',
     RemoveInvitation = 'removeInvitation',
-    ShowUserInfo = 'showUserInfo',
-    DeleteUser = 'deleteUser',
-    EditUser = 'editUser',
     RowContainerClick = 'rowContainerClick',
+    EditLocalPermission = 'editLocalPermission',
+    RemoveStaff = 'removeStaff'
 }
 
 export interface ContextPayload {
@@ -69,6 +68,8 @@ export interface PersonPayload {
     ty: RowType.Person;
     id: Staff['user_id'];
     office: Staff['office'];
+    email: User['email'];
+    permission: Staff['permission'];
 }
 
 export interface GlobalPersonPayload {
