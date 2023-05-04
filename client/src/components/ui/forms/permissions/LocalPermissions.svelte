@@ -3,9 +3,10 @@
     import { assert } from '../../../../assert.ts';
     import { IconColor, PersonPayload } from '../../../types.ts';
     import { Staff } from '../../../../api/staff.ts';
-
     import { Local } from '../../../../../../model/src/permission.ts';
+
     import { staffList } from '../../../../pages/dashboard/stores/StaffStore.ts';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
 
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
@@ -43,7 +44,7 @@
         }
     }
 </script>
-<p>You are modifying {payload.email}'s permissions in Office ID {payload.office}.</p>
+<p>You are modifying {payload.email}'s permissions in {$allOffices[payload.office]}.</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     <label>
         <input

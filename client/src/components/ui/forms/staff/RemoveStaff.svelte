@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Staff } from '../../../../api/staff.ts';
     import { staffList } from '../../../../pages/dashboard/stores/StaffStore.ts';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
@@ -23,7 +24,7 @@
 </script>
 
 
-<p>Are you sure you want to remove {payload.email} from {payload.office}?</p>
+<p>Are you sure you want to remove {payload.email} from {$allOffices[payload.office]}?</p>
 <Button type={ButtonType.Danger} on:click={handleRemove}>
     <PersonDelete color={IconColor.White} alt="Remove Staff" on:click/>Remove Staff
 </Button>
