@@ -1,16 +1,15 @@
 <script lang="ts">
-    import { Staff } from '../../../../api/staff.ts'; 
-    import { PersonPayload } from '../../../types.ts';
+    import { Staff } from '../../../../api/staff.ts';
     import { staffList } from '../../../../pages/dashboard/stores/StaffStore.ts';
     
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
-    import { ButtonType, IconColor } from '../../../types.ts';
+    import { ButtonType, IconColor, PersonPayload } from '../../../types.ts';
 
     export let payload: PersonPayload;
 
     async function handleRemove() {
-        try{
+        try {
             await Staff.remove({
                 office: payload.office,
                 user_id: payload.id,

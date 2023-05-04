@@ -7,7 +7,7 @@
     import ContextDivider from '../contextmenu/ContextDivider.svelte';
 
     import Edit from '../../icons/Edit.svelte';
-    import PersonDelete from '../../icons/PersonDelete.svelte'
+    import PersonDelete from '../../icons/PersonDelete.svelte';
 
     const dispatch = createEventDispatcher();
     export let show = false;
