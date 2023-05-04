@@ -1,5 +1,4 @@
 <script lang="ts">
-    // import './row-element.css';
     import './chip-style.css';
     import { createEventDispatcher } from 'svelte';
 

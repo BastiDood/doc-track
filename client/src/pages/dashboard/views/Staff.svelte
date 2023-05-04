@@ -84,5 +84,4 @@
             <RemoveStaff payload={currentContext} />
         {/if}
     </Modal>
-
 {/if}
