@@ -1,6 +1,7 @@
 <script lang="ts">
     import { dashboardState } from '../stores/DashboardState';
     import { staffList } from '../stores/StaffStore';
+    import { allOffices } from '../stores/OfficeStore';
 
     import { IconSize, PersonPayload, RowType, Events } from '../../../components/types';
     import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
@@ -10,6 +11,7 @@
     import PersonContext from '../../../components/ui/contextdrawer/PersonContext.svelte';
 
     $: ({ currentOffice } = $dashboardState);
+    $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
 
     let showContextMenu = false;
     let showLocalPermission = false;
@@ -40,9 +42,9 @@
     {#await staffList.load()}
         <p>Loading staff page...</p>
     {:then}
-        <h1>Staffs of Office {currentOffice}</h1>
+        <h1>Staffs of {officeName}</h1>
         {#if staffList === null}
-            No staff belonging in Office {currentOffice}
+            No staff belonging in {officeName}
         {:else}
             {#each $staffList as staff}
                 <!--Filtering removed staff-->
