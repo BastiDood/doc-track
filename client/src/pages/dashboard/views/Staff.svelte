@@ -43,7 +43,7 @@
         <p>Loading staff page...</p>
     {:then}
         <h1>Staffs of {officeName}</h1>
-        {#if staffList === null}
+        {#if $staffList === null}
             No staff belonging in {officeName}
         {:else}
             {#each $staffList as staff}
