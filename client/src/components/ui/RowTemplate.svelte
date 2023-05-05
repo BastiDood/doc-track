@@ -19,7 +19,9 @@
     </div>
     {#if showOverflowIcon}
         <div class="overflow" on:keydown on:click|stopPropagation={() => dispatch(Events.OverflowClick)}>
-            <OverflowMenuVertical size={iconSize} alt="Show overflow menu" />
+            <slot name="overflow">
+                <OverflowMenuVertical size={iconSize} alt="Show Overflow Menu" />
+            </slot>
         </div>
     {/if}
 </article>
