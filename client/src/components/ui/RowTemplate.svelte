@@ -11,7 +11,7 @@
     const dispatch = createEventDispatcher();
 </script>
 
-<article on:keydown on:click|stopPropagation={() => dispatch(Events.RowContainerClick)}>
+<article on:keydown on:click={() => dispatch(Events.RowContainerClick)}>
     <div class="icon"><slot name="icon" /></div>
     <div id="middle">
         <div><slot></slot></div>
