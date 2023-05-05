@@ -1,12 +1,58 @@
 import { getCookies } from 'cookie';
 import { Status } from 'http';
 import { error, info } from 'log';
+import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
 import { Global } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
+
+/**
+ * Gets a list of all the users in the system.
+ *
+ * # Inputs
+ * - Requires a valid session ID that may update users.
+ *
+ * # Outputs
+ * - `200` => list of users in the system
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `406` => content negotiation failed
+ */
+export async function handleGetUsers(pool: Pool, req: Request) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[User] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[User] Content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const user = await db.getUserFromSession(sid);
+        if (user === null) {
+            error(`[User] Session ${sid} is invalid`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((user.permission & Global.UpdateUser) === 0) {
+            error(`[User] User ${user.id} ${user.name} <${user.email}> cannot fetch all users`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const users = await db.getUsers();
+        info(`[User] User ${user.id} ${user.name} <${user.email}> fetched all users`);
+        return new Response(JSON.stringify(users));
+    } finally {
+        db.release();
+    }
+}
 
 /**
  * Sets the new permissions for a user.
