@@ -8,6 +8,7 @@
     import Camera from '../../components/icons/Camera.svelte';
     import Search from '../../components/icons/Search.svelte';
 
+
     // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
     const docTrackingNumber = '1234567890';
     
@@ -46,6 +47,9 @@
         'Current Office': 'College of Engineering',
         'Document Status': 'SENT',
     };
+
+    const { searchParams } = new URL(location.href);
+    const did = searchParams.get('id');
 </script>
 
 <svelte:head>
@@ -63,6 +67,12 @@
         </nav>
     </TopBar>
     <h2>Document {docTitle}</h2>
+
+    {#if did}
+        <p>Tracking Number: {did}</p>
+    {:else}
+        <p>No tracking number specified</p>
+    {/if}
 
     <Button>
         <Notification /> Subscribe to Push Notifications
