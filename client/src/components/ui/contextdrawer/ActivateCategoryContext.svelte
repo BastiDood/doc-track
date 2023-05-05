@@ -15,7 +15,7 @@
     const dispatch = createEventDispatcher();
 </script>
 
-<ContextTemplate bind:show={showMenu}>
+<ContextTemplate on:close bind:show={showMenu}>
     <ContextElement on:click={() => dispatch(Events.ActivateCategory)}>
         <Add slot="contextIcon" alt="Activate Category" />
         Activate Category

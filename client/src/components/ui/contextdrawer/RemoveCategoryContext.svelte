@@ -15,7 +15,7 @@
     const dispatch = createEventDispatcher();
 </script>
 
-<ContextTemplate bind:show={showMenu}>
+<ContextTemplate on:close bind:show={showMenu}>
     <ContextElement on:click={() => dispatch(Events.RemoveCategory)}>
         <Add slot="contextIcon" alt="Remove Category" />
         Remove Category

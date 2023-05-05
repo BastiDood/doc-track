@@ -15,7 +15,8 @@
     }
 </script>
 
-<dialog bind:this={context} on:close={offShow} on:click|self={closeDialog} on:keydown>
+<!-- FIXME: we may want to reconsider the buggy behavior of closing the dialog for each click -->
+<dialog bind:this={context} on:close={offShow} on:close on:click|self={closeDialog} on:keydown>
     <div on:click|stopPropagation on:keydown|stopPropagation>
         <slot />
     </div>

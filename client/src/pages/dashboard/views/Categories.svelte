@@ -3,17 +3,21 @@
 
     import { categoryList } from '../stores/CategoryStore.ts';
     import { Category as Api } from '../../../api/category.ts';
-    import { sendNotification } from '../../../notification.ts';
+
+    import Button from '../../../components/ui/Button.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
 
     import DocumentBlank from '../../../components/icons/DocumentBlank.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
     import RowTemplate from '../../../components/ui/RowTemplate.svelte';
 
     import ActivateCategoryContext from '../../../components/ui/contextdrawer/ActivateCategoryContext.svelte';
     import RemoveCategoryContext from '../../../components/ui/contextdrawer/RemoveCategoryContext.svelte';
+
+    import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
     import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
 
     enum ActiveMenu {
+        Create,
         Activate,
         Remove,
         Rename,
@@ -25,46 +29,36 @@
     }
 
     let ctx: Context | null = null;
+    $: console.log(ctx);
 
     $: ({ active, retire } = $categoryList);
 
-    async function activate(cid: Category['id']) {
-        // TODO: Prefer less intrusive toast messages rather than notifications
-        const name = await Api.activate(cid);
-        if (name === null) await sendNotification('Category Activation', { body: `Failed to activate non-existent category "${name}".` });
-        else await sendNotification('Category Activation', { body: `You just reactivated category "${name}".` });
 
-        // Refresh the stores
+    async function activate(cid: Category['id']) {
+        // TODO: inform user about the result of the operation
+        await Api.activate(cid);
         await categoryList.reload?.();
         ctx = null;
     }
 
     async function remove(cid: Category['id']) {
-        // TODO: Prefer less intrusive toast messages rather than notifications
-        const result = await Api.remove(cid);
-        switch (result) {
-            case true:
-                await sendNotification('Category Deprecation', { body: 'Successfully removed the category from the system.' });
-                break;
-            case false:
-                await sendNotification('Category Deprecation', { body: 'Successfully deprecated the category.' });
-                break;
-            case null:
-                await sendNotification('Category Deprecation', { body: 'Failed to remove non-existent category.' });
-                break;
-        }
-
-        // Refresh the stores
+        // TODO: inform user about the result of the operation
+        await Api.remove(cid);
         await categoryList.reload?.();
-        ctx = null;
+        resetContext();
     }
 
     function openRenameModal(cid: Category['id']) {
         ctx = { cid, mode: ActiveMenu.Rename };
     }
+
+    function resetContext() {
+        ctx = null;
+    }
 </script>
 
 <article>
+    <Button on:click={() => (ctx = { cid: 0, mode: ActiveMenu.Create })}>Create Category</Button>
     <section>
         <h1>Active Categories</h1>
         {#each active as { id, name } (id)}
@@ -91,21 +85,27 @@
 
 {#if ctx === null}
     <!-- Don't render anything! Intentionally left blank to make type inference happy. -->
+{:else if ctx.mode === ActiveMenu.Create}
+    <Modal showModal title="Create Category">
+        <CreateCategory on:done={resetContext} />
+    </Modal>
 {:else if ctx.mode === ActiveMenu.Activate}
     <ActivateCategoryContext
         showMenu
+        on:close={resetContext}
         on:activateCategory={activate.bind(null, ctx.cid)}
         on:renameCategory={openRenameModal.bind(null, ctx.cid)}
     />
 {:else if ctx.mode === ActiveMenu.Remove}
     <RemoveCategoryContext
         showMenu
+        on:close={resetContext}
         on:removeCategory={remove.bind(null, ctx.cid)}
         on:renameCategory={openRenameModal.bind(null, ctx.cid)}
     />
 {:else if ctx.mode === ActiveMenu.Rename}
     <Modal showModal title="Rename Category">
-        <RenameCategory cid={ctx.cid} on:done={() => (ctx = null)} />
+        <RenameCategory cid={ctx.cid} on:done={resetContext} />
     </Modal>
 {/if}
 
