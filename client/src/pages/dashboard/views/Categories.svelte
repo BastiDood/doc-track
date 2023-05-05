@@ -28,16 +28,18 @@
         mode: ActiveMenu;
     }
 
-    let ctx: Context | null = null;
-    $: console.log(ctx);
+    let ctx = null as Context | null;
 
     $: ({ active, retire } = $categoryList);
-
 
     async function activate(cid: Category['id']) {
         // TODO: inform user about the result of the operation
         await Api.activate(cid);
         await categoryList.reload?.();
+        ctx = null;
+    }
+
+    function resetContext() {
         ctx = null;
     }
 
@@ -50,10 +52,6 @@
 
     function openRenameModal(cid: Category['id']) {
         ctx = { cid, mode: ActiveMenu.Rename };
-    }
-
-    function resetContext() {
-        ctx = null;
     }
 </script>
 
