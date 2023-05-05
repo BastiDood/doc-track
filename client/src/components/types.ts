@@ -40,6 +40,7 @@ export enum RowType {
 }
 
 export enum Events {
+    Done = 'done',
     OverflowClick = 'overflowClick',
     AcceptDocument = 'acceptDocument',
     DeclineDocument = 'declineDocument',
@@ -52,6 +53,9 @@ export enum Events {
     EditLocalPermission = 'editLocalPermission',
     EditGlobalPermission = 'editGlobalPermission',
     RemoveStaff = 'removeStaff'
+    ActivateCategory = 'activateCategory',
+    RemoveCategory = 'removeCategory',
+    RenameCategory = 'renameCategory',
 }
 
 export interface ContextPayload {
