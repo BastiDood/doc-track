@@ -547,6 +547,16 @@ export class Database {
         }
     }
 
+    async getUsers(): Promise<User[]> {
+        // TODO: Add Tests
+        const { rows } = await this.#client
+            .queryObject('SELECT id,name,email,picture,permission FROM users');
+        return UserSchema
+            .extend({ permission: z.string().transform(p => parseInt(p, 2)) })
+            .array()
+            .parse(rows);
+    }
+
     /** Returns the user associated with the valid session ID. */
     async getUserFromSession(sid: Session['id']): Promise<User | null> {
         const { rows: [ first, ...rest ] } = await this.#client
