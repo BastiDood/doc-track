@@ -1,15 +1,12 @@
 <script lang="ts">
     import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
+    import { currentUser } from '../stores/UserStore.ts';
 
     import Modal from '../../../components/ui/Modal.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
-    import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
-    import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
-    import RemoveCategory from '../../../components/ui/forms/category/RemoveCategory.svelte';
-    import ActivateCategory from '../../../components/ui/forms/category/ActivateCategory.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import SubscribePushNotification from '../../../components/ui/forms/pushnotification/SubscribePushNotification.svelte';
     import UnsubscribePushNotification from '../../../components/ui/forms/pushnotification/UnsubscribePushNotification.svelte';
@@ -95,6 +92,14 @@
 </Modal>
 <Modal title="Create a Category" bind:showModal={showCreateCategory}>
     <CreateCategory />
+</Modal>
+
+<Modal title="Edit Global Permissions" bind:showModal={showPermission}>
+    {#if $currentUser === null}
+        Current user is not valid.
+    {:else}
+        <GlobalPermissions user={$currentUser} />
+    {/if}
 </Modal>
 
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>
