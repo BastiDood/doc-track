@@ -57,7 +57,7 @@
 </svelte:head>
 
 <main>
-    <TopBar open>
+    <TopBar open nodrawer>
         <nav>
             <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="" />
             <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
