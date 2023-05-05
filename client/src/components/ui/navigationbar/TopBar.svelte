@@ -29,6 +29,7 @@
             <span> - {officeName}</span>
         {/if}
     </span>
+    <slot></slot>
     <nav id="profilenav">
         {#if typeof user === 'undefined'} 
             <a href="/">

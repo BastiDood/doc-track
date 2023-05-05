@@ -50,6 +50,8 @@
 
     const { searchParams } = new URL(location.href);
     const did = searchParams.get('id');
+
+    let newTrackingNumber = '';
 </script>
 
 <svelte:head>
@@ -59,9 +61,9 @@
 <main>
     <TopBar open nodrawer>
         <nav>
-            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="" />
+            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="" bind:value={newTrackingNumber} />
             <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
-            <a href="/track">
+            <a href={`/track?id=${newTrackingNumber}`}>
                 <Button type={ButtonType.Primary}><Search alt="Search specified tracking number." /></Button>
             </a>
         </nav>
