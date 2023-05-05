@@ -11,7 +11,7 @@ import {
 } from './error.ts';
 
 export namespace User {
-    export async function getUsers(): Promise<UserType[]> {
+    export async function getAll(): Promise<UserType[]> {
         const res = await fetch('/api/users', {
             credentials: 'same-origin',
             headers: { 'Accepts': 'application/json' },
