@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { type User as UserType, UserSchema } from '~model/user.ts';
+import { type User as UserType, UserSchema } from '../../../model/src/user.ts';
 
 import {
     InsufficientPermissions,
