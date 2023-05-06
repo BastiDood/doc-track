@@ -2,7 +2,8 @@ import { asyncReadable, derived } from '@square/svelte-store';
 
 import { allOffices } from './OfficeStore.ts';
 import { Session } from '../../../api/session.ts';
-import { User } from '~model/user.ts';
+import { User as UserModel } from '~model/user.ts';
+import { User } from '../../../api/user.ts';
 
 export const userSession = asyncReadable(
     null,
@@ -16,7 +17,13 @@ export const currentUser = derived(userSession, session => session === null ? nu
     email: session.email,
     picture: session.picture,
     permission: session.global_perms,
-} as User);
+} as UserModel);
+
+export const userList = asyncReadable(
+    [],
+    User.getAll,
+    { reloadable: true }
+);
 
 export const userOffices = derived([userSession, allOffices], ([$userSession, $allOffices]) => {
     function* iterator() {
