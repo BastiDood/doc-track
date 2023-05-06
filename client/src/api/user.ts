@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import type { User as UserType } from '~model/user.ts';
+import { type User as UserType, UserSchema } from '../../../model/src/user.ts';
 
 import {
     InsufficientPermissions,
@@ -11,6 +11,20 @@ import {
 } from './error.ts';
 
 export namespace User {
+    export async function getAll(): Promise<UserType[]> {
+        const res = await fetch('/api/users', {
+            credentials: 'same-origin',
+            headers: { 'Accepts': 'application/json' },
+        });
+        switch (res.status) {
+            case StatusCodes.OK: return UserSchema.array().parse(await res.json());
+            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
+            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
+
     export async function setPermission({ id, permission }: Pick<UserType, 'id' | 'permission'>): Promise<boolean> {
         const res = await fetch(`/api/user?perms=${permission}`, {
             credentials: 'same-origin',
