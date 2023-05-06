@@ -2,6 +2,7 @@ import Barcodes from './Barcodes.svelte';
 import Drafts from './Drafts.svelte';
 import Inbox from './Inbox.svelte';
 import ManageUsers from './Users.svelte';
+import ManageCategories from './Categories.svelte';
 import ManageGlobalSettings from './Settings.svelte';
 import ManageInvites from './Invites.svelte';
 import ManageStaff from './Staff.svelte';
@@ -11,6 +12,7 @@ import Sandbox from './Sandbox.svelte';
 
 export default {
     '/barcodes': Barcodes,
+    '/categories': ManageCategories,
     '/drafts': Drafts,
     '/inbox': Inbox,
     '/users': ManageUsers,

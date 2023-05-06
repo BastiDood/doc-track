@@ -9,7 +9,7 @@
     ],
     "scripts": {
         "build": "parcel build",
-        "watch": "parcel watch",
+        "watch": "parcel watch --no-hmr",
         "lint": "eslint src"
     },
     "devDependencies": {

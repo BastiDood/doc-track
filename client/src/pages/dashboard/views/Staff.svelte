@@ -51,7 +51,7 @@
                 on:overflowClick={overflowClickHandler} 
             />
         {:else}
-            No staff members exist.
+            No staff members exist in "{officeName}".
         {/each}
     {/await}
 

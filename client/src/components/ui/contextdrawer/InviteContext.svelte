@@ -8,7 +8,7 @@
     import Close from '../../icons/Close.svelte';
 
     const dispatch = createEventDispatcher();
-    export let show = false;
+    export let show = false as boolean;
     export let payload: InvitePayload;
     export let iconSize = IconSize.Normal;
 </script>

@@ -5,10 +5,8 @@
 </script>
 
 <div on:click on:keydown>
-    <div>
-        <slot name="contextIcon">
-            <Add size={iconSize} alt="Placeholder" />
-        </slot>
-    </div>
-    <div><slot></slot></div>
+    <slot name="contextIcon">
+        <Add size={iconSize} alt="Placeholder" />
+    </slot>
+    <slot></slot>
 </div>

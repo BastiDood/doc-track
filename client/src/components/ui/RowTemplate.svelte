@@ -11,7 +11,7 @@
     const dispatch = createEventDispatcher();
 </script>
 
-<article on:keydown on:click|stopPropagation={() => dispatch(Events.RowContainerClick)}>
+<article on:keydown on:click={() => dispatch(Events.RowContainerClick)}>
     <div class="icon"><slot name="icon" /></div>
     <div id="middle">
         <div><slot></slot></div>
@@ -19,20 +19,21 @@
     </div>
     {#if showOverflowIcon}
         <div class="overflow" on:keydown on:click|stopPropagation={() => dispatch(Events.OverflowClick)}>
-            <OverflowMenuVertical size={iconSize} alt="Show overflow menu" />
+            <slot name="overflow">
+                <OverflowMenuVertical size={iconSize} alt="Show Overflow Menu" />
+            </slot>
         </div>
     {/if}
 </article>
 
 <style>
-    @import url('../../pages/vars.css');
-
     article {
+        align-items: center;
         display: flex;
         border-style: solid;
         border-width: var(--spacing-tiny);
         border-radius: var(--border-radius);
-        margin: var(--spacing-small);
+        gap: var(--spacing-normal);
         padding: var(--spacing-small);
     }
 
