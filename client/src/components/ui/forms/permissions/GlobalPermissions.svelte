@@ -5,12 +5,11 @@
     import { User } from '../../../../api/user.ts';
     import { PersonPayload } from '../../../types.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
-    import { userSession, userOffices } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { IconColor } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
-  import { staffList } from '../../../../pages/dashboard/stores/StaffStore.ts';
+    import { userList } from '../../../../pages/dashboard/stores/UserStore.ts';
 
     export let payload: PersonPayload;
 
@@ -35,7 +34,7 @@
                 id: payload.id,
                 permission: permsVal,
             });
-            await staffList.reload?.();
+            await userList.reload?.();
         } catch (err) {
             // TODO: No permission handler
             alert(err);
