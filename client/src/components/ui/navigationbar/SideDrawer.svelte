@@ -36,7 +36,7 @@
         <a href="#/barcodes" use:active><BarcodesIcon />Barcodes</a>
         <a href="#/invites" use:active><InvitesIcon />Invites</a>
         <a href="#/staff" use:active><StaffIcon />Staff</a>
-        <a href="#/admin" use:active><AdminIcon />Admin</a>
+        <a href="#/users" use:active><AdminIcon />Users</a>
         <a href="#/settings" use:active><SettingsIcon />Settings</a>
         <a href="#/sandbox" use:active><SettingsIcon />Sandbox</a>
     </section>
