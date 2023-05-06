@@ -8,7 +8,7 @@
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import PersonContext from '../../../components/ui/contextdrawer/PersonContext.svelte';
+    import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
 
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
@@ -61,7 +61,7 @@
     {/await}
 
     {#if currentContext?.ty === RowType.Person}
-        <PersonContext
+        <PersonContextLocal
             bind:show={showContextMenu}
             payload={currentContext} 
             on:editLocalPermission={contextMenuHandler}
