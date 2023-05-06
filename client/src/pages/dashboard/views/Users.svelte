@@ -1,16 +1,11 @@
 <script lang="ts">
-    import { dashboardState } from '../stores/DashboardState';
     import { userList } from '../stores/UserStore';
-    import { allOffices } from '../stores/OfficeStore';
 
     import { IconSize, PersonPayload, RowType, Events } from '../../../components/types';
     import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonContextGlobal from '../../../components/ui/contextdrawer/PersonContextGlobal.svelte';
-
-    $: ({ currentOffice } = $dashboardState);
-    $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
 
     let showContextMenu = false;
     let showGlobalPermission = false;
@@ -67,4 +62,3 @@
         <GlobalPermissions payload={currentContext} />
     {/if}
 </Modal>
-
