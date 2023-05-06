@@ -16,17 +16,10 @@
 </script>
 
 <ContextTemplate bind:show={show}>
-    <ContextElement on:click={() => dispatch(Events.EditLocalPermission, payload)}>
+    <ContextElement on:click={() => dispatch(Events.EditGlobalPermission, payload)}>
         <div slot="contextIcon">
             <Edit size={iconSize} alt="Edit Local Permissions" />
-            Edit Local Permissions
-        </div>
-    </ContextElement>
-    <ContextDivider />
-    <ContextElement on:click={() => dispatch(Events.RemoveStaff, payload)}>
-        <div slot="contextIcon">
-            <PersonDelete size={iconSize} alt="Remove Staff" />
-            Remove Staff
+            Edit Global Permissions
         </div>
     </ContextElement>
 </ContextTemplate>
