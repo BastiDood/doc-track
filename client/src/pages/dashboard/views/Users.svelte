@@ -52,7 +52,7 @@
 
 <Modal title="Edit Global Permissions" bind:showModal={showGlobalPermission}>
     {#if currentContext === null}
-        Current user is non existent
+        Current user is non-existent.
     {:else}
         <GlobalPermissions payload={currentContext} />
     {/if}
