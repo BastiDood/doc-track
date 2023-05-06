@@ -30,20 +30,15 @@
     <p>Loading users page...</p>
 {:then}
     <h1>Users</h1>
-    {#if $userList.length === 0}
-        No users exist
+    {#each $userList.filter(u => u.permission !== 0) as user (user.id)}
+        <PersonRowGlobal
+            {...user}
+            iconSize={IconSize.Large} 
+            on:overflowClick={overflowClickHandler} 
+        />
     {:else}
-        {#each $userList as user}
-            <!-- Filtering removed users -->
-            {#if user.permission !== 0}
-                <PersonRowGlobal
-                    {...user}
-                    iconSize={IconSize.Large} 
-                    on:overflowClick={overflowClickHandler} 
-                />
-            {/if}
-        {/each}
-    {/if}
+        No users exist.
+    {/each}
 {/await}
 
 {#if currentContext?.ty === RowType.Person}
