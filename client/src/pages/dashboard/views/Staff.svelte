@@ -43,21 +43,16 @@
         <p>Loading staff page...</p>
     {:then}
         <h1>Staffs of {officeName}</h1>
-        {#if $staffList === null}
-            No staff belonging in {officeName}
+        {#each $staffList.filter(s => s.permission !== 0) as staff (staff.id)}
+            <PersonRowLocal
+                {...staff}
+                office={currentOffice}
+                iconSize={IconSize.Large} 
+                on:overflowClick={overflowClickHandler} 
+            />
         {:else}
-            {#each $staffList as staff}
-                <!-- Filtering removed staff -->
-                {#if staff.permission !== 0}
-                    <PersonRowLocal
-                        {...staff}
-                        office={currentOffice}
-                        iconSize={IconSize.Large} 
-                        on:overflowClick={overflowClickHandler} 
-                    />
-                {/if}
-            {/each}
-        {/if}
+            No staff members exist.
+        {/each}
     {/await}
 
     {#if currentContext?.ty === RowType.Person}
