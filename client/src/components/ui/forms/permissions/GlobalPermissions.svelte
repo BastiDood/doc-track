@@ -3,9 +3,8 @@
     import { assert } from '../../../../assert.ts';
 
     import { User } from '../../../../api/user.ts';
-    import { PersonPayload } from '../../../types.ts';
+    import { PersonPayload, IconColor } from '../../../types.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
-    import { IconColor } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
