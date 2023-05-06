@@ -1,7 +1,6 @@
 <script lang="ts">
     import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
-    import { currentUser } from '../stores/UserStore.ts';
 
     import Modal from '../../../components/ui/Modal.svelte';
     import Button from '../../../components/ui/Button.svelte';
@@ -15,10 +14,6 @@
 
     let showCreateOffice = false;
     let showEditOffice = false;
-    let showCreateCategory = false;
-    let showEditCategory = false;
-    let showRemoveCategory = false;
-    let showActivateCategory = false;
     let showCreateDocument = false;
     let showSubscribePushNotification = false;
     let showUnsubscribePushNotification = false;
@@ -40,18 +35,6 @@
 </Button>
 <Button on:click={() => (showEditOffice = true)}>
     Edit an Office
-</Button>
-<Button on:click={() => (showCreateCategory = true)}>
-    Create a Category
-</Button>
-<Button on:click={() => (showEditCategory = true)}>
-    Rename a Category
-</Button>
-<Button on:click={() => (showRemoveCategory = true)}>
-    Remove a Category
-</Button>
-<Button on:click={() => (showActivateCategory = true)}>
-    Activate a Category
 </Button>
 <Button on:click={() => (showCreateDocument = true)}>
     Create a New Document
@@ -80,27 +63,6 @@
 }}>
     Get Outbox Of Selected Office
 </Button>
-
-<Modal title="Rename a Category" bind:showModal={showEditCategory}>
-    <RenameCategory />
-</Modal>
-<Modal title="Remove a Category" bind:showModal={showRemoveCategory}>
-    <RemoveCategory />
-</Modal>
-<Modal title="Activate a Category" bind:showModal={showActivateCategory}>
-    <ActivateCategory />
-</Modal>
-<Modal title="Create a Category" bind:showModal={showCreateCategory}>
-    <CreateCategory />
-</Modal>
-
-<Modal title="Edit Global Permissions" bind:showModal={showPermission}>
-    {#if $currentUser === null}
-        Current user is not valid.
-    {:else}
-        <GlobalPermissions user={$currentUser} />
-    {/if}
-</Modal>
 
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>
     <NewOffice />
