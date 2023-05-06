@@ -1,12 +1,9 @@
 <script lang="ts">
     import { Office } from '~model/office';
     import { dashboardState } from '../stores/DashboardState';
-    import { currentUser } from '../stores/UserStore.ts';
-    import { allOffices } from '../stores/OfficeStore.ts';
 
     import Modal from '../../../components/ui/Modal.svelte';
     import Button from '../../../components/ui/Button.svelte';
-    import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
     import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
@@ -21,7 +18,6 @@
 
     let showCreateOffice = false;
     let showEditOffice = false;
-    let showPermission = false;
     let showCreateCategory = false;
     let showEditCategory = false;
     let showRemoveCategory = false;
@@ -42,9 +38,6 @@
 </script>
 
 <h1>Sandbox</h1>
-<Button on:click={() => (showPermission = true)}>
-    Edit Global Permissions
-</Button>
 <Button on:click={() => (showCreateOffice = true)}>
     Create an Office
 </Button>
@@ -104,14 +97,6 @@
     <CreateCategory />
 </Modal>
 
-<Modal title="Edit Global Permissions" bind:showModal={showPermission}>
-    {#if $currentUser === null}
-        Current user is not valid.
-    {:else}
-        <GlobalPermissions user={$currentUser} />
-    {/if}
-</Modal>
-
 <Modal title="Create New Office" bind:showModal={showCreateOffice}>
     <NewOffice />
 </Modal>
@@ -119,7 +104,6 @@
 <Modal title="Edit Office" bind:showModal={showEditOffice}>
     <EditOffice />
 </Modal>
-
 
 <Modal title="Subscribe to Push Notification" bind:showModal={showSubscribePushNotification}>
     <SubscribePushNotification on:subscribe={handleIsSubscribed} />

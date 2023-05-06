@@ -4,7 +4,6 @@
     import { Events, InvitePayload, IconSize } from '../../types.ts';
     import ContextTemplate from '../contextmenu/ContextTemplate.svelte';
     import ContextElement from '../contextmenu/ContextElement.svelte';
-    import ContextDivider from '../contextmenu/ContextDivider.svelte';
 
     import Close from '../../icons/Close.svelte';
 

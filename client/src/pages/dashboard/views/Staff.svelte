@@ -8,7 +8,7 @@
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import PersonContext from '../../../components/ui/contextdrawer/PersonContext.svelte';
+    import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
 
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
@@ -43,25 +43,20 @@
         <p>Loading staff page...</p>
     {:then}
         <h1>Staffs of {officeName}</h1>
-        {#if $staffList === null}
-            No staff belonging in {officeName}
+        {#each $staffList.filter(s => s.permission !== 0) as staff (staff.id)}
+            <PersonRowLocal
+                {...staff}
+                office={currentOffice}
+                iconSize={IconSize.Large} 
+                on:overflowClick={overflowClickHandler} 
+            />
         {:else}
-            {#each $staffList as staff}
-                <!-- Filtering removed staff -->
-                {#if staff.permission !== 0}
-                    <PersonRowLocal
-                        {...staff}
-                        office={currentOffice}
-                        iconSize={IconSize.Large} 
-                        on:overflowClick={overflowClickHandler} 
-                    />
-                {/if}
-            {/each}
-        {/if}
+            No staff members exist.
+        {/each}
     {/await}
 
     {#if currentContext?.ty === RowType.Person}
-        <PersonContext
+        <PersonContextLocal
             bind:show={showContextMenu}
             payload={currentContext} 
             on:editLocalPermission={contextMenuHandler}

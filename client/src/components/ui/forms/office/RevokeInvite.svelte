@@ -6,23 +6,18 @@
     import { Invite } from '../../../../api/invite.ts';
     import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
     import { ButtonType, IconColor } from '../../../types.ts';
-    import { createEventDispatcher } from 'svelte';
 
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
-    import Close from '../../../icons/Close.svelte';
 
     export let email: Invitation['email'];
     export let office: Office['id'];
 
     $: officeName = $allOffices[office] ?? 'No office name.';
 
-    const dispatch = createEventDispatcher();
-
     async function removeInviteHandler() {
-        assert(email !== null);
-        assert(office !== null);
-
+        assert(email);
+        assert(office);
         try {
             await Invite.revoke({
                 office,

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import './row-element.css';
     import { createEventDispatcher } from 'svelte';
 
     import RowTemplate from '../RowTemplate.svelte';
@@ -19,6 +18,8 @@
     const rowEvent: GlobalPersonPayload = {
         ty: RowType.Person,
         id,
+        email,
+        permission,
     };
 </script>
 
@@ -26,7 +27,7 @@
     {iconSize} 
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
 >
-    <span class="chip office">Operator</span>
+    <span class="chip office">User</span>
     <span class="title">{name}</span>    
     <span slot="secondary" class="chipcontainer">
         <span class="chip email">{email}</span>

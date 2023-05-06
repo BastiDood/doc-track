@@ -21,7 +21,7 @@
 
     function overflowClickHandler(e: CustomEvent<InvitePayload>) {
         currentContext = e.detail;
-        showRevokeInviteContextMenu = currentContext.ty === RowType.Invite;
+        showRevokeInviteContextMenu = true;
     }
 </script>
 

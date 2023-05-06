@@ -50,6 +50,7 @@ export enum Events {
     RemoveInvitation = 'removeInvitation',
     RowContainerClick = 'rowContainerClick',
     EditLocalPermission = 'editLocalPermission',
+    EditGlobalPermission = 'editGlobalPermission',
     RemoveStaff = 'removeStaff'
 }
 
@@ -75,4 +76,6 @@ export interface PersonPayload {
 export interface GlobalPersonPayload {
     ty: RowType.Person;
     id: User['id'];
+    email: User['email'];
+    permission: Staff['permission'];
 }
