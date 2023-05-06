@@ -10,7 +10,7 @@
     import PersonDelete from '../../icons/PersonDelete.svelte';
 
     const dispatch = createEventDispatcher();
-    export let show = false;
+    export let show = false as boolean;
     export let payload: PersonPayload;
     export let iconSize = IconSize.Normal;
 </script>
