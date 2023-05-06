@@ -52,7 +52,7 @@ export enum Events {
     RowContainerClick = 'rowContainerClick',
     EditLocalPermission = 'editLocalPermission',
     EditGlobalPermission = 'editGlobalPermission',
-    RemoveStaff = 'removeStaff'
+    RemoveStaff = 'removeStaff',
     ActivateCategory = 'activateCategory',
     RemoveCategory = 'removeCategory',
     RenameCategory = 'renameCategory',
