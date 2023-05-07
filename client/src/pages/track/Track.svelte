@@ -104,12 +104,11 @@
     {#await Document.getPaperTrail(trackingNumber)}
         <p>Loading Paper Trail...</p>
     {:then trail}
-        <h2>Document </h2>
+        <h2>Document {trail[0]?.title}</h2>
 
         <Button>
             <Notification /> Subscribe to Push Notifications
         </Button>
-        {console.log(trail)}
         {#if trail.length == 0}
             <h1>Uh oh!</h1>
             <p>Something went wrong. Kindly re-check your tracking id above.</p>
