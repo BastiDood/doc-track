@@ -5,7 +5,7 @@ import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
-import type { BarcodeAssignmentError, AllInbox, AllOutbox, PaperTrail } from '~model/api.ts';
+import type { BarcodeAssignmentError, AllInbox, AllOutbox, InboxEntry, PaperTrail } from '~model/api.ts';
 import { Local } from '~model/permission.ts';
 
 import { DocumentSchema } from '~model/document.ts';
@@ -215,6 +215,64 @@ export async function handleGetOutbox(pool: Pool, req: Request, params: URLSearc
         db.release();
     }
 }
+
+/**
+ * Gets the dossier of an office. The dossier is a list of {@linkcode InboxEntry}
+ * such that the given office is the one that registered the document.
+ *
+ * # Inputs
+ * - Requires a valid session ID.
+ * - Accepts the target office ID via the `office` query parameter.
+ *
+ * # Outputs
+ * - `200` => returns the dossier of the office as JSON in the {@linkcode Response} body
+ * - `400` => provided office ID or document information is unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `406` => content negotiation failed
+ */
+export async function handleGetDossier(pool: Pool, req: Request, params: URLSearchParams) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Document] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    const office = params.get('office');
+    const oid = office ? parseInt(office, 10) : NaN;
+    if (isNaN(oid)) {
+        error(`[Document] Session ${sid} provided invalid office ID`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Document] Content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
+            error(`[Document] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((staff.permission & Local.ViewInbox) === 0) {
+            error(`[Document] User ${staff.user_id} cannot retrieve the dossier for office ${oid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const inbox: InboxEntry[] = await db.getDossier(oid);
+        info(`[Document] User ${staff.user_id} retrieved the dossier for office ${oid}`);
+        return new Response(JSON.stringify(inbox), {
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } finally {
+        db.release();
+    }
+}
+
 /**
  * Creates a new document by assigning it an available barcode.
  *
