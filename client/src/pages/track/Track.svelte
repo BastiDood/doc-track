@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { ButtonType, InputType } from '../../components/types.ts';
 
     import Notification from '../../components/icons/Notification.svelte';
@@ -8,8 +8,9 @@
     import Camera from '../../components/icons/Camera.svelte';
     import Search from '../../components/icons/Search.svelte';
 
-    import { Document } from '../../api/document.ts';
+    import { allOffices } from './../dashboard/stores/OfficeStore.ts';
 
+    import { Document } from '../../api/document.ts';
 
 
     // // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
@@ -52,7 +53,7 @@
     // };
 
     const { searchParams } = new URL(location.href);
-    let trackingNumber = searchParams.get('id');
+    let trackingNumber = searchParams.get('id') ?? '';
 
 </script>
 
@@ -70,6 +71,7 @@
             </a>
         </nav>
     </TopBar>
+
     {#await Document.getPaperTrail(trackingNumber)}
         <p>Loading Paper Trail...</p>
     {:then trail}
@@ -78,26 +80,69 @@
         <Button>
             <Notification /> Subscribe to Push Notifications
         </Button>
-        trail
-        <!-- <section>
+        {console.log(trail)}
+        {#if trail.length == 0}
+            <h1>Uh oh!</h1>
+            <p>Something went wrong. Kindly re-check your tracking id above.</p>
+        {/if}
+        <section>
             <table>
                 <tr>
                     <td><p class="header-color"><b>Overview</b></p></td>
                     <td></td>
                 </tr>
-                {#each Object.entries(overview) as [key, value] (key)}
-                    <tr>
-                        <td><b>{key}</b></td>
-                        <td>{value}</td>
-                    </tr>
-                {/each}
+                <tr>
+                    <td><b>Document Title</b></td>
+                    <td>{trail[0]?.title}</td>
+                </tr>
+                <tr>
+                    <td><b>Document Tracking Number</b></td>
+                    <td>{trackingNumber}</td>
+                </tr>
+                <tr>
+                    <td><b>Document Category</b></td>
+                    <td>{trail[0]?.category}</td>
+                </tr>
+                <tr>
+                    <td><b>Document For</b></td>
+                    <td>{trail[0]?.remark}</td>
+                </tr>
+                <tr>
+                    <td><b>Document Remarks</b></td>
+                    <td>{trail[trail.length - 1]?.remark}</td>
+                </tr>
+                <tr>
+                    <td><b>Originating Office</b></td>
+                    <td>{trail[0]?.target}</td>
+                </tr>
+                <tr>
+                    <td><b>Current Office</b></td>
+                    <td>{trail[trail.length - 1]?.target}</td>
+                </tr>
+                <tr>
+                    <td><b>Document Status</b></td>
+                    <td>{trail[trail.length - 1]?.status.toLocaleUpperCase()}</td>
             </table>
             <br>
             <table>
                 <th class="table-title">Files</th>
-                <tr><a href={fileUrl}>{fileName}</a></tr>
+                <!-- <tr><a href={fileUrl}>{trail[0]?.title}</a></tr> -->
+                <tr>No file attachment.</tr>
             </table>
             <br>
+            <table>
+                <th class="table-title">Paper Trail</th>
+                <tr><b>Office</b></tr>
+                <tr><b>Remarks</b></tr>
+                <tr><b>Date</b></tr>
+                {#each {length: trail.length} as _, i}
+                    <tr>
+                        <td>{trail[i]?.target}</td>
+                        <td>{trail[i]?.remark}</td>
+                        <td>{trail[i]?.creation}</td>
+                    </tr>
+                {/each}
+            <!-- 
             <table>
                 <th class="table-title">History</th>
                 <tr><b>Office</b></tr>
@@ -119,8 +164,8 @@
                         {/each}
                     </tr>
                 {/each}
-            </table>
-        </section> -->
+            </table> -->
+        </section>
     {:catch error}
         <h1>Uh oh!</h1>
         <p>Something went wrong. Kindly re-check your tracking id above.</p>
