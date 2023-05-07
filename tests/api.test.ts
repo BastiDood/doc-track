@@ -236,6 +236,9 @@ Deno.test('full API integration test', async t => {
         assertStrictEquals(initial.batch, bid);
         assertEquals(initial.codes, codes);
 
+        // Dossier should be initially empty
+        assertEquals(await Document.getDossier(oid), [ ]);
+
         for (const code of codes) {
             const batch = await Batch.getEarliestBatch(oid);
             assertInstanceOf(batch?.creation, Date);
@@ -259,8 +262,14 @@ Deno.test('full API integration test', async t => {
             const [ extracted, ...rest ]: string[] = initial.codes.splice(index, 1);
             assertStrictEquals(rest.length, 0);
             assertStrictEquals(extracted, code);
+
+            // Most recent entry in dossier should be this document
+            const expected = { doc: code, title: 'Leave of Absence', creation: doc, category: cName };
+            const dossier = await Document.getDossier(oid);
+            assertEquals(dossier[0], expected);
         }
 
+        // There should be no more available codes
         assertStrictEquals(await Batch.getEarliestBatch(oid), null);
     });
 
