@@ -58,19 +58,18 @@
     function formatElapsedTime(date2: Date, date1: Date): string {
         const elapsed = Math.abs(date2.getTime() - date1.getTime());
         const days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((elapsed / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((elapsed / (1000 * 60)) % 60);
-        const seconds = Math.floor((elapsed / 1000) % 60);
+        const hours = Math.floor(elapsed / (1000 * 60 * 60) % 24);
+        const minutes = Math.floor(elapsed / (1000 * 60) % 60);
+        const seconds = Math.floor(elapsed / 1000 % 60);
 
-        if (days > 0) {
+        if (days > 0)
             return `${days}d ${hours}h ${minutes}m`;
-        } else if (hours > 0) {
+        else if (hours > 0)
             return `${hours}h ${minutes}m`;
-        } else if (minutes > 0) {
+        else if (minutes > 0)
             return `${minutes}m ${seconds}s`;
-        } else {
-            return `${seconds}s`;
-        }
+    
+        return `${seconds}s`;
     }
 
     function formatPrint(date: Date): string {
@@ -169,16 +168,16 @@
                     <td><b>Remarks</b></td>
                     <td><b>Evaluator</b></td>
                 </tr>
-                {#each {length: trail.length} as _, i}
+                {#each { length: trail.length } as _, i}
                     <tr>
                         <td>{trail[i]?.target}</td>
                         <td>{formatPrint(trail[i]?.creation)}</td>
                         {#if i < trail.length - 1}
                             <td>{formatPrint(trail[i + 1]?.creation)}</td>
-                            <td>{formatElapsedTime(trail[i+1]?.creation, trail[i]?.creation)}</td>
+                            <td>{formatElapsedTime(trail[i + 1]?.creation, trail[i]?.creation)}</td>
                         {:else}
                             <td>Ongoing</td>
-                            <td>{formatElapsedTime(new Date(), trail[i]?.creation)}</td>
+                            <td>{formatElapsedTime(new Date, trail[i]?.creation)}</td>
                         {/if}
                         <td>{trail[i]?.status.toLocaleUpperCase()}</td>
                         <td>{trail[i]?.remark}</td>
