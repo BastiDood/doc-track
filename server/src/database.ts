@@ -8,20 +8,22 @@ import type { PushSubscription, PushSubscriptionJson } from '~model/subscription
 
 import {
     type AllCategories,
+    type AllInbox,
     type AllOffices,
+    type AllOutbox,
     type FullSession,
     type GeneratedBatch,
-    type AllInbox,
-    type AllOutbox,
+    type InboxEntry,
     type MinBatch,
     type PaperTrail,
     type StaffMember,
     AllCategoriesSchema,
+    AllInboxSchema,
     AllOfficesSchema,
+    AllOutboxSchema,
     BarcodeAssignmentError,
     FullSessionSchema,
-    AllInboxSchema,
-    AllOutboxSchema,
+    InboxEntrySchema,
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
@@ -388,6 +390,19 @@ export class Database {
                     INNER JOIN category AS c ON d.category = c.id
                 WHERE s.doc = ${doc} ORDER BY s.creation ASC`;
         return PaperTrailSchema.array().parse(rows);
+    }
+
+    /** Gets a list of {@linkcode InboxEntry} such that they were registered from the given office.  */
+    async getDossier(oid: Office['id']): Promise<InboxEntry[]> {
+        const { rows } = await this.#client
+            .queryObject`SELECT s.doc,d.title,c.name AS category,s.creation FROM snapshot AS s
+                INNER JOIN document AS d ON s.doc = d.id
+                INNER JOIN category AS c ON d.category = c.id
+                INNER JOIN barcode AS bar ON s.doc = bar.code
+                INNER JOIN batch AS bat ON bar.batch = bat.id
+            WHERE s.status = 'Register' AND bat.office = ${oid}
+            ORDER BY s.creation DESC`;
+        return InboxEntrySchema.array().parse(rows);
     }
 
     async getInbox(oid: Office['id']): Promise<AllInbox> {
