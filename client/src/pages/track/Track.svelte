@@ -12,136 +12,120 @@
 
 
 
-    // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
-    const docTrackingNumber = '1234567890';
+    // // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
+    // const docTrackingNumber = '1234567890';
     
-    // TODO: Populate based on API calls (SPRINT 4)
-    const docTitle = 'Document';
+    // // TODO: Populate based on API calls (SPRINT 4)
+    // const docTitle = 'Document';
 
-    const fileUrl = 'https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2020/10/Dropping-Form.pdf';
-    const fileName = 'Drop Form.pdf';
+    // const fileUrl = 'https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2020/10/Dropping-Form.pdf';
+    // const fileName = 'Drop Form.pdf';
 
-    const trail = [ // Contains dictionary with keys Office, In, Out, Elapsed Time, Action, Remarks
-        {
-            'Office': 'Department of Computer Science',
-            'In': '2021-04-20 12:00:00', // Should be a DateTime object (SPRINT 4)
-            'Out': '2021-04-20 12:00:00',
-            'Elapsed Time': '30s',
-            'Action': 'SENT',
-            'Remarks': 'Done',
-        },
-        { // College of Engineering
-            'Office': 'College of Engineering',
-            'In': '2021-04-20 12:00:00',
-            'Out': '',
-            'Elapsed Time': '',
-            'Action': 'RECEIVED',
-            'Remarks': 'Processing',
-        },
-    ];
+    // const trail = [ // Contains dictionary with keys Office, In, Out, Elapsed Time, Action, Remarks
+    //     {
+    //         'Office': 'Department of Computer Science',
+    //         'In': '2021-04-20 12:00:00', // Should be a DateTime object (SPRINT 4)
+    //         'Out': '2021-04-20 12:00:00',
+    //         'Elapsed Time': '30s',
+    //         'Action': 'SENT',
+    //         'Remarks': 'Done',
+    //     },
+    //     { // College of Engineering
+    //         'Office': 'College of Engineering',
+    //         'In': '2021-04-20 12:00:00',
+    //         'Out': '',
+    //         'Elapsed Time': '',
+    //         'Action': 'RECEIVED',
+    //         'Remarks': 'Processing',
+    //     },
+    // ];
 
-    const overview = {
-        'Document Title': 'Document',
-        'Document Tracking Number': docTrackingNumber,
-        'Document Type': 'Letter',
-        'Document For': 'Distribution/disubursement',
-        'Document Remarks': 'LGTM!',
-        'Originating Office': 'Department of Computer Science', // TODO: Given ID, get office name
-        'Current Office': 'College of Engineering',
-        'Document Status': 'SENT',
-    };
+    // const overview = {
+    //     'Document Title': 'Document',
+    //     'Document Tracking Number': docTrackingNumber,
+    //     'Document Type': 'Letter',
+    //     'Document For': 'Distribution/disubursement',
+    //     'Document Remarks': 'LGTM!',
+    //     'Originating Office': 'Department of Computer Science', // TODO: Given ID, get office name
+    //     'Current Office': 'College of Engineering',
+    //     'Document Status': 'SENT',
+    // };
 
     const { searchParams } = new URL(location.href);
-    const uuid = searchParams.get('id');
-
-    let newTrackingNumber = '';
-
-    async function getDocumentTrail() {
-        const response = await Document.getPaperTrail(uuid);
-        console.log(response);
-    }
-
-    getDocumentTrail();
+    let trackingNumber = searchParams.get('id');
 
 </script>
 
 <svelte:head>
-    <title>DocTrack | {docTitle}</title>
+    <title>DocTrack</title>
 </svelte:head>
 
 <main>
     <TopBar open nodrawer>
         <nav>
-            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="" bind:value={newTrackingNumber} />
+            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
             <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
-            <a href={`/track?id=${newTrackingNumber}`}>
+            <a href={`/track?id=${trackingNumber}`}>
                 <Button type={ButtonType.Primary}><Search alt="Search specified tracking number." /></Button>
             </a>
         </nav>
     </TopBar>
-    <h2>Document {docTitle}</h2>
+    {#await Document.getPaperTrail(trackingNumber)}
+        <p>Loading Paper Trail...</p>
+    {:then trail}
+        <h2>Document </h2>
 
-    {#if uuid}
-        <p>Tracking Number: {uuid}</p>
-        <!-- {#await Document.getPaperTrail(uuid)}
-            Loading... 
-        {:then trail}
-            Found trail!
-            {#each trail as item}
-                <p>{item}</p>
-            {/each}
-        {:catch error}
-            <p style="color: red">{error.message}</p>
-        {/await} -->
-    {:else}
-        <p>No tracking number specified</p>
-    {/if}
-
-    <Button>
-        <Notification /> Subscribe to Push Notifications
-    </Button>
-    <section>
-        <table>
-            <tr>
-                <td><p class="header-color"><b>Overview</b></p></td>
-                <td></td>
-            </tr>
-            {#each Object.entries(overview) as [key, value] (key)}
+        <Button>
+            <Notification /> Subscribe to Push Notifications
+        </Button>
+        trail
+        <!-- <section>
+            <table>
                 <tr>
-                    <td><b>{key}</b></td>
-                    <td>{value}</td>
+                    <td><p class="header-color"><b>Overview</b></p></td>
+                    <td></td>
                 </tr>
-            {/each}
-        </table>
-        <br>
-        <table>
-            <th class="table-title">Files</th>
-            <tr><a href={fileUrl}>{fileName}</a></tr>
-        </table>
-        <br>
-        <table>
-            <th class="table-title">History</th>
-            <tr><b>Office</b></tr>
-            <tr><b>Remarks</b></tr>
-            <tr><b>Date</b></tr>
-        </table>
-        <br>
-        <table>
-            <th class="table-title">Paper Trail</th>
-            <tr>
-                {#each Object.keys(trail[0]) as key}
-                    <td><b>{key}</b></td>
+                {#each Object.entries(overview) as [key, value] (key)}
+                    <tr>
+                        <td><b>{key}</b></td>
+                        <td>{value}</td>
+                    </tr>
                 {/each}
-            </tr>
-            {#each trail as item}
+            </table>
+            <br>
+            <table>
+                <th class="table-title">Files</th>
+                <tr><a href={fileUrl}>{fileName}</a></tr>
+            </table>
+            <br>
+            <table>
+                <th class="table-title">History</th>
+                <tr><b>Office</b></tr>
+                <tr><b>Remarks</b></tr>
+                <tr><b>Date</b></tr>
+            </table>
+            <br>
+            <table>
+                <th class="table-title">Paper Trail</th>
                 <tr>
-                    {#each Object.keys(item) as key}
-                        <td>{item[key]}</td>
+                    {#each Object.keys(trail[0]) as key}
+                        <td><b>{key}</b></td>
                     {/each}
                 </tr>
-            {/each}
-        </table>
-    </section>
+                {#each trail as item}
+                    <tr>
+                        {#each Object.keys(item) as key}
+                            <td>{item[key]}</td>
+                        {/each}
+                    </tr>
+                {/each}
+            </table>
+        </section> -->
+    {:catch error}
+        <h1>Uh oh!</h1>
+        <p>Something went wrong. Kindly re-check your tracking id above.</p>
+        <p style="color: red;">Error: {error}</p>
+    {/await}
 </main>
 
 <style>
