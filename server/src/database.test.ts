@@ -2,6 +2,7 @@ import {
     assert,
     assertArrayIncludes,
     assertEquals,
+    assertExists,
     assertFalse,
     assertInstanceOf,
     assertNotStrictEquals,
@@ -62,11 +63,11 @@ Deno.test('full OAuth flow', async t => {
             email,
             permission,
         });
-        assert(creation !== null);
+        assertExists(creation);
         assertEquals(await db.getInvitationList(office), [ { creation, office, email, permission } ]);
 
         const result = await db.revokeInvitation(office, email);
-        assert(result !== null);
+        assertExists(result);
         assertEquals(result, { permission, creation });
         assertEquals(await db.getInvitationList(office), [ ]);
     });
@@ -98,7 +99,7 @@ Deno.test('full OAuth flow', async t => {
             permission: USER.permission,
         };
         const creation = await db.upsertInvitation(invite);
-        assert(creation !== null);
+        assertExists(creation);
         assertEquals(await db.getInvitationList(office), [ { creation, office, email: USER.email, permission: USER.permission } ]);
 
         await t.step('invalid revocation of invites', async () => {
@@ -137,10 +138,10 @@ Deno.test('full OAuth flow', async t => {
 
         await t.step('invite acceptance', async () => {
             const creation = await db.upsertInvitation(invite);
-            assert(creation !== null);
+            assertExists(creation);
 
             const result = await db.insertInvitedUser(USER);
-            assert(result !== null);
+            assertExists(result)
             assertArrayIncludes(result, [ { office: invite.office, permission: invite.permission } ]);
             assertEquals(await db.getInvitationList(office), [ ]);
             assertStrictEquals(await db.upsertInvitation({
@@ -168,7 +169,7 @@ Deno.test('full OAuth flow', async t => {
         assertStrictEquals(await db.getStaffFromSession(id, office), null);
 
         const result = await db.invalidateSession(id);
-        assert(result !== null);
+        assertExists(result);
         assertEquals(result.data, { nonce, expiration });
     });
 
@@ -216,7 +217,7 @@ Deno.test('full OAuth flow', async t => {
 
         // Existing session
         const info = await db.getFullSessionInfo(id);
-        assert(info !== null);
+        assertExists(info);
         assertEquals(info.id, USER.id);
         assertEquals(info.name, USER.name);
         assertEquals(info.email, USER.email);
@@ -231,7 +232,7 @@ Deno.test('full OAuth flow', async t => {
 
         const first = 'Leave of Absence';
         const id = await db.createCategory(first);
-        assert(id !== null);
+        assertExists(id);
         assertEquals(await db.activateCategory(id), first);
 
         const { active: oldCategories } = await db.getAllCategories();
@@ -276,8 +277,7 @@ Deno.test('full OAuth flow', async t => {
 
     await t.step('valid session invalidation', async () => {
         const result = await db.invalidateSession(id);
-        assert(result !== null);
-        assertEquals(result.data, {
+        assertEquals(result?.data, {
             user_id: USER.id,
             expiration,
         });
@@ -288,7 +288,7 @@ Deno.test('full OAuth flow', async t => {
     assertStrictEquals(randomCategory.length, 19);
 
     const category = await db.createCategory(randomCategory);
-    assert(category !== null);
+    assertExists(category);
 
     const [ chosen, ...others ] = codes;
     assert(chosen);
@@ -324,7 +324,7 @@ Deno.test('full OAuth flow', async t => {
         assertEquals(await db.getDossier(office), expected);
 
         const info = await db.getEarliestAvailableBatch(office);
-        assert(info !== null);
+        assertExists(info);
         assertEquals(info.creation, batchCreation);
         assertStrictEquals(info.batch, batch);
         assertStrictEquals(info.codes.length, 9);
