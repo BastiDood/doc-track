@@ -55,6 +55,35 @@
     const { searchParams } = new URL(location.href);
     let trackingNumber = searchParams.get('id') ?? '';
 
+    function formatElapsedTime(date2: Date, date1: Date): string {
+        const elapsed = Math.abs(date2.getTime() - date1.getTime());
+        const days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((elapsed / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((elapsed / (1000 * 60)) % 60);
+        const seconds = Math.floor((elapsed / 1000) % 60);
+
+        if (days > 0) {
+            return `${days}d ${hours}h ${minutes}m`;
+        } else if (hours > 0) {
+            return `${hours}h ${minutes}m`;
+        } else if (minutes > 0) {
+            return `${minutes}m ${seconds}s`;
+        } else {
+            return `${seconds}s`;
+        }
+    }
+
+    function formatPrint(date: Date): string {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
 </script>
 
 <svelte:head>
@@ -132,14 +161,29 @@
             <br>
             <table>
                 <th class="table-title">Paper Trail</th>
-                <tr><b>Office</b></tr>
-                <tr><b>Remarks</b></tr>
-                <tr><b>Date</b></tr>
+                <tr>
+                    <td><b>Office</b></td>
+                    <td><b>In</b></td>
+                    <td><b>Out</b></td>
+                    <td><b>Elapsed Time</b></td>
+                    <td><b>Action</b></td>
+                    <td><b>Remarks</b></td>
+                    <td><b>Evaluator</b></td>
+                </tr>
                 {#each {length: trail.length} as _, i}
                     <tr>
                         <td>{trail[i]?.target}</td>
+                        <td>{formatPrint(trail[i]?.creation)}</td>
+                        {#if i < trail.length - 1}
+                            <td>{formatPrint(trail[i + 1]?.creation)}</td>
+                            <td>{formatElapsedTime(trail[i+1]?.creation, trail[i]?.creation)}</td>
+                        {:else}
+                            <td>Ongoing</td>
+                            <td>{formatElapsedTime(new Date(), trail[i]?.creation)}</td>
+                        {/if}
+                        <td>{trail[i]?.status.toLocaleUpperCase()}</td>
                         <td>{trail[i]?.remark}</td>
-                        <td>{trail[i]?.creation}</td>
+                        <td>{trail[i]?.email}</td>
                     </tr>
                 {/each}
             <!-- 
