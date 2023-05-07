@@ -2,6 +2,7 @@ import {
     assert,
     assertArrayIncludes,
     assertEquals,
+    assertExists,
     assertInstanceOf,
     assertNotStrictEquals,
     assertStrictEquals,
@@ -49,7 +50,7 @@ async function setup(pool: Pool) {
             permission,
             email,
         });
-        assertNotStrictEquals(creation, null);
+        assertExists(creation);
 
         // Construct mock user
         const user = {
@@ -61,7 +62,7 @@ async function setup(pool: Pool) {
 
         // Formally integrate user into the system
         const offices = await db.insertInvitedUser(user);
-        assert(offices !== null);
+        assertExists(offices);
         const [ first, ...rest ] = offices;
         assertStrictEquals(rest.length, 0);
         assertEquals(first, { office: oid, permission });
@@ -76,7 +77,7 @@ async function setup(pool: Pool) {
             user_id: user.id,
             expiration,
         });
-        assert(pending !== null);
+        assertExists(pending);
         assertEquals(pending.expiration, expiration);
         assert(bytewiseEquals(pending.nonce, nonce));
         return { oid, sid: id, user };
@@ -155,7 +156,7 @@ Deno.test('full API integration test', async t => {
             office: oid,
             permission: Local.AddStaff,
         });
-        assert(creation !== null);
+        assertExists(creation);
 
         // List one invitation
         assertEquals(await Invite.getList(oid), [ { office: oid, creation, email, permission: Local.AddStaff } ]);
@@ -236,6 +237,9 @@ Deno.test('full API integration test', async t => {
         assertStrictEquals(initial.batch, bid);
         assertEquals(initial.codes, codes);
 
+        // Dossier should be initially empty
+        assertEquals(await Document.getDossier(oid), [ ]);
+
         for (const code of codes) {
             const batch = await Batch.getEarliestBatch(oid);
             assertInstanceOf(batch?.creation, Date);
@@ -259,8 +263,14 @@ Deno.test('full API integration test', async t => {
             const [ extracted, ...rest ]: string[] = initial.codes.splice(index, 1);
             assertStrictEquals(rest.length, 0);
             assertStrictEquals(extracted, code);
+
+            // Most recent entry in dossier should be this document
+            const expected = { doc: code, title: 'Leave of Absence', creation: doc, category: cName };
+            const dossier = await Document.getDossier(oid);
+            assertEquals(dossier[0], expected);
         }
 
+        // There should be no more available codes
         assertStrictEquals(await Batch.getEarliestBatch(oid), null);
     });
 

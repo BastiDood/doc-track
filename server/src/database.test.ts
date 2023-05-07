@@ -2,6 +2,7 @@ import {
     assert,
     assertArrayIncludes,
     assertEquals,
+    assertExists,
     assertFalse,
     assertInstanceOf,
     assertNotStrictEquals,
@@ -62,11 +63,11 @@ Deno.test('full OAuth flow', async t => {
             email,
             permission,
         });
-        assert(creation !== null);
+        assertExists(creation);
         assertEquals(await db.getInvitationList(office), [ { creation, office, email, permission } ]);
 
         const result = await db.revokeInvitation(office, email);
-        assert(result !== null);
+        assertExists(result);
         assertEquals(result, { permission, creation });
         assertEquals(await db.getInvitationList(office), [ ]);
     });
@@ -98,7 +99,7 @@ Deno.test('full OAuth flow', async t => {
             permission: USER.permission,
         };
         const creation = await db.upsertInvitation(invite);
-        assert(creation !== null);
+        assertExists(creation);
         assertEquals(await db.getInvitationList(office), [ { creation, office, email: USER.email, permission: USER.permission } ]);
 
         await t.step('invalid revocation of invites', async () => {
@@ -137,10 +138,10 @@ Deno.test('full OAuth flow', async t => {
 
         await t.step('invite acceptance', async () => {
             const creation = await db.upsertInvitation(invite);
-            assert(creation !== null);
+            assertExists(creation);
 
             const result = await db.insertInvitedUser(USER);
-            assert(result !== null);
+            assertExists(result)
             assertArrayIncludes(result, [ { office: invite.office, permission: invite.permission } ]);
             assertEquals(await db.getInvitationList(office), [ ]);
             assertStrictEquals(await db.upsertInvitation({
@@ -168,7 +169,7 @@ Deno.test('full OAuth flow', async t => {
         assertStrictEquals(await db.getStaffFromSession(id, office), null);
 
         const result = await db.invalidateSession(id);
-        assert(result !== null);
+        assertExists(result);
         assertEquals(result.data, { nonce, expiration });
     });
 
@@ -216,7 +217,7 @@ Deno.test('full OAuth flow', async t => {
 
         // Existing session
         const info = await db.getFullSessionInfo(id);
-        assert(info !== null);
+        assertExists(info);
         assertEquals(info.id, USER.id);
         assertEquals(info.name, USER.name);
         assertEquals(info.email, USER.email);
@@ -231,7 +232,7 @@ Deno.test('full OAuth flow', async t => {
 
         const first = 'Leave of Absence';
         const id = await db.createCategory(first);
-        assert(id !== null);
+        assertExists(id);
         assertEquals(await db.activateCategory(id), first);
 
         const { active: oldCategories } = await db.getAllCategories();
@@ -276,8 +277,7 @@ Deno.test('full OAuth flow', async t => {
 
     await t.step('valid session invalidation', async () => {
         const result = await db.invalidateSession(id);
-        assert(result !== null);
-        assertEquals(result.data, {
+        assertEquals(result?.data, {
             user_id: USER.id,
             expiration,
         });
@@ -288,7 +288,7 @@ Deno.test('full OAuth flow', async t => {
     assertStrictEquals(randomCategory.length, 19);
 
     const category = await db.createCategory(randomCategory);
-    assert(category !== null);
+    assertExists(category);
 
     const [ chosen, ...others ] = codes;
     assert(chosen);
@@ -300,6 +300,9 @@ Deno.test('full OAuth flow', async t => {
         const snap = { evaluator: USER.id, remark: 'Hello', target: office };
         const uuid = crypto.randomUUID();
 
+        // Dossier must be empty before assigning
+        assertEquals(await db.getDossier(office), [ ]);
+
         // Non-existent barcode
         assertEquals(await db.assignBarcodeToDocument({ ...doc, id: uuid }, snap), BarcodeAssignmentError.BarcodeNotFound);
 
@@ -309,12 +312,19 @@ Deno.test('full OAuth flow', async t => {
         // Non-existent evaluator
         assertEquals(await db.assignBarcodeToDocument(doc, { ...snap, evaluator: uuid }), BarcodeAssignmentError.EvaluatorNotFound);
 
+        // Dossier must still be empty after erroneous assignments
+        assertEquals(await db.getDossier(office), [ ]);
+
         // Successful assignment
         const creation = await db.assignBarcodeToDocument(doc, snap);
         assertInstanceOf(creation, Date);
 
+        // Dossier must include the newly registered document
+        const expected = [ { creation, doc: doc.id, title: doc.title, category: randomCategory } ];
+        assertEquals(await db.getDossier(office), expected);
+
         const info = await db.getEarliestAvailableBatch(office);
-        assert(info !== null);
+        assertExists(info);
         assertEquals(info.creation, batchCreation);
         assertStrictEquals(info.batch, batch);
         assertStrictEquals(info.codes.length, 9);
@@ -334,6 +344,9 @@ Deno.test('full OAuth flow', async t => {
 
         // Use already assigned barcode
         assertEquals(await db.assignBarcodeToDocument(doc, snap), BarcodeAssignmentError.AlreadyAssigned);
+
+        // Dossier must be unaffected after errneous assignment
+        assertEquals(await db.getDossier(office), expected);
     });
 
     await t.step('snapshot insertion', async t => {
