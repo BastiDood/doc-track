@@ -154,13 +154,13 @@
             </table>
             <br>
             <table>
-                <th class="table-title">Files</th>
+                <td><p class="header-color"><b>File Attachment</b></p></td>
                 <!-- <tr><a href={fileUrl}>{trail[0]?.title}</a></tr> -->
                 <tr>No file attachment.</tr>
             </table>
             <br>
             <table>
-                <th class="table-title">Paper Trail</th>
+                <td><p class="header-color"><b>Paper Trail</b></p></td>
                 <tr>
                     <td><b>Office</b></td>
                     <td><b>In</b></td>
