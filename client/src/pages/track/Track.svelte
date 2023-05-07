@@ -8,6 +8,9 @@
     import Camera from '../../components/icons/Camera.svelte';
     import Search from '../../components/icons/Search.svelte';
 
+    import { Document } from '../../api/document.ts';
+
+
 
     // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
     const docTrackingNumber = '1234567890';
@@ -49,9 +52,17 @@
     };
 
     const { searchParams } = new URL(location.href);
-    const did = searchParams.get('id');
+    const uuid = searchParams.get('id');
 
     let newTrackingNumber = '';
+
+    async function getDocumentTrail() {
+        const response = await Document.getPaperTrail(uuid);
+        console.log(response);
+    }
+
+    getDocumentTrail();
+
 </script>
 
 <svelte:head>
@@ -70,8 +81,18 @@
     </TopBar>
     <h2>Document {docTitle}</h2>
 
-    {#if did}
-        <p>Tracking Number: {did}</p>
+    {#if uuid}
+        <p>Tracking Number: {uuid}</p>
+        <!-- {#await Document.getPaperTrail(uuid)}
+            Loading... 
+        {:then trail}
+            Found trail!
+            {#each trail as item}
+                <p>{item}</p>
+            {/each}
+        {:catch error}
+            <p style="color: red">{error.message}</p>
+        {/await} -->
     {:else}
         <p>No tracking number specified</p>
     {/if}
