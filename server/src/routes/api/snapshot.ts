@@ -81,7 +81,7 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
         const snap: Snapshot['creation'] | InsertSnapshotError = await db.insertSnapshot({ ...result.data, evaluator: staff.user_id });
         if (snap instanceof Date) {
             info(`[Snapshot] User ${staff.user_id} inserted ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target}`);
-            return new Response(snap.getUTCMilliseconds().toString(), {
+            return new Response(snap.getTime().toString(), {
                 status: Status.Created,
                 headers: { 'Content-Type': 'application/json' },
             });

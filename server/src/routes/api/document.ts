@@ -88,7 +88,7 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
 
         if (barcodeResult instanceof Date) {
             info(`[Document] User ${staff.user_id} assigned barcode ${doc.id} to document "${doc.title}"`);
-            return new Response(barcodeResult.getUTCMilliseconds().toString(), {
+            return new Response(barcodeResult.getTime().toString(), {
                 status: Status.Created,
                 headers: { 'Content-Type': 'application/json' },
             });
