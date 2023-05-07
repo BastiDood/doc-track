@@ -186,29 +186,6 @@
                         <td>{trail[i]?.email}</td>
                     </tr>
                 {/each}
-            <!-- 
-            <table>
-                <th class="table-title">History</th>
-                <tr><b>Office</b></tr>
-                <tr><b>Remarks</b></tr>
-                <tr><b>Date</b></tr>
-            </table>
-            <br>
-            <table>
-                <th class="table-title">Paper Trail</th>
-                <tr>
-                    {#each Object.keys(trail[0]) as key}
-                        <td><b>{key}</b></td>
-                    {/each}
-                </tr>
-                {#each trail as item}
-                    <tr>
-                        {#each Object.keys(item) as key}
-                            <td>{item[key]}</td>
-                        {/each}
-                    </tr>
-                {/each}
-            </table> -->
         </section>
     {:catch error}
         <h1>Uh oh!</h1>
@@ -233,12 +210,6 @@
         border-radius: var(--border-radius);
         color: var(--color-primary);
         width: 100%;
-    }
-
-    .table-title {
-        color: var(--color-primary);
-        font-size: var(--font-size-large);
-        text-align: center;
     }
 
     tr {
