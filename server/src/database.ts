@@ -563,7 +563,6 @@ export class Database {
     }
 
     async getUsers(): Promise<User[]> {
-        // TODO: Add Tests
         const { rows } = await this.#client
             .queryObject('SELECT id,name,email,picture,permission FROM users');
         return UserSchema

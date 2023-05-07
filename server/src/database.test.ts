@@ -300,6 +300,9 @@ Deno.test('full OAuth flow', async t => {
         const snap = { evaluator: USER.id, remark: 'Hello', target: office };
         const uuid = crypto.randomUUID();
 
+        // Dossier must be empty before assigning
+        assertEquals(await db.getDossier(office), [ ]);
+
         // Non-existent barcode
         assertEquals(await db.assignBarcodeToDocument({ ...doc, id: uuid }, snap), BarcodeAssignmentError.BarcodeNotFound);
 
@@ -309,9 +312,16 @@ Deno.test('full OAuth flow', async t => {
         // Non-existent evaluator
         assertEquals(await db.assignBarcodeToDocument(doc, { ...snap, evaluator: uuid }), BarcodeAssignmentError.EvaluatorNotFound);
 
+        // Dossier must still be empty after erroneous assignments
+        assertEquals(await db.getDossier(office), [ ]);
+
         // Successful assignment
         const creation = await db.assignBarcodeToDocument(doc, snap);
         assertInstanceOf(creation, Date);
+
+        // Dossier must include the newly registered document
+        const expected = [ { creation, doc: doc.id, title: doc.title, category: randomCategory } ];
+        assertEquals(await db.getDossier(office), expected);
 
         const info = await db.getEarliestAvailableBatch(office);
         assert(info !== null);
@@ -334,6 +344,9 @@ Deno.test('full OAuth flow', async t => {
 
         // Use already assigned barcode
         assertEquals(await db.assignBarcodeToDocument(doc, snap), BarcodeAssignmentError.AlreadyAssigned);
+
+        // Dossier must be unaffected after errneous assignment
+        assertEquals(await db.getDossier(office), expected);
     });
 
     await t.step('snapshot insertion', async t => {
