@@ -8,9 +8,13 @@
     import Camera from '../../components/icons/Camera.svelte';
     import Search from '../../components/icons/Search.svelte';
 
+    //  TODO: Cleanup
     import { allOffices } from './../dashboard/stores/OfficeStore.ts';
+    import type { PaperTrail } from '../../../../model/src/api.ts';
+    //
 
     import { Document } from '../../api/document.ts';
+    import { assert } from '../../assert.ts';
 
 
     // // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
@@ -83,6 +87,34 @@
 
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
+
+    function renderOverview(trail: PaperTrail[]) {
+        const [first, ...rest] = trail;
+        const last = rest.at(-1);
+
+        if (typeof first === 'undefined' && typeof last === 'undefined')
+            return null;
+        if (typeof first !== 'undefined' && typeof last !== 'undefined')
+            return {
+                title: first.title,
+                category: first.category,
+                documentFor: first.remark,
+                documentRemark: last.remark,
+                status: first.status,
+                origin: first.target,
+                current: last.target,
+            };
+        assert(typeof first !== 'undefined' && typeof last === 'undefined');
+        return {
+            title: first.title,
+            category: first.category,
+            documentFor: first.remark,
+            documentRemark: first.remark,
+            status: first.status,
+            origin: first.target,
+            current: first.target,
+        };
+    }
 </script>
 
 <svelte:head>
@@ -103,88 +135,85 @@
     {#await Document.getPaperTrail(trackingNumber)}
         <p>Loading Paper Trail...</p>
     {:then trail}
-        <h2>Document {trail[0]?.title}</h2>
-
-        <Button>
-            <Notification /> Subscribe to Push Notifications
-        </Button>
-        {#if trail.length == 0}
+        {@const overview = renderOverview(trail)}
+        {#if overview === null}
             <h1>Uh oh!</h1>
             <p>Something went wrong. Kindly re-check your tracking id above.</p>
-        {/if}
-        <section>
-            <table>
-                <tr>
-                    <td><p class="header-color"><b>Overview</b></p></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>Document Title</b></td>
-                    <td>{trail[0]?.title}</td>
-                </tr>
-                <tr>
-                    <td><b>Document Tracking Number</b></td>
-                    <td>{trackingNumber}</td>
-                </tr>
-                <tr>
-                    <td><b>Document Category</b></td>
-                    <td>{trail[0]?.category}</td>
-                </tr>
-                <tr>
-                    <td><b>Document For</b></td>
-                    <td>{trail[0]?.remark}</td>
-                </tr>
-                <tr>
-                    <td><b>Document Remarks</b></td>
-                    <td>{trail[trail.length - 1]?.remark}</td>
-                </tr>
-                <tr>
-                    <td><b>Originating Office</b></td>
-                    <td>{trail[0]?.target}</td>
-                </tr>
-                <tr>
-                    <td><b>Current Office</b></td>
-                    <td>{trail[trail.length - 1]?.target}</td>
-                </tr>
-                <tr>
-                    <td><b>Document Status</b></td>
-                    <td>{trail[trail.length - 1]?.status.toLocaleUpperCase()}</td>
-            </table>
-            <br>
-            <table>
-                <td><p class="header-color"><b>File Attachment</b></p></td>
-                <!-- <tr><a href={fileUrl}>{trail[0]?.title}</a></tr> -->
-                <tr>No file attachment.</tr>
-            </table>
-            <br>
-            <table>
-                <td><p class="header-color"><b>Paper Trail</b></p></td>
-                <tr>
-                    <td><b>Office</b></td>
-                    <td><b>In</b></td>
-                    <td><b>Out</b></td>
-                    <td><b>Elapsed Time</b></td>
-                    <td><b>Action</b></td>
-                    <td><b>Remarks</b></td>
-                    <td><b>Evaluator</b></td>
-                </tr>
-                {#each { length: trail.length } as _, i}
+        {:else}
+            <h2>Document {overview.title}</h2>
+            <Button>
+                <Notification /> Subscribe to Push Notifications
+            </Button>
+            <section>
+                <table>
                     <tr>
-                        <td>{trail[i]?.target}</td>
-                        <td>{formatPrint(trail[i]?.creation)}</td>
-                        {#if i < trail.length - 1}
-                            <td>{formatPrint(trail[i + 1]?.creation)}</td>
-                            <td>{formatElapsedTime(trail[i + 1]?.creation, trail[i]?.creation)}</td>
-                        {:else}
-                            <td>Ongoing</td>
-                            <td>{formatElapsedTime(new Date, trail[i]?.creation)}</td>
-                        {/if}
-                        <td>{trail[i]?.status.toLocaleUpperCase()}</td>
-                        <td>{trail[i]?.remark}</td>
-                        <td>{trail[i]?.email}</td>
+                        <td><p class="header-color"><b>Overview</b></p></td>
+                        <td></td>
                     </tr>
-                {/each}
-        </section>
+                    <tr>
+                        <td><b>Document Title</b></td>
+                        <td>{overview.title}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Document Tracking Number</b></td>
+                        <td>{trackingNumber}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Document Category</b></td>
+                        <td>{overview.category}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Document For</b></td>
+                        <td>{overview.documentFor}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Document Remarks</b></td>
+                        <td>{overview.documentRemark}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Originating Office</b></td>
+                        <td>{overview.origin}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Current Office</b></td>
+                        <td>{overview.current}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Document Status</b></td>
+                        <td>{overview.status}</td>
+                </table>
+                <br>
+                <table>
+                    <td><p class="header-color"><b>File Attachment</b></p></td>
+                    <!-- <tr><a href={fileUrl}>{trail[0]?.title}</a></tr> -->
+                    <tr>No file attachment.</tr>
+                </table>
+                <br>
+                <table>
+                    <td><p class="header-color"><b>Paper Trail</b></p></td>
+                    <tr>
+                        <td><b>Office</b></td>
+                        <td><b>In</b></td>
+                        <td><b>Out</b></td>
+                        <td><b>Elapsed Time</b></td>
+                        <td><b>Action</b></td>
+                        <td><b>Remarks</b></td>
+                        <td><b>Evaluator</b></td>
+                    </tr>
+                    {#each trail as { target, creation, status, remark, email }}
+                        <tr>
+                            <td>{target}</td>
+                            <td>{formatPrint(creation)}</td>
+                            <td>{formatPrint(creation)}</td>
+                            <td>WIP</td>
+                            <td>{formatElapsedTime(new Date, creation)}</td>
+                            <td>{status}</td>
+                            <td>{remark}</td>
+                            <td>{email}</td>
+                        </tr>
+                    {/each}
+            </section>
+        {/if}
     {:catch error}
         <h1>Uh oh!</h1>
         <p>Something went wrong. Kindly re-check your tracking id above.</p>
