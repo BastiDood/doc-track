@@ -7,6 +7,8 @@
 
     import { dashboardState } from '../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
+    import { allOffices } from '../stores/OfficeStore.ts';
+    import { currentUser } from '../stores/UserStore.ts';
 
     function selectSummary(mode?: MetricsMode, local?:Metrics): MetricsModel {
         switch (mode) {
@@ -22,12 +24,22 @@
     $: ({ currentOffice } = $dashboardState);
     // Hack to refresh metrics when office is changed
     $: metric = selectSummary(mode, $localSummary);
+
+    $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
+    $: userName = $currentUser?.name ?? 'No user name';
 </script>
 
 {#if currentOffice === null}
     You must select an office before accessing the Metrics page.
 {:else}
     <h1>Metrics</h1>
+    {#if mode === MetricsMode.User}
+        <p>You are viewing the metrics of user {userName}</p>
+    {:else if mode === MetricsMode.Local}
+        <p>You are viewing the metrics of office {officeName}</p>
+    {:else if mode === MetricsMode.Global}
+        <p>You are viewing the global metrics</p>
+    {/if}
     <main>
         <div class='header'>
             <h3>Report</h3>
