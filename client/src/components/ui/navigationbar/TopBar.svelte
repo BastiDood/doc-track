@@ -9,8 +9,9 @@
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { isOnline } from '../../../pages/dashboard/stores/NetState.ts';
 
-    export let open = false;
+    // eslint-disable-next-line no-undefined
     export let user = undefined as User | undefined;
+    export let open = false;
 
     $: maybeOfficeName = $dashboardState.currentOffice === null
         ? null

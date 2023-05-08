@@ -59,7 +59,7 @@
 
     {#await Promise.all([ Document.getPaperTrail(trackingNumber), allOffices.load() ])}
         <p>Loading Paper Trail...</p>
-    {:then [ trail, _allOffices ]}
+    {:then [trail, _allOffices]}
         {@const overview = renderOverview(trail, $allOffices)}
         {#if overview === null}
             <h1>Uh oh!</h1>
