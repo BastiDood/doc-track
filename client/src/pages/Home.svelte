@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import Button from '../components/ui/Button.svelte';
 
     import { register } from './register.ts';
