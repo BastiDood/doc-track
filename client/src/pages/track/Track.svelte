@@ -136,7 +136,7 @@
     {:catch error}
         <h1>Uh oh!</h1>
         <p>Something went wrong. Kindly re-check your tracking id above.</p>
-        <p style="color: red;">Error: {error}</p>
+        <p style:color="red">Error: {error}</p>
     {/await}
 </main>
 
