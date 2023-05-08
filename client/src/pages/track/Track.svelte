@@ -14,18 +14,6 @@
     const { searchParams } = new URL(location.href);
     let trackingNumber = searchParams.get('id') ?? '';
 
-    function formatPrint(date: Date): string {
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const seconds = date.getSeconds();
-
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
-
     function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
         const [first, ...rest] = trail;
         const last = rest.at(-1);
@@ -139,7 +127,7 @@
                     {#each trail as { target, creation, status, remark, email }}
                         <tr>
                             <td>{target}</td>
-                            <td>{formatPrint(creation)}</td>
+                            <td>{creation}</td>
                             <td>{status}</td>
                             <td>{remark}</td>
                             <td>{email}</td>
