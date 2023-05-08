@@ -88,7 +88,7 @@
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
-    function renderOverview(trail: PaperTrail[]) {
+    function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
         const [first, ...rest] = trail;
         const last = rest.at(-1);
 
@@ -101,18 +101,19 @@
                 documentFor: first.remark,
                 documentRemark: last.remark,
                 status: first.status,
-                origin: first.target,
-                current: last.target,
+                origin: first.target === null ? null : allOffices[first.target] ?? null,
+                current: last.target === null ? null : allOffices[last.target] ?? null,
             };
         assert(typeof first !== 'undefined' && typeof last === 'undefined');
+        const origin = first.target === null ? null : allOffices[first.target] ?? null;
         return {
             title: first.title,
             category: first.category,
             documentFor: first.remark,
             documentRemark: first.remark,
             status: first.status,
-            origin: first.target,
-            current: first.target,
+            origin,
+            current: origin,
         };
     }
 </script>
@@ -132,10 +133,10 @@
         </nav>
     </TopBar>
 
-    {#await Document.getPaperTrail(trackingNumber)}
+    {#await Promise.all([Document.getPaperTrail(trackingNumber), allOffices.load()])}
         <p>Loading Paper Trail...</p>
-    {:then trail}
-        {@const overview = renderOverview(trail)}
+    {:then [trail, _allOffices]}
+        {@const overview = renderOverview(trail, $allOffices)}
         {#if overview === null}
             <h1>Uh oh!</h1>
             <p>Something went wrong. Kindly re-check your tracking id above.</p>
