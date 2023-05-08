@@ -25,7 +25,7 @@
     $: metric = selectSummary(mode, $localSummary);
 
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
-    $: userName = $currentUser?.name ?? 'No user name';
+    $: userName = $currentUser?.name ?? 'No user name.';
 </script>
 
 {#if currentOffice === null}
@@ -33,11 +33,11 @@
 {:else}
     <h1>Metrics</h1>
     {#if mode === MetricsMode.User}
-        <p>You are viewing the metrics of user {userName}</p>
+        <p>You are viewing the metrics of user {userName}.</p>
     {:else if mode === MetricsMode.Local}
-        <p>You are viewing the metrics of office {officeName}</p>
+        <p>You are viewing the metrics of office {officeName}.</p>
     {:else if mode === MetricsMode.Global}
-        <p>You are viewing the global metrics</p>
+        <p>You are viewing the global metrics.</p>
     {/if}
     <main>
         <div class='header'>
