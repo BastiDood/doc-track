@@ -3,14 +3,13 @@
 
     import MetricsSelect from '../../../components/ui/MetricsSelect.svelte';
     import { MetricsMode } from '../../../components/types.ts';
-    import { Metrics } from '~model/metrics.ts';
 
     import { dashboardState } from '../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
     import { allOffices } from '../stores/OfficeStore.ts';
     import { currentUser } from '../stores/UserStore.ts';
 
-    function selectSummary(mode?: MetricsMode, local?:Metrics): MetricsModel {
+    function selectSummary(mode?: MetricsMode, local?:MetricsModel): MetricsModel {
         switch (mode) {
             case MetricsMode.User: return $userSummary;
             case MetricsMode.Local: return $localSummary;

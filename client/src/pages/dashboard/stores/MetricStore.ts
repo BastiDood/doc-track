@@ -26,7 +26,7 @@ export const globalSummary = asyncReadable(
 );
 
 export async function reloadMetrics() {
-    userSummary.reload?.();
-    localSummary.reload?.();
-    globalSummary.reload?.();
+    await userSummary.reload?.();
+    await localSummary.reload?.();
+    await globalSummary.reload?.();
 }
