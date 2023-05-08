@@ -9,9 +9,8 @@
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { isOnline } from '../../../pages/dashboard/stores/NetState.ts';
 
-    export let nodrawer = false;
     export let open = false;
-    export let user: User;
+    export let user = undefined as User | undefined;
 
     $: maybeOfficeName = $dashboardState.currentOffice === null
         ? null
@@ -21,7 +20,7 @@
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon">
-        {#if !nodrawer}
+        {#if typeof user === 'undefined'}
             <Hamburger bind:open on:click={() => (open = !open)} /> 
         {/if}
         <span class:offline={!$isOnline} id="title">DocTrack</span>

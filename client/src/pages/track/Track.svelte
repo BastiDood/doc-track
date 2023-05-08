@@ -6,7 +6,7 @@
     import TextInput from '../../components/ui/TextInput.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import type { PaperTrail } from '../../../../model/src/api.ts';
-    import { ButtonType, InputType } from '../../components/types.ts';
+    import { ButtonType } from '../../components/types.ts';
     import { Document } from '../../api/document.ts';
     import { allOffices } from './../dashboard/stores/OfficeStore.ts';
     import { assert } from '../../assert.ts';
@@ -20,6 +20,7 @@
 
         if (typeof first === 'undefined' && typeof last === 'undefined')
             return null;
+
         if (typeof first !== 'undefined' && typeof last !== 'undefined')
             return {
                 title: first.title,
@@ -30,6 +31,7 @@
                 origin: first.target === null ? null : allOffices[first.target] ?? null,
                 current: last.target === null ? null : allOffices[last.target] ?? null,
             };
+
         assert(typeof first !== 'undefined' && typeof last === 'undefined');
         const origin = first.target === null ? null : allOffices[first.target] ?? null;
         return {
@@ -44,12 +46,8 @@
     }
 </script>
 
-<svelte:head>
-    <title>DocTrack</title>
-</svelte:head>
-
 <main>
-    <TopBar open nodrawer>
+    <TopBar open>
         <nav>
             <TextInput name="tracking-number" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
             <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
@@ -59,9 +57,9 @@
         </nav>
     </TopBar>
 
-    {#await Promise.all([Document.getPaperTrail(trackingNumber), allOffices.load()])}
+    {#await Promise.all([ Document.getPaperTrail(trackingNumber), allOffices.load() ])}
         <p>Loading Paper Trail...</p>
-    {:then [trail, _allOffices]}
+    {:then [ trail, _allOffices ]}
         {@const overview = renderOverview(trail, $allOffices)}
         {#if overview === null}
             <h1>Uh oh!</h1>
@@ -69,7 +67,7 @@
         {:else}
             <h2>Document {overview.title}</h2>
             <Button>
-                <Notification /> Subscribe to Push Notifications
+                <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
             </Button>
             <section>
                 <table>
