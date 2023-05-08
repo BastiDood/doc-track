@@ -9,8 +9,9 @@
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { isOnline } from '../../../pages/dashboard/stores/NetState.ts';
 
+    // eslint-disable-next-line no-undefined
+    export let user = undefined as User | undefined;
     export let open = false;
-    export let user: User;
 
     $: maybeOfficeName = $dashboardState.currentOffice === null
         ? null
@@ -20,12 +21,15 @@
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon">
-        <Hamburger bind:open on:click={() => (open = !open)} /> 
+        {#if typeof user === 'undefined'}
+            <Hamburger bind:open on:click={() => (open = !open)} /> 
+        {/if}
         <span class:offline={!$isOnline} id="title">DocTrack</span>
         {#if officeName}
             <span> - {officeName}</span>
         {/if}
     </span>
+    <slot></slot>
     <nav id="profilenav">
         {#if typeof user === 'undefined'} 
             <a href="/">
