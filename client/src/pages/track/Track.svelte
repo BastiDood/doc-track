@@ -1,80 +1,18 @@
 <script lang="ts">
-    import { ButtonType, InputType } from '../../components/types.ts';
-
-    import Notification from '../../components/icons/Notification.svelte';
     import Button from '../../components/ui/Button.svelte';
+    import Camera from '../../components/icons/Camera.svelte';
+    import Notification from '../../components/icons/Notification.svelte';
+    import Search from '../../components/icons/Search.svelte';
     import TextInput from '../../components/ui/TextInput.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
-    import Camera from '../../components/icons/Camera.svelte';
-    import Search from '../../components/icons/Search.svelte';
-
-    //  TODO: Cleanup
-    import { allOffices } from './../dashboard/stores/OfficeStore.ts';
     import type { PaperTrail } from '../../../../model/src/api.ts';
-    //
-
+    import { ButtonType, InputType } from '../../components/types.ts';
     import { Document } from '../../api/document.ts';
+    import { allOffices } from './../dashboard/stores/OfficeStore.ts';
     import { assert } from '../../assert.ts';
-
-
-    // // TODO: Add API calls to get document details using the Tracking Number (SPRINT 4)
-    // const docTrackingNumber = '1234567890';
     
-    // // TODO: Populate based on API calls (SPRINT 4)
-    // const docTitle = 'Document';
-
-    // const fileUrl = 'https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2020/10/Dropping-Form.pdf';
-    // const fileName = 'Drop Form.pdf';
-
-    // const trail = [ // Contains dictionary with keys Office, In, Out, Elapsed Time, Action, Remarks
-    //     {
-    //         'Office': 'Department of Computer Science',
-    //         'In': '2021-04-20 12:00:00', // Should be a DateTime object (SPRINT 4)
-    //         'Out': '2021-04-20 12:00:00',
-    //         'Elapsed Time': '30s',
-    //         'Action': 'SENT',
-    //         'Remarks': 'Done',
-    //     },
-    //     { // College of Engineering
-    //         'Office': 'College of Engineering',
-    //         'In': '2021-04-20 12:00:00',
-    //         'Out': '',
-    //         'Elapsed Time': '',
-    //         'Action': 'RECEIVED',
-    //         'Remarks': 'Processing',
-    //     },
-    // ];
-
-    // const overview = {
-    //     'Document Title': 'Document',
-    //     'Document Tracking Number': docTrackingNumber,
-    //     'Document Type': 'Letter',
-    //     'Document For': 'Distribution/disubursement',
-    //     'Document Remarks': 'LGTM!',
-    //     'Originating Office': 'Department of Computer Science', // TODO: Given ID, get office name
-    //     'Current Office': 'College of Engineering',
-    //     'Document Status': 'SENT',
-    // };
-
     const { searchParams } = new URL(location.href);
     let trackingNumber = searchParams.get('id') ?? '';
-
-    function formatElapsedTime(date2: Date, date1: Date): string {
-        const elapsed = Math.abs(date2.getTime() - date1.getTime());
-        const days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(elapsed / (1000 * 60 * 60) % 24);
-        const minutes = Math.floor(elapsed / (1000 * 60) % 60);
-        const seconds = Math.floor(elapsed / 1000 % 60);
-
-        if (days > 0)
-            return `${days}d ${hours}h ${minutes}m`;
-        else if (hours > 0)
-            return `${hours}h ${minutes}m`;
-        else if (minutes > 0)
-            return `${minutes}m ${seconds}s`;
-    
-        return `${seconds}s`;
-    }
 
     function formatPrint(date: Date): string {
         const year = date.getFullYear();
@@ -125,7 +63,7 @@
 <main>
     <TopBar open nodrawer>
         <nav>
-            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
+            <TextInput name="tracking-number" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
             <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
             <a href={`/track?id=${trackingNumber}`}>
                 <Button type={ButtonType.Primary}><Search alt="Search specified tracking number." /></Button>
@@ -186,7 +124,6 @@
                 <br>
                 <table>
                     <td><p class="header-color"><b>File Attachment</b></p></td>
-                    <!-- <tr><a href={fileUrl}>{trail[0]?.title}</a></tr> -->
                     <tr>No file attachment.</tr>
                 </table>
                 <br>
@@ -194,10 +131,9 @@
                     <td><p class="header-color"><b>Paper Trail</b></p></td>
                     <tr>
                         <td><b>Office</b></td>
-                        <td><b>In</b></td>
-                        <td><b>Out</b></td>
-                        <td><b>Elapsed Time</b></td>
+                        <td><b>Creation</b></td>
                         <td><b>Action</b></td>
+                        <td><b>Status</b></td>
                         <td><b>Remarks</b></td>
                         <td><b>Evaluator</b></td>
                     </tr>
@@ -205,9 +141,6 @@
                         <tr>
                             <td>{target}</td>
                             <td>{formatPrint(creation)}</td>
-                            <td>{formatPrint(creation)}</td>
-                            <td>WIP</td>
-                            <td>{formatElapsedTime(new Date, creation)}</td>
                             <td>{status}</td>
                             <td>{remark}</td>
                             <td>{email}</td>
