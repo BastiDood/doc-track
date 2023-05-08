@@ -1,31 +1,43 @@
 <script lang="ts">
-    import type { Metrics as MetricsModel } from '~model/metrics.ts';
+    import type { Metrics } from '~model/metrics.ts';
 
     import MetricsSelect from '../../../components/ui/MetricsSelect.svelte';
     import { MetricsMode } from '../../../components/types.ts';
 
     import { dashboardState } from '../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
+    import { allOffices } from '../stores/OfficeStore.ts';
+    import { currentUser } from '../stores/UserStore.ts';
 
-    function selectSummary(mode?: MetricsMode): MetricsModel {
+    function selectSummary(user: Metrics, local: Metrics, global: Metrics, mode?: MetricsMode): Metrics {
         switch (mode) {
-            case MetricsMode.User: return $userSummary;
-            case MetricsMode.Local: return $localSummary;
-            case MetricsMode.Global: return $globalSummary;
+            case MetricsMode.User: return user;
+            case MetricsMode.Local: return local;
+            case MetricsMode.Global: return global;
             default: return { };
         }
     }
 
+    // HACK: refresh metrics when office is changed
     let mode: MetricsMode | undefined;
+    $: metric = selectSummary($userSummary, $localSummary, $globalSummary, mode);
 
     $: ({ currentOffice } = $dashboardState);
-    $: metric = selectSummary(mode);
+    $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
+    $: userName = $currentUser?.name ?? 'No user name.';
 </script>
 
 {#if currentOffice === null}
     You must select an office before accessing the Metrics page.
 {:else}
     <h1>Metrics</h1>
+    {#if mode === MetricsMode.User}
+        <p>You are viewing the metrics of user {userName}.</p>
+    {:else if mode === MetricsMode.Local}
+        <p>You are viewing the metrics of office {officeName}.</p>
+    {:else if mode === MetricsMode.Global}
+        <p>You are viewing the global metrics.</p>
+    {/if}
     <main>
         <div class='header'>
             <h3>Report</h3>

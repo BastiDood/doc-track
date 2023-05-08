@@ -5,6 +5,7 @@
     import { earliestBatch } from '../../../../pages/dashboard/stores/BatchStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
+    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
 
     import type { Category } from '../../../../.../../../../model/src/category.ts';
     import type { Document } from '../../../../.../../../../model/src/document.ts';
@@ -30,6 +31,7 @@
             assert(result instanceof Date);
             await earliestBatch.reload?.();
             await documentOutbox.reload?.();
+            await reloadMetrics();
             this.reset();
         } catch (err) {
             alert(err);
