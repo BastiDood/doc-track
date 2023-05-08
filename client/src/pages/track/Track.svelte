@@ -10,7 +10,7 @@
     import { Document } from '../../api/document.ts';
     import { allOffices } from './../dashboard/stores/OfficeStore.ts';
     import { assert } from '../../assert.ts';
-    
+
     const { searchParams } = new URL(location.href);
     let trackingNumber = searchParams.get('id') ?? '';
 
@@ -133,7 +133,6 @@
                         <td><b>Office</b></td>
                         <td><b>Creation</b></td>
                         <td><b>Action</b></td>
-                        <td><b>Status</b></td>
                         <td><b>Remarks</b></td>
                         <td><b>Evaluator</b></td>
                     </tr>
