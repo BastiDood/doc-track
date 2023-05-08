@@ -21,7 +21,7 @@
     let mode: MetricsMode | undefined;
 
     $: ({ currentOffice } = $dashboardState);
-    // Hack to refresh metrics when office is changed
+    // HACK: refresh metrics when office is changed
     $: metric = selectSummary(mode, $localSummary);
 
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
