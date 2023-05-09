@@ -3,9 +3,9 @@ import { manifest, version } from '@parcel/service-worker';
 import localForage from 'localforage';
 import { assert } from '../assert.ts';
 import { DeferredFetch } from './syncman.ts';
-import { SnapshotSchema, Status } from '../../../model/src/snapshot.ts';
+import { Status } from '../../../model/src/snapshot.ts';
 import { deferredSnaps } from './dashboard/stores/DeferredStore.ts';
-import { DocumentSchema } from '../../../model/src/document.ts';
+import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
 
 async function handleInstall() {
     const INDEX = '/index.html';
@@ -61,11 +61,6 @@ async function pushEntriesToServer() {
 async function handleDocumentPost(req: Request): Promise<Response> {
     try {
         const res = await fetch(req.clone());
-
-        // If you reach this point without throwing an error, you are probably online.
-        if ((await self.registration.sync.getTags()).length !== 0)
-            // Go and push the entries if there is at least one registered sync event.
-            await pushEntriesToServer();
         return res;
     } catch (error) {
         // Threw an error, you are probably offline.
@@ -78,12 +73,12 @@ async function handleDocumentPost(req: Request): Promise<Response> {
         // Extract document information and status from json body.
         if (url.pathname.startsWith('/api/snapshot')) {
             // Insert snapshot schema uses doc as barcode id.
-            const { doc, status } = SnapshotSchema.pick({ doc: true , status: true}).parse(await req.clone().json());
+            const { doc, status } = DeferredSnapshotSchema.parse(await req.clone().json());
             key = doc;
             stat = status
         } else {
             // Registration uses id to hold barcode id. It dosen't have a status either.
-            const { id } = DocumentSchema.pick({ id: true }).parse(await req.clone().json());
+            const { id } = DeferredRegistrationSchema.parse(await req.clone().json());
             key = id;
             stat = Status.Register;
         }
