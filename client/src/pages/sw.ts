@@ -102,12 +102,7 @@ async function handleDocumentPost(req: Request): Promise<Response> {
         } as DeferredFetch;
 
         // Load the item into local storage, with barcode as the primary key.
-        await localForage.setItem(key, defer)
-
-        // Update snaps store.
-        deferredSnaps.update(snaps => {
-            return [...snaps, {status: stat, doc: key}]})
-
+        await localForage.setItem(key, defer);
         // Return sentinel response.
         return new Response(null, { status: 503 });
     }

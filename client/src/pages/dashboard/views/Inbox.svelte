@@ -12,6 +12,8 @@
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
+    import { loadAll } from '@square/svelte-store';
+    import { deferredSnaps } from '../stores/DeferredStore.ts';
 
     let showCreateDocument = false;
     let showInsertSnapshot = false;
@@ -57,7 +59,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await documentInbox.load()}
+    {#await loadAll([documentInbox, deferredSnaps])}
         <p>Loading inbox...</p>
     {:then}
         <h2>Pending Acceptance</h2>

@@ -9,6 +9,7 @@
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { isOnline } from '../../../pages/dashboard/stores/NetState.ts';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
+    import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
 
     // eslint-disable-next-line no-undefined
     export let user = undefined as User | undefined;
@@ -18,6 +19,8 @@
         ? null
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '';
+
+    $: deferCount = $deferredSnaps.length;
 </script>
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
@@ -28,6 +31,9 @@
             <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
         {/if}
         <span class:offline={!$isOnline} id="title">DocTrack</span>
+        {#if deferCount > 0}
+            <span id='defer'>{deferCount}</span>
+        {/if}
         {#if officeName}
             <span> - {officeName}</span>
         {/if}
@@ -95,5 +101,13 @@
         gap: var(--spacing-small);
         align-items: center;
         padding: var(--spacing-small);
+    }
+
+    #defer {
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+        text-align: center;
+        display: flex;
     }
 </style>

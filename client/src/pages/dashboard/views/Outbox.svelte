@@ -11,6 +11,9 @@
     import Button from '../../../components/ui/Button.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
+    import { loadAll } from '@square/svelte-store';
+    import { deferredSnaps } from '../stores/DeferredStore.ts';
+
 
     $: ({ currentOffice } = $dashboardState);
 
@@ -49,7 +52,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await documentOutbox.load()}
+    {#await loadAll([documentOutbox, deferredSnaps])}
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>
