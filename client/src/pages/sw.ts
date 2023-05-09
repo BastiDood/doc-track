@@ -54,8 +54,8 @@ async function pushEntriesToServer() {
     // Toss all to the server
     return Promise.allSettled(promises);
 
-    //TODO: Error handler when atleast one fails.
-    //TODO: UI facing indicator of entries being pushed.
+    // TODO: Error handler when atleast one fails.
+    // TODO: UI facing indicator of entries being pushed.
 }
 
 async function handleDocumentPost(req: Request): Promise<Response> {
@@ -67,22 +67,19 @@ async function handleDocumentPost(req: Request): Promise<Response> {
         assert(error instanceof TypeError);
 
         const url = new URL(req.url);
-        let key: string;
-        let stat: Status;
+        let key = '';
 
         // Extract document information and status from json body.
         if (url.pathname.startsWith('/api/snapshot')) {
             // Insert snapshot schema uses doc as barcode id.
-            const { doc, status } = DeferredSnapshotSchema.parse(await req.clone().json());
+            const { doc } = DeferredSnapshotSchema.parse(await req.clone().json());
             key = doc;
-            stat = status
         } else {
             // Registration uses id to hold barcode id. It dosen't have a status either.
             const { id } = DeferredRegistrationSchema.parse(await req.clone().json());
             key = id;
-            stat = Status.Register;
         }
-        
+
         // Request a background sync by assigning a tag.
         await requestBackgroundSync(key);
 

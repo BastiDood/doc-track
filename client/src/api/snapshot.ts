@@ -34,9 +34,9 @@ export namespace Snapshot {
             case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
             case StatusCodes.CONFLICT: return InsertSnapshotErrorSchema.parse(await res.json());
             case StatusCodes.SERVICE_UNAVAILABLE: {
-                deferredSnaps.update(snaps => upsert(snaps, {doc: info.doc, status: info.status}))
+                await deferredSnaps.update(snaps => upsert(snaps, { doc: info.doc, status: info.status }));
                 throw new DeferredSnap;
-            };
+            }
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;

@@ -6,7 +6,5 @@ export function goToTrackingPage(id: Document['id']) {
 }
 
 export function markDeferred(store: DeferredSnapshot[], doc: Document['id']) {
-    console.log(doc);
-    console.log(store);
-    return store.findIndex(def=> def.doc === doc) >= 0
+    return store.findIndex(def=> def.doc === doc) >= 0;
 }
