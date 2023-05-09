@@ -21,7 +21,7 @@
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon">
-        {#if typeof user === 'undefined'}
+        {#if typeof user !== 'undefined'}
             <Hamburger bind:open on:click={() => (open = !open)} /> 
         {/if}
         <span class:offline={!$isOnline} id="title">DocTrack</span>
