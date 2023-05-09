@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import type { Document as DocumentType } from '~model/document.ts';
 import type { Office } from '~model/office.ts';
 
+
 import {
     type AllInbox,
     type AllOutbox,
@@ -23,6 +24,7 @@ import {
     InvalidSession,
     BadContentNegotiation,
     UnexpectedStatusCode,
+    DeferredSnap,
 } from './error.ts';
 
 export namespace Document {
@@ -43,6 +45,7 @@ export namespace Document {
         switch (res.status) {
             case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
             case StatusCodes.CONFLICT: return BarcodeAssignmentErrorSchema.parse(await res.json());
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new DeferredSnap;
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;

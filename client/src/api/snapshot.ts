@@ -11,6 +11,7 @@ import {
     InvalidSession,
     BadContentNegotiation,
     UnexpectedStatusCode,
+    DeferredSnap,
 } from './error.ts';
 
 export namespace Snapshot {
@@ -30,6 +31,7 @@ export namespace Snapshot {
         switch (res.status) {
             case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
             case StatusCodes.CONFLICT: return InsertSnapshotErrorSchema.parse(await res.json());
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new DeferredSnap;
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
