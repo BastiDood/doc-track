@@ -1,8 +1,9 @@
 import { asyncWritable } from '@square/svelte-store';
-import { DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
+import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
 import localForage from 'localforage';
 import { DeferredFetch } from '../../syncman.ts';
 import { assert } from '../../../assert.ts';
+import { Status } from '../../../../../model/src/snapshot.ts';
 
 export const deferredSnaps = asyncWritable(
     [],
@@ -12,6 +13,10 @@ export const deferredSnaps = asyncWritable(
             console.log(key);
             const defer: DeferredFetch | null = await localForage.getItem(key);
             assert(defer !== null);
+            const url = new URL(defer.url);
+            if (url.pathname.startsWith('/api/document')) {
+                return {doc: DeferredRegistrationSchema.parse(defer.body)['id'], status: Status.Register}
+            }
             return DeferredSnapshotSchema.parse(defer.body);
         });
         return Promise.all(deferred);
