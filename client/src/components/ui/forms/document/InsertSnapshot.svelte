@@ -12,6 +12,8 @@
     import OfficeSelect from '../../OfficeSelect.svelte';
     import StatusSelect from '../../StatusSelect.svelte';
     import TextInput from '../../TextInput.svelte';
+    import { DeferredSnap } from '../../../../api/error.ts';
+    import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
 
     import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
@@ -41,9 +43,9 @@
                 remark: node.value,
                 target: destOfficeId,
             });
+
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
-            await reloadMetrics();
             // TODO: Exit out of the modal.
         } catch (err) {
             assert(err instanceof Error);
@@ -63,7 +65,7 @@
     {/if}
     
     <br />
-    Set Status As: <StatusSelect bind:value={status} />
+    Set Status As: <StatusSelect disabled={true} bind:value={status} />
     <br />
     <TextInput name="snap-remark" label="Remarks: " placeholder="Optional" />
     <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>

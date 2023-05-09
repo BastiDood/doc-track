@@ -31,7 +31,6 @@
             assert(result instanceof Date);
             await earliestBatch.reload?.();
             await documentOutbox.reload?.();
-            await reloadMetrics();
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

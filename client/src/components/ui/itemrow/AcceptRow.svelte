@@ -8,23 +8,28 @@
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
-    import { goToTrackingPage } from './util.ts';
+    import { goToTrackingPage, markDeferred } from './util.ts';
+    import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
 
     export let iconSize: IconSize;
     export let doc: Document['id'];
     export let category: Category['name'];
     export let title: Document['title'];
     export let creation: Snapshot['creation'];
+    
+    $: isDeferred = markDeferred($deferredSnaps, doc);
 
     const dispatch = createEventDispatcher();
     const rowEvent: ContextPayload = {
         ty: RowType.AcceptDocument,
         id: doc,
     };
+
 </script>
 
 <RowTemplate
     {iconSize}
+    {isDeferred}
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >
