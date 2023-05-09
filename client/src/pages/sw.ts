@@ -3,7 +3,6 @@ import { manifest, version } from '@parcel/service-worker';
 import localForage from 'localforage';
 import { assert } from '../assert.ts';
 import { DeferredFetch } from './syncman.ts';
-import { Status } from '../../../model/src/snapshot.ts';
 import { deferredSnaps } from './dashboard/stores/DeferredStore.ts';
 import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
 
@@ -95,8 +94,9 @@ async function handleDocumentPost(req: Request): Promise<Response> {
 
         // Load the item into local storage, with barcode as the primary key.
         await localForage.setItem(key, defer);
+
         // Return sentinel response.
-        return new Response(null, { status: 503 });
+        return new Response(null , { status: 503 });
     }
 }
 

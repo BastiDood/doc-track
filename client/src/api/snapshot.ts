@@ -2,9 +2,8 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { Office } from '~model/office.ts';
 
-import { type InsertSnapshotError, InsertSnapshotErrorSchema } from '../../../model/src/api.ts';
+import { type InsertSnapshotError, InsertSnapshotErrorSchema, DeferredSnapshot } from '../../../model/src/api.ts';
 import { type Snapshot as SnapshotType, SnapshotSchema } from '../../../model/src/snapshot.ts';
-import { deferredSnaps } from '../pages/dashboard/stores/DeferredStore.ts';
 
 import {
     InsufficientPermissions,
@@ -14,13 +13,12 @@ import {
     UnexpectedStatusCode,
     DeferredSnap,
 } from './error.ts';
-import { upsert } from './utils.ts';
 
 export namespace Snapshot {
     export async function insert(
         oid: Office['id'],
         info: Omit<SnapshotType, 'creation' | 'evaluator'>,
-    ): Promise<SnapshotType['creation'] | InsertSnapshotError> {
+    ): Promise<SnapshotType['creation'] | InsertSnapshotError | DeferredSnapshot> {
         const res = await fetch(`/api/snapshot?office=${oid}`, {
             credentials: 'same-origin',
             method: 'POST',
@@ -33,10 +31,7 @@ export namespace Snapshot {
         switch (res.status) {
             case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
             case StatusCodes.CONFLICT: return InsertSnapshotErrorSchema.parse(await res.json());
-            case StatusCodes.SERVICE_UNAVAILABLE: {
-                await deferredSnaps.update(snaps => upsert(snaps, { doc: info.doc, status: info.status }));
-                throw new DeferredSnap;
-            }
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new DeferredSnap;
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;

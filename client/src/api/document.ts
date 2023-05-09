@@ -2,7 +2,6 @@ import { StatusCodes } from 'http-status-codes';
 
 import type { Document as DocumentType } from '~model/document.ts';
 import type { Office } from '~model/office.ts';
-import { deferredSnaps } from '../pages/dashboard/stores/DeferredStore.ts';
 
 import {
     type AllInbox,
@@ -15,9 +14,9 @@ import {
     BarcodeAssignmentErrorSchema,
     InboxEntrySchema,
     PaperTrailSchema,
+    DeferredSnapshot,
 } from '../../../model/src/api.ts';
-import { type Snapshot, SnapshotSchema, Status } from '../../../model/src/snapshot.ts';
-import { upsert } from './utils.ts';
+import { type Snapshot, SnapshotSchema } from '../../../model/src/snapshot.ts';
 
 import {
     InsufficientPermissions,
@@ -33,7 +32,7 @@ export namespace Document {
         oid: Office['id'],
         doc: DocumentType,
         remark: Snapshot['remark'],
-    ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
+    ): Promise<Snapshot['creation'] | BarcodeAssignmentError | DeferredSnapshot> {
         const res = await fetch(`/api/document?office=${oid}`, {
             credentials: 'same-origin',
             method: 'POST',
@@ -46,10 +45,7 @@ export namespace Document {
         switch (res.status) {
             case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
             case StatusCodes.CONFLICT: return BarcodeAssignmentErrorSchema.parse(await res.json());
-            case StatusCodes.SERVICE_UNAVAILABLE: {
-                await deferredSnaps.update(snaps => upsert(snaps, { doc: doc.id, status: Status.Register }));
-                throw new DeferredSnap;
-            }
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new DeferredSnap;
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;

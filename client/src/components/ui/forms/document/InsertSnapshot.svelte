@@ -16,6 +16,9 @@
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
     import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { DeferredSnap } from '../../../../api/error.ts';
+    import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
+    import { upsert } from './utils.ts';
 
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];

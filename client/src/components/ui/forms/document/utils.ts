@@ -1,4 +1,4 @@
-import { DeferredSnapshot } from '~model/api';
+import { DeferredSnapshot } from '../../../../../../model/src/api.ts';
 
 export function upsert(store: DeferredSnapshot[], insert: DeferredSnapshot) {
     const maybeIndex = store.findIndex(snap => {
