@@ -39,13 +39,13 @@
             this.reset();
         } catch (err) {
             if (err instanceof DeferredSnap) {
-                await deferredSnaps.update(snaps => {return upsert(snaps, { status: Status.Register, doc: id });});
+                await deferredSnaps.update(snaps => upsert(snaps, { status: Status.Register, doc: id }));
                 topToastMessage.enqueue({ title: err.name, body: `${id} is deferred.` });
             }
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
-}
+    }
 </script>
 
 {#if $earliestBatch === null || typeof $earliestBatch === 'undefined'}

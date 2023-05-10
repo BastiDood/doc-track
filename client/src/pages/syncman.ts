@@ -31,7 +31,7 @@ export const DeferredFetchSchema = z.object({
     credentials: z.string(),
     url: z.string().url(),
     method: z.string(),
-    headers: (z.string().array().length(2)).array(),
+    headers: z.string().array().length(2).array(),
     body: z.string(),
 });
 

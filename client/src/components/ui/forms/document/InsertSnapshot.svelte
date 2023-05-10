@@ -73,7 +73,7 @@
     {/if}
     
     <br />
-    Set Status As: <StatusSelect disabled = {true} bind:value={status} />
+    Set Status As: <StatusSelect disabled bind:value={status} />
     <br />
     <TextInput name="snap-remark" label="Remarks: " placeholder="Optional" />
     <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>

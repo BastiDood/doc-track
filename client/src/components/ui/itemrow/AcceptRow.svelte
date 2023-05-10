@@ -33,7 +33,7 @@
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >
     {#if isDeferred} 
-        <span class='chip defer'>Deferred</span>
+        <span class="chip defer">Deferred</span>
     {/if}
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>

@@ -10,7 +10,6 @@
     import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
     import { goToTrackingPage, findDeferredSnapshot } from './util.ts';
 
-
     export let iconSize: IconSize;
     export let doc: Document['id'];
     export let category: Category['name'];
