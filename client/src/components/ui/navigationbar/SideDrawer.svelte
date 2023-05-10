@@ -21,7 +21,7 @@
     import TextInput from '../../ui/TextInput.svelte';
     import Button from '../../ui/Button.svelte';
     import Search from '../../icons/Search.svelte';
-
+    let trackingNumber: string | null = null;
 
     let selectedOffice: Office['id'] | null = null;
     $: dashboardState.setOffice(selectedOffice);
@@ -36,7 +36,7 @@
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
             <div class="noflex">
-            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
+            <TextInput placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
             <a href={`/track?id=${trackingNumber}`}>
                 <Button type={ButtonType.Primary}><Search alt="Search specified tracking number."/></Button>
             </a>
@@ -83,7 +83,7 @@
         margin: var(--large);
     }
     
-    a {
+    section > a {
         border-right: var(--spacing-small) solid transparent;
         color: initial;
         display: block;
@@ -108,7 +108,7 @@
         width: 100%;
     }
 
-    a:hover, input[type="submit"]:hover, :global(a.active) {
+    section > a:hover, input[type="submit"]:hover, :global(a.active) {
         background-color: var(--hover-color);
         border-right: var(--spacing-small) solid var(--primary-color);
     }
