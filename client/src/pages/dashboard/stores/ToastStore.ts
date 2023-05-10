@@ -8,11 +8,11 @@ export interface Toast {
 
 const { subscribe, set } = writable(null as Omit<Toast, 'timeout'> | null);
 
-let messages: Toast[] = [];
+const messages: Toast[] = [];
 let handler: number | null = null;
 function bootstrap() {
-    let first = messages[0];
-    if (first === undefined) {
+    const first = messages.at(0);
+    if (typeof first === 'undefined') {
         set(null);
         return;
     }
@@ -21,7 +21,7 @@ function bootstrap() {
     set({ title, body });
     handler = setTimeout(() => {
         handler = null;
-        [first, ...messages] = messages;
+        messages.shift();
         bootstrap();
     }, timeout ?? 3000);
 }
