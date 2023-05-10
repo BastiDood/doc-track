@@ -48,22 +48,26 @@
         };
     }
 
-    let prev = null;
+    let prev : Date;
 
     function computeTimeDiff(date: Date) {
-        if(prev === null) {
+        if (typeof prev === 'undefined') {
             prev = date;
             return null;
         }
+        if (typeof date === 'undefined')
+            return null;
+
         let diff = date.getTime() - prev.getTime();
-        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        diff -=  days * (1000 * 60 * 60 * 24);
-        let hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -= days * (1000 * 60 * 60 * 24);
+        const hours = Math.floor(diff / (1000 * 60 * 60));
         diff -= hours * (1000 * 60 * 60);
-        let mins = Math.floor(diff / (1000 * 60));
+        const mins = Math.floor(diff / (1000 * 60));
         diff -= mins * (1000 * 60);
-        let seconds = Math.floor(diff / (1000));
-        diff -= seconds * (1000);
+        const seconds = Math.floor(diff / 1000);
+        diff -= seconds * 1000;
+        prev = date;
         return `${days}d ${hours}h ${mins}m ${seconds}s`;
     }
 </script>
@@ -148,7 +152,7 @@
                     </tr>
                     {#each trail as { target, creation, status, remark, email }}
                         <tr>
-                            <td>{target}</td>
+                            <td>{$allOffices[target]}</td>
                             <td>{creation.toLocaleString()}</td>
                             <td>{computeTimeDiff(creation) ?? 'Start'}</td>
                             <td>{status}</td>
