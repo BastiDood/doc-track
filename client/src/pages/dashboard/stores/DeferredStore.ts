@@ -5,10 +5,12 @@ import { DeferredFetch } from '../../syncman.ts';
 import { assert } from '../../../assert.ts';
 import { Status } from '../../../../../model/src/snapshot.ts';
 import { z } from 'zod';
+import { topToastMessage } from './ToastStore.ts';
 
 export const latestMessage = readable(null as string | null, set=>{
     function handle(evt: MessageEvent) {
         set(z.string().parse(evt.data));
+        topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
     }
     addEventListener('message', handle);
     return () => removeEventListener('message', handle);

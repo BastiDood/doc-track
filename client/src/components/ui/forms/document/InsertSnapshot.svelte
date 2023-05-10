@@ -19,6 +19,7 @@
     import { DeferredSnap } from '../../../../api/error.ts';
     import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
     import { upsert } from './utils.ts';
+    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
 
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
@@ -46,8 +47,13 @@
 
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
+            await reloadMetrics();
             // TODO: Exit out of the modal.
         } catch (err) {
+            if (err instanceof DeferredSnap) {
+                await deferredSnaps.update(snaps => {return upsert(snaps, { status: Status.Register, doc: payload.id });});
+                topToastMessage.enqueue({ title: err.name, body: `${payload.id} is deferred.` });
+            }
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
@@ -65,7 +71,7 @@
     {/if}
     
     <br />
-    Set Status As: <StatusSelect disabled={true} bind:value={status} />
+    Set Status As: <StatusSelect disabled = {true} bind:value={status} />
     <br />
     <TextInput name="snap-remark" label="Remarks: " placeholder="Optional" />
     <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>
