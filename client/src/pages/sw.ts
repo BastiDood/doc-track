@@ -2,8 +2,10 @@ import { manifest, version } from '@parcel/service-worker';
 
 import localForage from 'localforage';
 import { assert } from '../assert.ts';
-import { DeferredFetch, DeferredFetchSchema } from './syncman.ts';
+import { DeferredFetchSchema } from './syncman.ts';
 import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
+
+assert(self.registration.sync);
 
 async function handleInstall() {
     const INDEX = '/index.html';
@@ -14,7 +16,6 @@ async function handleInstall() {
 
     // Pre-cache all the new assets
     const cache = await caches.open(version);
-    assert(self.registration.sync);
     return cache.addAll(files);
 }
 
@@ -36,11 +37,10 @@ async function pushEntriesToServer() {
     // Load up all entries in localForage and create an array of promises that we will push to the server.
     const promises = (await localForage.keys()).map(async key => {
         const defer = DeferredFetchSchema.parse(await localForage.getItem(key));
-        assert(defer !== null);
         return fetch(defer.url, {
             credentials: defer.credentials as RequestCredentials,
             method: defer.method,
-            body: JSON.stringify(defer.body),
+            body: defer.body,
             headers: defer.headers as HeadersInit,
         });
     });
@@ -67,10 +67,10 @@ async function handleDocumentPost(req: Request): Promise<Response> {
 
         // Extract document information and status from json body.
         const { pathname } = new URL(req.url);
-	        const json = await req.clone().json();
-	        const key = pathname.startsWith('/api/snapshot')
-	            ? DeferredSnapshotSchema.parse(json).doc
-	            : DeferredRegistrationSchema.parse(json).id;
+        const json: unknown = await req.clone().json();
+        const key = pathname.startsWith('/api/snapshot')
+            ? DeferredSnapshotSchema.parse(json).doc
+            : DeferredRegistrationSchema.parse(json).id;
 
         // Request a background sync by assigning a tag.
         await requestBackgroundSync(key);
@@ -82,7 +82,7 @@ async function handleDocumentPost(req: Request): Promise<Response> {
             url: req.url,
             method: req.method,
             headers: [...req.headers],
-            body: payload,
+            body: JSON.stringify(payload),
         });
 
         // Load the item into local storage, with barcode as the primary key.

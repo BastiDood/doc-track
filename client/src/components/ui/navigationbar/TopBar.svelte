@@ -20,6 +20,7 @@
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '';
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     $: deferCount = $deferredSnaps?.length;
 </script>
 

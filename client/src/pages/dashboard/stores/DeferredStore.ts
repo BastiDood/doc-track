@@ -1,20 +1,11 @@
-import { asyncWritable, readable } from '@square/svelte-store';
+import { asyncWritable } from '@square/svelte-store';
 import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
 import localForage from 'localforage';
-import { DeferredFetch, DeferredFetchSchema } from '../../syncman.ts';
-import { assert } from '../../../assert.ts';
+import { DeferredFetchSchema } from '../../syncman.ts';
 import { Status } from '../../../../../model/src/snapshot.ts';
-import { z } from 'zod';
+import { assert } from '../../../assert.ts';
 import { topToastMessage } from './ToastStore.ts';
-
-export const latestMessage = readable(null as string | null, set=>{
-    function handle(evt: MessageEvent) {
-        set(z.string().parse(evt.data));
-        topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
-    }
-    addEventListener('message', handle);
-    return () => removeEventListener('message', handle);
-});
+import { z } from 'zod';
 
 export const deferredSnaps = asyncWritable(
     [],
@@ -23,13 +14,19 @@ export const deferredSnaps = asyncWritable(
         const keys = await localForage.keys();
         const deferred = keys.map(async key => {
             const defer = DeferredFetchSchema.parse(await localForage.getItem(key));
-            assert(defer !== null);
             const url = new URL(defer.url);
             if (url.pathname.startsWith('/api/document'))
-                return { doc: DeferredRegistrationSchema.parse(defer.body).id, status: Status.Register };
+                return { doc: DeferredRegistrationSchema.parse(JSON.parse(defer.body)).id, status: Status.Register };
 
-            return DeferredSnapshotSchema.parse(defer.body);
+            return DeferredSnapshotSchema.parse(JSON.parse(defer.body));
         });
         return Promise.all(deferred);
     },
 );
+
+export function onDocumentSync(evt: MessageEvent) {
+    assert(z.string().parse(evt.data) === 'sync');
+    topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
+    deferredSnaps.reset?.();
+    return;
+}
