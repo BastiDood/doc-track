@@ -16,6 +16,7 @@
     export let category: Category['name'];
     export let title: Document['title'];
     export let creation: Snapshot['creation'];
+    export let showOverflowIcon = true;
     
     const dispatch = createEventDispatcher();
     const rowEvent: ContextPayload = {
@@ -26,6 +27,7 @@
 
 <RowTemplate
     {iconSize} 
+    {showOverflowIcon}
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >

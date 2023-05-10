@@ -6,6 +6,7 @@
 
     import InboxIcon from '../../icons/DocumentDownload.svelte';
     import OutboxIcon from '../../icons/DocumentExport.svelte';
+    import Document from '../../icons/DocumentBlank.svelte';
     import EventsIcon from '../../icons/Events.svelte';
     import BarcodesIcon from '../../icons/Barcode.svelte';
     import InvitesIcon from '../../icons/PersonAdd.svelte';
@@ -31,7 +32,7 @@
         </header>
         <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
         <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
-        <a href="#/drafts" use:active><EventsIcon alt="Go to Drafts" />Drafts</a>
+        <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
         <a href="#/metrics" use:active><EventsIcon alt="Go to Metrics" />Metrics</a>
         <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
         <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
