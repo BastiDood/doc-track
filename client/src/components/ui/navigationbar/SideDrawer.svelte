@@ -21,7 +21,7 @@
     import TextInput from '../../ui/TextInput.svelte';
     import Button from '../../ui/Button.svelte';
     import Search from '../../icons/Search.svelte';
-    let trackingNumber: string | null = null;
+    let trackingNumber: string | null = '';
 
     let selectedOffice: Office['id'] | null = null;
     $: dashboardState.setOffice(selectedOffice);
