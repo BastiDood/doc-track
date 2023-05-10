@@ -20,7 +20,7 @@
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '';
 
-    $: deferCount = $deferredSnaps?.length;
+    $: deferCount = $deferredSnaps.length;
 </script>
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>

@@ -7,7 +7,9 @@ import { Status } from '../../../../../model/src/snapshot.ts';
 import { z } from 'zod';
 
 export const latestMessage = readable(null as string | null, set=>{
-    const handle = (evt: MessageEvent) => set(z.string().parse(evt.data));
+    function handle(evt: MessageEvent) {
+        set(z.string().parse(evt.data));
+    }
     addEventListener('message', handle);
     return () => removeEventListener('message', handle);
 });

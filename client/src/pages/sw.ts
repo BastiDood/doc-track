@@ -47,7 +47,7 @@ async function pushEntriesToServer() {
 
     // Clear storage and reset deferredSnaps store if all entries pushed.
     await localForage.clear();
-    
+
     // Toss all to the server
     const client = await self.clients.matchAll();
     client.map(client=> client.postMessage('sync'));

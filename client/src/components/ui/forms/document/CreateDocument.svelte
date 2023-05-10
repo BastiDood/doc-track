@@ -37,7 +37,7 @@
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
-    }
+}
 </script>
 
 {#if $earliestBatch === null || typeof $earliestBatch === 'undefined'}

@@ -21,7 +21,7 @@
         ? null
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '[No Office]';
-    $: if ($latestMessage === 'sync') deferredSnaps.set([]);
+    $: if ($latestMessage === 'sync') $deferredSnaps = [];
 </script>
 
 <svelte:head>
