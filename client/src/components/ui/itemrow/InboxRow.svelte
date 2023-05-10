@@ -8,7 +8,7 @@
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
     import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
-    import { goToTrackingPage, markDeferred } from './util.ts';
+    import { goToTrackingPage, findDeferredSnapshot } from './util.ts';
 
 
     export let iconSize: IconSize;
@@ -23,7 +23,7 @@
         id: doc,
     };
 
-    $: isDeferred = markDeferred($deferredSnaps, doc);
+    $: isDeferred = findDeferredSnapshot($deferredSnaps, doc);
 </script>
 
 <RowTemplate

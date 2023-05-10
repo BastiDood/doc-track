@@ -20,7 +20,7 @@
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '';
 
-    $: deferCount = $deferredSnaps.length;
+    $: deferCount = $deferredSnaps?.length;
 </script>
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
@@ -32,7 +32,7 @@
         {/if}
         <span class:offline={!$isOnline} id="title">DocTrack</span>
         {#if deferCount > 0}
-            <span>{deferCount}⚠️</span>
+            <span>{deferCount} ⚠️</span>
         {/if}
         {#if officeName}
             <span> - {officeName}</span>
@@ -90,7 +90,7 @@
     }
 
     #title.offline::after {
-        content: ' *' ;
+        content: ' *';
     }
 
     #profilenav {

@@ -2,7 +2,7 @@ import { manifest, version } from '@parcel/service-worker';
 
 import localForage from 'localforage';
 import { assert } from '../assert.ts';
-import { DeferredFetch } from './syncman.ts';
+import { DeferredFetch, DeferredFetchSchema } from './syncman.ts';
 import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
 
 async function handleInstall() {
@@ -35,13 +35,13 @@ async function requestBackgroundSync(ty: string) {
 async function pushEntriesToServer() {
     // Load up all entries in localForage and create an array of promises that we will push to the server.
     const promises = (await localForage.keys()).map(async key => {
-        const defer: DeferredFetch | null = await localForage.getItem(key);
+        const defer = DeferredFetchSchema.parse(await localForage.getItem(key));
         assert(defer !== null);
         return fetch(defer.url, {
-            credentials: defer.credentials,
+            credentials: defer.credentials as RequestCredentials,
             method: defer.method,
             body: JSON.stringify(defer.body),
-            headers: defer.headers,
+            headers: defer.headers as HeadersInit,
         });
     });
 
@@ -65,32 +65,25 @@ async function handleDocumentPost(req: Request): Promise<Response> {
         // Threw an error, you are probably offline.
         assert(error instanceof TypeError);
 
-        const url = new URL(req.url);
-        let key = '';
-
         // Extract document information and status from json body.
-        if (url.pathname.startsWith('/api/snapshot')) {
-            // Insert snapshot schema uses doc as barcode id.
-            const { doc } = DeferredSnapshotSchema.parse(await req.clone().json());
-            key = doc;
-        } else {
-            // Registration uses id to hold barcode id. It dosen't have a status either.
-            const { id } = DeferredRegistrationSchema.parse(await req.clone().json());
-            key = id;
-        }
+        const { pathname } = new URL(req.url);
+	        const json = await req.clone().json();
+	        const key = pathname.startsWith('/api/snapshot')
+	            ? DeferredSnapshotSchema.parse(json).doc
+	            : DeferredRegistrationSchema.parse(json).id;
 
         // Request a background sync by assigning a tag.
         await requestBackgroundSync(key);
 
         // Copy the failed request's structure
         const payload: unknown = await req.json();
-        const defer = {
+        const defer = DeferredFetchSchema.parse({
             credentials: req.credentials,
             url: req.url,
             method: req.method,
             headers: [...req.headers],
             body: payload,
-        } as DeferredFetch;
+        });
 
         // Load the item into local storage, with barcode as the primary key.
         await localForage.setItem(key, defer);
@@ -116,7 +109,6 @@ async function handleFetch(req: Request): Promise<Response> {
     // Check first if the fetch request is a POST request.
     if (req.method === 'POST' && (url.pathname.startsWith('/api/document') || url.pathname.startsWith('/api/snapshot')))
         return handleDocumentPost(req);
-
 
     // For any other fetch.
     try {

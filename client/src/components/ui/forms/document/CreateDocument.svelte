@@ -13,13 +13,14 @@
     import type { Category } from '../../../../.../../../../model/src/category.ts';
     import type { Document } from '../../../../.../../../../model/src/document.ts';
     import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
+    
+    import { DeferredSnap } from '../../../../api/error.ts';
+    import { upsert } from './utils.ts';
 
     import Button from '../../Button.svelte';
     import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
     import TextInput from '../../TextInput.svelte';
-    import { upsert } from './utils.ts';
-    import { DeferredSnap } from '../../../../api/error.ts';
 
     let id: Document['id'] | null = null;
     let category: Category['id'] | null = null;

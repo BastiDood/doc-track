@@ -12,7 +12,7 @@
     const dispatch = createEventDispatcher();
 </script>
 
-<article class:defer="{isDeferred}" on:keydown on:click={() => dispatch(Events.RowContainerClick)}>
+<article class:defer={isDeferred} on:keydown on:click={() => dispatch(Events.RowContainerClick)}>
     <div class="icon"><slot name="icon" /></div>
     <div id="middle">
         <div><slot></slot></div>

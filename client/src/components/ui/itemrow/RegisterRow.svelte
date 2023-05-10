@@ -10,7 +10,7 @@
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
-    import { goToTrackingPage, markDeferred } from './util.ts';
+    import { goToTrackingPage, findDeferredSnapshot } from './util.ts';
     
     export let iconSize: IconSize;
     export let doc: Document['id'];
@@ -25,7 +25,7 @@
         id: doc,
     };
 
-    $: isDeferred = markDeferred($deferredSnaps, doc);
+    $: isDeferred = findDeferredSnapshot($deferredSnaps, doc);
 </script>
 
 <RowTemplate

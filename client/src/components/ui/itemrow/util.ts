@@ -5,6 +5,6 @@ export function goToTrackingPage(id: Document['id']) {
     window.location.href = `/track?id=${id}`;
 }
 
-export function markDeferred(store: DeferredSnapshot[], doc: Document['id']) {
-    return store.findIndex(def=> def.doc === doc) >= 0;
+export function findDeferredSnapshot(store: DeferredSnapshot[], doc: Document['id']) {
+    return store.findIndex(def => def.doc === doc) >= 0;
 }

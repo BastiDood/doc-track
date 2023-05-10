@@ -6,20 +6,21 @@
     import { Office } from '../../../../../../model/src/office.ts';
     import { ContextPayload, IconColor } from '../../../types.ts';
 
+    import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
+    import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
+    
+    import { DeferredSnap } from '../../../../api/error.ts';
+    import { upsert } from './utils.ts';
+
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
     import StatusSelect from '../../StatusSelect.svelte';
     import TextInput from '../../TextInput.svelte';
-
-    import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { DeferredSnap } from '../../../../api/error.ts';
-    import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
-    import { upsert } from './utils.ts';
-    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
 
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
@@ -53,6 +54,7 @@
             if (err instanceof DeferredSnap) {
                 await deferredSnaps.update(snaps => {return upsert(snaps, { status: Status.Register, doc: payload.id });});
                 topToastMessage.enqueue({ title: err.name, body: `${payload.id} is deferred.` });
+                return;
             }
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });

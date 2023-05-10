@@ -44,11 +44,11 @@ export namespace Document {
         switch (res.status) {
             case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
             case StatusCodes.CONFLICT: return BarcodeAssignmentErrorSchema.parse(await res.json());
-            case StatusCodes.SERVICE_UNAVAILABLE: throw new DeferredSnap;
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new DeferredSnap;
             default: throw new UnexpectedStatusCode;
         }
     }

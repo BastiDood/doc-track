@@ -14,7 +14,6 @@
     import { loadAll } from '@square/svelte-store';
     import { deferredSnaps } from '../stores/DeferredStore.ts';
 
-
     $: ({ currentOffice } = $dashboardState);
 
     let showContextMenu = false;

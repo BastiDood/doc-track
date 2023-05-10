@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 // HACK: SyncManager is not properly defined ANYWHERE. See https://stackoverflow.com/questions/69786676/how-to-use-service-worker-background-sync-with-typescript
 export interface SyncManager {
     getTags(): Promise<string[]>;
@@ -25,10 +27,12 @@ declare global {
   };
 }
 
-export interface DeferredFetch {
-    credentials: RequestCredentials
-    url: string;
-    method: string;
-    body: BodyInit;
-    headers: HeadersInit;
-}
+export const DeferredFetchSchema = z.object({
+    credentials: z.string(),
+    url: z.string().url(),
+    method: z.string(),
+    headers: (z.string().array().length(2)).array(),
+    body: z.string(),
+});
+
+export type DeferredFetch = z.infer<typeof DeferredFetchSchema>
