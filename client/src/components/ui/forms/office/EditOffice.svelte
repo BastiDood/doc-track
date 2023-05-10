@@ -1,15 +1,19 @@
 <script lang="ts">
-    import { Office as OfficeModel } from '../../../../../../model/src/office.ts';
+    import { assert } from '../../../../assert.ts';
+
+    import { Office as OfficeModel } from '~model/office.ts';
 
     import { Office } from '../../../../api/office.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { IconColor } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
+
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
     let currId: OfficeModel['id'] | null = null;
     let currName: OfficeModel['name'] | undefined;
@@ -27,8 +31,8 @@
             await allOffices.reload?.();
             this.reset();
         } catch (err) {
-            // TODO: No permission handler
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 </script>

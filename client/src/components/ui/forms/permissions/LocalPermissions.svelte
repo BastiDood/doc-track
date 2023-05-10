@@ -7,6 +7,7 @@
 
     import { staffList } from '../../../../pages/dashboard/stores/StaffStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
 
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
@@ -39,11 +40,12 @@
             // Reload the staffList store
             await staffList.reload?.();
         } catch (err) {
-            // TODO: No permission handler
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 </script>
+
 <p>You are modifying {payload.email}'s permissions in {$allOffices[payload.office]}.</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
     <label>

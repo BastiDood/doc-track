@@ -1,10 +1,13 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+    import type { Category } from '~model/category.ts';
 
-    import { Category } from '~model/category.ts';
+    import { assert } from '../../../../assert.ts';
     import { Category as Api } from '../../../../api/category.ts';
-    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     import { Events, IconColor } from '../../../types.ts';
+
+    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -12,20 +15,18 @@
 
     export let cid: Category['id'];
 
-    let currName: Category['name'] | undefined;
+    let currName: Category['name'] = '';
 
     const dispatch = createEventDispatcher();
     async function handleSubmit(this: HTMLFormElement) {
-        if (typeof currName === 'undefined') return;
         if (!this.reportValidity()) return;
-
         try {
             await Api.rename({ id: cid, name: currName });
             await categoryList.reload?.();
             this.reset();
         } catch (err) {
-            // TODO: No permission handler
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         } finally {
             dispatch(Events.Done);
         }

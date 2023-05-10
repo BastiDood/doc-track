@@ -4,8 +4,10 @@
 
     import { earliestBatch } from '../../../../pages/dashboard/stores/BatchStore.ts';
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
     import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
     import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
 
     import type { Category } from '../../../../.../../../../model/src/category.ts';
     import type { Document } from '../../../../.../../../../model/src/document.ts';
@@ -15,7 +17,6 @@
     import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
     import TextInput from '../../TextInput.svelte';
-    import { documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
 
     let id: Document['id'] | null = null;
     let category: Category['id'] | null = null;
@@ -25,7 +26,6 @@
     async function handleSubmit(this: HTMLFormElement) {
         const oid = $dashboardState.currentOffice;
         if (oid === null || id === null || category === null) return;
-
         try {
             const result = await Api.create(oid, { id, title, category }, remark);
             assert(result instanceof Date);
@@ -34,9 +34,9 @@
             await reloadMetrics();
             this.reset();
         } catch (err) {
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
-        // TODO: handle error states
     }
 </script>
 
