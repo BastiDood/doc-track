@@ -44,6 +44,10 @@ span > span {
     border: solid orange 1px;
 }
 
+.defer {
+    border: solid var(--offline-color) 1px;
+}
+
 .office {
     border: solid olivedrab 1px;
 }

@@ -3,7 +3,6 @@ import { manifest, version } from '@parcel/service-worker';
 import localForage from 'localforage';
 import { assert } from '../assert.ts';
 import { DeferredFetch } from './syncman.ts';
-import { deferredSnaps } from './dashboard/stores/DeferredStore.ts';
 import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
 
 async function handleInstall() {
@@ -50,7 +49,8 @@ async function pushEntriesToServer() {
     await localForage.clear();
     
     // Toss all to the server
-    postMessage('sync');
+    const client = await self.clients.matchAll();
+    client.map(client=> client.postMessage('sync'));
     return Promise.allSettled(promises);
 
     // TODO: Error handler when atleast one fails.

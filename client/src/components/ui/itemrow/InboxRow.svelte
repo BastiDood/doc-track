@@ -32,6 +32,9 @@
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >
+    {#if isDeferred} 
+        <span class='chip defer'>Deferred</span>
+    {/if}   
     <span class="chip category">{category}</span>
     <span class="title">{title}</span>
     <span slot="secondary" class="chipcontainer">
