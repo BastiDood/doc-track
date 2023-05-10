@@ -48,9 +48,9 @@ async function pushEntriesToServer() {
 
     // Clear storage and reset deferredSnaps store if all entries pushed.
     await localForage.clear();
-    deferredSnaps.reset?.();
-
+    
     // Toss all to the server
+    postMessage('sync');
     return Promise.allSettled(promises);
 
     // TODO: Error handler when atleast one fails.

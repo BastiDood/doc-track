@@ -1,9 +1,16 @@
-import { asyncWritable } from '@square/svelte-store';
+import { asyncWritable, readable } from '@square/svelte-store';
 import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
 import localForage from 'localforage';
 import { DeferredFetch } from '../../syncman.ts';
 import { assert } from '../../../assert.ts';
 import { Status } from '../../../../../model/src/snapshot.ts';
+import { z } from 'zod';
+
+export const latestMessage = readable(null as string | null, set=>{
+    const handle = (evt: MessageEvent) => set(z.string().parse(evt.data));
+    addEventListener('message', handle);
+    return () => removeEventListener('message', handle);
+});
 
 export const deferredSnaps = asyncWritable(
     [],

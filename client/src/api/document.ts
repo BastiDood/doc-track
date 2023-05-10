@@ -32,7 +32,7 @@ export namespace Document {
         oid: Office['id'],
         doc: DocumentType,
         remark: Snapshot['remark'],
-    ): Promise<Snapshot['creation'] | BarcodeAssignmentError | DeferredSnapshot> {
+    ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
         const res = await fetch(`/api/document?office=${oid}`, {
             credentials: 'same-origin',
             method: 'POST',

@@ -18,7 +18,7 @@ export namespace Snapshot {
     export async function insert(
         oid: Office['id'],
         info: Omit<SnapshotType, 'creation' | 'evaluator'>,
-    ): Promise<SnapshotType['creation'] | InsertSnapshotError | DeferredSnapshot> {
+    ): Promise<SnapshotType['creation'] | InsertSnapshotError> {
         const res = await fetch(`/api/snapshot?office=${oid}`, {
             credentials: 'same-origin',
             method: 'POST',
