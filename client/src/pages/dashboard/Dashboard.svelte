@@ -6,6 +6,7 @@
     import { allOffices } from './stores/OfficeStore.ts';
     import { currentUser } from './stores/UserStore.ts';
 
+    import Toast from '../../components/ui/Toast.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
 
@@ -41,6 +42,7 @@
             <p>{error} <a href="/auth/login">Try logging in again?</a></p>
         {/await}
     </main>
+    <Toast />
 {/if}
 
 <style>

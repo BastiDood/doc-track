@@ -2,12 +2,14 @@
     import { assert } from '../../../../assert.ts';
     import { Invite } from '../../../../api/invite.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
-    import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
+
     import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
+    import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
     let email = '';
 
@@ -33,8 +35,8 @@
             await inviteList.reload?.();
             this.reset();
         } catch (err) {
-            // TODO: No permission handler
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 </script>

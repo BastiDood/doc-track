@@ -1,7 +1,10 @@
 <script lang="ts">
+    import { assert } from '../../../../assert.ts';
     import { Staff } from '../../../../api/staff.ts';
+
     import { staffList } from '../../../../pages/dashboard/stores/StaffStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
     
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
@@ -17,8 +20,8 @@
             });
             await staffList.reload?.();
         } catch (err) {
-            // TODO: No permission handler
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 </script>

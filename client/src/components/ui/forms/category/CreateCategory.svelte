@@ -2,9 +2,12 @@
     import { createEventDispatcher } from 'svelte';
     import type { Category } from '~model/category.ts';
 
+    import { assert } from '../../../../assert.ts';
     import { Category as Api } from '../../../../api/category.ts';
-    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     import { Events, IconColor } from '../../../types.ts';
+
+    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -20,7 +23,8 @@
             await categoryList.reload?.();
             this.reset();
         } catch (err) {
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         } finally {
             dispatch(Events.Done);
         }
@@ -35,5 +39,5 @@
         label="New Category Name:"
         bind:value={name}
     />
-    <Button submit><Checkmark color={IconColor.White} alt="Create New Category"/> New Category</Button>
+    <Button submit><Checkmark color={IconColor.White} alt="Create New Category" /> New Category</Button>
 </form>

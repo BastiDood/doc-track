@@ -1,14 +1,18 @@
 <script lang="ts">
     import { Invitation } from '~model/invitation';
     import { Office } from '~model/office';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore';
+
     import { assert } from '../../../../assert.ts';
+
     import { Invite } from '../../../../api/invite.ts';
-    import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
     import { ButtonType, IconColor } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
+
+    import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
 
     export let email: Invitation['email'];
     export let office: Office['id'];
@@ -25,7 +29,8 @@
             });
             await inviteList.reload?.();
         } catch (err) {
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 

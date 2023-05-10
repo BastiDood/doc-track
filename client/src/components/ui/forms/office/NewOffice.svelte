@@ -2,13 +2,15 @@
     import { assert } from '../../../../assert.ts';
 
     import { Office } from '../../../../api/office.ts';
-    import { userOffices, userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { IconColor } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
+
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { userOffices, userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
     async function handleSubmit(this: HTMLFormElement) {
         const node = this.elements.namedItem('officename');
@@ -22,8 +24,8 @@
             await userOffices.reload?.(); // Reloads all relevant stores
             this.reset();
         } catch (err) {
-            // TODO: No permission handler
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 </script>

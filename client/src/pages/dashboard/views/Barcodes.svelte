@@ -1,7 +1,10 @@
 <script lang="ts">
-    import { dashboardState } from '../stores/DashboardState.ts';
+    import { assert } from '../../../assert.ts';
     import { Batch } from '../../../api/batch.ts';
-    import { earliestBatch } from '../../dashboard/stores/BatchStore.ts';
+
+    import { earliestBatch } from '../stores/BatchStore.ts';
+    import { dashboardState } from '../stores/DashboardState.ts';
+    import { topToastMessage } from '../stores/ToastStore.ts';
 
     import GenerateBatch from '../../../components/ui/forms/batch/GenerateBatch.svelte';
     import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
@@ -30,8 +33,8 @@
             await earliestBatch.reload?.();
             showGenerateBatch = true;
         } catch (err) {
-            // TODO: error message
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 
@@ -41,8 +44,8 @@
             await earliestBatch.reload?.();
             showDownloadBatch = true;
         } catch (err) {
-            // TODO: error message
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 </script>

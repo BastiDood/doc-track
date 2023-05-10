@@ -3,10 +3,7 @@
 
     import { Snapshot } from '../../../../api/snapshot.ts';
     import { Snapshot as SnapshotModel, Status } from '../../../../../../model/src/snapshot.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
     import { Office } from '../../../../../../model/src/office.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
     import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
     import { ContextPayload, IconColor } from '../../../types.ts';
 
@@ -15,7 +12,12 @@
     import OfficeSelect from '../../OfficeSelect.svelte';
     import StatusSelect from '../../StatusSelect.svelte';
     import TextInput from '../../TextInput.svelte';
-    
+
+    import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
     export let status: Status;
@@ -26,7 +28,7 @@
         const node = this.elements.namedItem('snap-remark');
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
-    
+
         if (status === Status.Receive) destOfficeId = userOfficeId;
         if (status === Status.Terminate) destOfficeId = null;
         else assert(destOfficeId !== null);
@@ -44,8 +46,8 @@
             await reloadMetrics();
             // TODO: Exit out of the modal.
         } catch (err) {
-            // TODO: No permission handler
-            alert(err);
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 </script>
