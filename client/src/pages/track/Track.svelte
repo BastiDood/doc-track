@@ -57,7 +57,7 @@
         </nav>
     </TopBar>
 
-    {#await Promise.all([ Document.getPaperTrail(trackingNumber), allOffices.load() ])}
+    {#await Promise.all([Document.getPaperTrail(trackingNumber), allOffices.load()])}
         <p>Loading Paper Trail...</p>
     {:then [trail, _allOffices]}
         {@const overview = renderOverview(trail, $allOffices)}

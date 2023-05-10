@@ -1,6 +1,6 @@
 <script>
     import { dashboardState } from '../stores/DashboardState';
-    import { Document as Api } from '../../../api/document.ts'
+    import { Document as Api } from '../../../api/document.ts';
     import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
     import { IconSize } from '../../../components/types.ts';
 
