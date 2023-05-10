@@ -1,8 +1,9 @@
 import { manifest, version } from '@parcel/service-worker';
+import { StatusCodes } from 'http-status-codes';
 
 import localForage from 'localforage';
 import { assert } from '../assert.ts';
-import { DeferredFetchSchema } from './syncman.ts';
+import { type DeferredFetch, DeferredFetchSchema } from './syncman.ts';
 import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
 
 assert(self.registration.sync);
@@ -35,7 +36,8 @@ async function requestBackgroundSync(ty: string) {
 
 async function pushEntriesToServer() {
     // Load up all entries in localForage and create an array of promises that we will push to the server.
-    const promises = (await localForage.keys()).map(async key => {
+    const keys = await localForage.keys();
+    const promises = keys.map(async key => {
         const defer = DeferredFetchSchema.parse(await localForage.getItem(key));
         return fetch(defer.url, {
             credentials: defer.credentials as RequestCredentials,
@@ -50,7 +52,7 @@ async function pushEntriesToServer() {
 
     // Toss all to the server
     const client = await self.clients.matchAll();
-    client.map(client=> client.postMessage('sync'));
+    client.forEach(client => client.postMessage('sync'));
     return Promise.allSettled(promises);
 
     // TODO: Error handler when atleast one fails.
@@ -75,21 +77,17 @@ async function handleDocumentPost(req: Request): Promise<Response> {
         // Request a background sync by assigning a tag.
         await requestBackgroundSync(key);
 
-        // Copy the failed request's structure
-        const payload: unknown = await req.json();
-        const defer = DeferredFetchSchema.parse({
+        // Load the item into local storage, with barcode as the primary key.
+        await localForage.setItem(key, {
             credentials: req.credentials,
             url: req.url,
             method: req.method,
             headers: [...req.headers],
-            body: JSON.stringify(payload),
-        });
-
-        // Load the item into local storage, with barcode as the primary key.
-        await localForage.setItem(key, defer);
+            body: await req.text(),
+        } satisfies DeferredFetch);
 
         // Return sentinel response.
-        return new Response(null , { status: 503 });
+        return new Response(null , { status: StatusCodes.SERVICE_UNAVAILABLE });
     }
 }
 
@@ -115,7 +113,6 @@ async function handleFetch(req: Request): Promise<Response> {
         const res = await fetch(req);
         if (url.pathname.startsWith('/api/') || url.hostname.endsWith('googleusercontent.com'))
             await cache.put(url, res.clone());
-
         return res;
     } catch (error) {
         assert(error instanceof TypeError);

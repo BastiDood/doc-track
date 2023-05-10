@@ -38,12 +38,12 @@
             await reloadMetrics();
             this.reset();
         } catch (err) {
+            assert(err instanceof Error);
             if (err instanceof DeferredSnap) {
                 await deferredSnaps.update(snaps => upsert(snaps, { status: Status.Register, doc: id }));
                 topToastMessage.enqueue({ title: err.name, body: `${id} is deferred.` });
                 return;
             }
-            assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
