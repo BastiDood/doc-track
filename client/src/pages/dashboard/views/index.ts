@@ -1,5 +1,5 @@
 import Barcodes from './Barcodes.svelte';
-import Drafts from './Drafts.svelte';
+import Dossier from './Dossier.svelte';
 import Inbox from './Inbox.svelte';
 import ManageUsers from './Users.svelte';
 import ManageCategories from './Categories.svelte';
@@ -13,7 +13,7 @@ import Sandbox from './Sandbox.svelte';
 export default {
     '/barcodes': Barcodes,
     '/categories': ManageCategories,
-    '/drafts': Drafts,
+    '/dossier': Dossier,
     '/inbox': Inbox,
     '/users': ManageUsers,
     '/settings': ManageGlobalSettings,
