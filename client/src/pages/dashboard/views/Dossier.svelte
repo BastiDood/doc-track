@@ -14,11 +14,11 @@
     {#await Api.getDossier(currentOffice)}
         Loading registered documents.
     {:then reg}
-        {#each reg as entry(entry.doc)}
+        {#each reg as entry (entry.doc)}
             <RegisterRow 
-            {...entry}
-            showOverflowIcon = {false}
-            iconSize={IconSize.Large} 
+                {...entry}
+                showOverflowIcon={false}
+                iconSize={IconSize.Large} 
             />
         {:else}
             No documents were yet.
