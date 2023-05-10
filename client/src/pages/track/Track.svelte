@@ -76,13 +76,12 @@
     <TopBar open>
         <nav>
             <TextInput name="tracking-number" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
-            <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
+            <Button type={ButtonType.Secondary}><Camera alt="Take/select an image." /></Button>
             <a href={`/track?id=${trackingNumber}`}>
-                <Button type={ButtonType.Primary}><Search alt="Search specified tracking number." /></Button>
+                <Button type={ButtonType.Secondary}><Search alt="Search specified tracking number." /></Button>
             </a>
         </nav>
     </TopBar>
-
     {#await Promise.all([Document.getPaperTrail(trackingNumber), allOffices.load()])}
         <p>Loading Paper Trail...</p>
     {:then [trail, _allOffices]}
@@ -91,7 +90,6 @@
             <h1>Uh oh!</h1>
             <p>Something went wrong. Kindly re-check your tracking id above.</p>
         {:else}
-            {console.log(trail)}
             <h2>Document {overview.title}</h2>
             <Button>
                 <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications

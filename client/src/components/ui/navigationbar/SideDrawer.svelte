@@ -17,7 +17,7 @@
 
     export let show = false;
 
-    import { InputType, ButtonType } from '../../types.ts';
+    import { ButtonType } from '../../types.ts';
     import TextInput from '../../ui/TextInput.svelte';
     import Button from '../../ui/Button.svelte';
     import Search from '../../icons/Search.svelte';

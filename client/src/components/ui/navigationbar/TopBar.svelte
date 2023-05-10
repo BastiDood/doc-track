@@ -8,6 +8,7 @@
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { isOnline } from '../../../pages/dashboard/stores/NetState.ts';
+    import ChevronLeft from '../../icons/ChevronLeft.svelte';
 
     // eslint-disable-next-line no-undefined
     export let user = undefined as User | undefined;
@@ -23,6 +24,8 @@
     <span id="icon">
         {#if typeof user !== 'undefined'}
             <Hamburger bind:open on:click={() => (open = !open)} /> 
+        {:else}
+            <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
         {/if}
         <span class:offline={!$isOnline} id="title">DocTrack</span>
         {#if officeName}
@@ -33,8 +36,8 @@
     <nav id="profilenav">
         {#if typeof user === 'undefined'} 
             <a href="/">
-                <Button type={ButtonType.Primary}>
-                    <Logout color={IconColor.White} alt="Return to the main Login screen" /> Back to Main Page
+                <Button type={ButtonType.Secondary}>
+                    <Logout alt="Return to the main Login screen" /> Back to Main Page
                 </Button>
             </a>
         {:else}
