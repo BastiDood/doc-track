@@ -17,8 +17,17 @@
 
     export let show = false;
 
+    import { InputType, ButtonType } from '../../types.ts';
+    import TextInput from '../../ui/TextInput.svelte';
+    import Button from '../../ui/Button.svelte';
+    import Camera from '../../icons/Camera.svelte';
+    import Search from '../../icons/Search.svelte';
+    
+
     let selectedOffice: Office['id'] | null = null;
     $: dashboardState.setOffice(selectedOffice);
+
+    let trackingNumber: string = '';
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
@@ -29,6 +38,11 @@
             {:else}
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
+            <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="Tracking Number:" bind:value={trackingNumber} />
+                <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
+                <a href={`/track?id=${trackingNumber}`}>
+                    <Button type={ButtonType.Primary}><Search alt="Search specified tracking number."/></Button>
+                </a>
         </header>
         <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
         <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
