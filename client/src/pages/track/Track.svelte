@@ -14,6 +14,8 @@
     const { searchParams } = new URL(location.href);
     let trackingNumber = searchParams.get('id') ?? '';
 
+    let lastTrail = null;
+
     function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
         const [first, ...rest] = trail;
         const last = rest.at(-1);
@@ -21,7 +23,8 @@
         if (typeof first === 'undefined' && typeof last === 'undefined')
             return null;
 
-        if (typeof first !== 'undefined' && typeof last !== 'undefined')
+        if (typeof first !== 'undefined' && typeof last !== 'undefined') {
+            lastTrail = last;
             return {
                 title: first.title,
                 category: first.category,
@@ -31,7 +34,7 @@
                 origin: first.target === null ? null : allOffices[first.target] ?? null,
                 current: last.target === null ? null : allOffices[last.target] ?? null,
             };
-
+        }
         assert(typeof first !== 'undefined' && typeof last === 'undefined');
         const origin = first.target === null ? null : allOffices[first.target] ?? null;
         return {
@@ -43,6 +46,25 @@
             origin,
             current: origin,
         };
+    }
+
+    let prev = null;
+
+    function computeTimeDiff(date: Date) {
+        if(prev === null) {
+            prev = date;
+            return null;
+        }
+        let diff = date.getTime() - prev.getTime();
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -=  days * (1000 * 60 * 60 * 24);
+        let hours = Math.floor(diff / (1000 * 60 * 60));
+        diff -= hours * (1000 * 60 * 60);
+        let mins = Math.floor(diff / (1000 * 60));
+        diff -= mins * (1000 * 60);
+        let seconds = Math.floor(diff / (1000));
+        diff -= seconds * (1000);
+        return `${days}d ${hours}h ${mins}m ${seconds}s`;
     }
 </script>
 
@@ -65,6 +87,7 @@
             <h1>Uh oh!</h1>
             <p>Something went wrong. Kindly re-check your tracking id above.</p>
         {:else}
+            {console.log(trail)}
             <h2>Document {overview.title}</h2>
             <Button>
                 <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
@@ -118,6 +141,7 @@
                     <tr>
                         <td><b>Office</b></td>
                         <td><b>Creation</b></td>
+                        <td><b>Time Elapsed</b></td>
                         <td><b>Action</b></td>
                         <td><b>Remarks</b></td>
                         <td><b>Evaluator</b></td>
@@ -125,7 +149,8 @@
                     {#each trail as { target, creation, status, remark, email }}
                         <tr>
                             <td>{target}</td>
-                            <td>{creation}</td>
+                            <td>{creation.toLocaleString()}</td>
+                            <td>{computeTimeDiff(creation) ?? 'Start'}</td>
                             <td>{status}</td>
                             <td>{remark}</td>
                             <td>{email}</td>
