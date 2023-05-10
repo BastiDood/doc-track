@@ -5,6 +5,8 @@
     export let name: string;
     export let label: string;
     export let value: string | number = '';
+
+    export let pattern = '';
 </script>
 
 <label>
