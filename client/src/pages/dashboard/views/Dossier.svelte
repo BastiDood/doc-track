@@ -21,7 +21,7 @@
                 iconSize={IconSize.Large} 
             />
         {:else}
-            No documents were yet.
+            No documents were created in this office yet.
         {/each}
     {/await}
 {/if}

@@ -44,19 +44,39 @@
             current: origin,
         };
     }
+
+
+    let prev: Date | null = null;
+    function computeTimeDiff(date: Date) {
+        if (prev === null) {
+            prev = date;
+            return 'Start';
+        }
+
+        let diff = date.getTime() - prev.getTime();
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -= days * (1000 * 60 * 60 * 24);
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        diff -= hours * (1000 * 60 * 60);
+        const mins = Math.floor(diff / (1000 * 60));
+        diff -= mins * (1000 * 60);
+        const seconds = Math.floor(diff / 1000);
+        diff -= seconds * 1000;
+        prev = date;
+        return `${days}d ${hours}h ${mins}m ${seconds}s`;
+    }
 </script>
 
 <main>
     <TopBar open>
         <nav>
             <TextInput name="tracking-number" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
-            <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
+            <Button type={ButtonType.Secondary}><Camera alt="Take/select an image." /></Button>
             <a href={`/track?id=${trackingNumber}`}>
-                <Button type={ButtonType.Primary}><Search alt="Search specified tracking number." /></Button>
+                <Button type={ButtonType.Secondary}><Search alt="Search specified tracking number." /></Button>
             </a>
         </nav>
     </TopBar>
-
     {#await Promise.all([Document.getPaperTrail(trackingNumber), allOffices.load()])}
         <p>Loading Paper Trail...</p>
     {:then [trail, _allOffices]}
@@ -118,14 +138,22 @@
                     <tr>
                         <td><b>Office</b></td>
                         <td><b>Creation</b></td>
+                        <td><b>Time Elapsed</b></td>
                         <td><b>Action</b></td>
                         <td><b>Remarks</b></td>
                         <td><b>Evaluator</b></td>
                     </tr>
                     {#each trail as { target, creation, status, remark, email }}
                         <tr>
-                            <td>{target}</td>
-                            <td>{creation}</td>
+                            <td>
+                                {#if target === null}
+                                    End
+                                {:else}
+                                    {$allOffices[target]}
+                                {/if}
+                            </td>
+                            <td>{creation.toLocaleString()}</td>
+                            <td>{computeTimeDiff(creation)}</td>
                             <td>{status}</td>
                             <td>{remark}</td>
                             <td>{email}</td>

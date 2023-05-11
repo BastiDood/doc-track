@@ -23,6 +23,7 @@
         font-size: var(--normal);
         user-select: none;
         transition: all var(--animation-length) ease;
+        width: 100%;
     }
 
     select:focus {
