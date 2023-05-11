@@ -15,7 +15,6 @@
     import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
     
     import { DeferredSnap } from '../../../../api/error.ts';
-    import { upsert } from './utils.ts';
 
     import Button from '../../Button.svelte';
     import BarcodeSelect from '../../BarcodeSelect.svelte';
@@ -40,7 +39,7 @@
         } catch (err) {
             assert(err instanceof Error);
             if (err instanceof DeferredSnap) {
-                await deferredSnaps.update(snaps => upsert(snaps, { status: Status.Register, doc: id }));
+                await deferredSnaps.upsert({ status: Status.Register, doc: id });
                 topToastMessage.enqueue({ title: err.name, body: `${id} is deferred.` });
                 return;
             }

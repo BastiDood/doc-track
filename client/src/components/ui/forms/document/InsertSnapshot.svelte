@@ -14,7 +14,6 @@
     import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
     
     import { DeferredSnap } from '../../../../api/error.ts';
-    import { upsert } from './utils.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
@@ -52,7 +51,7 @@
             // TODO: Exit out of the modal.
         } catch (err) {
             if (err instanceof DeferredSnap) {
-                await deferredSnaps.update(snaps => {return upsert(snaps, { status: Status.Register, doc: payload.id });});
+                await deferredSnaps.upsert({ status: Status.Register, doc: payload.id });
                 topToastMessage.enqueue({ title: err.name, body: `${payload.id} is deferred.` });
                 return;
             }

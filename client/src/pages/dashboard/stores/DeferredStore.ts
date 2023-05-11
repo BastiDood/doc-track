@@ -1,5 +1,5 @@
 import { asyncWritable } from '@square/svelte-store';
-import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
+import { DeferredRegistrationSchema, DeferredSnapshot, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
 import localForage from 'localforage';
 import { DeferredFetchSchema } from '../../syncman.ts';
 import { Status } from '../../../../../model/src/snapshot.ts';
@@ -7,7 +7,7 @@ import { assert } from '../../../assert.ts';
 import { topToastMessage } from './ToastStore.ts';
 import { z } from 'zod';
 
-export const deferredSnaps = asyncWritable(
+const { subscribe, update, reset } = asyncWritable(
     [],
     async() => {
         // Get all keys in the localStorage and resolve all of them and set as contents of this store.
@@ -24,9 +24,18 @@ export const deferredSnaps = asyncWritable(
     },
 );
 
-export function onDocumentSync(evt: MessageEvent) {
-    assert(z.string().parse(evt.data) === 'sync');
-    topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
-    deferredSnaps.reset?.();
-    return;
-}
+export const deferredSnaps = {
+    subscribe,
+    onDocumentSync(evt: MessageEvent) {
+        assert(z.string().parse(evt.data) === 'sync');
+        topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
+        reset?.();
+    },
+    async upsert(insert: DeferredSnapshot) {
+        await update(snaps=>{
+            const maybeIndex = snaps.findIndex(snap => snap.doc === insert.doc);
+            if (maybeIndex >= 0) snaps.splice(maybeIndex, 1);
+            return [...snaps, insert];
+        });
+    },
+};
