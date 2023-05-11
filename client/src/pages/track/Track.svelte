@@ -46,15 +46,13 @@
         };
     }
 
-    let prev : Date;
 
+    let prev: Date | null = null;
     function computeTimeDiff(date: Date) {
-        if (typeof prev === 'undefined') {
+        if (prev === null) {
             prev = date;
-            return null;
+            return 'Start';
         }
-        if (typeof date === 'undefined')
-            return null;
 
         let diff = date.getTime() - prev.getTime();
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -148,9 +146,15 @@
                     </tr>
                     {#each trail as { target, creation, status, remark, email }}
                         <tr>
-                            <td>{$allOffices[target]}</td>
+                            <td>
+                                {#if target === null}
+                                    End
+                                {:else}
+                                    {$allOffices[target]}
+                                {/if}
+                            </td>
                             <td>{creation.toLocaleString()}</td>
-                            <td>{computeTimeDiff(creation) ?? 'Start'}</td>
+                            <td>{computeTimeDiff(creation)}</td>
                             <td>{status}</td>
                             <td>{remark}</td>
                             <td>{email}</td>
