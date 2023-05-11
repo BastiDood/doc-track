@@ -14,6 +14,7 @@ let handler: number | null = null;
 function advance() {
     handler = null;
     messages.shift();
+    // eslint-disable-next-line no-use-before-define
     bootstrap();
 }
 
