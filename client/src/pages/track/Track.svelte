@@ -21,7 +21,7 @@
         if (typeof first === 'undefined' && typeof last === 'undefined')
             return null;
 
-        if (typeof first !== 'undefined' && typeof last !== 'undefined') {
+        if (typeof first !== 'undefined' && typeof last !== 'undefined')
             return {
                 title: first.title,
                 category: first.category,
@@ -31,7 +31,6 @@
                 origin: first.target === null ? null : allOffices[first.target] ?? null,
                 current: last.target === null ? null : allOffices[last.target] ?? null,
             };
-        }
 
         assert(typeof first !== 'undefined' && typeof last === 'undefined');
         const origin = first.target === null ? null : allOffices[first.target] ?? null;
