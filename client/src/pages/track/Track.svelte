@@ -14,8 +14,6 @@
     const { searchParams } = new URL(location.href);
     let trackingNumber = searchParams.get('id') ?? '';
 
-    let lastTrail = null;
-
     function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
         const [first, ...rest] = trail;
         const last = rest.at(-1);
@@ -24,7 +22,6 @@
             return null;
 
         if (typeof first !== 'undefined' && typeof last !== 'undefined') {
-            lastTrail = last;
             return {
                 title: first.title,
                 category: first.category,
