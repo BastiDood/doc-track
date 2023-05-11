@@ -10,6 +10,13 @@ const { subscribe, set } = writable(null as Omit<Toast, 'timeout'> | null);
 
 const messages: Toast[] = [];
 let handler: number | null = null;
+
+function advance() {
+    handler = null;
+    messages.shift();
+    bootstrap();
+}
+
 function bootstrap() {
     const first = messages.at(0);
     if (typeof first === 'undefined') {
@@ -19,11 +26,7 @@ function bootstrap() {
 
     const { title, body, timeout } = first;
     set({ title, body });
-    handler = setTimeout(() => {
-        handler = null;
-        messages.shift();
-        bootstrap();
-    }, timeout ?? 3000);
+    handler = setTimeout(advance, timeout ?? 3000);
 }
 
 export const topToastMessage = {
@@ -33,7 +36,6 @@ export const topToastMessage = {
     },
     dismiss() {
         if (handler !== null) clearTimeout(handler);
-        handler = null;
-        bootstrap();
+        advance();
     },
 };
