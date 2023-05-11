@@ -35,6 +35,7 @@
                 current: last.target === null ? null : allOffices[last.target] ?? null,
             };
         }
+
         assert(typeof first !== 'undefined' && typeof last === 'undefined');
         const origin = first.target === null ? null : allOffices[first.target] ?? null;
         return {
