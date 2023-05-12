@@ -659,10 +659,7 @@ export class Database {
     }
 
     async generateBarcodeSummary(oid: Office['id']): Promise<BarcodeMetrics> {
-<<<<<<< HEAD
-=======
         // TODO: Add Tests
->>>>>>> cd1c108 (feat(server/db): implement barcode metrics summary)
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`WITH _ AS (SELECT code FROM barcode AS bar INNER JOIN batch AS bat ON bar.batch = bat.id WHERE bat.office = ${oid}),
                 codes AS (SELECT id FROM _ LEFT JOIN document AS d ON id = code)
@@ -671,11 +668,7 @@ export class Database {
                     'pending',coalesce((SELECT SUM(CASE WHEN id IS NULL THEN 1 ELSE 0 END) FROM codes),0)
                 ) AS result`;
         assertStrictEquals(rest.length, 0);
-<<<<<<< HEAD
         return z.object({ result: BarcodeMetricsSchema }).parse(first).result;
-=======
-        return BarcodeMetricsSchema.parse(first);
->>>>>>> cd1c108 (feat(server/db): implement barcode metrics summary)
     }
 
     /** Generate a user-centric summary of the metrics (across all offices). */
