@@ -19,9 +19,6 @@
         ? null
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '';
-
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    $: deferCount = $deferredSnaps?.length;
 </script>
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
