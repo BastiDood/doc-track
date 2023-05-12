@@ -129,12 +129,12 @@ Deno.test('full API integration test', async t => {
 
     // Promote as superuser
     await t.step('User API', async () => {
-        assertArrayIncludes(await User.getAll(), [ { ...user, permission: 511 } ]);
+        assertArrayIncludes(await User.getAll(), [ { ...user, permission: 255 } ]);
         assert(await User.setPermission({
             id: user.id,
-            permission: 511,
+            permission: 255,
         }));
-        assertArrayIncludes(await User.getAll(), [ { ...user, permission: 511 } ]);
+        assertArrayIncludes(await User.getAll(), [ { ...user, permission: 255 } ]);
     });
 
     const otherOid = await Office.create('Test Office');
