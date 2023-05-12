@@ -90,7 +90,7 @@
     <!-- Do not render anything! -->
 {:else if ctx.mode === Status.Register}
 <Modal title="Create Document" showModal on:close={resetContext}>
-    <CreateDocument on:done={resetContext}/>
+    <CreateDocument on:done={resetContext} />
 </Modal>
 {:else if ctx.context === ActiveMenu.ContextInbox && ctx.docId !== null}
     <InboxContext 

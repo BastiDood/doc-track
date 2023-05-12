@@ -68,10 +68,7 @@
 
         <h2>Sent Documents</h2>
         {#each $documentOutbox.pending as entry (entry.doc)}
-            <SendRow 
-                {...entry}
-                iconSize={IconSize.Large}
-            />
+            <SendRow {...entry} iconSize={IconSize.Large} />
         {/each}
     {/await}
 {/if}
@@ -79,7 +76,7 @@
     <!-- Do not render anything! -->
 {:else if ctx.mode === Status.Register}
     <Modal title="Create Document" showModal on:close={resetContext}>
-        <CreateDocument on:done={resetContext}/>
+        <CreateDocument on:done={resetContext} />
     </Modal>
 {:else if ctx.context && ctx.docId !== null}
     <InboxContext 
