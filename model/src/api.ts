@@ -112,3 +112,9 @@ export type DeferredSnapshot = z.infer<typeof DeferredSnapshotSchema>
 
 export const DeferredRegistrationSchema = DocumentSchema.pick({ id: true });
 export type DeferredRegistration = z.infer<typeof DeferredRegistrationSchema>
+
+export const BarcodeMetricsSchema = z.object({
+    assigned: z.number().int().nonnegative(),
+    pending: z.number().int().nonnegative(),
+});
+export type BarcodeMetrics = z.infer<typeof BarcodeMetricsSchema>;
