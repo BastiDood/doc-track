@@ -54,7 +54,7 @@
     You must select an office before accessing the Barcodes page.
 {:else}
     {#await barcodeSummary.load()}
-        Loading barcodeSummary.
+        Loading barcode metrics...
     {:then} 
         {#if $barcodeSummary === null}
             No office is selected.
