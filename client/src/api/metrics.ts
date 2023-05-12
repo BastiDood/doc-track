@@ -1,16 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
-<<<<<<< HEAD
 import { type BarcodeMetrics, BarcodeMetricsSchema } from '../../../model/src/api.ts';
 import { type Metrics as MetricsType, MetricsSchema } from '../../../model/src/metrics.ts';
-=======
-import {
-    type BarcodeMetrics,
-    type Metrics as MetricsType,
-    BarcodeMetricsSchema,
-    MetricsSchema,
-} from '../../../model/src/metrics.ts';
->>>>>>> 3bd5927 (feat(client/api): implement API wrappers for barcode metrics)
 import type { Office } from '../../../model/src/office.ts';
 
 import {
@@ -29,7 +20,6 @@ export namespace Metrics {
         });
         switch (res.status) {
             case StatusCodes.OK: return BarcodeMetricsSchema.parse(await res.json());
-            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
