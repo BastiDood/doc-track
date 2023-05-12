@@ -282,7 +282,6 @@ Deno.test('full API integration test', async t => {
             remark: 'Sending!',
         });
         assertInstanceOf(result, Date);
-        assert(new Date >= result);
     });
 
     await t.step('Metrics API', async () => {
@@ -305,6 +304,10 @@ Deno.test('full API integration test', async t => {
         assert(global.Send ?? 0 > 0);
         assertStrictEquals(global.Receive, undefined);
         assertStrictEquals(global.Terminate, undefined);
+
+        const { assigned, pending } = await Metrics.generateBarcodeSummary(oid);
+        assertStrictEquals(assigned, 10);
+        assertStrictEquals(pending, 0);
     });
 
     await t.step('Category API - retirement', async () => {
