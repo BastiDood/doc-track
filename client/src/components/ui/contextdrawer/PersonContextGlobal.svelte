@@ -9,12 +9,11 @@
 
     const dispatch = createEventDispatcher();
     export let show = false as boolean;
-    export let payload: PersonPayload;
     export let iconSize = IconSize.Normal;
 </script>
 
-<ContextTemplate bind:show={show}>
-    <ContextElement on:click={() => dispatch(Events.EditGlobalPermission, payload)}>
+<ContextTemplate on:close bind:show={show}>
+    <ContextElement on:click={() => dispatch(Events.EditGlobalPermission)}>
         <div slot="contextIcon">
             <Edit size={iconSize} alt="Edit Local Permissions" />
             Edit Global Permissions

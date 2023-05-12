@@ -2,27 +2,32 @@
     import { userList } from '../stores/UserStore';
 
     import { IconSize, PersonPayload, RowType, Events } from '../../../components/types';
+    import { User } from '~model/user';
     import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonContextGlobal from '../../../components/ui/contextdrawer/PersonContextGlobal.svelte';
 
-    let showContextMenu = false;
-    let showGlobalPermission = false;
-    let currentContext = null as PersonPayload | null;
-
-    function overflowClickHandler(e: CustomEvent<PersonPayload>) {
-        currentContext = e.detail;
-        showContextMenu = true;
+    interface Context {
+        id: User['id'],
+        permissions: User['permission'],
+        context: boolean,
+        showEdit: boolean,
     }
 
-    function contextMenuHandler(e: CustomEvent<PersonPayload>) {
-        switch (e.type) {
-            case Events.EditGlobalPermission:
-                showGlobalPermission = true;
-                break;
-            default: break;
-        }
+    let ctx = null as Context | null;
+
+    function openContext(id: User['id'], permissions: User['permission']) {
+        ctx = {id: id, permissions: permissions, context: true, showEdit: false}
+    }
+
+    function openEditGlobal(ctxcpy: ctx) {
+        ctxcpy.context = false;
+        ctxcpy.showEdit = true;
+        ctx = ctxcpy;
+    }
+    function resetContext() {
+        ctx = null;
     }
 </script>
 
@@ -34,26 +39,28 @@
         <PersonRowGlobal
             {...user}
             iconSize={IconSize.Large} 
-            on:overflowClick={overflowClickHandler} 
+            on:overflowClick={openContext.bind(null, user.id, user.permission)} 
         />
     {:else}
         No users exist.
     {/each}
 {/await}
-
-{#if currentContext?.ty === RowType.Person}
+{#if ctx === null} 
+    <!-- Do not display anything! -->
+{:else if ctx.showEdit}
+    <Modal title="Edit Global Permissions" showModal>
+        <GlobalPermissions 
+            on:done={resetContext}
+            id={ctx.id}
+            permission={ctx.permissions}    
+        />
+    </Modal>
+{:else if ctx.context}
     <PersonContextGlobal
-        bind:show={showContextMenu}
-        payload={currentContext} 
-        on:editGlobalPermission={contextMenuHandler}
-        on:removeStaff={contextMenuHandler}
+        show
+        on:close={resetContext}
+        on:editGlobalPermission={openEditGlobal.bind(null, ctx)}
     />
 {/if}
 
-<Modal title="Edit Global Permissions" bind:showModal={showGlobalPermission}>
-    {#if currentContext === null}
-        Current user is non-existent.
-    {:else}
-        <GlobalPermissions payload={currentContext} />
-    {/if}
-</Modal>
+

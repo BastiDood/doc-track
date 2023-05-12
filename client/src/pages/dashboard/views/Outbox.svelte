@@ -3,7 +3,7 @@
     import { dashboardState } from '../stores/DashboardState';
     import { documentOutbox } from '../stores/DocumentStore';
     
-    import { IconSize, Events, RowType, ContextPayload } from '../../../components/types';
+    import { IconSize } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
@@ -25,6 +25,10 @@
 
     $: ({ currentOffice } = $dashboardState);
 
+    function openContext(doc: Document['id']) {
+        ctx = {docId: doc, mode: null, context: true};
+    }
+
     function openInsertSnapshot(doc: Document['id'], mode: Status) {
         ctx = {docId: doc, mode: mode, context: false}
     }
@@ -33,9 +37,6 @@
         ctx = {docId: null, mode: Status.Register, context: false};
     }
 
-    function openContext(doc: Document['id']) {
-        ctx = {docId: doc, mode: null, context: true};
-    }
 
     function resetContext() {
         ctx = null;
