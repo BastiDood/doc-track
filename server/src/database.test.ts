@@ -402,7 +402,7 @@ Deno.test('full OAuth flow', async t => {
 
         await t.step('verify that the outbox only contains one document with the latest snapshot', async () => {
             const inbox = await db.getInbox(office);
-            assertEquals(inbox, [{
+            assertEquals(inbox.pending, [{
                 creation: result.creation,
                 category: randomCategory,
                 doc: doc.id,
