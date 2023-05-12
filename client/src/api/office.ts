@@ -19,8 +19,6 @@ export namespace Office {
         });
         switch (res.status) {
             case StatusCodes.OK: return AllOfficesSchema.parse(await res.json());
-            case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
-            case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
