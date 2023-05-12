@@ -59,15 +59,6 @@
         <input
             type="checkbox"
             name="perms"
-            value={Global.GetOffices}
-            checked={checkPerms(permission, Global.GetOffices)}
-        />
-        Get Offices
-    </label>
-    <label>
-        <input
-            type="checkbox"
-            name="perms"
             value={Global.CreateOffice}
             checked={checkPerms(permission, Global.CreateOffice)}
         />

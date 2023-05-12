@@ -16,13 +16,12 @@ export enum Local {
 
 /** Represents the global permission (operator-level) bit string. */
 export enum Global {
-    GetOffices = 1,
-    CreateOffice = 2,
-    UpdateOffice = 4,
-    UpdateUser = 8,
-    CreateCategory = 16,
-    UpdateCategory = 32,
-    DeleteCategory = 64,
-    ActivateCategory = 128,
-    ViewMetrics = 256,
+    CreateOffice = 1,
+    UpdateOffice = 2,
+    UpdateUser = 4,
+    CreateCategory = 8,
+    UpdateCategory = 16,
+    DeleteCategory = 32,
+    ActivateCategory = 64,
+    ViewMetrics = 128,
 }

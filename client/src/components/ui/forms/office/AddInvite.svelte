@@ -56,11 +56,6 @@
         <br />
         <p><b>Permissions:</b></p>
         <label>
-            <input type="checkbox" name="perms" value={Global.GetOffices} />
-            Get Office
-        </label>
-        <br />
-        <label>
             <input type="checkbox" name="perms" value={Global.CreateOffice} />
             Create Office
         </label>
