@@ -75,10 +75,10 @@
                 <br />
                 
                 <Button on:click={handleDownload}>
-                    <Download alt='download' />Download Stickers
+                    <Download alt="download" />Download Stickers
                 </Button>
                 <Button on:click={handleGenerate}>
-                    <Add alt='add'/> Generate New Batch
+                    <Add alt="add" /> Generate New Batch
                 </Button>
             
                 <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
