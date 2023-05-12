@@ -53,7 +53,7 @@
 {:else}
     <h1>Inbox</h1>
 
-    <Button on:click={() => openCreateDocument.bind(null)}>
+    <Button on:click={openCreateDocument.bind(null)}>
         Register and Stage a New Document
     </Button>
 
@@ -89,9 +89,9 @@
 {#if ctx === null}
     <!-- Do not render anything! -->
 {:else if ctx.mode === Status.Register}
-<Modal title="Create Document" showModal on:close={resetContext}>
-    <CreateDocument on:done={resetContext} />
-</Modal>
+    <Modal title="Create Document" showModal on:close={resetContext}>
+        <CreateDocument on:done={resetContext} />
+    </Modal>
 {:else if ctx.context === ActiveMenu.ContextInbox && ctx.docId !== null}
     <InboxContext 
         showMenu
