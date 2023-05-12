@@ -60,12 +60,16 @@
         <p>Loading staff page...</p>
     {:then}
         <h1>Staffs of {officeName}</h1>
-        {#each $staffList.filter(s => s.permission !== 0) as staff (staff.id)}
+        {#each $staffList.filter(s => s.permission !== 0) as {id, name, email, permission, picture} (id)}
             <PersonRowLocal
-                {...staff}
+                {id}
+                {email}
+                {name}
+                {permission}
+                {picture}
                 office={currentOffice}
                 iconSize={IconSize.Large} 
-                on:overflowClick={openContextMenu.bind(null, staff.id, currentOffice, staff.email, staff.permission)} 
+                on:overflowClick={openContextMenu.bind(null, id, currentOffice, email, permission)} 
             />
         {:else}
             No staff members exist in "{officeName}".

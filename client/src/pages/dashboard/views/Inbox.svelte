@@ -61,20 +61,26 @@
         <p>Loading inbox...</p>
     {:then}
         <h2>Pending Acceptance</h2>
-        {#each $documentInbox.pending as entry (entry.doc)}
+        {#each $documentInbox.pending as {creation, category, title, doc} (doc)}
             <AcceptRow
-                {...entry}
+                {doc}
+                {category}
+                {title}
+                {creation}
                 iconSize = {IconSize.Large}
-                on:overflowClick = {setOpenedContext.bind(null, entry.doc, ActiveMenu.ContextAccept)}
+                on:overflowClick = {setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
             />
         {/each}
 
         <h2>Office Inbox</h2>
-        {#each $documentInbox.accept as entry (entry.doc)}
+        {#each $documentInbox.accept as {creation, category, title, doc} (doc)}
             <InboxRow
-                {...entry}
+                {doc}
+                {category}
+                {title}
+                {creation}
                 iconSize={IconSize.Large}
-                on:overflowClick={setOpenedContext.bind(null, entry.doc, ActiveMenu.ContextInbox)}
+                on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
             />
         {/each}
     {/await}

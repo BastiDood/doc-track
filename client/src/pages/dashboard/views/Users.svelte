@@ -35,11 +35,15 @@
     <p>Loading users page...</p>
 {:then}
     <h1>Users</h1>
-    {#each $userList.filter(u => u.permission !== 0) as user (user.id)}
+    {#each $userList.filter(u => u.permission !== 0) as {id, name, email, picture, permission} (id)}
         <PersonRowGlobal
-            {...user}
+            {id}
+            {name}
+            {email}
+            {picture}
+            {permission}
             iconSize={IconSize.Large} 
-            on:overflowClick={openContext.bind(null, user.id, user.permission)} 
+            on:overflowClick={openContext.bind(null, id, permission)} 
         />
     {:else}
         No users exist.

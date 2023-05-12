@@ -55,17 +55,23 @@
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>
-        {#each $documentOutbox.ready as entry (entry.doc)}
+        {#each $documentOutbox.ready as {doc, category, creation, title} (doc)}
             <RegisterRow 
-                {...entry}
+                {doc}
+                {category}
+                {title}
+                {creation}
                 iconSize={IconSize.Large} 
-                on:overflowClick = {openContext.bind(null, entry.doc)}
+                on:overflowClick = {openContext.bind(null, doc)}
             />
         {/each}
 
         <h2>Sent Documents</h2>
         {#each $documentOutbox.pending as entry (entry.doc)}
-            <SendRow iconSize={IconSize.Large} {...entry} />
+            <SendRow 
+                {...entry}
+                iconSize={IconSize.Large}
+            />
         {/each}
     {/await}
 {/if}
