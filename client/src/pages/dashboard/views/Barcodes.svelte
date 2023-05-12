@@ -10,19 +10,17 @@
     import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
 
     import Download from '../../../components/icons/Download.svelte';
-    import Barcode from '../../../components/icons/Barcode.svelte';
     import Add from '../../../components/icons/Add.svelte';
-
-    import TextInput from '../../../components/ui/TextInput.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-
-    import { ButtonType } from '../../../components/types.ts';
 
     $: ({ currentOffice } = $dashboardState);
 
     let showGenerateBatch = false;
     let showDownloadBatch = false;
+
+    let unused = 0;
+    let used = 0;
 
     async function handleGenerate() {
         if (currentOffice === null) return;
@@ -59,22 +57,15 @@
         <table>
             <tr>
                 <td>Unused</td>
-                <td>0</td>
+                <td>{unused}</td>
             </tr>
             <tr>
                 <td>Used</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Valid</td>
-                <td>0</td>
+                <td>{used}</td>
             </tr>
         </table>
-    
-        <div class="invalidate-container">
-            <TextInput label='id' placeholder='ID' name='invalidate-id'>Invalide ID</TextInput>
-            <Button type={ButtonType.Danger}><Barcode alt='barcode' />Submit</Button>
-        </div>
+        <br />
+        
         <Button on:click={handleDownload}>
             <Download alt='download' />Download Stickers
         </Button>
@@ -99,13 +90,9 @@
         align-items: center;
     }
 
-    .invalidate-container {
-        display: flex;
-        align-items: baseline;
-    }
-
     table {
         border-collapse: collapse;
+        width: 20vw;
     }
 
     table, td {
