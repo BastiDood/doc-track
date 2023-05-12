@@ -1,11 +1,14 @@
 import { asyncWritable } from '@square/svelte-store';
-import { DeferredRegistrationSchema, DeferredSnapshot, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
 import localForage from 'localforage';
-import { DeferredFetchSchema } from '../../syncman.ts';
-import { Status } from '../../../../../model/src/snapshot.ts';
-import { assert } from '../../../assert.ts';
-import { topToastMessage } from './ToastStore.ts';
 import { z } from 'zod';
+
+import { type DeferredSnapshot, DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
+import { Status } from '../../../../../model/src/snapshot.ts';
+
+import { assert } from '../../../assert.ts';
+import { DeferredFetchSchema } from '../../syncman.ts';
+
+import { topToastMessage } from './ToastStore.ts';
 
 const deferStore = asyncWritable(
     [],
@@ -42,10 +45,8 @@ export const deferredSnaps = {
     },
     countDeferRegistration() {
         let count = 0;
-        const unsubscribe = deferStore.subscribe( snaps => {
-            count = snaps.filter(snap => snap.status === Status.Register).length
-        })
+        const unsubscribe = deferStore.subscribe(snaps => (count = snaps.filter(snap => snap.status === Status.Register).length));
         unsubscribe();
         return count;
-    }
+    },
 };
