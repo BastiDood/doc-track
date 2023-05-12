@@ -7,6 +7,9 @@ dependencies:
   http-status-codes:
     specifier: ^2.2.0
     version: 2.2.0
+  svelte-qrcode:
+    specifier: ^1.0.0
+    version: 1.0.0
   svelte-spa-router:
     specifier: ^3.3.0
     version: 3.3.0
@@ -2822,6 +2825,10 @@ packages:
       svelte: 3.58.0
       typescript: 5.0.4
     dev: true
+
+  /svelte-qrcode@1.0.0:
+    resolution: {integrity: sha512-WrOvyyxtUzu32gVIDxcFMy0A7uUpbl/8yHaTNOsUaI8W5V4wa7AmReCjffhNY2aS42CqCLJ6qdwUoj/KxmeZzA==}
+    dev: false
 
   /svelte-spa-router@3.3.0:
     resolution: {integrity: sha512-cwRNe7cxD43sCvSfEeaKiNZg3FCizGxeMcf7CPiWRP3jKXjEma3vxyyuDtPOam6nWbVxl9TNM3hlE/i87ZlqcQ==}

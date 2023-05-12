@@ -5,6 +5,7 @@
     import Button from '../../components/ui/Button.svelte';
     import Notification from '../../components/icons/Notification.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
+    import QrCode from '../../components/ui/qr/QRGenerator.svelte';
 
     import { Document } from '../../api/document.ts';
     import { Vapid } from '../../api/vapid.ts';
