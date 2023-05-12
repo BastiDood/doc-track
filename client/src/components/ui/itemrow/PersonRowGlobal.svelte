@@ -15,17 +15,11 @@
     export let permission: User['permission'];
 
     const dispatch = createEventDispatcher();
-    const rowEvent: GlobalPersonPayload = {
-        ty: RowType.Person,
-        id,
-        email,
-        permission,
-    };
 </script>
 
 <RowTemplate 
     {iconSize} 
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+    on:overflowClick={() => dispatch(Events.OverflowClick)}
 >
     <span class="chip office">User</span>
     <span class="title">{name}</span>    

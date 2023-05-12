@@ -17,18 +17,13 @@
     export let creation: Snapshot['creation'];
 
     const dispatch = createEventDispatcher();
-    const rowEvent: ContextPayload = {
-        ty: RowType.Inbox,
-        id: doc,
-    };
-
     $: isDeferred = findDeferredSnapshot($deferredSnaps, doc);
 </script>
 
 <RowTemplate
     {iconSize} 
     {isDeferred}
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+    on:overflowClick={() => dispatch(Events.OverflowClick)}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >
     {#if isDeferred} 

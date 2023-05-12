@@ -18,17 +18,11 @@
     let targetName: Office['name'];
     
     const dispatch = createEventDispatcher();
-    const rowEvent: InvitePayload = {
-        ty: RowType.Invite,
-        email,
-        office,
-    };
-
     $: targetName = $allOffices[office] ?? 'No office.';
 </script>
 
 <RowTemplate
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+    on:overflowClick={() => dispatch(Events.OverflowClick)}
 >
     <span class="title">{email}</span>
     <span slot="secondary" class="chipcontainer">

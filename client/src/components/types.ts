@@ -57,24 +57,3 @@ export enum Events {
     RemoveCategory = 'removeCategory',
     RenameCategory = 'renameCategory',
 }
-
-export interface InvitePayload {
-    ty: RowType.Invite;
-    email: Invitation['email'];
-    office: Invitation['office'];
-}
-
-export interface PersonPayload {
-    ty: RowType.Person;
-    id: Staff['user_id'];
-    office: Staff['office'];
-    email: User['email'];
-    permission: Staff['permission'];
-}
-
-export interface GlobalPersonPayload {
-    ty: RowType.Person;
-    id: User['id'];
-    email: User['email'];
-    permission: Staff['permission'];
-}

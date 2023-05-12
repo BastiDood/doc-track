@@ -20,11 +20,6 @@
     export let showOverflowIcon = true;
     
     const dispatch = createEventDispatcher();
-    const rowEvent: ContextPayload = {
-        ty: RowType.Inbox,
-        id: doc,
-    };
-
     $: isDeferred = findDeferredSnapshot($deferredSnaps, doc);
 </script>
 
@@ -32,7 +27,7 @@
     {iconSize} 
     {showOverflowIcon}
     {isDeferred}
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+    on:overflowClick={() => dispatch(Events.OverflowClick)}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >
     <span class="chip category">{category}</span>
