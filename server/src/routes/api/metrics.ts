@@ -170,6 +170,7 @@ export async function handleGenerateGlobalSummary(pool: Pool, req: Request) {
  *
  * # Outputs
  * - `200` => returns the counts of the grouped snapshots as JSON in the {@linkcode Response} body
+ * - `400` => office ID is invalid or other unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => insufficient permissions
  * - `406` => content negotiation failed

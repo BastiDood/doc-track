@@ -20,6 +20,7 @@ export namespace Metrics {
         });
         switch (res.status) {
             case StatusCodes.OK: return BarcodeMetricsSchema.parse(await res.json());
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
