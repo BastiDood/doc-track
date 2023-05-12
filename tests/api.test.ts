@@ -187,7 +187,7 @@ Deno.test('full API integration test', async t => {
                 [oid]: 4095,
                 [otherOid]: 4095,
             },
-            global_perms: 511,
+            global_perms: 255,
         });
     });
 
