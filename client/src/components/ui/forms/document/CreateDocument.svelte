@@ -8,10 +8,13 @@
     import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
     import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
     import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
 
     import type { Category } from '../../../../.../../../../model/src/category.ts';
     import type { Document } from '../../../../.../../../../model/src/document.ts';
-    import type { Snapshot } from '../../../../.../../../../model/src/snapshot.ts';
+    import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
+    
+    import { DeferredSnap } from '../../../../api/error.ts';
 
     import Button from '../../Button.svelte';
     import BarcodeSelect from '../../BarcodeSelect.svelte';
@@ -35,6 +38,11 @@
             this.reset();
         } catch (err) {
             assert(err instanceof Error);
+            if (err instanceof DeferredSnap) {
+                await deferredSnaps.upsert({ status: Status.Register, doc: id });
+                topToastMessage.enqueue({ title: err.name, body: `${id} is deferred.` });
+                return;
+            }
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }

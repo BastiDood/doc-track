@@ -7,11 +7,12 @@
 
     export let iconSize: IconSize = IconSize.Large;
     export let showOverflowIcon = true;
+    export let isDeferred = false as boolean;
 
     const dispatch = createEventDispatcher();
 </script>
 
-<article on:keydown on:click={() => dispatch(Events.RowContainerClick)}>
+<article class:defer={isDeferred} on:keydown on:click={() => dispatch(Events.RowContainerClick)}>
     <div class="icon"><slot name="icon" /></div>
     <div id="middle">
         <div><slot></slot></div>
@@ -27,6 +28,8 @@
 </article>
 
 <style>
+    @import url('../../pages/vars.css');
+
     article {
         align-items: center;
         display: flex;
@@ -47,5 +50,9 @@
 
     .subtext {
         font-size: var(--small);
+    }
+
+    .defer {
+        border-bottom: var(--spacing-small) var(--offline-color) solid;
     }
 </style>

@@ -4,19 +4,22 @@
     import { Snapshot } from '../../../../api/snapshot.ts';
     import { Snapshot as SnapshotModel, Status } from '../../../../../../model/src/snapshot.ts';
     import { Office } from '../../../../../../model/src/office.ts';
-    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
     import { ContextPayload, IconColor } from '../../../types.ts';
+
+    import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
+    import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
+    
+    import { DeferredSnap } from '../../../../api/error.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
     import OfficeSelect from '../../OfficeSelect.svelte';
     import StatusSelect from '../../StatusSelect.svelte';
     import TextInput from '../../TextInput.svelte';
-
-    import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
     export let payload: ContextPayload;
     export let userOfficeId: Office['id'];
@@ -41,11 +44,17 @@
                 remark: node.value,
                 target: destOfficeId,
             });
+
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
             await reloadMetrics();
             // TODO: Exit out of the modal.
         } catch (err) {
+            if (err instanceof DeferredSnap) {
+                await deferredSnaps.upsert({ status: Status.Register, doc: payload.id });
+                topToastMessage.enqueue({ title: err.name, body: `${payload.id} is deferred.` });
+                return;
+            }
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
@@ -63,7 +72,7 @@
     {/if}
     
     <br />
-    Set Status As: <StatusSelect bind:value={status} />
+    Set Status As: <StatusSelect disabled bind:value={status} />
     <br />
     <TextInput name="snap-remark" label="Remarks: " placeholder="Optional" />
     <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>

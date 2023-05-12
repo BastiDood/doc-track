@@ -1,9 +1,10 @@
 <script lang="ts">
     import { Status } from '../../../../model/src/snapshot';
     export let value: Status | undefined;
+    export let disabled = false as boolean;
 </script>
 
-<select required bind:value>
+<select required {disabled} bind:value>
     <option value={Status.Register}>Register</option>
     <option value={Status.Send}>Send</option>
     <option value={Status.Receive}>Receive</option>

@@ -10,6 +10,12 @@ export class InvalidInput extends Error {
     }
 }
 
+export class DeferredSnap extends Error {
+    constructor() {
+        super('snapshot is deffered');
+    }
+}
+
 export class InvalidSession extends Error {
     constructor() {
         super('invalid or expired session');

@@ -9,6 +9,7 @@
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { isOnline } from '../../../pages/dashboard/stores/NetState.ts';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
+    import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
 
     // eslint-disable-next-line no-undefined
     export let user = undefined as User | undefined;
@@ -28,6 +29,11 @@
             <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
         {/if}
         <span class:offline={!$isOnline} id="title">DocTrack</span>
+        {#await deferredSnaps.load()}
+            <span>🔄</span>
+        {:then}
+            <span>{$deferredSnaps.length} ⚠️</span>    
+        {/await}
         {#if officeName}
             <span> - {officeName}</span>
         {/if}

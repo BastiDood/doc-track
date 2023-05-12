@@ -44,6 +44,12 @@ span > span {
     border: solid orange 1px;
 }
 
+.chip.defer {
+    background-color: var(--offline-color);
+    color: white;
+    font-style: italic;
+}
+
 .office {
     border: solid olivedrab 1px;
 }

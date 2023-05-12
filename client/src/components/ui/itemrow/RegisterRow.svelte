@@ -6,10 +6,11 @@
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, RowType, ContextPayload, Events } from '../../types.ts';
+    import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
-    import { goToTrackingPage } from './util.ts';
+    import { goToTrackingPage, findDeferredSnapshot } from './util.ts';
     
     export let iconSize: IconSize;
     export let doc: Document['id'];
@@ -23,11 +24,14 @@
         ty: RowType.Inbox,
         id: doc,
     };
+
+    $: isDeferred = findDeferredSnapshot($deferredSnaps, doc);
 </script>
 
 <RowTemplate
     {iconSize} 
     {showOverflowIcon}
+    {isDeferred}
     on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >

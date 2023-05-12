@@ -106,3 +106,9 @@ export const StaffMemberSchema = UserSchema
     .pick({ id: true, name: true, email: true, picture: true })
     .merge(StaffSchema.pick({ permission: true }));
 export type StaffMember = z.infer<typeof StaffMemberSchema>;
+
+export const DeferredSnapshotSchema = SnapshotSchema.pick({ doc: true, status: true });
+export type DeferredSnapshot = z.infer<typeof DeferredSnapshotSchema>
+
+export const DeferredRegistrationSchema = DocumentSchema.pick({ id: true });
+export type DeferredRegistration = z.infer<typeof DeferredRegistrationSchema>

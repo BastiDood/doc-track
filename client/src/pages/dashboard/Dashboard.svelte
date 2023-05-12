@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
     import Router from 'svelte-spa-router';
 
     import { currentPage } from './stores/CurrentPage.ts';
     import { dashboardState } from './stores/DashboardState.ts';
     import { allOffices } from './stores/OfficeStore.ts';
     import { currentUser } from './stores/UserStore.ts';
+    import { deferredSnaps } from './stores/DeferredStore.ts';
 
     import Toast from '../../components/ui/Toast.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
@@ -20,11 +21,17 @@
         ? null
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '[No Office]';
+
+    function onSync(evt: MessageEvent) {
+        deferredSnaps.onDocumentSync(evt);
+    }
 </script>
 
 <svelte:head>
     <title>{pageName} - {officeName}</title>
 </svelte:head>
+
+<svelte:window on:message={onSync} />
 
 {#if $currentUser === null}
     <p>Loading user...</p>
