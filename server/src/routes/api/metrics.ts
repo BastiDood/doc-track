@@ -161,3 +161,58 @@ export async function handleGenerateGlobalSummary(pool: Pool, req: Request) {
         db.release();
     }
 }
+
+/**
+ * Gets the summary of an office's barcode metrics.
+ *
+ * # Inputs
+ * - Requires a session whose global permissions include {@linkcode Local.ViewMetrics}
+ *
+ * # Outputs
+ * - `200` => returns the counts of the grouped snapshots as JSON in the {@linkcode Response} body
+ * - `400` => office ID is invalid or other unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => insufficient permissions
+ * - `406` => content negotiation failed
+ */
+export async function handleGenerateBarcodeSummary(pool: Pool, req: Request, params: URLSearchParams) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Metrics] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    const office = params.get('office');
+    const oid = office ? parseInt(office, 10) : NaN;
+    if (isNaN(oid)) {
+        error(`[Metrics] Session ${sid} provided invalid office ID`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Metrics] Content negotiation failed for session ${sid}`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
+            error(`[Metrics] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((staff.permission & Local.ViewMetrics) === 0) {
+            error(`[Metrics] Staff ${staff.user_id} from office ${oid} cannot view barcode metrics summary`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const bars = await db.generateBarcodeSummary(oid);
+        info(`[Metrics] Staff ${staff.user_id} from office ${oid} cannot view barcode metrics summary`);
+        return new Response(JSON.stringify(bars), {
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } finally {
+        db.release();
+    }
+}

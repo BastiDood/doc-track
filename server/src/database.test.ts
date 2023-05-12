@@ -425,10 +425,15 @@ Deno.test('full OAuth flow', async t => {
             assert(global.Send ?? 0 > 0);
             assertStrictEquals(global.Receive, undefined);
             assertStrictEquals(global.Terminate, undefined);
+
+            const { assigned, pending } = await db.generateBarcodeSummary(office);
+            assertStrictEquals(assigned, 1);
+            assertStrictEquals(pending, 9);
         });
     });
 
     await t.step('fully populate the batch - cleanup', async () => {
+
         // Assign barcodes to documents
         for (const other of others) {
             const result = await db.assignBarcodeToDocument(
@@ -445,6 +450,7 @@ Deno.test('full OAuth flow', async t => {
             );
             assertInstanceOf(result, Date);
         }
+
 
         // There should be no remaining codes left
         assertStrictEquals(await db.getEarliestAvailableBatch(office), null);
