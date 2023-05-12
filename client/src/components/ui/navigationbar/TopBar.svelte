@@ -32,9 +32,11 @@
             <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
         {/if}
         <span class:offline={!$isOnline} id="title">DocTrack</span>
-        {#if deferCount > 0}
-            <span>{deferCount} ⚠️</span>
-        {/if}
+        {#await deferredSnaps.load()}
+            <span>🔄</span>
+        {:then defer}
+            <span>{defer.length} ⚠️</span>    
+        {/await}
         {#if officeName}
             <span> - {officeName}</span>
         {/if}

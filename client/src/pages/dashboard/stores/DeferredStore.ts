@@ -27,6 +27,7 @@ const deferStore = asyncWritable(
 export const deferredSnaps = {
     subscribe: deferStore.subscribe,
     reset: deferStore.reset?.bind(deferStore),
+    load: deferStore.load,
     onDocumentSync(evt: MessageEvent) {
         assert(z.string().parse(evt.data) === 'sync');
         topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
