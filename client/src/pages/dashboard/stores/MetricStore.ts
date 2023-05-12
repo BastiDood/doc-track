@@ -25,8 +25,20 @@ export const globalSummary = asyncReadable(
     { reloadable: true }
 );
 
+export const barcodeSummary = asyncDerived(
+    dashboardState,
+    $dashboardState => {
+        const { currentOffice } = $dashboardState;
+        return currentOffice === null
+            ? Promise.resolve(null)
+            : Metrics.generateBarcodeSummary(currentOffice);
+    },
+    { reloadable: true }
+);
+
 export async function reloadMetrics() {
     await userSummary.reload?.();
     await localSummary.reload?.();
     await globalSummary.reload?.();
+    await barcodeSummary.reload?.();
 }

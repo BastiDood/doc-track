@@ -32,7 +32,9 @@
         {#await deferredSnaps.load()}
             <span>🔄</span>
         {:then}
-            <span>{$deferredSnaps.length} ⚠️</span>    
+            {#if $deferredSnaps.length > 0}
+                <span>{$deferredSnaps.length} ⚠️</span>    
+            {/if}
         {/await}
         {#if officeName}
             <span> - {officeName}</span>
