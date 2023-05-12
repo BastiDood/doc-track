@@ -58,11 +58,6 @@ export enum Events {
     RenameCategory = 'renameCategory',
 }
 
-export interface ContextPayload {
-    ty: RowType.AcceptDocument | RowType.Inbox;
-    id: Document['id'];
-}
-
 export interface InvitePayload {
     ty: RowType.Invite;
     email: Invitation['email'];

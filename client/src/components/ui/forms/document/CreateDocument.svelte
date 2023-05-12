@@ -1,5 +1,6 @@
 <script lang="ts">
     import { assert } from '../../../../assert.ts';
+    import { createEventDispatcher } from 'svelte';
     import { Document as Api } from '../../../../api/document.ts';
 
     import { earliestBatch } from '../../../../pages/dashboard/stores/BatchStore.ts';
@@ -13,6 +14,7 @@
     import type { Category } from '../../../../.../../../../model/src/category.ts';
     import type { Document } from '../../../../.../../../../model/src/document.ts';
     import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
+    import { Events } from '../../../types.ts';
     
     import { DeferredSnap } from '../../../../api/error.ts';
 
@@ -25,6 +27,7 @@
     let category: Category['id'] | null = null;
     let title: Document['title'] = '';
     let remark: Snapshot['remark'] = '';
+    const dispatch = createEventDispatcher();
 
     async function handleSubmit(this: HTMLFormElement) {
         const oid = $dashboardState.currentOffice;
@@ -35,12 +38,14 @@
             await earliestBatch.reload?.();
             await documentOutbox.reload?.();
             await reloadMetrics();
+            dispatch(Events.Done);
             this.reset();
         } catch (err) {
             assert(err instanceof Error);
             if (err instanceof DeferredSnap) {
                 await deferredSnaps.upsert({ status: Status.Register, doc: id });
                 topToastMessage.enqueue({ title: err.name, body: `${id} is deferred.` });
+                dispatch(Events.Done);
                 return;
             }
             topToastMessage.enqueue({ title: err.name, body: err.message });

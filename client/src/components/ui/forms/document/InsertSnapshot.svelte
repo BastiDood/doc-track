@@ -1,10 +1,12 @@
 <script lang="ts">
+    import { createEventDispatcher } from 'svelte';
     import { assert } from '../../../../assert.ts';
 
     import { Snapshot } from '../../../../api/snapshot.ts';
     import { Snapshot as SnapshotModel, Status } from '../../../../../../model/src/snapshot.ts';
     import { Office } from '../../../../../../model/src/office.ts';
-    import { ContextPayload, IconColor } from '../../../types.ts';
+    import { IconColor, Events } from '../../../types.ts';
+    import { Document } from '~model/document.ts';
 
     import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
@@ -21,10 +23,11 @@
     import StatusSelect from '../../StatusSelect.svelte';
     import TextInput from '../../TextInput.svelte';
 
-    export let payload: ContextPayload;
+    export let docId: Document['id'];
     export let userOfficeId: Office['id'];
     export let status: Status;
 
+    const dispatch = createEventDispatcher();
     let destOfficeId: SnapshotModel['target'] | null = null;
 
     async function handleSubmit(this: HTMLFormElement) {
@@ -35,11 +38,11 @@
         if (status === Status.Receive) destOfficeId = userOfficeId;
         if (status === Status.Terminate) destOfficeId = null;
         else assert(destOfficeId !== null);
-        assert(payload.id);
+        assert(docId);
 
         try {
             await Snapshot.insert(userOfficeId,{
-                doc: payload.id,
+                doc: docId,
                 status,
                 remark: node.value,
                 target: destOfficeId,
@@ -48,11 +51,12 @@
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
             await reloadMetrics();
-            // TODO: Exit out of the modal.
+            dispatch(Events.Done)
         } catch (err) {
             if (err instanceof DeferredSnap) {
-                await deferredSnaps.upsert({ status: Status.Register, doc: payload.id });
-                topToastMessage.enqueue({ title: err.name, body: `${payload.id} is deferred.` });
+                await deferredSnaps.upsert({ status: Status.Register, doc: docId });
+                topToastMessage.enqueue({ title: err.name, body: `${docId} is deferred.` });
+                dispatch(Events.Done)
                 return;
             }
             assert(err instanceof Error);
@@ -63,7 +67,7 @@
 
 <p>You are currently adding a snapshot as {$userSession?.email} in office {userOfficeId}.</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-    Document Barcode ID: {payload.id}
+    Document Barcode ID: {docId}
     <br />
     {#if status === Status.Terminate || status === Status.Receive}
         Set Target Office: This Office.
