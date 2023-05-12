@@ -97,12 +97,12 @@
     main {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        height: 100%;
+        place-items: center;
     }
 
     table {
         border-collapse: collapse;
-        width: 20vw;
     }
 
     table, td {
