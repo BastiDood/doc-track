@@ -26,7 +26,7 @@
     <span slot="secondary" class="chipcontainer">
         <span class="chip email">{email}</span>
         <span class="chip doc">#{id}</span>
-        <span class="chip permission">Permissions: {permission.toString(2).padStart(9, '0')}</span>
+        <span class="chip permission">Permissions: {permission.toString(2).padStart(8, '0')}</span>
     </span>
     <img class="{iconSize} rounded" src={picture} alt={name} slot="icon" />
 </RowTemplate>
