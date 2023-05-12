@@ -31,8 +31,8 @@
         <span class:offline={!$isOnline} id="title">DocTrack</span>
         {#await deferredSnaps.load()}
             <span>🔄</span>
-        {:then defer}
-            <span>{defer.length} ⚠️</span>    
+        {:then}
+            <span>{$deferredSnaps.length} ⚠️</span>    
         {/await}
         {#if officeName}
             <span> - {officeName}</span>
