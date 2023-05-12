@@ -61,7 +61,7 @@
         <p>Loading inbox...</p>
     {:then}
         <h2>Pending Acceptance</h2>
-        {#each $documentInbox.pending as {creation, category, title, doc} (doc)}
+        {#each $documentInbox.pending as { creation, category, title, doc } (doc)}
             <AcceptRow
                 {doc}
                 {category}
@@ -73,7 +73,7 @@
         {/each}
 
         <h2>Office Inbox</h2>
-        {#each $documentInbox.accept as {creation, category, title, doc} (doc)}
+        {#each $documentInbox.accept as { creation, category, title, doc } (doc)}
             <InboxRow
                 {doc}
                 {category}

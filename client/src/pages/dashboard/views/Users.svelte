@@ -35,7 +35,7 @@
     <p>Loading users page...</p>
 {:then}
     <h1>Users</h1>
-    {#each $userList.filter(u => u.permission !== 0) as {id, name, email, picture, permission} (id)}
+    {#each $userList.filter(u => u.permission !== 0) as { id, name, email, picture, permission } (id)}
         <PersonRowGlobal
             {id}
             {name}

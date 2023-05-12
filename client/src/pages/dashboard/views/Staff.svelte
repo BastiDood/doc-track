@@ -60,7 +60,7 @@
         <p>Loading staff page...</p>
     {:then}
         <h1>Staffs of {officeName}</h1>
-        {#each $staffList.filter(s => s.permission !== 0) as {id, name, email, permission, picture} (id)}
+        {#each $staffList.filter(s => s.permission !== 0) as { id, name, email, permission, picture } (id)}
             <PersonRowLocal
                 {id}
                 {email}

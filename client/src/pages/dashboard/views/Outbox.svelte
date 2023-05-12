@@ -55,7 +55,7 @@
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>
-        {#each $documentOutbox.ready as {doc, category, creation, title} (doc)}
+        {#each $documentOutbox.ready as { doc, category, creation, title } (doc)}
             <RegisterRow 
                 {doc}
                 {category}
