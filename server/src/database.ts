@@ -663,9 +663,9 @@ export class Database {
             .queryObject`WITH _ AS (SELECT code FROM barcode AS bar INNER JOIN batch AS bat ON bar.batch = bat.id WHERE bat.office = ${oid}),
                 codes AS (SELECT id FROM _ LEFT JOIN document AS d ON id = code)
                 SELECT json_build_object(
-                    'assigned',COALESCE((SELECT COUNT(id) FROM codes),0),
-                    'pending',COALESCE((SELECT SUM(CASE WHEN id IS NULL THEN 1 ELSE 0 END) FROM codes)),0)
-                AS result`;
+                    'assigned',coalesce((SELECT COUNT(id) FROM codes),0),
+                    'pending',coalesce((SELECT SUM(CASE WHEN id IS NULL THEN 1 ELSE 0 END) FROM codes),0)
+                ) AS result`;
         assertStrictEquals(rest.length, 0);
         return z.object({ result: BarcodeMetricsSchema }).parse(first).result;
     }
