@@ -32,8 +32,8 @@ export const deferredSnaps = {
         topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
         deferStore.reset?.();
     },
-    async upsert(insert: DeferredSnapshot) {
-        await deferStore.update.call(null, snaps=>{
+    upsert(insert: DeferredSnapshot) {
+        return deferStore.update.call(null, snaps => {
             const maybeIndex = snaps.findIndex(snap => snap.doc === insert.doc);
             if (maybeIndex >= 0) snaps.splice(maybeIndex, 1);
             return [...snaps, insert];
