@@ -1,6 +1,5 @@
-import { asyncWritable } from '@square/svelte-store';
+import { asyncWritable, derived } from '@square/svelte-store';
 import localForage from 'localforage';
-import { z } from 'zod';
 
 import { type DeferredSnapshot, DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
 import { Status } from '../../../../../model/src/snapshot.ts';
@@ -17,11 +16,10 @@ const deferStore = asyncWritable(
         const keys = await localForage.keys();
         const deferred = keys.map(async key => {
             const defer = DeferredFetchSchema.parse(await localForage.getItem(key));
-            const url = new URL(defer.url);
-            if (url.pathname.startsWith('/api/document'))
-                return { doc: DeferredRegistrationSchema.parse(JSON.parse(defer.body)).id, status: Status.Register };
-
-            return DeferredSnapshotSchema.parse(JSON.parse(defer.body));
+            const { pathname } = new URL(defer.url);
+            return pathname.startsWith('/api/document')
+                ? { doc: DeferredRegistrationSchema.parse(JSON.parse(defer.body)).id, status: Status.Register }
+                : DeferredSnapshotSchema.parse(JSON.parse(defer.body));
         });
         return Promise.all(deferred);
     },
@@ -31,8 +29,8 @@ export const deferredSnaps = {
     subscribe: deferStore.subscribe,
     reset: deferStore.reset?.bind(deferStore),
     load: deferStore.load.bind(deferStore),
-    onDocumentSync(evt: MessageEvent) {
-        assert(z.string().parse(evt.data) === 'sync');
+    onDocumentSync(evt: MessageEvent<string>) {
+        assert(evt.data === 'sync');
         topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
         deferStore.reset?.();
     },
@@ -43,10 +41,7 @@ export const deferredSnaps = {
             return [...snaps, insert];
         });
     },
-    countDeferRegistration() {
-        let count = 0;
-        const unsubscribe = deferStore.subscribe(snaps => (count = snaps.filter(snap => snap.status === Status.Register).length));
-        unsubscribe();
-        return count;
-    },
 };
+
+export const deferRegistrationCount = derived(deferredSnaps, $deferredSnaps =>
+    $deferredSnaps.reduce((total, { status }) => total + Number(status === Status.Register), 0));

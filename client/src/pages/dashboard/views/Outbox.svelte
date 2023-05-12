@@ -11,8 +11,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
-    import { loadAll } from '@square/svelte-store';
-    import { deferredSnaps } from '../stores/DeferredStore.ts';
+    import { deferRegistrationCount } from '../stores/DeferredStore.ts';
     import { Document } from '../../../../../model/src/document.ts';
 
     interface Context {
@@ -37,7 +36,6 @@
         ctx = { docId: null, mode: Status.Register, context: false };
     }
 
-
     function resetContext() {
         ctx = null;
     }
@@ -51,7 +49,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await loadAll([documentOutbox, deferredSnaps])}
+    {#await Promise.all([documentOutbox.load(), deferRegistrationCount.load()])}
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>
@@ -62,11 +60,11 @@
                 {title}
                 {creation}
                 iconSize={IconSize.Large} 
-                on:overflowClick = {openContext.bind(null, doc)}
+                on:overflowClick={openContext.bind(null, doc)}
             />
         {/each}
-        {#if deferredSnaps.countDeferRegistration() > 0}
-            There are {deferredSnaps.countDeferRegistration()} document/s awaiting to be registered on the next Background Sync.
+        {#if $deferRegistrationCount > 0}
+            There are {$deferRegistrationCount} document/s awaiting to be registered on the next Background Sync.
         {/if}
         <h2>Sent Documents</h2>
         {#each $documentOutbox.pending as entry (entry.doc)}
