@@ -22,13 +22,13 @@
             <img src={placeholderSrc} alt="DocTrack Logo" />
             <h3>DocTrack: Document Tracking System</h3>
             <a href="/auth/login">
-                <Button type={ButtonType.Primary}><Google color={IconColor.White} alt="Log in with UP Mail"/>Log in with University of the Philippines Mail</Button>
+                <Button type={ButtonType.Primary}><Google color={IconColor.White} alt="Log in with UP Mail" />Log in with University of the Philippines Mail</Button>
             </a>
             <div class="search-container">
                 <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="Tracking Number:" bind:value={trackingNumber} />
                 <Button type={ButtonType.Primary}><Camera alt="Take/select an image." /></Button>
                 <a href={`/track?id=${trackingNumber}`}>
-                    <Button type={ButtonType.Primary}><Search alt="Search specified tracking number."/></Button>
+                    <Button type={ButtonType.Primary}><Search alt="Search specified tracking number." /></Button>
                 </a>
             </div>
         </div>
