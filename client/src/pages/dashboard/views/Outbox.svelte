@@ -65,7 +65,9 @@
                 on:overflowClick = {openContext.bind(null, doc)}
             />
         {/each}
-
+        {#if deferredSnaps.countDeferRegistration() > 0}
+            There are {deferredSnaps.countDeferRegistration()} document/s awaiting to be registered on the next Background Sync.
+        {/if}
         <h2>Sent Documents</h2>
         {#each $documentOutbox.pending as entry (entry.doc)}
             <SendRow {...entry} iconSize={IconSize.Large} />

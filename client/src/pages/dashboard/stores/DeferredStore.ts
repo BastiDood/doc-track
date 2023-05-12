@@ -40,4 +40,12 @@ export const deferredSnaps = {
             return [...snaps, insert];
         });
     },
+    countDeferRegistration() {
+        let count = 0;
+        const unsubscribe = deferStore.subscribe( snaps => {
+            count = snaps.filter(snap => snap.status === Status.Register).length
+        })
+        unsubscribe();
+        return count;
+    }
 };
