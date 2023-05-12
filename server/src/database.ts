@@ -659,7 +659,6 @@ export class Database {
     }
 
     async generateBarcodeSummary(oid: Office['id']): Promise<BarcodeMetrics> {
-        // TODO: Add Tests
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`WITH _ AS (SELECT code FROM barcode AS bar INNER JOIN batch AS bat ON bar.batch = bat.id WHERE bat.office = ${oid}),
                 codes AS (SELECT id FROM _ LEFT JOIN document AS d ON id = code)
