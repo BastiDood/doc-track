@@ -68,7 +68,7 @@ async function setup(pool: Pool) {
         assertEquals(first, { office: oid, permission });
 
         // Set as superuser
-        assert(await db.setUserPermissions(user.id, 511));
+        assert(await db.setUserPermissions(user.id, 255));
 
         // Construct a full valid session
         const { id, nonce, expiration } = await db.generatePendingSession();
