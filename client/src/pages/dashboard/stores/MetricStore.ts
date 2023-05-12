@@ -30,7 +30,7 @@ export const barcodeSummary = asyncDerived(
     $dashboardState => {
         const { currentOffice } = $dashboardState;
         return currentOffice === null
-            ? Promise.resolve({ })
+            ? Promise.resolve(null)
             : Metrics.generateBarcodeSummary(currentOffice);
     },
     { reloadable: true }
