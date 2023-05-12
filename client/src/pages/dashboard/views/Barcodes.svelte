@@ -48,8 +48,6 @@
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
-
-    $: console.log($barcodeSummary)
 </script>
 
 {#if currentOffice === null}
