@@ -201,7 +201,7 @@ export async function handleGenerateBarcodeSummary(pool: Pool, req: Request, par
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        if ((staff.permission & Global.ViewMetrics) === 0) {
+        if ((staff.permission & Local.ViewMetrics) === 0) {
             error(`[Metrics] Staff ${staff.user_id} from office ${oid} cannot view barcode metrics summary`);
             return new Response(null, { status: Status.Forbidden });
         }
