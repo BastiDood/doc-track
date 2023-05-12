@@ -4,7 +4,7 @@
     import PersonMail from '../../icons/PersonMail.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { IconSize, InvitePayload, RowType, Events } from '../../types.ts';
+    import { IconSize, Events } from '../../types.ts';
     import { Invitation } from '../../../../../model/src/invitation.ts';
     import { Office } from '~model/office.ts';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
@@ -18,17 +18,11 @@
     let targetName: Office['name'];
     
     const dispatch = createEventDispatcher();
-    const rowEvent: InvitePayload = {
-        ty: RowType.Invite,
-        email,
-        office,
-    };
-
     $: targetName = $allOffices[office] ?? 'No office.';
 </script>
 
 <RowTemplate
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+    on:overflowClick={() => dispatch(Events.OverflowClick)}
 >
     <span class="title">{email}</span>
     <span slot="secondary" class="chipcontainer">

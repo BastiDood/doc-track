@@ -1,8 +1,3 @@
-import { Document } from '../../../model/src/document.ts';
-import { Invitation } from '../../../model/src/invitation.ts';
-import { Staff } from '../../../model/src/staff.ts';
-import { User } from '../../../model/src/user.ts';
-
 export enum MetricsMode {
     User,
     Local,
@@ -56,30 +51,4 @@ export enum Events {
     ActivateCategory = 'activateCategory',
     RemoveCategory = 'removeCategory',
     RenameCategory = 'renameCategory',
-}
-
-export interface ContextPayload {
-    ty: RowType.AcceptDocument | RowType.Inbox;
-    id: Document['id'];
-}
-
-export interface InvitePayload {
-    ty: RowType.Invite;
-    email: Invitation['email'];
-    office: Invitation['office'];
-}
-
-export interface PersonPayload {
-    ty: RowType.Person;
-    id: Staff['user_id'];
-    office: Staff['office'];
-    email: User['email'];
-    permission: Staff['permission'];
-}
-
-export interface GlobalPersonPayload {
-    ty: RowType.Person;
-    id: User['id'];
-    email: User['email'];
-    permission: Staff['permission'];
 }

@@ -4,7 +4,7 @@
     import DocumentImport from '../../icons/DocumentImport.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { ContextPayload, RowType, IconSize, Events } from '../../types.ts';
+    import { IconSize, Events } from '../../types.ts';
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
@@ -20,16 +20,12 @@
     $: isDeferred = findDeferredSnapshot($deferredSnaps, doc);
 
     const dispatch = createEventDispatcher();
-    const rowEvent: ContextPayload = {
-        ty: RowType.AcceptDocument,
-        id: doc,
-    };
 </script>
 
 <RowTemplate
     {iconSize}
     {isDeferred}
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+    on:overflowClick={() => dispatch(Events.OverflowClick)}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >
     {#if isDeferred} 

@@ -3,7 +3,7 @@
     import DocumentBlank from '../../icons/DocumentBlank.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { IconSize, ContextPayload, RowType, Events } from '../../types.ts';
+    import { IconSize, Events } from '../../types.ts';
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
@@ -17,18 +17,13 @@
     export let creation: Snapshot['creation'];
 
     const dispatch = createEventDispatcher();
-    const rowEvent: ContextPayload = {
-        ty: RowType.Inbox,
-        id: doc,
-    };
-
     $: isDeferred = findDeferredSnapshot($deferredSnaps, doc);
 </script>
 
 <RowTemplate
     {iconSize} 
     {isDeferred}
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+    on:overflowClick={() => dispatch(Events.OverflowClick)}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >
     {#if isDeferred} 

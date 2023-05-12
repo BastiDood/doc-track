@@ -4,7 +4,7 @@
 
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { PersonPayload, IconSize, Events, RowType } from '../../types.ts';
+    import { IconSize, Events } from '../../types.ts';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { User } from '../../../../../model/src/user.ts';
     import { Staff } from '../../../../../model/src/staff.ts';
@@ -22,20 +22,13 @@
     export let permission: Staff['permission'];
 
     const dispatch = createEventDispatcher();
-    const rowEvent: PersonPayload = {
-        ty: RowType.Person,
-        id,
-        office,
-        email,
-        permission,
-    };
     
     $: officeName = $allOffices[office] ?? 'No office.';
 </script>
 
 <RowTemplate 
     {iconSize} 
-    on:overflowClick={() => dispatch(Events.OverflowClick, rowEvent)}
+    on:overflowClick={() => dispatch(Events.OverflowClick)}
 >
     <span class="chip office">{officeName}</span>
     <span class="title">{name}</span>    

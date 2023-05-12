@@ -3,7 +3,7 @@
     import { dashboardState } from '../stores/DashboardState';
     import { documentOutbox } from '../stores/DocumentStore';
     
-    import { IconSize, Events, RowType, ContextPayload } from '../../../components/types';
+    import { IconSize } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
@@ -13,41 +13,41 @@
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
     import { loadAll } from '@square/svelte-store';
     import { deferredSnaps } from '../stores/DeferredStore.ts';
+    import { Document } from '../../../../../model/src/document.ts';
+
+    interface Context {
+        docId: Document['id'] | null,
+        mode: Status | null,
+        context: boolean,
+    }
+
+    let ctx = null as Context | null;
 
     $: ({ currentOffice } = $dashboardState);
 
-    let showContextMenu = false;
-    let showInsertSnapshot = false;
-    let showCreateDocument = false;
-
-    let insertSnapshotAction = null as Status | null;
-    let currentContext = null as ContextPayload | null;
-
-    function overflowClickHandler(e: CustomEvent<ContextPayload>) {
-        currentContext = e.detail;
-        showContextMenu = true;
+    function openContext(doc: Document['id']) {
+        ctx = { docId: doc, mode: null, context: true };
     }
 
-    function contextMenuHandler(e: CustomEvent<ContextPayload>) {
-        switch (e.type) {
-            case Events.SendDocument:
-                insertSnapshotAction = Status.Send;
-                break;
-            case Events.TerminateDocument:
-                insertSnapshotAction = Status.Terminate;
-                break;
-            default: break;
-        }
-        if (currentOffice) showInsertSnapshot = true;
+    function openInsertSnapshot(doc: Document['id'], mode: Status) {
+        ctx = { docId: doc, mode: mode, context: false };
+    }
+
+    function openCreateDocument() {
+        ctx = { docId: null, mode: Status.Register, context: false };
+    }
+
+
+    function resetContext() {
+        ctx = null;
     }
 </script>
-
 {#if currentOffice === null}
     You must select an office before accessing the Outbox page.
 {:else}
     <h1>Outbox</h1>
     
-    <Button on:click={() => (showCreateDocument = true)}>
+    <Button on:click={openCreateDocument.bind(null)}>
         Register and Stage a New Document
     </Button>
 
@@ -55,41 +55,44 @@
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>
-        {#each $documentOutbox.ready as entry (entry.doc)}
+        {#each $documentOutbox.ready as { doc, category, creation, title } (doc)}
             <RegisterRow 
-                {...entry}
+                {doc}
+                {category}
+                {title}
+                {creation}
                 iconSize={IconSize.Large} 
-                on:overflowClick = {overflowClickHandler}
+                on:overflowClick = {openContext.bind(null, doc)}
             />
         {/each}
 
         <h2>Sent Documents</h2>
         {#each $documentOutbox.pending as entry (entry.doc)}
-            <SendRow iconSize={IconSize.Large} {...entry} />
+            <SendRow {...entry} iconSize={IconSize.Large} />
         {/each}
     {/await}
-
-    {#if currentContext?.ty === RowType.Inbox}
-        <InboxContext
-            bind:show={showContextMenu}
-            payload={currentContext} 
-            on:sendDocument={contextMenuHandler}
-            on:terminateDocument={contextMenuHandler}   
-        />
-    {/if}
-
-    <Modal title="Insert Snapshot" bind:showModal={showInsertSnapshot}>
-        {#if insertSnapshotAction === null || currentContext === null || !showInsertSnapshot}
-            Invalid parameters.
-        {:else}
-            <InsertSnapshot
-                payload={currentContext}
-                userOfficeId={currentOffice}
-                status={insertSnapshotAction}
-            /> 
-        {/if}
+{/if}
+{#if ctx === null}
+    <!-- Do not render anything! -->
+{:else if ctx.mode === Status.Register}
+    <Modal title="Create Document" showModal on:close={resetContext}>
+        <CreateDocument on:done={resetContext} />
     </Modal>
-    <Modal title="Create Document" bind:showModal={showCreateDocument}>
-        <CreateDocument />
+{:else if ctx.context && ctx.docId !== null}
+    <InboxContext 
+    showMenu
+        on:close={resetContext}
+        on:sendDocument={openInsertSnapshot.bind(null, ctx.docId, Status.Send)}
+        on:terminateDocument={openInsertSnapshot.bind(null, ctx.docId, Status.Terminate)}   
+    />
+{:else if ctx.docId !== null && currentOffice !== null && ctx.mode !== null}
+    <!-- All other possible modes, Send, Terminate, Accept. -->
+    <Modal title="Insert Snapshot" showModal on:close={resetContext}>
+        <InsertSnapshot
+            on:done={resetContext}
+            docId={ctx.docId}
+            userOfficeId={currentOffice}
+            status={ctx.mode}
+        /> 
     </Modal>
 {/if}
