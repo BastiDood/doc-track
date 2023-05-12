@@ -1,7 +1,9 @@
 <script lang='ts'>
+    import { createEventDispatcher } from 'svelte';
     import { assert } from '../../../../assert.ts';
     import { Invite } from '../../../../api/invite.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
+    import { Events } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
@@ -13,6 +15,7 @@
 
     let email = '';
 
+    const dispatch = createEventDispatcher()
     async function handleSubmit(this: HTMLFormElement) {
         // Computes permissions
         let permission = 0;
@@ -34,6 +37,7 @@
             await Invite.add({ email, office, permission });
             await inviteList.reload?.();
             this.reset();
+            dispatch(Events.Done)
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });

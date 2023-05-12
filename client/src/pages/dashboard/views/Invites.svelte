@@ -10,18 +10,35 @@
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import RevokeInvite from '../../../components/ui/forms/office/RevokeInvite.svelte';
+    import { Invitation } from '~model/invitation.ts';
 
-    let showInviteForm = false;
-    let showRevokeInviteContextMenu = false;
-    let showRevokeInviteModal = false;
-
-    let currentContext = null as InvitePayload | null;
+    enum ActiveMenu {
+        CreateInvite,
+        RevokeInvite
+    }
+    interface Context {
+        email: Invitation['email'] | null;
+        office: Invitation['office'] | null;
+        contextMenu: boolean | null;
+        inviteModal: ActiveMenu | null;
+    }
 
     $: ({ currentOffice } = $dashboardState);
+    let ctx = null as Context | null;
 
-    function overflowClickHandler(e: CustomEvent<InvitePayload>) {
-        currentContext = e.detail;
-        showRevokeInviteContextMenu = true;
+    function openContextMenu(email: Invitation['email'], office: Invitation['office']) {
+        ctx = {email: email, office: office, contextMenu: true, inviteModal: null}
+    }
+
+    function openRevokeInvite(email: Invitation['email'], office: Invitation['office']) {
+        ctx = {email: email, office: office, contextMenu: false, inviteModal: ActiveMenu.RevokeInvite}
+    }
+
+    function openCreateInvite() {
+        ctx = {email: null, office: null, contextMenu: null, inviteModal: ActiveMenu.CreateInvite}
+    }
+    function resetContext() {
+        ctx = null;
     }
 </script>
 
@@ -29,16 +46,10 @@
     You must select an office before accessing the Invites page.
 {:else}
     <h1>Invitations</h1>
-    <Button on:click={() => (showInviteForm = true)}>
+    <Button on:click={openCreateInvite.bind(null)}>
         <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
     </Button>
-    <Modal title="Invite User" bind:showModal={showInviteForm}>
-        {#if $dashboardState.currentOffice === null}
-            <span>No selected office.</span>
-        {:else}
-            <InviteForm />
-        {/if}
-    </Modal>
+
     {#await inviteList.load()}
         Loading invite list.
     {:then}
@@ -52,22 +63,30 @@
                     permission={permission}
                     iconSize={IconSize.Large}
                     creation={creation}
-                    on:overflowClick={overflowClickHandler}
+                    on:overflowClick={openContextMenu.bind(null, email, currentOffice)}
                 />
             {/each}
-            {#if currentContext?.ty === RowType.Invite}
-                <InviteContext
-                    bind:show={showRevokeInviteContextMenu}
-                    payload={currentContext}
-                    on:removeInvitation={()=> { showRevokeInviteModal = true; }}/>
-            {/if}
-            <Modal title="Remove Invitation" bind:showModal={showRevokeInviteModal}>
-                {#if currentContext === null }
-                    Cannot remove this invitation.
-                {:else}
-                    <RevokeInvite {...currentContext}/>
-                {/if}
-            </Modal>
         {/if}
     {/await}
+{/if}
+{#if ctx === null}
+    <!-- Do not render anything! -->
+{:else if ctx.inviteModal === ActiveMenu.CreateInvite && currentOffice}
+    <Modal title="Invite User" showModal>
+            <InviteForm />
+    </Modal>
+{:else if ctx.inviteModal === ActiveMenu.RevokeInvite && ctx.email !== null && ctx.office !== null}
+    <Modal title="Remove Invitation" showModal>
+            <RevokeInvite
+                on:done={resetContext}
+                email={ctx.email}
+                office={ctx.office}
+            />
+    </Modal>
+{:else if ctx.contextMenu && ctx.email !== null && currentOffice}
+    <InviteContext
+        show
+        on:done={resetContext}
+        on:removeInvitation={openRevokeInvite.bind(null, ctx.email, currentOffice)}
+    />
 {/if}

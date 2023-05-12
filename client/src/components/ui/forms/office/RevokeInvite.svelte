@@ -1,11 +1,12 @@
 <script lang="ts">
+    import { createEventDispatcher } from 'svelte';
     import { Invitation } from '~model/invitation';
     import { Office } from '~model/office';
 
     import { assert } from '../../../../assert.ts';
 
     import { Invite } from '../../../../api/invite.ts';
-    import { ButtonType, IconColor } from '../../../types.ts';
+    import { ButtonType, IconColor, Events } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
@@ -28,12 +29,14 @@
                 email,
             });
             await inviteList.reload?.();
+            dispatch(Events.Done)
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
 
+    const dispatch = createEventDispatcher()
 </script>
 
 <p> Are you sure you want to remove the invitation for {email} in {officeName}?</p>

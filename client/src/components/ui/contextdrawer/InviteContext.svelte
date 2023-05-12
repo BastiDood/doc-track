@@ -9,15 +9,14 @@
 
     const dispatch = createEventDispatcher();
     export let show = false as boolean;
-    export let payload: InvitePayload;
     export let iconSize = IconSize.Normal;
 </script>
 
-<ContextTemplate bind:show>
-    <ContextElement on:click={() => dispatch(Events.RemoveInvitation, payload)}>
+<ContextTemplate on:close bind:show>
+    <ContextElement on:click={() => dispatch(Events.RemoveInvitation)}>
         <div slot="contextIcon">
             <Close size={iconSize} alt="Cancel Invitation" />
-            Revoke invite of <b>{payload.email}</b>
+            Cancel Invitation
         </div>
     </ContextElement>
 </ContextTemplate>
