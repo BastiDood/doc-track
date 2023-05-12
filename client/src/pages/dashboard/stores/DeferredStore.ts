@@ -7,7 +7,7 @@ import { assert } from '../../../assert.ts';
 import { topToastMessage } from './ToastStore.ts';
 import { z } from 'zod';
 
-const { subscribe, update, reset } = asyncWritable(
+const deferStore = asyncWritable(
     [],
     async() => {
         // Get all keys in the localStorage and resolve all of them and set as contents of this store.
@@ -25,14 +25,15 @@ const { subscribe, update, reset } = asyncWritable(
 );
 
 export const deferredSnaps = {
-    subscribe,
+    subscribe: deferStore.subscribe,
+    reset: deferStore.reset?.bind(deferStore),
     onDocumentSync(evt: MessageEvent) {
         assert(z.string().parse(evt.data) === 'sync');
         topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
-        reset?.();
+        deferStore.reset?.();
     },
     async upsert(insert: DeferredSnapshot) {
-        await update(snaps=>{
+        await deferStore.update.call(null, snaps=>{
             const maybeIndex = snaps.findIndex(snap => snap.doc === insert.doc);
             if (maybeIndex >= 0) snaps.splice(maybeIndex, 1);
             return [...snaps, insert];
