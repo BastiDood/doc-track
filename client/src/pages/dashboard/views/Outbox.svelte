@@ -26,15 +26,15 @@
     $: ({ currentOffice } = $dashboardState);
 
     function openContext(doc: Document['id']) {
-        ctx = {docId: doc, mode: null, context: true};
+        ctx = { docId: doc, mode: null, context: true };
     }
 
     function openInsertSnapshot(doc: Document['id'], mode: Status) {
-        ctx = {docId: doc, mode: mode, context: false}
+        ctx = { docId: doc, mode: mode, context: false };
     }
 
     function openCreateDocument() {
-        ctx = {docId: null, mode: Status.Register, context: false};
+        ctx = { docId: null, mode: Status.Register, context: false };
     }
 
 

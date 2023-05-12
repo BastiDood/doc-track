@@ -3,7 +3,7 @@
 
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { GlobalPersonPayload, IconSize, Events, RowType } from '../../types.ts';
+    import { IconSize, Events } from '../../types.ts';
     import { User } from '../../../../../model/src/user.ts';
     export let iconSize: IconSize;
     

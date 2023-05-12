@@ -18,7 +18,7 @@
 
     enum ActiveMenu {
         ContextInbox,
-        ContextAccept, 
+        ContextAccept,
     }
 
     interface Context {
@@ -32,15 +32,15 @@
     $: ({ currentOffice } = $dashboardState);
     
     function openInsertSnapshot(doc: Document['id'], mode: Status) {
-        ctx = {docId: doc, mode: mode, context: null};
-    };
+        ctx = { docId: doc, mode: mode, context: null };
+    }
 
     function openCreateDocument() {
-        ctx = {docId: null, mode: Status.Register, context: null};
+        ctx = { docId: null, mode: Status.Register, context: null };
     }
 
     function setOpenedContext(doc: Document['id'], context: ActiveMenu) {
-        ctx = {docId: doc, mode: null, context: context};
+        ctx = { docId: doc, mode: null, context: context };
     }
 
     function resetContext() {

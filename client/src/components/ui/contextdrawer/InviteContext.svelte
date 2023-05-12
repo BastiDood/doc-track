@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
 
-    import { Events, InvitePayload, IconSize } from '../../types.ts';
+    import { Events, IconSize } from '../../types.ts';
     import ContextTemplate from '../contextmenu/ContextTemplate.svelte';
     import ContextElement from '../contextmenu/ContextElement.svelte';
 

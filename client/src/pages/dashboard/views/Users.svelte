@@ -1,7 +1,7 @@
 <script lang="ts">
     import { userList } from '../stores/UserStore';
 
-    import { IconSize, PersonPayload, RowType, Events } from '../../../components/types';
+    import { IconSize } from '../../../components/types';
     import { User } from '~model/user';
     import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
@@ -18,10 +18,10 @@
     let ctx = null as Context | null;
 
     function openContext(id: User['id'], permissions: User['permission']) {
-        ctx = {id: id, permissions: permissions, context: true, showEdit: false}
+        ctx = { id: id, permissions: permissions, context: true, showEdit: false };
     }
 
-    function openEditGlobal(ctxcpy: ctx) {
+    function openEditGlobal(ctxcpy: Context) {
         ctxcpy.context = false;
         ctxcpy.showEdit = true;
         ctx = ctxcpy;

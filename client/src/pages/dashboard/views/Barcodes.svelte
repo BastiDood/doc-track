@@ -1,7 +1,6 @@
 <script lang="ts">
     import { assert } from '../../../assert.ts';
     import { Batch } from '../../../api/batch.ts';
-    import { BarcodeMetrics } from '~model/api.ts';
 
     import { earliestBatch } from '../stores/BatchStore.ts';
     import { dashboardState } from '../stores/DashboardState.ts';

@@ -2,7 +2,7 @@
     import { createEventDispatcher } from 'svelte';
     import { checkPerms } from './util.ts';
     import { assert } from '../../../../assert.ts';
-    import { Events, IconColor, PersonPayload } from '../../../types.ts';
+    import { Events, IconColor } from '../../../types.ts';
     import { Staff as Api } from '../../../../api/staff.ts';
     import { Staff } from '~model/staff.ts';
     import { User } from '~model/user.ts';
@@ -50,7 +50,7 @@
 
             // Reload the staffList store
             await staffList.reload?.();
-            dispatch(Events.Done)
+            dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });

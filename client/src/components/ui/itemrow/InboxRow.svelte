@@ -3,7 +3,7 @@
     import DocumentBlank from '../../icons/DocumentBlank.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { IconSize, ContextPayload, RowType, Events } from '../../types.ts';
+    import { IconSize, Events } from '../../types.ts';
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';

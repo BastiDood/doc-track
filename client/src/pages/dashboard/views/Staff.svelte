@@ -5,7 +5,7 @@
     import { Staff } from '~model/staff';
     import { User } from '~model/user';
 
-    import { IconSize, PersonPayload, RowType, Events } from '../../../components/types';
+    import { IconSize } from '../../../components/types';
     import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
@@ -33,7 +33,7 @@
     let ctx = null as Context | null;
 
     function openContextMenu(id: Staff['user_id'], office: Staff['office'], email: User['email'], permission: Staff['permission']) {
-        ctx = {id: id, office: office, email: email, permission: permission, showContext: true, activeMenu: null}
+        ctx = { id: id, office: office, email: email, permission: permission, showContext: true, activeMenu: null };
     }
 
     function openEditStaff(ctxcpy: Context) {
@@ -45,12 +45,12 @@
     function openRemoveStaff(ctxcpy: Context) {
         ctxcpy.showContext = false;
         ctxcpy.activeMenu = ActiveMenu.RemoveStaff;
-        ctx = ctxcpy
+        ctx = ctxcpy;
     }
 
     function resetContext() {
         ctx = null;
-    } 
+    }
 </script>
 
 {#if currentOffice === null}

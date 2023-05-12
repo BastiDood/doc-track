@@ -1,7 +1,7 @@
 <script lang="ts">
     import { dashboardState } from '../stores/DashboardState';
     import { inviteList } from '../../../pages/dashboard/stores/InviteStore.ts';
-    import { RowType, InvitePayload, IconColor, IconSize } from '../../../components/types.ts';
+    import { IconColor, IconSize } from '../../../components/types.ts';
 
     import Button from '../../../components/ui/Button.svelte';
     import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
@@ -27,15 +27,15 @@
     let ctx = null as Context | null;
 
     function openContextMenu(email: Invitation['email'], office: Invitation['office']) {
-        ctx = {email: email, office: office, contextMenu: true, inviteModal: null}
+        ctx = { email: email, office: office, contextMenu: true, inviteModal: null };
     }
 
     function openRevokeInvite(email: Invitation['email'], office: Invitation['office']) {
-        ctx = {email: email, office: office, contextMenu: false, inviteModal: ActiveMenu.RevokeInvite}
+        ctx = { email: email, office: office, contextMenu: false, inviteModal: ActiveMenu.RevokeInvite };
     }
 
     function openCreateInvite() {
-        ctx = {email: null, office: null, contextMenu: null, inviteModal: ActiveMenu.CreateInvite}
+        ctx = { email: null, office: null, contextMenu: null, inviteModal: ActiveMenu.CreateInvite };
     }
     function resetContext() {
         ctx = null;

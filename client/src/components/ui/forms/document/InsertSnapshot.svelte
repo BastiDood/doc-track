@@ -51,12 +51,12 @@
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
             await reloadMetrics();
-            dispatch(Events.Done)
+            dispatch(Events.Done);
         } catch (err) {
             if (err instanceof DeferredSnap) {
                 await deferredSnaps.upsert({ status: Status.Register, doc: docId });
                 topToastMessage.enqueue({ title: err.name, body: `${docId} is deferred.` });
-                dispatch(Events.Done)
+                dispatch(Events.Done);
                 return;
             }
             assert(err instanceof Error);

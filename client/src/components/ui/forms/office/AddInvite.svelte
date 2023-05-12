@@ -15,7 +15,7 @@
 
     let email = '';
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher();
     async function handleSubmit(this: HTMLFormElement) {
         // Computes permissions
         let permission = 0;
@@ -37,7 +37,7 @@
             await Invite.add({ email, office, permission });
             await inviteList.reload?.();
             this.reset();
-            dispatch(Events.Done)
+            dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });

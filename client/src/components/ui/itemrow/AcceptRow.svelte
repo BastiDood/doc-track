@@ -4,7 +4,7 @@
     import DocumentImport from '../../icons/DocumentImport.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { ContextPayload, RowType, IconSize, Events } from '../../types.ts';
+    import { IconSize, Events } from '../../types.ts';
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';

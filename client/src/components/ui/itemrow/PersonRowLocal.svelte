@@ -4,7 +4,7 @@
 
     import RowTemplate from '../RowTemplate.svelte';
 
-    import { PersonPayload, IconSize, Events, RowType } from '../../types.ts';
+    import { IconSize, Events } from '../../types.ts';
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
     import { User } from '../../../../../model/src/user.ts';
     import { Staff } from '../../../../../model/src/staff.ts';

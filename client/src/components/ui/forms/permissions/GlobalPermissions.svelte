@@ -3,7 +3,7 @@
     import { checkPerms } from './util.ts';
     import { assert } from '../../../../assert.ts';
 
-    import { User as Api} from '../../../../api/user.ts';
+    import { User as Api } from '../../../../api/user.ts';
     import { IconColor, Events } from '../../../types.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
     import { User } from '~model/user.ts';
@@ -18,7 +18,7 @@
     export let id: Staff['user_id'];
     export let permission: User['permission'];
 
-    const dispatch = createEventDispatcher()
+    const dispatch = createEventDispatcher();
 
     async function handleSubmit(this: HTMLFormElement) {
         // Recompute permissions before submitting
