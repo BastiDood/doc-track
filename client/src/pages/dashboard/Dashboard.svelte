@@ -22,7 +22,7 @@
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '[No Office]';
 
-    function onSync(evt: MessageEvent) {
+    function onSync(evt: MessageEvent<string>) {
         deferredSnaps.onDocumentSync(evt);
     }
 </script>
