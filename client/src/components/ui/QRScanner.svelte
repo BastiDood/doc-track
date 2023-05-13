@@ -1,10 +1,10 @@
 <script lang="ts">
     import QrScanner from 'qr-scanner';
-    import z from 'zod';
+    import { z } from 'zod';
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
     import { Events, ButtonType } from '../types';
     import { assert } from '../../assert';
-    import { Document } from '~model/document';
+    import { Document, DocumentSchema } from '../../../../model/src/document.ts';
 
     import { topToastMessage } from '../../pages/dashboard/stores/ToastStore';
     import Button from './Button.svelte';
@@ -33,7 +33,8 @@
         assert(typeof first !== 'undefined');
         try {
             const scanData = await QrScanner.scanImage(first, { returnDetailedScanResult: true });
-            maybeId = z.string().parse(scanData.data);
+            if (scanData.data === '') return;
+            maybeId = DocumentSchema.shape.id.parse(scanData.data.trim());
             dispatch(Events.OnDocumentScan, maybeId);
         } catch (err) {
             topToastMessage.enqueue({ title: 'Failed to Find QR code', body: JSON.stringify(err) });
@@ -48,13 +49,18 @@
         return new QrScanner(
             videoElement,
             result => {
-                maybeId = z.string().parse(result.data);
+                if (result.data === '') return;
+                maybeId = DocumentSchema.shape.id.parse(result.data.trim());
                 stopCamera();
                 dispatch(Events.OnDocumentScan, maybeId);
             }, {
                 highlightCodeOutline: true,
                 highlightScanRegion: true,
-                onDecodeError: (err) => topToastMessage.enqueue({ title: 'Failed to Find QR code', body: JSON.stringify(err) }),
+                onDecodeError: (err) => {
+                    if (err === 'No QR code found') return;
+                    topToastMessage.enqueue({ title: 'Failed to Find QR code', body: JSON.stringify(err) });
+                },
+                maxScansPerSecond: 1,
                 returnDetailedScanResult: true,
             }
         );
@@ -88,18 +94,17 @@
         {/if}
 {/await}
 <header>
-    Select an ID from a file: <input on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
+    Upload a file with the QR code: <input on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
 </header>
 <section>
     {#if maybeId === null || maybeId === ''} 
         No valid QR code dectected
-    {:else}
-        Read code {maybeId}
     {/if}
 </section>
 
 <style>
     video {
         height: 400px;   
+        border: var(--primary-color) var(--spacing-normal);
     }
 </style>
