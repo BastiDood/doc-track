@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import Button from '../components/ui/Button.svelte';
 
     import { register } from './register.ts';
@@ -8,8 +8,11 @@
     import Camera from '../components/icons/Camera.svelte';
     import Search from '../components/icons/Search.svelte';
     import TextInput from '../components/ui/TextInput.svelte';
+    import Modal from '../components/ui/Modal.svelte';
+    import QrScanner from '../components/ui/QRScanner.svelte';
 
     const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
+    let showScan = false as boolean;
 
     let trackingNumber = '';
 </script>
@@ -25,14 +28,19 @@
                 <Button type={ButtonType.Primary}><Google color={IconColor.White} alt="Log in with UP Mail" />Log in with University of the Philippines Mail</Button>
             </a>
             <div class="search-container">
-                <TextInput type={InputType.Primary} placeholder="Enter tracking number here..." label="Tracking Number:" bind:value={trackingNumber} />
-                <Button type={ButtonType.Primary}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
+                <TextInput placeholder="Enter tracking number here..." label="Tracking Number:" name="track-number" bind:value={trackingNumber} />
+                <Button type={ButtonType.Primary} on:click={() => showScan = true}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
                 <a href={`/track?id=${trackingNumber}`}>
                     <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
                 </a>
             </div>
         </div>
     {/await}
+    {#if showScan}
+        <Modal showModal title="Scan/Select a File">
+            <QrScanner/>
+        </Modal>
+    {/if}
 </main>
 
 <style>
