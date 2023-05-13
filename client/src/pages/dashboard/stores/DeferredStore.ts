@@ -43,5 +43,4 @@ export const deferredSnaps = {
     },
 };
 
-export const deferRegistrationCount = derived(deferredSnaps, $deferredSnaps =>
-    $deferredSnaps.reduce((total, { status }) => total + Number(status === Status.Register), 0));
+export const deferRegistrationCount = derived(deferredSnaps, $deferredSnaps => $deferredSnaps.reduce((total, { status }) => total + Number(status === Status.Register), 0));
