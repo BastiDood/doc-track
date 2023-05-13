@@ -13,6 +13,15 @@
     import Notification from '../../components/icons/Notification.svelte';
     import PrintQr from '../../components/ui/qr/PrintQr.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
+    import type { PaperTrail } from '../../../../model/src/api.ts';
+    import { ButtonType } from '../../components/types.ts';
+    import { Document } from '../../api/document.ts';
+    import { allOffices } from './../dashboard/stores/OfficeStore.ts';
+    import { assert } from '../../assert.ts';
+
+    import { goToTrackingPage } from '../../components/ui/itemrow/util.ts';
+    import QrScanner from '../../components/ui/QRScanner.svelte';
+    import Modal from '../../components/ui/Modal.svelte';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
