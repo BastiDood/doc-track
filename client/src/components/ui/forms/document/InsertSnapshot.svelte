@@ -54,7 +54,7 @@
             dispatch(Events.Done);
         } catch (err) {
             if (err instanceof DeferredSnap) {
-                await deferredSnaps.upsert({ status: status, doc: docId });
+                await deferredSnaps.upsert({ status, doc: docId });
                 topToastMessage.enqueue({ title: err.name, body: `${docId} is deferred.` });
                 dispatch(Events.Done);
                 return;
