@@ -3,6 +3,7 @@
     import { Office } from '~model/office.ts';
     import { userOffices } from '../../../pages/dashboard/stores/UserStore.ts';
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
+    import { goToTrackingPage } from '../itemrow/util.ts';
 
     import InboxIcon from '../../icons/DocumentDownload.svelte';
     import OutboxIcon from '../../icons/DocumentExport.svelte';
@@ -18,13 +19,18 @@
 
     export let show = false;
 
-    import { ButtonType } from '../../types.ts';
+    import { ButtonType, IconColor } from '../../types.ts';
+    import QrScanner from '../QRScanner.svelte';
+    import Modal from '../Modal.svelte';
     import TextInput from '../../ui/TextInput.svelte';
     import Button from '../../ui/Button.svelte';
     import Search from '../../icons/Search.svelte';
+    import Camera from '../../icons/Camera.svelte';
     let trackingNumber: string | null = '';
 
     let selectedOffice: Office['id'] | null = null;
+    let showScan = false;
+
     $: dashboardState.setOffice(selectedOffice);
 </script>
 
@@ -36,11 +42,10 @@
             {:else}
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
-            <div class="noflex">
-            <TextInput placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
-            <a href={`/track?id=${trackingNumber}`}>
-                <Button type={ButtonType.Primary}><Search alt="Search specified tracking number."/></Button>
-            </a>
+            <div>
+                <Button type={ButtonType.Primary} on:click={() => {showScan = true;} }><Camera color={IconColor.White} alt="Take/select an image." /></Button>
+                <TextInput placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
+                <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number."/></Button>
             </div>
         </header>
         <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
@@ -58,6 +63,13 @@
         <input type="submit" value="Logout" />
     </form>
 </nav>
+
+{#if showScan}
+<Modal showModal on:close={() => {showScan = false;} } title="Scan/Select a File">
+    <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber}/>
+</Modal>
+{/if}
+
 <style>
     @import url('../../../pages/vars.css');
 
@@ -113,8 +125,9 @@
         border-right: var(--spacing-small) solid var(--primary-color);
     }
 
-    .noflex {
-        display: inline-block;
-        flex-direction: row;
+    div {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
     }
 </style>
