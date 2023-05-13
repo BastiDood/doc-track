@@ -1,12 +1,20 @@
 <script lang="ts">
     import QrScanner from 'qr-scanner';
+    import { createEventDispatcher } from 'svelte';
+    import { Events } from '../types';
     import { assert } from '../../assert';
     import { Document } from '~model/document';
     import Button from './Button.svelte';
     import { ButtonType } from '../types';
     import { topToastMessage } from '../../pages/dashboard/stores/ToastStore';
     import z from 'zod'
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
+
+    export let maybeId = null as Document['id'] | null;
+
+    const dispatch = createEventDispatcher();
+    let camStart = false as boolean;
+    let qrScanner = null as QrScanner | null;
 
     function setup() {
         const videoElement = document.getElementById('scan');
@@ -15,8 +23,13 @@
 
         return new QrScanner(
             videoElement, 
-            result => maybeId = z.string().parse(result.data), {
+            result => {
+                maybeId = z.string().parse(result.data)
+                stopCamera();
+                dispatch(Events.OnDocumentScan, maybeId)
+            }, {
                 highlightCodeOutline: true,
+                highlightScanRegion: true,
                 onDecodeError: (err) => topToastMessage.enqueue({title: 'Failed to Find QR code', body: JSON.stringify(err)}),
                 returnDetailedScanResult: true,
             }
@@ -47,13 +60,16 @@
         }
         uploadElement.value = '';
     }
-    let camStart = false as boolean;
-
+    
     onMount(() => {
+        //Needs to be here so that the <video> tag is rendered before it is assereted
         qrScanner = setup();
     })
-    let qrScanner = null as QrScanner | null;
-    export let maybeId = null as Document['id'] | null;
+
+    onDestroy(() => {
+        //Otherwise, when the window is closed - browser still thinks you are recording.
+        stopCamera();
+    })
 </script>
 
 <video id='scan'><track kind="captions"></video>
@@ -82,3 +98,9 @@
         Read code {maybeId}
     {/if}
 </section>
+
+<style>
+    video {
+        height: 400px;   
+    }
+</style>
