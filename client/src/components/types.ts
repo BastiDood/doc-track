@@ -35,6 +35,7 @@ export enum RowType {
 }
 
 export enum Events {
+    OnDocumentScan = 'onDocumentScan',
     Done = 'done',
     OverflowClick = 'overflowClick',
     AcceptDocument = 'acceptDocument',
