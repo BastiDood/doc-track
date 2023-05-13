@@ -29,7 +29,7 @@
                 documentRemark: last.remark,
                 status: first.status,
                 origin: first.target === null ? null : allOffices[first.target] ?? null,
-                current: last.target === null ? null : allOffices[last.target] ?? null,
+                current: last.status,
             };
 
         assert(typeof first !== 'undefined' && typeof last === 'undefined');
