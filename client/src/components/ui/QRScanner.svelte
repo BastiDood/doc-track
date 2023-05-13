@@ -1,14 +1,13 @@
 <script lang="ts">
     import QrScanner from 'qr-scanner';
-    import { createEventDispatcher } from 'svelte';
-    import { Events } from '../types';
+    import z from 'zod';
+    import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+    import { Events, ButtonType } from '../types';
     import { assert } from '../../assert';
     import { Document } from '~model/document';
-    import Button from './Button.svelte';
-    import { ButtonType } from '../types';
+
     import { topToastMessage } from '../../pages/dashboard/stores/ToastStore';
-    import z from 'zod'
-    import { onDestroy, onMount } from 'svelte';
+    import Button from './Button.svelte';
 
     export let maybeId = null as Document['id'] | null;
 
@@ -16,29 +15,9 @@
     let camStart = false as boolean;
     let qrScanner = null as QrScanner | null;
 
-    function setup() {
-        const videoElement = document.getElementById('scan');
-        console.log(videoElement)
-        assert(videoElement instanceof HTMLVideoElement);
-
-        return new QrScanner(
-            videoElement, 
-            result => {
-                maybeId = z.string().parse(result.data)
-                stopCamera();
-                dispatch(Events.OnDocumentScan, maybeId)
-            }, {
-                highlightCodeOutline: true,
-                highlightScanRegion: true,
-                onDecodeError: (err) => topToastMessage.enqueue({title: 'Failed to Find QR code', body: JSON.stringify(err)}),
-                returnDetailedScanResult: true,
-            }
-        )
-    }
-
     async function startCamera() {
         camStart = true;
-        return qrScanner?.start();
+        await qrScanner?.start();
     }
 
     function stopCamera() {
@@ -50,26 +29,46 @@
         const uploadElement = document.getElementById('file-selector');
         assert(uploadElement instanceof HTMLInputElement);
         assert(uploadElement.files instanceof FileList);
-        const [first, ..._] =  uploadElement.files;
+        const [first] = uploadElement.files;
         assert(typeof first !== 'undefined');
         try {
-            const scanData =  await QrScanner.scanImage(first, {returnDetailedScanResult: true})
-            maybeId = z.string().parse(scanData.data)
+            const scanData = await QrScanner.scanImage(first, { returnDetailedScanResult: true });
+            maybeId = z.string().parse(scanData.data);
+            dispatch(Events.OnDocumentScan, maybeId);
         } catch (err) {
-            topToastMessage.enqueue({title: 'Failed to Find QR code', body: JSON.stringify(err)})
+            topToastMessage.enqueue({ title: 'Failed to Find QR code', body: JSON.stringify(err) });
         }
         uploadElement.value = '';
     }
+
+    function setup() {
+        const videoElement = document.getElementById('scan');
+        assert(videoElement instanceof HTMLVideoElement);
+
+        return new QrScanner(
+            videoElement,
+            result => {
+                maybeId = z.string().parse(result.data);
+                stopCamera();
+                dispatch(Events.OnDocumentScan, maybeId);
+            }, {
+                highlightCodeOutline: true,
+                highlightScanRegion: true,
+                onDecodeError: (err) => topToastMessage.enqueue({ title: 'Failed to Find QR code', body: JSON.stringify(err) }),
+                returnDetailedScanResult: true,
+            }
+        );
+    }
     
     onMount(() => {
-        //Needs to be here so that the <video> tag is rendered before it is assereted
+        // Needs to be here so that the <video> tag is rendered before it is asserted
         qrScanner = setup();
-    })
+    });
 
     onDestroy(() => {
-        //Otherwise, when the window is closed - browser still thinks you are recording.
+        // Otherwise, when the window is closed - browser still thinks you are recording.
         stopCamera();
-    })
+    });
 </script>
 
 <video id='scan'><track kind="captions"></video>
@@ -92,7 +91,7 @@
     Select an ID from a file: <input on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
 </header>
 <section>
-    {#if maybeId === null} 
+    {#if maybeId === null || maybeId === ''} 
         No valid QR code dectected
     {:else}
         Read code {maybeId}

@@ -1,8 +1,8 @@
 <script lang="ts">
     import Button from '../components/ui/Button.svelte';
-
+    import { goToTrackingPage } from '../components/ui/itemrow/util.ts';
     import { register } from './register.ts';
-    import { ButtonType, InputType, IconColor } from '../components/types.ts';
+    import { ButtonType, IconColor } from '../components/types.ts';
 
     import Google from '../components/icons/Google.svelte';
     import Camera from '../components/icons/Camera.svelte';
@@ -29,7 +29,7 @@
             </a>
             <div class="search-container">
                 <TextInput placeholder="Enter tracking number here..." label="Tracking Number:" name="track-number" bind:value={trackingNumber} />
-                <Button type={ButtonType.Primary} on:click={() => showScan = true}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
+                <Button type={ButtonType.Primary} on:click={() => {showScan = true;} }><Camera color={IconColor.White} alt="Take/select an image." /></Button>
                 <a href={`/track?id=${trackingNumber}`}>
                     <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
                 </a>
@@ -37,8 +37,8 @@
         </div>
     {/await}
     {#if showScan}
-        <Modal showModal title="Scan/Select a File">
-            <QrScanner/>
+        <Modal showModal on:close={() => {showScan = false;} } title="Scan/Select a File">
+            <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber}/>
         </Modal>
     {/if}
 </main>
