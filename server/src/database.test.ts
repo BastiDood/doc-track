@@ -449,42 +449,42 @@ Deno.test('full OAuth flow', async t => {
         const newOffice = await db.createOfficeWithSuperuser(USER.id, 'Cool Office');
         assertNotStrictEquals(newOffice, 1);
 
-        await t.step('send to new office, recieve, and return', async() => {
+        await t.step('send to new office, recieve, and return', async () => {
             // Send to newly created office
-            let snapshot = {
+            const snapshotSend = {
                 doc: chosen,
                 target: newOffice,
                 evaluator: USER.id,
                 status: Status.Send,
                 remark: 'Sent to the new office!',
             };
-            const send = await db.insertSnapshot(snapshot);
+            const send = await db.insertSnapshot(snapshotSend);
             assertInstanceOf(send, Date);
 
             // Newly created office accepts the document
-            snapshot = {
+            const snapshotReceive = {
                 doc: chosen,
                 target: newOffice,
                 evaluator: USER.id,
                 status: Status.Receive,
                 remark: 'I got it!',
             };
-            const accept = await db.insertSnapshot(snapshot);
+            const accept = await db.insertSnapshot(snapshotReceive);
             assertInstanceOf(accept, Date);
 
             // Newly created office resends the document.
-            snapshot = {
+            const snapshotReturn = {
                 doc: chosen,
                 target: office,
                 evaluator: USER.id,
                 status: Status.Send,
                 remark: 'Hold up, back to you.',
             };
-            const ret = await db.insertSnapshot(snapshot);
+            const ret = await db.insertSnapshot(snapshotReturn);
             assertInstanceOf(ret, Date);
         });
 
-        await t.step('check local metrics sanity', async() => {
+        await t.step('check local metrics sanity', async () => {
             // Check summaries of the first office.
             const local = await db.generateLocalSummary(office);
             assertStrictEquals(local.Register, 1);
@@ -499,7 +499,7 @@ Deno.test('full OAuth flow', async t => {
             assertStrictEquals(recipient.Receive, 1);
             assertStrictEquals(recipient.Terminate, undefined);
         });
-    })
+    });
 
     await t.step('fully populate the batch - cleanup', async () => {
 

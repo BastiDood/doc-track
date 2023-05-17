@@ -436,10 +436,10 @@ export class Database {
         const { rows : [first, ...rest] } = await this.#client
             .queryObject`
             WITH mostRecentSnaps AS (
-                SELECT doc, MAX(creation) AS creation FROM snapshot
+                SELECT doc,MAX(creation) AS creation FROM snapshot
                 GROUP BY doc
             ), register AS (
-                SELECT status, json_agg(json_build_object('doc', m.doc, 'creation', m.creation, 'title', d.title, 'category', c.name ,'status', status, 'target', target)) AS info FROM mostRecentSnaps as m
+                SELECT status,json_agg(json_build_object('doc', m.doc, 'creation', m.creation, 'title', d.title, 'category', c.name ,'status', status, 'target', target)) AS info FROM mostRecentSnaps as m
                     INNER JOIN snapshot AS s ON m.creation = s.creation
                     INNER JOIN document AS d ON m.doc = d.id
                     INNER JOIN category AS c ON d.category = c.id
@@ -683,21 +683,21 @@ export class Database {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`
             WITH officeTarget AS (
-                SELECT s.status, COUNT(s.status) AS amount
+                SELECT s.status,COUNT(s.status) AS amount
                     FROM snapshot as s
                 WHERE (s.status = 'Register' OR s.status = 'Receive') AND s.target = ${oid}
                 GROUP BY s.status
             ), backTarget AS (
-                SELECT creation, doc, target, status 
+                SELECT creation,doc,target,status 
                     FROM snapshot as s
                 WHERE s.status = 'Terminate' OR s.status = 'Send'
             ), actualTarget AS (
-                SELECT b.doc, b.creation AS actualCreate, b.status AS actualStatus, MAX(s.creation) as backCreate FROM snapshot as s
+                SELECT b.doc,b.creation AS actualCreate,b.status AS actualStatus,MAX(s.creation) as backCreate FROM snapshot as s
                     INNER JOIN backTarget AS b ON s.doc = b.doc
                 WHERE s.creation < b.creation
-                GROUP BY b.doc, actualCreate, actualStatus
+                GROUP BY b.doc,actualCreate,actualStatus
             ), increment AS (
-                SELECT actualStatus, COUNT(actualStatus) AS amount FROM actualTarget
+                SELECT actualStatus,COUNT(actualStatus) AS amount FROM actualTarget
                     INNER JOIN snapshot AS s ON backcreate = s.creation
                 WHERE s.target = ${oid}
                 GROUP BY actualStatus
