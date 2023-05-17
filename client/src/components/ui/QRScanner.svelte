@@ -39,6 +39,7 @@
         } catch (err) {
             topToastMessage.enqueue({ title: 'Failed to Find QR code', body: JSON.stringify(err) });
         }
+        // eslint-disable-next-line require-atomic-updates
         uploadElement.value = '';
     }
 
