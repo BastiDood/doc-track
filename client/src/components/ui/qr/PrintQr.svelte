@@ -4,6 +4,7 @@
     import Modal from '../Modal.svelte';
     import QrGenerator from './QrGenerator.svelte';
     import { ButtonType } from '../../types.ts';
+    import Checkmark from '../../icons/Checkmark.svelte';
     
 
     export let trackingNumber: string;
@@ -23,7 +24,7 @@
     <span id="bottom">
         <Button submit><DownloadButton alt="Download QR"/> Download QR</Button>
         <Button type={ButtonType.Primary} on:click={() => (window.print())}>Print</Button>
-        <a href={trackingUrl}><Button type={ButtonType.Primary}>Go to Tracking Page</Button></a>
+        <a href={trackingUrl}><Button type={ButtonType.Primary}><Checkmark alt="Checkmark" />Go to Tracking Page</Button></a>
     </span>
 </Modal>
 
