@@ -432,6 +432,77 @@ Deno.test('full OAuth flow', async t => {
         });
     });
 
+    await t.step('exhaustive local metrics test', async t => {
+        //Accept the latest sent document.
+        await t.step('accept the latest sent document', async () => {
+            const snapshot = {
+                doc: chosen,
+                target: office,
+                evaluator: USER.id,
+                status: Status.Receive,
+                remark: 'Hello world!',
+            };
+            const recieve = await db.insertSnapshot(snapshot);
+            assertInstanceOf(recieve, Date);
+        });
+        
+        const newOffice = await db.createOfficeWithSuperuser(USER.id, 'Cool Office')
+
+        //Create another office to recieve the document
+        await t.step('create recepient office', async() => {
+            assertNotStrictEquals(newOffice, 1);
+        });
+
+        await t.step('send to new office, recieve, and return', async() => {
+            // Send to newly created office
+            let snapshot = {
+                doc: chosen,
+                target: newOffice,
+                evaluator: USER.id,
+                status: Status.Send,
+                remark: 'Sent to the new office!',
+            };
+            const send = await db.insertSnapshot(snapshot);
+            assertInstanceOf(send, Date);
+
+            // Newly created office accepts the document
+            snapshot = {
+                doc: chosen,
+                target: newOffice,
+                evaluator: USER.id,
+                status: Status.Receive,
+                remark: 'I got it!',
+            };
+            const accept = await db.insertSnapshot(snapshot);
+            assertInstanceOf(accept, Date);
+
+            // Newly created office resends the document.
+            snapshot = {
+                doc: chosen,
+                target: office,
+                evaluator: USER.id,
+                status: Status.Send,
+                remark: 'Hold up, back to you.',
+            };
+            const ret = await db.insertSnapshot(snapshot);
+            assertInstanceOf(ret, Date);
+        });
+
+        await t.step('check local metrics sanity', async() => {
+            const local = await db.generateLocalSummary(office);
+            assertStrictEquals(local.Register, 1);
+            assertStrictEquals(local.Send, 2);
+            assertStrictEquals(local.Receive, 1);
+            assertStrictEquals(local.Terminate, undefined);
+
+            const recipient = await db.generateLocalSummary(newOffice);
+            assertStrictEquals(recipient.Register, undefined);
+            assertStrictEquals(recipient.Send, 1);
+            assertStrictEquals(recipient.Receive, 1);
+            assertStrictEquals(recipient.Terminate, undefined);
+        });
+    })
+
     await t.step('fully populate the batch - cleanup', async () => {
 
         // Assign barcodes to documents

@@ -681,13 +681,31 @@ export class Database {
 
     async generateLocalSummary(oid: Office['id']): Promise<Metrics> {
         const { rows: [ first, ...rest ] } = await this.#client
-            .queryObject`WITH _ AS (
-                SELECT s.status,COUNT(s.status) AS amount
-                    FROM snapshot AS s
-                    INNER JOIN barcode AS bar ON s.doc = bar.code
-                    INNER JOIN batch AS bch ON bar.batch = bch.id
-                WHERE bch.office = ${oid} GROUP BY s.status
-            ) SELECT coalesce(json_object_agg(status,amount),'{}') AS result FROM _;`;
+            .queryObject`
+            WITH officeTarget AS (
+                SELECT s.status, COUNT(s.status) AS amount
+                    FROM snapshot as s
+                WHERE (s.status = 'Register' OR s.status = 'Receive') AND s.target = ${oid}
+                GROUP BY s.status
+            ), backTarget AS (
+                SELECT creation, doc, target, status 
+                    FROM snapshot as s
+                WHERE s.status = 'Terminate' OR s.status = 'Send'
+            ), actualTarget AS (
+                SELECT b.doc, b.creation AS actualCreate, b.status AS actualStatus, MAX(s.creation) as backCreate FROM snapshot as s
+                    INNER JOIN backTarget AS b ON s.doc = b.doc
+                WHERE s.creation < b.creation
+                GROUP BY b.doc, actualCreate, actualStatus
+            ), increment AS (
+                SELECT actualStatus, COUNT(actualStatus) AS amount FROM actualTarget
+                    INNER JOIN snapshot AS s ON backcreate = s.creation
+                WHERE s.target = ${oid}
+                GROUP BY actualStatus
+            ), combine AS (
+                SELECT * FROM increment
+                UNION
+                SELECT * FROM officeTarget
+            ) SELECT coalesce(json_object_agg(actualStatus,amount),'{}') AS result FROM combine;`;
         assertStrictEquals(rest.length, 0);
         return z.object({ result: MetricsSchema }).parse(first).result;
     }
