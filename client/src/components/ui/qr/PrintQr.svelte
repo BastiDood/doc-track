@@ -6,7 +6,7 @@
     import { ButtonType } from '../../types.ts';
     import Checkmark from '../../icons/Checkmark.svelte';
     
-
+    export let simplified = false;
     export let trackingNumber: string;
     const trackingUrl = `http://localhost:3000/track?id=${trackingNumber}`;
 
@@ -22,8 +22,8 @@
     </center>
     <p>Tracking Number: {trackingNumber}</p>
     <span id="bottom">
-        <Button submit><DownloadButton alt="Download QR"/> Download QR</Button>
-        <Button type={ButtonType.Primary} on:click={() => (window.print())}>Print</Button>
+        <Button submit><DownloadButton alt="Download QR"/>{simplified ? '' : 'Download QR'}</Button>
+        <Button type={ButtonType.Primary} on:click={() => window.print()}>Print</Button>
         <a href={trackingUrl}><Button type={ButtonType.Primary}><Checkmark alt="Checkmark" />Go to Tracking Page</Button></a>
     </span>
 </Modal>
