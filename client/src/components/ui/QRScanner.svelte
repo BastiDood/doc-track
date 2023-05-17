@@ -1,6 +1,5 @@
 <script lang="ts">
     import QrScanner from 'qr-scanner';
-    import { z } from 'zod';
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
     import { Events, ButtonType } from '../types';
     import { assert } from '../../assert';
@@ -98,7 +97,7 @@
 </header>
 <section>
     {#if maybeId === null || maybeId === ''} 
-        No valid QR code dectected
+        No valid QR code detected
     {/if}
 </section>
 
@@ -106,5 +105,6 @@
     video {
         height: 400px;   
         border: var(--primary-color) var(--spacing-normal);
+        display: block;
     }
 </style>
