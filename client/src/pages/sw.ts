@@ -118,8 +118,10 @@ async function handleFetch(req: Request): Promise<Response> {
     } catch (error) {
         assert(error instanceof TypeError);
         const maybeRes = await cache.match(req);
-        assert(maybeRes instanceof Response);
-        return maybeRes;
+        if (maybeRes instanceof Response) {
+            return maybeRes;
+        }
+        return new Response(null, { status: StatusCodes.SERVICE_UNAVAILABLE });
     }
 }
 
