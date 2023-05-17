@@ -38,3 +38,7 @@
 
 <div id="qrcode"></div>
 
+
+{#await QRCode.toDataURL(URL) then dataUrl}
+  <img src={dataUrl} alt="QR Code" />
+{/await}
