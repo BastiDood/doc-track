@@ -5,7 +5,7 @@
     import Button from '../../components/ui/Button.svelte';
     import Notification from '../../components/icons/Notification.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
-    import QrCode from '../../components/ui/qr/QRGenerator.svelte';
+    import QrGenerator from '../../components/ui/QRGenerator.svelte';
 
     import { Document } from '../../api/document.ts';
     import { Vapid } from '../../api/vapid.ts';
@@ -44,6 +44,8 @@
         await Vapid.hookSubscription({ sub: sub.endpoint, doc });
         alert('Successfully subscribed!');
     }
+    const { searchParams } = new URL(location.href);
+    let trackingNumber = searchParams.get('id') ?? '';
 
     function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
         const [first, ...rest] = trail;
