@@ -43,9 +43,9 @@
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
             <div>
-                <Button type={ButtonType.Primary} on:click={() => {showScan = true;} }><Camera color={IconColor.White} alt="Take/select an image." /></Button>
+                <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
                 <TextInput placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
-                <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number."/></Button>
+                <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
             </div>
         </header>
         <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
@@ -65,9 +65,9 @@
 </nav>
 
 {#if showScan}
-<Modal showModal on:close={() => {showScan = false;} } title="Scan/Select a File">
-    <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber}/>
-</Modal>
+    <Modal showModal on:close={() => (showScan = false)} title="Scan/Select a File">
+        <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber} />
+    </Modal>
 {/if}
 
 <style>

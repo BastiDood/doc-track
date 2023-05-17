@@ -29,7 +29,8 @@
             </a>
             <div class="search-container">
                 <TextInput placeholder="Enter tracking number here..." label="Tracking Number:" name="track-number" bind:value={trackingNumber} />
-                <Button type={ButtonType.Primary} on:click={() => {showScan = true;} }><Camera color={IconColor.White} alt="Take/select an image." /></Button>
+                <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
+
                 <a href={`/track?id=${trackingNumber}`}>
                     <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
                 </a>
@@ -37,8 +38,10 @@
         </div>
     {/await}
     {#if showScan}
-        <Modal showModal on:close={() => {showScan = false;} } title="Scan/Select a File">
-            <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber}/>
+        <Modal showModal on:close={() => (showScan = false)} title="Scan/Select a File">
+
+            <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber} />
+
         </Modal>
     {/if}
 </main>
