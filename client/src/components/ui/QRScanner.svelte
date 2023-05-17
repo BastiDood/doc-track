@@ -13,6 +13,8 @@
     const dispatch = createEventDispatcher();
     let camStart = false as boolean;
     let qrScanner = null as QrScanner | null;
+    let videoElement = null as HTMLVideoElement | null;
+    let uploadElement = null as HTMLInputElement | null;
 
     async function startCamera() {
         camStart = true;
@@ -25,7 +27,6 @@
     }
 
     async function handleFileInput() {
-        const uploadElement = document.getElementById('file-selector');
         assert(uploadElement instanceof HTMLInputElement);
         assert(uploadElement.files instanceof FileList);
         const [first] = uploadElement.files;
@@ -42,7 +43,6 @@
     }
 
     function setup() {
-        const videoElement = document.getElementById('scan');
         assert(videoElement instanceof HTMLVideoElement);
 
         return new QrScanner(
@@ -76,7 +76,7 @@
     });
 </script>
 
-<video id='scan'><track kind="captions"></video>
+<video bind:this={videoElement}><track kind="captions"></video>
 {#await QrScanner.hasCamera()}
     Loading cameras.
     {:then hasCamera}
@@ -93,7 +93,7 @@
         {/if}
 {/await}
 <header>
-    Upload a file with the QR code: <input on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
+    Upload a file with the QR code: <input bind:this={fileUpload} on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
 </header>
 <section>
     {#if maybeId === null || maybeId === ''} 
