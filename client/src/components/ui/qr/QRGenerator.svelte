@@ -5,7 +5,7 @@
 	export let squareSize : number; 
 	
   let qrcode;
-			
+  
 	onMount(() => {
 
 		let script = document.createElement('script');
