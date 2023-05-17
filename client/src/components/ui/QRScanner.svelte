@@ -78,28 +78,26 @@
 
 <video bind:this={videoElement}><track kind="captions"></video>
 {#await QrScanner.hasCamera()}
-    Loading cameras.
+    Loading cameras...
     {:then hasCamera}
-        {#if !hasCamera}
-            No cameras detected.
+        {#if hasCamera}
+        <header>
+            {#if camStart}
+                <Button type={ButtonType.Secondary} on:click={() => stopCamera()}> End Capture </Button>
+            {:else}
+                <Button on:click={() => startCamera()}> Start Capture </Button>
+            {/if}
+        </header>
         {:else}
-            <header>
-                {#if camStart}
-                    <Button type={ButtonType.Secondary} on:click={() => stopCamera()}> End Capture </Button>
-                {:else}
-                    <Button on:click={() => startCamera()}> Start Capture </Button>
-                {/if}
-            </header>
+            <p> No cameras available. </p>
         {/if}
 {/await}
 <header>
-    Upload a file with the QR code: <input bind:this={fileUpload} on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
+    Upload a file with the QR code: <input bind:this={uploadElement} on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
 </header>
-<section>
     {#if maybeId === null || maybeId === ''} 
-        No valid QR code detected
+        <p> No valid QR code detected. </p>
     {/if}
-</section>
 
 <style>
     video {
