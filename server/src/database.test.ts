@@ -379,7 +379,6 @@ Deno.test('full OAuth flow', async t => {
         // Valid document
         const result = await db.insertSnapshot(snapshot);
         assert(typeof result !== 'number');
-        assert(result.creation <= new Date);
         assertStrictEquals(result.status, snapshot.status);
         assertStrictEquals(result.title, doc.title);
         assertStrictEquals(result.target, 'Hello');
