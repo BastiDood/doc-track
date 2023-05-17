@@ -22,6 +22,7 @@
     import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
     import TextInput from '../../TextInput.svelte';
+    import QrGenerator from '../../qr/QrGenerator.svelte';
 
     let id: Document['id'] | null = null;
     let category: Category['id'] | null = null;
@@ -59,6 +60,10 @@
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
+        {#if typeof $earliestBatch.codes !== 'undefined' && id !== null}
+            <QrGenerator URL={`http://localhost:3000/track?id=${id}`} />
+            <br>
+        {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
         <br />
         Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
