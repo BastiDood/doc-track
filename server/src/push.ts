@@ -62,8 +62,7 @@ export class WebPush {
         return `WebPush ${token}.${signature}`;
     }
 
-    /** Implements Section 3.4 of RFC 8291 (Message Encryption for Web Push). */
-    async createPushPayload({ endpoint, auth, p256dh }: Omit<PushSubscription, 'expiration'>, payload: PushNotification) {
+    async createPushPayloadWithSalt(rawSalt: Uint8Array, { endpoint, auth, p256dh }: Omit<PushSubscription, 'expiration'>, payload: PushNotification) {
         // Compute the shared secret from the client's public key and the server's (newly generated) private key
         const { privateKey: localPrivateKey, publicKey: localPublicKey } = await crypto.subtle.generateKey(ECDSA, true, [ 'deriveKey' ]);
         const clientPublicKey = await crypto.subtle.importKey('raw', p256dh, HMAC, false, [ 'deriveKey' ]);
@@ -81,7 +80,6 @@ export class WebPush {
         const rawIkm = await crypto.subtle.sign('HMAC', prkKey, keyInfo);
 
         // HKDF-Extract(salt, ikm)
-        const rawSalt = crypto.getRandomValues(new Uint8Array(16));
         const salt = await crypto.subtle.importKey('raw', rawSalt, HMAC, false, [ 'sign' ]);
         const rawPrk = await crypto.subtle.sign('HMAC', salt, rawIkm);
         const prk = await crypto.subtle.importKey('raw', rawPrk, HMAC, false, [ 'sign' ]);
@@ -117,5 +115,11 @@ export class WebPush {
                 'TTL': '10', // arbitrarily selected
             },
         });
+    }
+
+    /** Implements Section 3.4 of RFC 8291 (Message Encryption for Web Push). */
+    createPushPayload(sub: Omit<PushSubscription, 'expiration'>, payload: PushNotification) {
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        return this.createPushPayloadWithSalt(salt, sub, payload);
     }
 }
