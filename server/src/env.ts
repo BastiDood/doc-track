@@ -31,7 +31,6 @@ const PG_POOL = Deno.env.get('PG_POOL');
 const VAPID_PUB_KEY_JSON = Deno.env.get('VAPID_PUB_KEY');
 assert(VAPID_PUB_KEY_JSON);
 const VAPID_PUB_KEY = await crypto.subtle.importKey('jwk', JSON.parse(VAPID_PUB_KEY_JSON), { name: 'ECDSA', namedCurve: 'P-256' }, true, [ 'verify' ]);
-const VAPID_RAW_PUB_KEY = await crypto.subtle.exportKey('raw', VAPID_PUB_KEY);
 
 const VAPID_PRV_KEY = Deno.env.get('VAPID_PRV_KEY');
 assert(VAPID_PRV_KEY);
@@ -55,7 +54,6 @@ export const env = {
     PG_USER,
     PG_POOL: PG_POOL ? parseInt(PG_POOL, 10) : 4,
     VAPID_PUB_KEY,
-    VAPID_RAW_PUB_KEY,
     VAPID_PRV_KEY: await crypto.subtle.importKey('jwk', JSON.parse(VAPID_PRV_KEY), ECDSA, false, [ 'sign' ]),
     VAPID_EMAIL: 'mailto:' + VAPID_EMAIL,
 };

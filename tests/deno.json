@@ -39,6 +39,7 @@
         "email": "https://deno.land/x/validation@v0.4.0/email.ts",
         "itertools": "https://deno.land/x/itertools@v1.1.0/builtins.ts",
         "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
+        "webpush": "https://raw.githubusercontent.com/alastaircoote/webpush-webcrypto/177d4f04a02e41da5c41a445b5393c56e0d48971/lib/webpush.js",
         "zod": "https://deno.land/x/zod@v3.21.4/mod.ts"
     }
 }

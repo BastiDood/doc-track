@@ -1,15 +1,17 @@
+import { encode as b64encode } from 'base64url';
 import { getCookies } from 'cookie';
 import { Status } from 'http';
 import { critical, error, info, warning } from 'log';
 import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
+import { ApplicationServerKeys, generatePushHTTPRequest } from 'webpush';
 
 import { Local } from '~model/permission.ts';
 import { SnapshotSchema } from '~model/snapshot.ts';
 
 import { Database } from '../../database.ts';
-import { createPushPayload } from '../../push.ts';
+import { env } from '../../env.ts';
 
 /**
  * Inserts a new document snapshot into the database.
@@ -90,8 +92,22 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
         // Send notification to the push service
         const subscriptions = await db.getSubscriptionsForDocument(result.data.doc);
         await Promise.all(subscriptions.map(async sub => {
-            const req = await createPushPayload(sub, notif);
-            const res = await fetch(req);
+            // const req = await createPushPayload(sub, notif);
+            ApplicationServerKeys
+            const { endpoint, headers, body } = await generatePushHTTPRequest({
+                applicationServerKeys: new ApplicationServerKeys(env.VAPID_PUB_KEY, env.VAPID_PRV_KEY),
+                adminContact: env.VAPID_EMAIL,
+                payload: JSON.stringify(notif),
+                ttl: 10,
+                target: {
+                    endpoint: sub.endpoint,
+                    keys: {
+                        auth: b64encode(sub.auth),
+                        p256dh: b64encode(sub.p256dh),
+                    },
+                },
+            });
+            const res = await fetch(endpoint, { headers, body });
             // https://web.dev/push-notifications-web-push-protocol/#response-from-push-service
             switch (res.status) {
                 case Status.Created:

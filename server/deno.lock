@@ -144,5 +144,16 @@
     "https://deno.land/x/zod@v3.21.4/locales/en.ts": "a7a25cd23563ccb5e0eed214d9b31846305ddbcdb9c5c8f508b108943366ab4c",
     "https://deno.land/x/zod@v3.21.4/mod.ts": "64e55237cb4410e17d968cd08975566059f27638ebb0b86048031b987ba251c4",
     "https://deno.land/x/zod@v3.21.4/types.ts": "b5d061babea250de14fc63764df5b3afa24f2b088a1d797fc060ba49a0ddff28"
+  },
+  "npm": {
+    "specifiers": {
+      "webpush-webcrypto@1.0.3": "webpush-webcrypto@1.0.3"
+    },
+    "packages": {
+      "webpush-webcrypto@1.0.3": {
+        "integrity": "sha512-V56PtCeMtehU9xPzIh2vOIzDPhi5ryapuUXdZCX3xn1XQUQHI66SNiDKUvzuITI92CYyDiHy3cEVw8KFOclWsA==",
+        "dependencies": {}
+      }
+    }
   }
 }
