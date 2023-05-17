@@ -16,6 +16,11 @@ export class DeferredSnap extends Error {
     }
 }
 
+export class UncachedFetch extends Error {
+    constructor() {
+        super('resource was not cached and is unavailable offline');
+    }
+}
 export class InvalidSession extends Error {
     constructor() {
         super('invalid or expired session');
