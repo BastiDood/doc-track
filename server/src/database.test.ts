@@ -446,11 +446,8 @@ Deno.test('full OAuth flow', async t => {
             assertInstanceOf(recieve, Date);
         });
         
-        const newOffice = await db.createOfficeWithSuperuser(USER.id, 'Cool Office')
-
-        await t.step('create recepient office', async() => {
-            await assertNotStrictEquals(newOffice, 1);
-        });
+        const newOffice = await db.createOfficeWithSuperuser(USER.id, 'Cool Office');
+        assertNotStrictEquals(newOffice, 1);
 
         await t.step('send to new office, recieve, and return', async() => {
             // Send to newly created office
