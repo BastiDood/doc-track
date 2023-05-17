@@ -433,7 +433,7 @@ Deno.test('full OAuth flow', async t => {
     });
 
     await t.step('exhaustive local metrics test', async t => {
-        //Accept the latest sent document.
+        // Accept the latest sent document.
         await t.step('accept the latest sent document', async () => {
             const snapshot = {
                 doc: chosen,
@@ -448,7 +448,6 @@ Deno.test('full OAuth flow', async t => {
         
         const newOffice = await db.createOfficeWithSuperuser(USER.id, 'Cool Office')
 
-        //Create another office to recieve the document
         await t.step('create recepient office', async() => {
             await assertNotStrictEquals(newOffice, 1);
         });
@@ -489,12 +488,14 @@ Deno.test('full OAuth flow', async t => {
         });
 
         await t.step('check local metrics sanity', async() => {
+            // Check summaries of the first office.
             const local = await db.generateLocalSummary(office);
             assertStrictEquals(local.Register, 1);
             assertStrictEquals(local.Send, 2);
             assertStrictEquals(local.Receive, 1);
             assertStrictEquals(local.Terminate, undefined);
 
+            // Check summaries of the second office.
             const recipient = await db.generateLocalSummary(newOffice);
             assertStrictEquals(recipient.Register, undefined);
             assertStrictEquals(recipient.Send, 1);
