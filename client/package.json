@@ -49,6 +49,7 @@
         "eslint-plugin-svelte3": "^4.0.0",
         "localforage": "^1.10.0",
         "parcel": "^2.8.3",
+        "qrcode": "^1.5.3",
         "svelte": "^3.58.0",
         "svelte-preprocess": "^5.0.3",
         "typescript": "^5.0.4",
@@ -57,7 +58,6 @@
     "dependencies": {
         "@parcel/service-worker": "^2.8.3",
         "http-status-codes": "^2.2.0",
-        "svelte-qrcode": "^1.0.0",
         "svelte-spa-router": "^3.3.0",
         "zod": "^3.21.4"
     }
