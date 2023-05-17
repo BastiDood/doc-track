@@ -450,7 +450,7 @@ Deno.test('full OAuth flow', async t => {
 
         //Create another office to recieve the document
         await t.step('create recepient office', async() => {
-            assertNotStrictEquals(newOffice, 1);
+            await assertNotStrictEquals(newOffice, 1);
         });
 
         await t.step('send to new office, recieve, and return', async() => {
