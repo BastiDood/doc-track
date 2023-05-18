@@ -26,10 +26,9 @@
         return qrScanner?.stop();
     }
 
-    async function handleFileInput() {
-        assert(uploadElement instanceof HTMLInputElement);
-        assert(uploadElement.files instanceof FileList);
-        const [first] = uploadElement.files;
+    async function handleFileInput(this: HTMLInputElement) {
+        assert(this.files instanceof FileList);
+        const [first] = this.files;
         assert(typeof first !== 'undefined');
         try {
             const scanData = await QrScanner.scanImage(first, { returnDetailedScanResult: true });
@@ -40,7 +39,7 @@
             topToastMessage.enqueue({ title: 'Failed to Find QR code', body: JSON.stringify(err) });
         }
         // eslint-disable-next-line require-atomic-updates
-        uploadElement.value = '';
+        this.value = '';
     }
 
     function setup() {
@@ -94,7 +93,7 @@
         {/if}
 {/await}
 <header>
-    Upload a file with the QR code: <input bind:this={uploadElement} on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
+    Upload a file with the QR code: <input bind:this={uploadElement} on:change={handleFileInput} type="file" id="file-selector" accept="image/*">
 </header>
 {#if maybeId === null || maybeId === ''} 
     <p> No valid QR code detected. </p>
