@@ -24,7 +24,9 @@
     import TextInput from '../../TextInput.svelte';
     import QrGenerator from '../../qr/QrGenerator.svelte';
 
-    let id: Document['id'] | null = null;
+    let id = null as Document['id'] | null;
+    $: url = id === null ? '' : `/track?id=${id}`;
+
     let category: Category['id'] | null = null;
     let title: Document['title'] = '';
     let remark: Snapshot['remark'] = '';
@@ -60,8 +62,7 @@
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
-        {#if id !== null}
-            {@const url = `/track?id=${id}`}
+        {#if url}
             <center>
                 <QrGenerator {url} />
             </center>
