@@ -4,27 +4,25 @@
     import Modal from '../Modal.svelte';
     import QrGenerator from './QrGenerator.svelte';
     import { ButtonType } from '../../types.ts';
-    import Checkmark from '../../icons/Checkmark.svelte';
+    import Close from '../../icons/Close.svelte';
     
-    export let simplified = false;
     export let trackingNumber: string;
     const trackingUrl = `http://localhost:3000/track?id=${trackingNumber}`;
 
     let showPrintQr = false;
 </script>
 <Button on:click={() => (showPrintQr = true)}>
-    <DownloadButton alt="Download QR" />Download QR Code
+    <DownloadButton />Download
 </Button>
 
 <Modal title="Print QR Code" bind:showModal={showPrintQr}>
     <center>
         <QrGenerator URL={trackingNumber} />
     </center>
-    <p>Tracking Number: {trackingNumber}</p>
+    <p>Tracking Number: <a href={trackingUrl}>{trackingNumber}</a></p>
     <span id="bottom">
-        <Button submit><DownloadButton alt="Download QR"/>{simplified ? '' : 'Download QR'}</Button>
         <Button type={ButtonType.Primary} on:click={() => window.print()}>Print</Button>
-        <a href={trackingUrl}><Button type={ButtonType.Primary}><Checkmark alt="Checkmark" />Go to Tracking Page</Button></a>
+        <Button type={ButtonType.Danger} on:click={() => (showPrintQr = false)}><Close alt="Close" />Close</Button>
     </span>
 </Modal>
 

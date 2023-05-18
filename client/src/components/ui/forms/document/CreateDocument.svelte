@@ -60,9 +60,10 @@
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
-        {#if typeof $earliestBatch.codes !== 'undefined' && id !== null}
-            <QrGenerator URL={`http://localhost:3000/track?id=${id}`} />
-            <br>
+        {#if id}
+            <center>
+                <QrGenerator URL={`http://localhost:3000/track?id=${id}`} />
+            </center>
         {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
         <br />
