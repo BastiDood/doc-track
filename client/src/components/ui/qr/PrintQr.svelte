@@ -7,24 +7,27 @@
     import Close from '../../icons/Close.svelte';
     
     export let trackingNumber: string;
-    export let hideText: boolean;
-    const trackingUrl = `http://localhost:3000/track?id=${trackingNumber}`;
-
+    export let showText = false as boolean;
     let showPrintQr = false;
-</script>
-<Button on:click={() => (showPrintQr = true)}>
-    <DownloadButton />{hideText ? '' : 'Print QR Code'}
-</Button>
 
+    $: trackingUrl = `/track?id=${trackingNumber}`;
+</script>
+
+<Button on:click={() => (showPrintQr = true)}>
+    <DownloadButton alt="Download icon for printing QR codes" />
+    {#if showText}
+        Print QR Code
+    {/if}
+</Button>
 <Modal title="Print QR Code" bind:showModal={showPrintQr}>
     <center>
-        <QrGenerator URL={trackingNumber} />
+        <QrGenerator url={trackingNumber} />
     </center>
     <p>Tracking Number: <a href={trackingUrl}>{trackingNumber}</a></p>
-    <span id="bottom">
+    <div id="bottom">
         <Button type={ButtonType.Primary} on:click={() => window.print()}>Print</Button>
-        <Button type={ButtonType.Danger} on:click={() => (showPrintQr = false)}><Close alt="Close" />Close</Button>
-    </span>
+        <Button type={ButtonType.Danger} on:click={() => (showPrintQr = false)}><Close alt="Close" /> Close</Button>
+    </div>
 </Modal>
 
 <style>
@@ -33,6 +36,3 @@
         justify-content: space-between;
     }
 </style>
-
-
-
