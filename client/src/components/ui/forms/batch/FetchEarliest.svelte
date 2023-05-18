@@ -10,7 +10,7 @@
     <p>You successfully fetched the earliest batch as {$userSession?.email}</p>
     <ul>
         {#each $earliestBatch.codes as code}
-            <li><PrintQr trackingNumber={code} /> {code}</li>   
+            <li><PrintQr trackingNumber={code} hideText={true} /> {code}</li>   
         {/each}
     </ul>
 {/if}

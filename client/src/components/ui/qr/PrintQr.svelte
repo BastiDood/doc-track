@@ -7,12 +7,13 @@
     import Close from '../../icons/Close.svelte';
     
     export let trackingNumber: string;
+    export let hideText: boolean;
     const trackingUrl = `http://localhost:3000/track?id=${trackingNumber}`;
 
     let showPrintQr = false;
 </script>
 <Button on:click={() => (showPrintQr = true)}>
-    <DownloadButton />Download
+    <DownloadButton />{hideText ? '' : 'Print QR Code'}
 </Button>
 
 <Modal title="Print QR Code" bind:showModal={showPrintQr}>
