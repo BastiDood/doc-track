@@ -63,9 +63,7 @@
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
         {#if url}
-            <center>
-                <QrGenerator {url} />
-            </center>
+            <div><QrGenerator {url} /></div>
         {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
         <br />
@@ -75,3 +73,10 @@
         <Button submit>Create Document</Button>
     </form>
 {/if}
+
+<style>
+    div {
+        display: flex;
+        justify-content: center;
+    }
+</style>
