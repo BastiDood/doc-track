@@ -61,8 +61,9 @@
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
         {#if typeof id !== 'undefined'}
+            {@const url = `/track?id=${id}`}
             <center>
-                <QrGenerator url={`/track?id=${id}`} />
+                <QrGenerator {url} />
             </center>
         {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
