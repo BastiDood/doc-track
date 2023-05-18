@@ -1,20 +1,16 @@
 <script lang="ts">
     import type { PaperTrail } from '~model/api.ts';
-    import type { Document as DocumentModel } from '~model/document.ts';
+
+    import { assert } from '../../assert.ts';
+    import { Document } from '../../api/document.ts';
+
+    import { allOffices } from './../dashboard/stores/OfficeStore.ts';
 
     import Button from '../../components/ui/Button.svelte';
     import Notification from '../../components/icons/Notification.svelte';
+    import PrintQr from '../../components/ui/qr/PrintQr.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
-    import QrGenerator from '../../components/ui/QRGenerator.svelte';
-
-    import { Document } from '../../api/document.ts';
-    import { Vapid } from '../../api/vapid.ts';
-
-    import { allOffices } from '../dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../dashboard/stores/ToastStore.ts';
-
-    import { register } from '../register.ts';
-    import { assert } from '../../assert.ts';
+    import { ButtonType } from '../../components/types.ts';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
