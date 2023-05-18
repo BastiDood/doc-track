@@ -24,7 +24,7 @@
     import TextInput from '../../TextInput.svelte';
     import QrGenerator from '../../qr/QrGenerator.svelte';
 
-    let id: Document['id'] | null = null;
+    let id: Document['id'] | undefined;
     let category: Category['id'] | null = null;
     let title: Document['title'] = '';
     let remark: Snapshot['remark'] = '';
@@ -32,7 +32,7 @@
 
     async function handleSubmit(this: HTMLFormElement) {
         const oid = $dashboardState.currentOffice;
-        if (oid === null || id === null || category === null) return;
+        if (oid === null || typeof id === 'undefined' || category === null) return;
         try {
             const result = await Api.create(oid, { id, title, category }, remark);
             assert(result instanceof Date);
@@ -60,9 +60,9 @@
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
-        {#if typeof id !== 'undefined' && id !== 'null'}
+        {#if typeof id !== 'undefined'}
             <center>
-                <QrGenerator URL={`http://localhost:3000/track?id=${$id}`} />
+                <QrGenerator url={`/track?id=${id}`} />
             </center>
         {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
