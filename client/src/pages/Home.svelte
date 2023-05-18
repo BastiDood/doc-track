@@ -41,7 +41,6 @@
         <Modal showModal on:close={() => (showScan = false)} title="Scan/Select a File">
 
             <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber} />
-
         </Modal>
     {/if}
 </main>

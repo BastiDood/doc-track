@@ -84,9 +84,9 @@
         {#if hasCamera}
         <header>
             {#if camStart}
-                <Button type={ButtonType.Secondary} on:click={() => stopCamera()}> End Capture </Button>
+                <Button type={ButtonType.Secondary} on:click={stopCamera}> End Capture </Button>
             {:else}
-                <Button on:click={() => startCamera()}> Start Capture </Button>
+                <Button on:click={startCamera}> Start Capture </Button>
             {/if}
         </header>
         {:else}
@@ -96,9 +96,9 @@
 <header>
     Upload a file with the QR code: <input bind:this={uploadElement} on:change={() => handleFileInput()} type="file" id="file-selector" accept="image/*">
 </header>
-    {#if maybeId === null || maybeId === ''} 
-        <p> No valid QR code detected. </p>
-    {/if}
+{#if maybeId === null || maybeId === ''} 
+    <p> No valid QR code detected. </p>
+{/if}
 
 <style>
     video {
