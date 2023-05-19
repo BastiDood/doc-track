@@ -22,8 +22,11 @@
     import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
     import TextInput from '../../TextInput.svelte';
+    import QrGenerator from '../../qr/QrGenerator.svelte';
 
-    let id: Document['id'] | null = null;
+    let id = null as Document['id'] | null;
+    $: url = id === null ? '' : `/track?id=${id}`;
+
     let category: Category['id'] | null = null;
     let title: Document['title'] = '';
     let remark: Snapshot['remark'] = '';
@@ -59,6 +62,9 @@
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
+        {#if url}
+            <div><QrGenerator {url} /></div>
+        {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
         <br />
         Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
@@ -67,3 +73,10 @@
         <Button submit>Create Document</Button>
     </form>
 {/if}
+
+<style>
+    div {
+        display: flex;
+        justify-content: center;
+    }
+</style>

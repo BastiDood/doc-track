@@ -1,19 +1,18 @@
 <script lang="ts">
     import type { PaperTrail } from '~model/api.ts';
-    import type { Document as DocumentModel } from '~model/document.ts';
-
-    import Button from '../../components/ui/Button.svelte';
-    import Notification from '../../components/icons/Notification.svelte';
-    import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
-
+    import { Document as DocumentModel } from '~model/document.ts';
+    import { assert } from '../../assert.ts';
     import { Document } from '../../api/document.ts';
-    import { Vapid } from '../../api/vapid.ts';
+    import { register } from '../register.ts';
 
     import { allOffices } from '../dashboard/stores/OfficeStore.ts';
     import { topToastMessage } from '../dashboard/stores/ToastStore.ts';
+    import { Vapid } from '../../api/vapid.ts';
 
-    import { register } from '../register.ts';
-    import { assert } from '../../assert.ts';
+    import Button from '../../components/ui/Button.svelte';
+    import Notification from '../../components/icons/Notification.svelte';
+    import PrintQr from '../../components/ui/qr/PrintQr.svelte';
+    import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -41,7 +40,10 @@
         const sub = await getSubscription(pushManager);
         await Vapid.sendSubscription(sub.toJSON());
         await Vapid.hookSubscription({ sub: sub.endpoint, doc });
-        alert('Successfully subscribed!');
+        topToastMessage.enqueue({
+            title: 'Subscribed to Document',
+            body: 'You will recieve updates for this document.',
+        });
     }
 
     function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
@@ -74,7 +76,6 @@
             current: origin,
         };
     }
-
 
     let prev: Date | null = null;
     function computeTimeDiff(date: Date) {
@@ -114,6 +115,8 @@
                 <Button on:click={subscribePushNotifications.bind(null, trackingNumber)}>
                     <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
                 </Button>
+                <br />
+                <PrintQr trackingNumber={trackingNumber} showText allowRedirect />
                 <section>
                     <table>
                         <tr>
