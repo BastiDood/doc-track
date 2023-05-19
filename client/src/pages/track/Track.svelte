@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { PaperTrail } from '~model/api.ts';
+    import type { Document as DocumentModel } from '~model/document.ts';
 
     import Button from '../../components/ui/Button.svelte';
     import Notification from '../../components/icons/Notification.svelte';
@@ -15,7 +16,7 @@
     import { assert } from '../../assert.ts';
 
     $: ({ searchParams } = new URL(location.href));
-    $: trackingNumber = searchParams.get('id') as string | null;
+    $: trackingNumber = searchParams.get('id');
 
     async function getSubscription(manager: PushManager) {
         const maybeSub = await manager.getSubscription();
@@ -26,7 +27,7 @@
         });
     }
 
-    async function subscribePushNotifications() {
+    async function subscribePushNotifications(doc: DocumentModel['id']) {
         if (trackingNumber === null) {
             topToastMessage.enqueue({
                 title: 'Subscription Failed',
@@ -39,7 +40,7 @@
         const { pushManager } = await register();
         const sub = await getSubscription(pushManager);
         await Vapid.sendSubscription(sub.toJSON());
-        await Vapid.hookSubscription({ sub: sub.endpoint, doc: trackingNumber });
+        await Vapid.hookSubscription({ sub: sub.endpoint, doc });
         alert('Successfully subscribed!');
     }
 
@@ -110,7 +111,7 @@
                 <p>Something went wrong. Kindly re-check your tracking id above.</p>
             {:else}
                 <h2>Document {overview.title}</h2>
-                <Button on:click={subscribePushNotifications}>
+                <Button on:click={subscribePushNotifications.bind(null, trackingNumber)}>
                     <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
                 </Button>
                 <section>
