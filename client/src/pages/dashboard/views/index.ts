@@ -3,12 +3,11 @@ import Dossier from './Dossier.svelte';
 import Inbox from './Inbox.svelte';
 import ManageUsers from './Users.svelte';
 import ManageCategories from './Categories.svelte';
-import ManageGlobalSettings from './Settings.svelte';
+import ManageOffices from './Office.svelte';
 import ManageInvites from './Invites.svelte';
 import ManageStaff from './Staff.svelte';
 import Metrics from './Metrics.svelte';
 import Outbox from './Outbox.svelte';
-import Sandbox from './Sandbox.svelte';
 
 export default {
     '/barcodes': Barcodes,
@@ -16,10 +15,9 @@ export default {
     '/dossier': Dossier,
     '/inbox': Inbox,
     '/users': ManageUsers,
-    '/settings': ManageGlobalSettings,
+    '/offices': ManageOffices,
     '/invites': ManageInvites,
     '/staff': ManageStaff,
     '/metrics': Metrics,
     '/outbox': Outbox,
-    '/sandbox': Sandbox,
 };

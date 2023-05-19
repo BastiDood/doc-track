@@ -84,7 +84,7 @@
 {#if ctx === null}
     <!-- Don't render anything! Intentionally left blank to make type inference happy. -->
 {:else if ctx.mode === ActiveMenu.Create}
-    <Modal showModal title="Create Category">
+    <Modal showModal title="Create Category" on:close={resetContext}>
         <CreateCategory on:done={resetContext} />
     </Modal>
 {:else if ctx.mode === ActiveMenu.Activate}
@@ -102,7 +102,7 @@
         on:renameCategory={openRenameModal.bind(null, ctx.cid)}
     />
 {:else if ctx.mode === ActiveMenu.Rename}
-    <Modal showModal title="Rename Category">
+    <Modal showModal title="Rename Category" on:close={resetContext}>
         <RenameCategory cid={ctx.cid} on:done={resetContext} />
     </Modal>
 {/if}
