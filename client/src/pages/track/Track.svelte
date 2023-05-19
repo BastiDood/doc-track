@@ -5,7 +5,7 @@
     import NotificationIcon from '../../components/icons/Notification.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
 
-    import { getSubscription, register } from '../register.ts';
+    import { register } from '../register.ts';
     import { assert } from '../../assert.ts';
     import { Document } from '../../api/document.ts';
     import { Vapid } from '../../api/vapid.ts';
@@ -15,6 +15,15 @@
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
+
+    async function getSubscription(manager: PushManager): Promise<PushSubscription> {
+        const maybeSub = await manager.getSubscription();
+        if (maybeSub !== null) return maybeSub;
+        return manager.subscribe({
+            applicationServerKey: await Vapid.getVapidPublicKey(),
+            userVisibleOnly: true,
+        });
+    }
 
     async function subscribePushNotifications() {
         if (trackingNumber === null) {
