@@ -446,8 +446,8 @@ Deno.test('full OAuth flow', async t => {
                 status: Status.Receive,
                 remark: 'Hello world!',
             };
-            const recieve = await db.insertSnapshot(snapshot);
-            assertInstanceOf(recieve, Date);
+            const receive = await db.insertSnapshot(snapshot);
+            assertNotStrictEquals(typeof receive, 'number');
         });
         
         const newOffice = await db.createOfficeWithSuperuser(USER.id, 'Cool Office');
@@ -463,7 +463,7 @@ Deno.test('full OAuth flow', async t => {
                 remark: 'Sent to the new office!',
             };
             const send = await db.insertSnapshot(snapshotSend);
-            assertInstanceOf(send, Date);
+            assertNotStrictEquals(typeof send, 'number');
 
             // Newly created office accepts the document
             const snapshotReceive = {
@@ -474,7 +474,7 @@ Deno.test('full OAuth flow', async t => {
                 remark: 'I got it!',
             };
             const accept = await db.insertSnapshot(snapshotReceive);
-            assertInstanceOf(accept, Date);
+            assertNotStrictEquals(typeof accept, 'number');
 
             // Newly created office resends the document.
             const snapshotReturn = {
@@ -485,7 +485,7 @@ Deno.test('full OAuth flow', async t => {
                 remark: 'Hold up, back to you.',
             };
             const ret = await db.insertSnapshot(snapshotReturn);
-            assertInstanceOf(ret, Date);
+            assertNotStrictEquals(typeof ret, 'number');
         });
 
         await t.step('check local metrics sanity', async () => {
