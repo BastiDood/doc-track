@@ -8,13 +8,12 @@ import { assert } from '../assert.ts';
 import { DeferredRegistrationSchema, DeferredSnapshotSchema, PushNotificationSchema } from '../../../model/src/api.ts';
 import { Status } from '../../../model/src/snapshot.ts';
 
-assert(self.registration.sync);
-
 async function handleInstall() {
     const INDEX = '/index.html';
     const files = manifest.map(path => {
-        if (!path.endsWith(INDEX)) return path;
-        return path.slice(0, -INDEX.length) || '/';
+        if (path.endsWith(INDEX))
+            return path.slice(0, -INDEX.length) || '/';
+        return path;
     });
 
     // Pre-cache all the new assets
@@ -31,8 +30,8 @@ function* deleteAll(keys: Iterable<string>) {
 
 async function requestBackgroundSync(ty: string) {
     // We are offline, set a tag to insert snapshot.
-    await self.registration.sync.register(ty);
-    const tag = await self.registration.sync.getTags();
+    await registration.sync.register(ty);
+    const tag = await registration.sync.getTags();
     assert(tag.includes(ty));
 }
 
