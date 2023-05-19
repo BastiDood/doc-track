@@ -6,6 +6,7 @@ import {
     InvalidSession,
     BadContentNegotiation,
     UnexpectedStatusCode,
+    UncachedFetch,
 } from './error.ts';
 
 export namespace Session {
@@ -18,6 +19,7 @@ export namespace Session {
             case StatusCodes.OK: return FullSessionSchema.parse(await res.json());
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new UncachedFetch;
             default: throw new UnexpectedStatusCode;
         }
     }

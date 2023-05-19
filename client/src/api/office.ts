@@ -9,6 +9,7 @@ import {
     InvalidSession,
     BadContentNegotiation,
     UnexpectedStatusCode,
+    UncachedFetch,
 } from './error.ts';
 
 export namespace Office {
@@ -20,6 +21,7 @@ export namespace Office {
         switch (res.status) {
             case StatusCodes.OK: return AllOfficesSchema.parse(await res.json());
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new UncachedFetch;
             default: throw new UnexpectedStatusCode;
         }
     }
