@@ -15,7 +15,7 @@ CREATE DOMAIN LocalPermission AS BIT VARYING(12) NOT NULL DEFAULT B'0';
 CREATE DOMAIN GlobalPermission AS BIT VARYING(8) NOT NULL DEFAULT B'0';
 
 -- Push Subscription Endpoint
-CREATE DOMAIN Endpoint AS VARCHAR(50) NOT NULL;
+CREATE DOMAIN Endpoint AS VARCHAR(1024) NOT NULL;
 
 -- Document Status
 CREATE TYPE DocStatus AS ENUM ('Register', 'Send', 'Receive', 'Terminate');
