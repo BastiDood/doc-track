@@ -155,6 +155,7 @@
                         <td><p class="header-color"><b>File Attachment</b></p></td>
                         <tr>No file attachment.</tr>
                     </table>
+                    <br />
                     <table>
                         <td><p class="header-color"><b>Paper Trail</b></p></td>
                         <tr>
