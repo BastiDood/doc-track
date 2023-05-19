@@ -55,7 +55,7 @@
             <NewOffice on:done={resetContext}/>
         </Modal>
     {:else if ctx.mode === OfficeEvents.Edit}
-        <Modal showModal title="Edit Office">
+        <Modal showModal title="Edit Office" on:close={resetContext}>
             <EditOffice currId={ctx.id} on:done={resetContext}/>
         </Modal>
     {/if}
