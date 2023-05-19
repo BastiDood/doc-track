@@ -1,10 +1,12 @@
 import { manifest, version } from '@parcel/service-worker';
+import localForage from 'localforage';
 import { StatusCodes } from 'http-status-codes';
 
-import localForage from 'localforage';
-import { assert } from '../assert.ts';
 import { type DeferredFetch, DeferredFetchSchema } from './syncman.ts';
-import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
+import { assert } from '../assert.ts';
+
+import { DeferredRegistrationSchema, DeferredSnapshotSchema, PushNotificationSchema } from '../../../model/src/api.ts';
+import { Status } from '../../../model/src/snapshot.ts';
 
 assert(self.registration.sync);
 
@@ -144,7 +146,35 @@ self.addEventListener('fetch', evt => {
 
 self.addEventListener('push', evt => {
     assert(evt instanceof PushEvent);
-    // TODO
+    const { title, creation, eval: staff, target, status } = PushNotificationSchema.parse(evt.data);
+    const timestamp = creation.valueOf();
+    switch (status) {
+        case Status.Register:
+            new Notification('New Document Registered', {
+                body: `${staff} has created a new document "${title}" for "${target}".`,
+                timestamp,
+            });
+            break;
+        case Status.Send:
+            new Notification('Document Sent', {
+                body: `${staff} has sent "${title}" to "${target}".`,
+                timestamp,
+            });
+            break;
+        case Status.Receive:
+            new Notification('Document Received', {
+                body: `${staff} has received "${title}" on behalf of "${target}".`,
+                timestamp,
+            });
+            break;
+        case Status.Terminate:
+            new Notification('Document Terminated', {
+                body: `${staff} has terminated the paper trail for "${title}" at "${target}".`,
+                timestamp,
+            });
+            break;
+        default: throw new Error('unknown status');
+    }
 }, { passive: true });
 
 self.addEventListener('sync', evt => {
