@@ -91,11 +91,12 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
 
         // Send notification to the push service
         const subscriptions = await db.getSubscriptionsForDocument(result.data.doc);
-        await Promise.all(subscriptions.map(async sub => {
+        await Promise.allSettled(subscriptions.map(async sub => {
             const { endpoint, headers, body } = await generatePushHTTPRequest({
                 applicationServerKeys: env.VAPID_CREDENTIALS,
                 adminContact: env.VAPID_EMAIL,
                 payload: JSON.stringify(notif),
+                urgency: 'high',
                 ttl: 10,
                 target: {
                     endpoint: sub.endpoint,
@@ -134,7 +135,8 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
                     // TODO: Implement retry logic
                     return;
                 default:
-                    critical(`[Snapshot] Notification ${endpoint} returned unexpected status code ${res.status}`);
+                    critical(`[Snapshot] Notification ${endpoint} returned unexpected status code ${res.status} ${res.statusText}`);
+                    console.error(res);
                     return;
             }
             await db.popSubscription(sub.endpoint);
