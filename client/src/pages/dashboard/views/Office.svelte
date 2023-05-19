@@ -6,9 +6,9 @@
     import RowTemplate from '../../../components/ui/RowTemplate.svelte';
     import Events from '../../../components/icons/Events.svelte';
     import Edit from '../../../components/icons/Edit.svelte';
-    import NewOffice from "../../../components/ui/forms/office/NewOffice.svelte";
-    import EditOffice from "../../../components/ui/forms/office/EditOffice.svelte";
-    import Button from "../../../components/ui/Button.svelte";
+    import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
+    import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
+    import Button from '../../../components/ui/Button.svelte';
     import { IconSize } from '../../../components/types';
 
     enum OfficeEvents {
