@@ -15,7 +15,7 @@
     import { assert } from '../../assert.ts';
 
     $: ({ searchParams } = new URL(location.href));
-    $: trackingNumber = searchParams.get('id');
+    $: trackingNumber = searchParams.get('id') as string | null;
 
     async function getSubscription(manager: PushManager) {
         const maybeSub = await manager.getSubscription();
