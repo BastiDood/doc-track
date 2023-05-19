@@ -1,22 +1,23 @@
 <script lang="ts">
     import { assert } from '../../../../assert.ts';
+    import { createEventDispatcher } from 'svelte';
 
     import { Office as OfficeModel } from '~model/office.ts';
 
     import { Office } from '../../../../api/office.ts';
-    import { IconColor } from '../../../types.ts';
+    import { Events, IconColor } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
-    import OfficeSelect from '../../OfficeSelect.svelte';
 
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
 
-    let currId: OfficeModel['id'] | null = null;
+    export let currId: OfficeModel['id'] | null = null;
     let currName: OfficeModel['name'] | undefined;
+
+    const dispatch = createEventDispatcher();
 
     async function handleSubmit(this: HTMLFormElement) {
         if (currId === null || typeof currName !== 'string') return;
@@ -34,25 +35,19 @@
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
+        finally {
+            dispatch(Events.Done);
+        }
     }
 </script>
 
-<p>You are currently editing an office as {$userSession?.email}</p>
-<article>
-    {#if Object.getOwnPropertyNames($allOffices).length === 0}
-        No offices to edit.
-    {:else}
-        <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
-            <OfficeSelect bind:oid={currId} offices={$allOffices} />
-            <br />
-            <TextInput
-                required
-                placeholder="Name"
-                name="officename"
-                label="Office Name:"
-                bind:value={currName}
-            />
-            <Button submit><Checkmark color={IconColor.White} alt="Edit Office" /> Edit Office</Button> 
-        </form>
-    {/if}
-</article>
+<form on:submit|preventDefault|stopPropagation={handleSubmit}>   
+    <TextInput
+        required
+        placeholder="Name"
+        name="officename"
+        label="Office Name:"
+        bind:value={currName}
+    />
+    <Button submit><Checkmark color={IconColor.White} alt="Edit Office" /> Edit Office</Button> 
+</form>
