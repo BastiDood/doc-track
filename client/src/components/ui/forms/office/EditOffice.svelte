@@ -14,13 +14,13 @@
     import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
 
-    export let currId: OfficeModel['id'] | null = null;
+    export let currId: OfficeModel['id'];
     let currName: OfficeModel['name'] | undefined;
 
     const dispatch = createEventDispatcher();
 
     async function handleSubmit(this: HTMLFormElement) {
-        if (currId === null || typeof currName !== 'string') return;
+        if (typeof currName !== 'string') return;
         if (!this.reportValidity()) return;
 
         try {
