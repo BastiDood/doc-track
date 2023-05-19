@@ -27,7 +27,7 @@ import { handleGetUserFromSession } from './api/session.ts';
 import { handleInsertSnapshot } from './api/snapshot.ts';
 import { handleGetStaff, handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
 import { handleGetUsers, handleSetUserPermissions } from './api/user.ts';
-import { handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
+import { handleHook, handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 
 const STATIC_ROOT = resolve(Deno.cwd(), '../client/dist');
@@ -90,6 +90,7 @@ function handlePost(pool: Pool, req: Request) {
         case '/api/batch': return handleGenerateBatch(pool, req, searchParams);
         case '/api/category': return handleCreateCategory(pool, req);
         case '/api/document': return handleCreateDocument(pool, req, searchParams);
+        case '/api/hook': return handleHook(pool, req, searchParams);
         case '/api/office': return handleCreateOffice(pool, req);
         case '/api/snapshot': return handleInsertSnapshot(pool, req, searchParams);
         case '/api/vapid': return handleSubscribe(pool, req);
