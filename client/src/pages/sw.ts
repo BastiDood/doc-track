@@ -124,6 +124,39 @@ async function handleFetch(req: Request): Promise<Response> {
     }
 }
 
+async function handlePush(data: PushMessageData) {
+    const json = await data.json();
+    const { title, creation, eval: staff, target, status } = PushNotificationSchema.parse(json);
+    const timestamp = creation.valueOf();
+    switch (status) {
+        case Status.Register:
+            registration.showNotification('New Document Registered', {
+                body: `${staff} has created a new document "${title}" for "${target}".`,
+                timestamp,
+            });
+            break;
+        case Status.Send:
+            registration.showNotification('Document Sent', {
+                body: `${staff} has sent "${title}" to "${target}".`,
+                timestamp,
+            });
+            break;
+        case Status.Receive:
+            registration.showNotification('Document Received', {
+                body: `${staff} has received "${title}" on behalf of "${target}".`,
+                timestamp,
+            });
+            break;
+        case Status.Terminate:
+            registration.showNotification('Document Terminated', {
+                body: `${staff} has terminated the paper trail for "${title}" at "${target}".`,
+                timestamp,
+            });
+            break;
+        default: throw new Error('unknown status');
+    }
+}
+
 self.addEventListener('install', evt => {
     assert(evt instanceof ExtendableEvent);
     evt.waitUntil(handleInstall());
@@ -146,35 +179,9 @@ self.addEventListener('fetch', evt => {
 
 self.addEventListener('push', evt => {
     assert(evt instanceof PushEvent);
-    const { title, creation, eval: staff, target, status } = PushNotificationSchema.parse(evt.data);
-    const timestamp = creation.valueOf();
-    switch (status) {
-        case Status.Register:
-            new Notification('New Document Registered', {
-                body: `${staff} has created a new document "${title}" for "${target}".`,
-                timestamp,
-            });
-            break;
-        case Status.Send:
-            new Notification('Document Sent', {
-                body: `${staff} has sent "${title}" to "${target}".`,
-                timestamp,
-            });
-            break;
-        case Status.Receive:
-            new Notification('Document Received', {
-                body: `${staff} has received "${title}" on behalf of "${target}".`,
-                timestamp,
-            });
-            break;
-        case Status.Terminate:
-            new Notification('Document Terminated', {
-                body: `${staff} has terminated the paper trail for "${title}" at "${target}".`,
-                timestamp,
-            });
-            break;
-        default: throw new Error('unknown status');
-    }
+    const { data } = evt;
+    assert(data !== null);
+    evt.waitUntil(handlePush(data));
 }, { passive: true });
 
 self.addEventListener('sync', evt => {
