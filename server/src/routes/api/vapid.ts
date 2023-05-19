@@ -1,3 +1,4 @@
+import { decode as b64decode } from 'base64url';
 import { Status } from 'http';
 import { error, info, warning } from 'log';
 import { parseMediaType } from 'parse-media-type';
@@ -18,11 +19,11 @@ export function handleVapidPublicKey() {
 
 export async function handleSubscribe(pool: Pool, req: Request) {
     // FIXME: Add CSRF tokens and nonces to mitigate replay attacks.
-    const sub = PushSubscriptionJsonSchema.parse(await req.json());
+    const { endpoint, expiration, auth, p256dh } = PushSubscriptionJsonSchema.parse(await req.json());
     const db = await Database.fromPool(pool);
     try {
-        await db.pushSubscription(sub);
-        info(`[VAPID] Push notification endpoint ${sub.endpoint} submitted`);
+        await db.pushSubscription(endpoint, expiration, b64decode(auth), b64decode(p256dh));
+        info(`[VAPID] Push notification endpoint ${endpoint} submitted`);
         return new Response(null, { status: Status.Created });
     } finally {
         db.release();

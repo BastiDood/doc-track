@@ -1,4 +1,5 @@
 import { assert, assertEquals, assertInstanceOf, assertStrictEquals, unreachable } from 'asserts';
+import { encode as hexEncode } from 'hex';
 import { range } from 'itertools';
 import { Pool, PoolClient, PostgresError } from 'postgres';
 import { z } from 'zod';
@@ -542,12 +543,21 @@ export class Database {
     }
 
     /** Register a push subscription to be used later for notifying a user. */
-    async pushSubscription({ endpoint, expiration, auth, p256dh }: PushSubscriptionJson) {
+    async pushSubscription(
+        endpoint: PushSubscriptionJson['endpoint'],
+        expiration: PushSubscriptionJson['expiration'],
+        auth: Uint8Array,
+        p256dh: Uint8Array,
+    ) {
         // TODO: Add Tests
         const expires = expiration?.toISOString() || 'infinity';
+        const decoder = new TextDecoder;
+        const authSecret = '\\x' + decoder.decode(hexEncode(auth));
+        const curvePoints = '\\x' + decoder.decode(hexEncode(p256dh));
+
         const { rowCount } = await this.#client
             .queryArray`INSERT INTO subscription (endpoint,expiration,auth,p256dh)
-                VALUES (${endpoint},${expires},${auth},${p256dh})
+                VALUES (${endpoint},${expires},${authSecret}::BYTEA,${curvePoints}::BYTEA)
                 ON CONFLICT (endpoint) DO UPDATE SET expiration = ${expires}`;
         assertStrictEquals(rowCount, 1);
     }
@@ -564,7 +574,7 @@ export class Database {
     async hookSubscription(sub: PushSubscription['endpoint'], doc: Document['id']): Promise<boolean> {
         // TODO: Add Tests with Document Bindings
         const { rowCount } = await this.#client
-            .queryArray`INSERT INTO notification (sub,doc) VALUES (${sub},${doc}) ON CONFLICT (sub,doc) DO NOTHING`;
+            .queryArray`INSERT INTO notification (sub,doc) VALUES (${sub},${doc}) ON CONFLICT DO NOTHING`;
         switch (rowCount) {
             case 0: return false;
             case 1: return true;

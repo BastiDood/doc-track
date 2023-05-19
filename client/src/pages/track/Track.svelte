@@ -17,7 +17,7 @@
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
 
-    async function getSubscription(manager: PushManager): Promise<PushSubscription> {
+    async function getSubscription(manager: PushManager) {
         const maybeSub = await manager.getSubscription();
         if (maybeSub !== null) return maybeSub;
         return manager.subscribe({
@@ -37,8 +37,9 @@
 
         // TODO: request for notification permissions first
         const { pushManager } = await register();
-        const { endpoint } = await getSubscription(pushManager);
-        await Vapid.hookSubscription({ sub: endpoint, doc: trackingNumber });
+        const sub = await getSubscription(pushManager);
+        await Vapid.sendSubscription(sub.toJSON());
+        await Vapid.hookSubscription({ sub: sub.endpoint, doc: trackingNumber });
         alert('Successfully subscribed!');
     }
 

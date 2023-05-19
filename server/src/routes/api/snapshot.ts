@@ -5,7 +5,7 @@ import { critical, error, info, warning } from 'log';
 import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
-import { ApplicationServerKeys, generatePushHTTPRequest } from 'webpush';
+import { generatePushHTTPRequest } from 'webpush';
 
 import { Local } from '~model/permission.ts';
 import { SnapshotSchema } from '~model/snapshot.ts';
@@ -92,10 +92,8 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
         // Send notification to the push service
         const subscriptions = await db.getSubscriptionsForDocument(result.data.doc);
         await Promise.all(subscriptions.map(async sub => {
-            // const req = await createPushPayload(sub, notif);
-            ApplicationServerKeys
             const { endpoint, headers, body } = await generatePushHTTPRequest({
-                applicationServerKeys: new ApplicationServerKeys(env.VAPID_PUB_KEY, env.VAPID_PRV_KEY),
+                applicationServerKeys: env.VAPID_CREDENTIALS,
                 adminContact: env.VAPID_EMAIL,
                 payload: JSON.stringify(notif),
                 ttl: 10,
@@ -107,7 +105,13 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
                     },
                 },
             });
-            const res = await fetch(endpoint, { headers, body });
+
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers,
+                body,
+            });
+
             // https://web.dev/push-notifications-web-push-protocol/#response-from-push-service
             switch (res.status) {
                 case Status.Created:
