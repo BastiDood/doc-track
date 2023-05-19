@@ -1,16 +1,18 @@
 <script lang="ts">
     import type { PaperTrail } from '~model/api.ts';
-
+    import { Document as DocumentModel } from '~model/document.ts';
     import { assert } from '../../assert.ts';
     import { Document } from '../../api/document.ts';
+    import { register } from '../register.ts';
 
     import { allOffices } from './../dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../dashboard/stores/ToastStore.ts';
+    import { Vapid } from '../../api/vapid.ts';
 
     import Button from '../../components/ui/Button.svelte';
     import Notification from '../../components/icons/Notification.svelte';
     import PrintQr from '../../components/ui/qr/PrintQr.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
-    import { ButtonType } from '../../components/types.ts';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -40,8 +42,6 @@
         await Vapid.hookSubscription({ sub: sub.endpoint, doc });
         alert('Successfully subscribed!');
     }
-    const { searchParams } = new URL(location.href);
-    let trackingNumber = searchParams.get('id') ?? '';
 
     function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
         const [first, ...rest] = trail;
@@ -73,7 +73,6 @@
             current: origin,
         };
     }
-
 
     let prev: Date | null = null;
     function computeTimeDiff(date: Date) {
@@ -113,6 +112,8 @@
                 <Button on:click={subscribePushNotifications.bind(null, trackingNumber)}>
                     <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
                 </Button>
+                <br>
+                <PrintQr trackingNumber={trackingNumber} showText={true} allowRedirect={true} />
                 <section>
                     <table>
                         <tr>
