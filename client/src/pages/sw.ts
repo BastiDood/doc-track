@@ -125,31 +125,31 @@ async function handleFetch(req: Request): Promise<Response> {
 }
 
 async function handlePush(data: PushMessageData) {
-    const json = await data.json();
-    const { title, creation, eval: staff, target, status } = PushNotificationSchema.parse(json);
+    const { title, creation, eval: staff, target, status } = PushNotificationSchema.parse(await data.json());
     const timestamp = creation.valueOf();
+    const office = target ?? 'No Office';
     switch (status) {
         case Status.Register:
-            registration.showNotification('New Document Registered', {
-                body: `${staff} has created a new document "${title}" for "${target}".`,
+            await registration.showNotification('New Document Registered', {
+                body: `${staff} has created a new document "${title}" for "${office}".`,
                 timestamp,
             });
             break;
         case Status.Send:
-            registration.showNotification('Document Sent', {
-                body: `${staff} has sent "${title}" to "${target}".`,
+            await registration.showNotification('Document Sent', {
+                body: `${staff} has sent "${title}" to "${office}".`,
                 timestamp,
             });
             break;
         case Status.Receive:
-            registration.showNotification('Document Received', {
-                body: `${staff} has received "${title}" on behalf of "${target}".`,
+            await registration.showNotification('Document Received', {
+                body: `${staff} has received "${title}" on behalf of "${office}".`,
                 timestamp,
             });
             break;
         case Status.Terminate:
-            registration.showNotification('Document Terminated', {
-                body: `${staff} has terminated the paper trail for "${title}" at "${target}".`,
+            await registration.showNotification('Document Terminated', {
+                body: `${staff} has terminated the paper trail for "${title}" at "${office}".`,
                 timestamp,
             });
             break;
