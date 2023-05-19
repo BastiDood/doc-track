@@ -2,15 +2,35 @@
     import type { PaperTrail } from '~model/api.ts';
 
     import Button from '../../components/ui/Button.svelte';
-    import Notification from '../../components/icons/Notification.svelte';
+    import NotificationIcon from '../../components/icons/Notification.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
 
+    import { getSubscription, register } from '../register.ts';
     import { assert } from '../../assert.ts';
     import { Document } from '../../api/document.ts';
+    import { Vapid } from '../../api/vapid.ts';
+
     import { allOffices } from './../dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from './../dashboard/stores/ToastStore.ts';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
+
+    async function subscribePushNotifications() {
+        if (trackingNumber === null) {
+            topToastMessage.enqueue({
+                title: 'Subscription Failed',
+                body: 'The tracking number is invalid.',
+            });
+            return;
+        }
+
+        // TODO: request for notification permissions first
+        const { pushManager } = await register();
+        const { endpoint } = await getSubscription(pushManager);
+        await Vapid.hookSubscription({ sub: endpoint, doc: trackingNumber });
+        alert('Successfully subscribed!');
+    }
 
     function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
         const [first, ...rest] = trail;
@@ -42,7 +62,6 @@
             current: origin,
         };
     }
-
 
     let prev: Date | null = null;
     function computeTimeDiff(date: Date) {
@@ -83,7 +102,7 @@
                 {:else}
                     <h2>Document {overview.title}</h2>
                     <Button>
-                        <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
+                        <NotificationIcon alt="Bell icon for subscribing to push notifications" on:click={subscribePushNotifications} /> Subscribe to Push Notifications
                     </Button>
                     <section>
                         <table>

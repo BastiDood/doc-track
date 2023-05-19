@@ -1,23 +1,18 @@
 import { assert } from '../assert.ts';
 import { Vapid } from '../api/vapid.ts';
 
-async function getSubscription(manager: PushManager): Promise<PushSubscription> {
+export async function getSubscription(manager: PushManager): Promise<PushSubscription> {
     const maybeSub = await manager.getSubscription();
     if (maybeSub !== null) return maybeSub;
-
-    const sub = await manager.subscribe({
+    return manager.subscribe({
         applicationServerKey: await Vapid.getVapidPublicKey(),
         userVisibleOnly: true,
     });
-
-    assert(await Vapid.sendSubscription(sub.toJSON()));
-    return sub;
 }
 
-export async function register() {
-    await navigator.serviceWorker.register(new URL('sw.ts', import.meta.url), {
+export function register() {
+    return navigator.serviceWorker.register(new URL('sw.ts', import.meta.url), {
         type: 'module',
         scope: '/',
     });
-    const { pushManager } = await navigator.serviceWorker.ready;
 }
