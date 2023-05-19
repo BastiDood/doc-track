@@ -1,44 +1,24 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-	
-	export let codeValue: string;
-	export let squareSize : number; 
-	
-  let qrcode;
-			
-	onMount(() => {
+    import QRCode from 'qrcode';
 
-		let script = document.createElement('script');
-    script.src = "https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"
-    document.head.append(script);
-	
-		script.onload = function() {
+    import { assert } from '../../../assert.ts';
+    import { topToastMessage } from '../../../pages/dashboard/stores/ToastStore.ts';
 
-			qrcode = new QRCode("qrcode", {
-				text: codeValue,
-		  	width: squareSize,
-        height: squareSize,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-			});		
-			
-		};				
-	  
-	});
-</script>
+    export let url: string;
 
-<style>
-  #qrcode {
-    width:20px;
-    height:200x;
-    margin-top:15px;
-  }
-</style>
+    $: qrCode = QRCode.toDataURL(url).catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        return null;
+    });
+</script> 
 
-<div id="qrcode"></div>
-
-
-{#await QRCode.toDataURL(URL) then dataUrl}
-  <img src={dataUrl} alt="QR Code" />
+{#await qrCode}
+    <p>Generating QR Code...</p>
+{:then dataUrl}
+    {#if dataUrl === null}
+        <p>Failed to generate QR code.</p>
+    {:else}
+        <img src={dataUrl} alt="QR Code" />
+    {/if}
 {/await}
