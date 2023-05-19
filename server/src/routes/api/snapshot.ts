@@ -115,33 +115,33 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
             // https://web.dev/push-notifications-web-push-protocol/#response-from-push-service
             switch (res.status) {
                 case Status.Created:
-                    info(`[Snapshot] Notification ${sub.endpoint} successfully dispatched`);
+                    info(`[Snapshot] Notification ${endpoint} successfully dispatched`);
                     return;
                 case Status.BadRequest:
-                    critical(`[Snapshot] Notification ${sub.endpoint} failed due to bad input`);
+                    critical(`[Snapshot] Notification ${endpoint} failed due to bad input`);
                     return;
                 case Status.NotFound:
-                    warning(`[Snapshot] Notification ${sub.endpoint} already expired`);
+                    warning(`[Snapshot] Notification ${endpoint} already expired`);
                     break;
                 case Status.Gone:
-                    warning(`[Snapshot] Notification ${sub.endpoint} already unsubscribed`);
+                    warning(`[Snapshot] Notification ${endpoint} already unsubscribed`);
                     break;
                 case Status.RequestEntityTooLarge:
-                    critical(`[Snapshot] Notification ${sub.endpoint} failed due to payload size`);
+                    critical(`[Snapshot] Notification ${endpoint} failed due to payload size`);
                     return;
                 case Status.TooManyRequests:
-                    error(`[Snapshot] Notification ${sub.endpoint} failed due to rate-limiting`);
+                    error(`[Snapshot] Notification ${endpoint} failed due to rate-limiting`);
                     // TODO: Implement retry logic
                     return;
                 default:
-                    critical(`[Snapshot] Notification ${sub.endpoint} returned unexpected status code ${res.status}`);
+                    critical(`[Snapshot] Notification ${endpoint} returned unexpected status code ${res.status}`);
                     return;
             }
             await db.popSubscription(sub.endpoint);
         }));
 
         info(`[Snapshot] User ${staff.user_id} inserted ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target}`);
-        return new Response(notif.creation.getUTCMilliseconds().toString(), {
+        return new Response(notif.creation.valueOf().toString(), {
             status: Status.Created,
             headers: { 'Content-Type': 'application/json' },
         });
