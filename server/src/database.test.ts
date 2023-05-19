@@ -377,14 +377,18 @@ Deno.test('full OAuth flow', async t => {
         });
 
         // Valid document
-        const creation = await db.insertSnapshot(snapshot);
-        assertInstanceOf(creation, Date);
+        const result = await db.insertSnapshot(snapshot);
+        assert(typeof result !== 'number');
+        assertStrictEquals(result.status, snapshot.status);
+        assertStrictEquals(result.title, doc.title);
+        assertStrictEquals(result.target, 'Hello');
+        assertStrictEquals(result.eval, USER.name);
 
         await t.step('view latest snapshot in paper trail', async () => {
             const trail = await db.getPaperTrail(chosen);
             assertEquals(trail.at(-1), {
                 status: Status.Send,
-                creation,
+                creation: result.creation,
                 category: randomCategory,
                 remark: snapshot.remark,
                 target: office,
@@ -398,7 +402,7 @@ Deno.test('full OAuth flow', async t => {
         await t.step('verify that the outbox only contains one document with the latest snapshot', async () => {
             const inbox = await db.getInbox(office);
             assertEquals(inbox.pending, [{
-                creation,
+                creation: result.creation,
                 category: randomCategory,
                 doc: doc.id,
                 title: doc.title,
@@ -442,8 +446,8 @@ Deno.test('full OAuth flow', async t => {
                 status: Status.Receive,
                 remark: 'Hello world!',
             };
-            const recieve = await db.insertSnapshot(snapshot);
-            assertInstanceOf(recieve, Date);
+            const receive = await db.insertSnapshot(snapshot);
+            assertNotStrictEquals(typeof receive, 'number');
         });
         
         const newOffice = await db.createOfficeWithSuperuser(USER.id, 'Cool Office');
@@ -459,7 +463,7 @@ Deno.test('full OAuth flow', async t => {
                 remark: 'Sent to the new office!',
             };
             const send = await db.insertSnapshot(snapshotSend);
-            assertInstanceOf(send, Date);
+            assertNotStrictEquals(typeof send, 'number');
 
             // Newly created office accepts the document
             const snapshotReceive = {
@@ -470,7 +474,7 @@ Deno.test('full OAuth flow', async t => {
                 remark: 'I got it!',
             };
             const accept = await db.insertSnapshot(snapshotReceive);
-            assertInstanceOf(accept, Date);
+            assertNotStrictEquals(typeof accept, 'number');
 
             // Newly created office resends the document.
             const snapshotReturn = {
@@ -481,7 +485,7 @@ Deno.test('full OAuth flow', async t => {
                 remark: 'Hold up, back to you.',
             };
             const ret = await db.insertSnapshot(snapshotReturn);
-            assertInstanceOf(ret, Date);
+            assertNotStrictEquals(typeof ret, 'number');
         });
 
         await t.step('check local metrics sanity', async () => {

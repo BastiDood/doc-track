@@ -1,10 +1,8 @@
 import { assert, assertEquals, assertInstanceOf, assertStrictEquals, unreachable } from 'asserts';
+import { encode as hexEncode } from 'hex';
 import { range } from 'itertools';
 import { Pool, PoolClient, PostgresError } from 'postgres';
 import { z } from 'zod';
-
-import type { Document } from '~model/document.ts';
-import type { PushSubscription, PushSubscriptionJson } from '~model/subscription.ts';
 
 import {
     type AllCategories,
@@ -17,6 +15,7 @@ import {
     type InboxEntry,
     type MinBatch,
     type PaperTrail,
+    type PushNotification,
     type StaffMember,
     AllCategoriesSchema,
     AllInboxSchema,
@@ -29,18 +28,20 @@ import {
     InsertSnapshotError,
     MinBatchSchema,
     PaperTrailSchema,
+    PushNotificationSchema,
     StaffMemberSchema,
 } from '~model/api.ts';
-
 import { type Barcode, BarcodeSchema } from '~model/barcode.ts';
 import { type Batch, BatchSchema, } from '~model/batch.ts';
 import { type Category, CategorySchema } from '~model/category.ts';
+import type { Document } from '~model/document.ts';
 import { type Invitation, InvitationSchema } from '~model/invitation.ts';
 import { type Metrics, MetricsSchema } from '~model/metrics.ts';
 import { type Office, OfficeSchema } from '~model/office.ts';
 import { type Pending, PendingSchema } from '~model/pending.ts';
 import { type Session, SessionSchema } from '~model/session.ts';
 import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
+import { type PushSubscription, type PushSubscriptionJson, PushSubscriptionSchema } from '~model/subscription.ts';
 import { type Staff, StaffSchema } from '~model/staff.ts';
 import { type User, UserSchema } from '~model/user.ts';
 
@@ -353,13 +354,15 @@ export class Database {
         }
     }
 
-    async insertSnapshot({ doc, target, evaluator, status, remark }: Omit<Snapshot, 'creation'>): Promise<Snapshot['creation'] | InsertSnapshotError> {
+    async insertSnapshot({ doc, target, evaluator, status, remark }: Omit<Snapshot, 'creation'>): Promise<PushNotification | InsertSnapshotError> {
         try {
             const { rows: [ first, ...rest ] } = await this.#client
-                .queryObject`INSERT INTO snapshot (doc,target,evaluator,status,remark)
-                    VALUES (${doc},${target},${evaluator},${status},${remark}) RETURNING creation`;
+                .queryObject`WITH _ AS (INSERT INTO snapshot (doc,target,evaluator,status,remark)
+                    VALUES (${doc},${target},${evaluator},${status},${remark}) RETURNING *)
+                    SELECT creation,status,d.title,u.name AS eval,o.name AS target
+                    FROM _ INNER JOIN document AS d ON doc = d.id INNER JOIN users AS u ON evaluator = u.id LEFT JOIN office AS o ON target = o.id LIMIT 1`;
             assertStrictEquals(rest.length, 0);
-            return SnapshotSchema.pick({ creation: true }).parse(first).creation;
+            return PushNotificationSchema.parse(first);
         } catch (err) {
             // Lint is ignored due to false positive.
             assertInstanceOf(err, PostgresError);
@@ -540,28 +543,53 @@ export class Database {
     }
 
     /** Register a push subscription to be used later for notifying a user. */
-    async pushSubscription({ endpoint, expiration, auth, p256dh }: PushSubscriptionJson) {
+    async pushSubscription(
+        endpoint: PushSubscriptionJson['endpoint'],
+        expiration: PushSubscriptionJson['expiration'],
+        auth: Uint8Array,
+        p256dh: Uint8Array,
+    ) {
         // TODO: Add Tests
-        // TODO: Convert keys to bit strings
-        // TODO: Add Tests with Document Bindings
         const expires = expiration?.toISOString() || 'infinity';
+        const decoder = new TextDecoder;
+        const authSecret = '\\x' + decoder.decode(hexEncode(auth));
+        const curvePoints = '\\x' + decoder.decode(hexEncode(p256dh));
+
         const { rowCount } = await this.#client
             .queryArray`INSERT INTO subscription (endpoint,expiration,auth,p256dh)
-                VALUES (${endpoint},${expires},${auth},${p256dh})
+                VALUES (${endpoint},${expires},${authSecret}::BYTEA,${curvePoints}::BYTEA)
                 ON CONFLICT (endpoint) DO UPDATE SET expiration = ${expires}`;
         assertStrictEquals(rowCount, 1);
+    }
+
+    async popSubscription(endpoint: PushSubscription['endpoint']): Promise<number> {
+        // TODO: Add Tests
+        const { rowCount } = await this.#client
+            .queryArray`DELETE FROM subscription WHERE endpoint = ${endpoint}`;
+        assert(rowCount !== undefined);
+        return rowCount;
     }
 
     /** Hooks a subscription to a valid document. Returns `false` if already added previously. */
     async hookSubscription(sub: PushSubscription['endpoint'], doc: Document['id']): Promise<boolean> {
         // TODO: Add Tests with Document Bindings
         const { rowCount } = await this.#client
-            .queryArray`INSERT INTO subscription (sub,doc) VALUES (${sub},${doc}) ON CONFLICT (sub,doc) DO NOTHING`;
+            .queryArray`INSERT INTO notification (sub,doc) VALUES (${sub},${doc}) ON CONFLICT DO NOTHING`;
         switch (rowCount) {
             case 0: return false;
             case 1: return true;
             default: unreachable();
         }
+    }
+
+    /** Gets all of the associated subscriptions to a document. */
+    async getSubscriptionsForDocument(did: Document['id']): Promise<Omit<PushSubscription, 'expiration'>[]> {
+        // TODO: Add Tests
+        const { rows } = await this.#client
+            .queryObject`SELECT s.endpoint,s.auth,s.p256dh
+                FROM notification AS n INNER JOIN subscription AS s ON n.sub = s.endpoint
+                WHERE n.doc = ${did} AND NOW() < s.expiration`;
+        return PushSubscriptionSchema.omit({ expiration: true }).array().parse(rows);
     }
 
     async getUsers(): Promise<User[]> {

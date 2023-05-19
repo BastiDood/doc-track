@@ -1,5 +1,6 @@
 import { assert } from 'asserts';
-import { decode } from 'base64url';
+import { valid as isEmail } from 'email';
+import { ApplicationServerKeys } from 'webpush';
 
 const PORT = Deno.env.get('PORT');
 assert(PORT);
@@ -34,6 +35,17 @@ assert(VAPID_PUB_KEY);
 const VAPID_PRV_KEY = Deno.env.get('VAPID_PRV_KEY');
 assert(VAPID_PRV_KEY);
 
+const VAPID_CREDENTIALS = await ApplicationServerKeys.fromJSON({
+    publicKey: VAPID_PUB_KEY,
+    privateKey: VAPID_PRV_KEY,
+});
+
+const VAPID_RAW_PUB_KEY = await crypto.subtle.exportKey('raw', VAPID_CREDENTIALS.publicKey);
+
+const VAPID_EMAIL = Deno.env.get('VAPID_EMAIL');
+assert(VAPID_EMAIL);
+assert(isEmail(VAPID_EMAIL));
+
 export const env = {
     PORT: parseInt(PORT, 10),
     GOOGLE_ID,
@@ -46,6 +58,7 @@ export const env = {
     PG_PORT: PG_PORT ? parseInt(PG_PORT, 10) : 5432,
     PG_USER,
     PG_POOL: PG_POOL ? parseInt(PG_POOL, 10) : 4,
-    VAPID_PUB_KEY: decode(VAPID_PUB_KEY),
-    VAPID_PRV_KEY: decode(VAPID_PRV_KEY),
+    VAPID_RAW_PUB_KEY,
+    VAPID_CREDENTIALS,
+    VAPID_EMAIL: 'mailto:' + VAPID_EMAIL,
 };

@@ -8,8 +8,9 @@ import {
     assertStrictEquals,
 } from 'asserts';
 import { encode as b64encode } from 'base64url';
-import { equals as bytewiseEquals } from 'bytes';
+import { equals as bytewiseEquals } from 'bytes/equals';
 import { Pool } from 'postgres';
+import { Status as HttpStatus } from 'http';
 
 import { Batch } from '~client/api/batch.ts';
 import { Category } from '~client/api/category.ts';
@@ -101,6 +102,10 @@ Deno.test('full API integration test', async t => {
     // Mock the `fetch` function and its cookie store
     const origFetch = globalThis.fetch;
     globalThis.fetch = (input, init) => {
+        // This is probably a push notification emulation
+        if (input instanceof Request)
+            return Promise.resolve(new Response(null, { status: HttpStatus.Created }));
+
         const request = new Request('https://doctrack.app' + input, {
             ...init,
             headers: {
@@ -117,7 +122,7 @@ Deno.test('full API integration test', async t => {
     await t.step('VAPID wrappers', async () => {
         // Public key retrieval
         const key = new Uint8Array(await Vapid.getVapidPublicKey());
-        assert(bytewiseEquals(key, env.VAPID_PUB_KEY));
+        assert(bytewiseEquals(key, new Uint8Array(env.VAPID_RAW_PUB_KEY)));
 
         // Submit push subscription
         await Vapid.sendSubscription({

@@ -4,7 +4,7 @@ export const PushSubscriptionSchema = z.object({
 	endpoint: z.string().url(),
 	expiration: z.coerce.date(),
     auth: z.instanceof(Uint8Array),
-    p256dh: z.instanceof(Uint8Array).refine(bytes => bytes.length === 64),
+    p256dh: z.instanceof(Uint8Array),
 });
 
 export const PushSubscriptionJsonSchema = z.object({

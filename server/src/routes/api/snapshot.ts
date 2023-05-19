@@ -1,31 +1,33 @@
+import { encode as b64encode } from 'base64url';
 import { getCookies } from 'cookie';
 import { Status } from 'http';
-import { error, info } from 'log';
+import { critical, error, info, warning } from 'log';
 import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
+import { generatePushHTTPRequest } from 'webpush';
 
-import type { InsertSnapshotError } from '~model/api.ts';
 import { Local } from '~model/permission.ts';
-import { type Snapshot, SnapshotSchema } from '~model/snapshot.ts';
+import { SnapshotSchema } from '~model/snapshot.ts';
 
 import { Database } from '../../database.ts';
+import { env } from '../../env.ts';
 
 /**
  * Inserts a new document snapshot into the database.
  *
  * # Inputs
  * - Requires a valid session ID.
- * - Accepts the ID of the office to which the {@linkcode Snapshot} will be inserted via the `office` query parameter.
- * - Accepts the to-be-inserted {@linkcode Snapshot} (minus the `creation` and `evaluator` fields) via the {@linkcode Request} body.
+ * - Accepts the ID of the office to which the snapshot will be inserted via the `office` query parameter.
+ * - Accepts the to-be-inserted snapshot (minus the `creation` and `evaluator` fields) via the {@linkcode Request} body.
  *
  * # Outputs
  * - `201` => returns {@linkcode Date} (as UTC milliseconds) in the {@linkcode Response} body if successful
- * - `400` => office ID or {@linkcode Snapshot} JSON is unacceptable
+ * - `400` => office ID or snapshot JSON is unacceptable
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session is invalid
  * - `406` => content negotiation failed
- * - `409` => returns error code as {@linkcode InsertSnapshotError} in JSON
+ * - `409` => returns error code as JSON
  */
 export async function handleInsertSnapshot(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
@@ -78,18 +80,71 @@ export async function handleInsertSnapshot(pool: Pool, req: Request, params: URL
         }
 
         // FIXME: make sure that we don't insert a new `Register` type
-        const snap: Snapshot['creation'] | InsertSnapshotError = await db.insertSnapshot({ ...result.data, evaluator: staff.user_id });
-        if (snap instanceof Date) {
-            info(`[Snapshot] User ${staff.user_id} inserted ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target}`);
-            return new Response(snap.getTime().toString(), {
-                status: Status.Created,
+        const notif = await db.insertSnapshot({ ...result.data, evaluator: staff.user_id });
+        if (typeof notif === 'number') {
+            error(`[Snapshot] User ${staff.user_id} could not insert ${result.data.status} snapshot for document ${result.data.doc} to office ${result.data.target} because error ${notif}`);
+            return new Response(notif.toString(), {
+                status: Status.Conflict,
                 headers: { 'Content-Type': 'application/json' },
             });
         }
 
-        error(`[Snapshot] User ${staff.user_id} could not insert ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target} because error ${snap}`);
-        return new Response(snap.toString(), {
-            status: Status.Conflict,
+        // Send notification to the push service
+        const subscriptions = await db.getSubscriptionsForDocument(result.data.doc);
+        await Promise.allSettled(subscriptions.map(async sub => {
+            const { endpoint, headers, body } = await generatePushHTTPRequest({
+                applicationServerKeys: env.VAPID_CREDENTIALS,
+                adminContact: env.VAPID_EMAIL,
+                payload: JSON.stringify(notif),
+                urgency: 'high',
+                ttl: 10,
+                target: {
+                    endpoint: sub.endpoint,
+                    keys: {
+                        auth: b64encode(sub.auth),
+                        p256dh: b64encode(sub.p256dh),
+                    },
+                },
+            });
+
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers,
+                body,
+            });
+
+            // https://web.dev/push-notifications-web-push-protocol/#response-from-push-service
+            switch (res.status) {
+                case Status.Created:
+                    info(`[Snapshot] Notification ${endpoint} successfully dispatched`);
+                    return;
+                case Status.BadRequest:
+                    critical(`[Snapshot] Notification ${endpoint} failed due to bad input`);
+                    return;
+                case Status.NotFound:
+                    warning(`[Snapshot] Notification ${endpoint} already expired`);
+                    break;
+                case Status.Gone:
+                    warning(`[Snapshot] Notification ${endpoint} already unsubscribed`);
+                    break;
+                case Status.RequestEntityTooLarge:
+                    critical(`[Snapshot] Notification ${endpoint} failed due to payload size`);
+                    return;
+                case Status.TooManyRequests:
+                    error(`[Snapshot] Notification ${endpoint} failed due to rate-limiting`);
+                    // TODO: Implement retry logic
+                    return;
+                default:
+                    critical(`[Snapshot] Notification ${endpoint} returned unexpected status code ${res.status} ${res.statusText}`);
+                    console.error(res);
+                    return;
+            }
+            await db.popSubscription(sub.endpoint);
+        }));
+
+        info(`[Snapshot] User ${staff.user_id} inserted ${result.data.status} snapshot for document ${result.data.doc} to ${result.data.target}`);
+        return new Response(notif.creation.valueOf().toString(), {
+            status: Status.Created,
             headers: { 'Content-Type': 'application/json' },
         });
     } finally {

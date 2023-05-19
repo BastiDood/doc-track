@@ -1,18 +1,19 @@
 import { manifest, version } from '@parcel/service-worker';
+import localForage from 'localforage';
 import { StatusCodes } from 'http-status-codes';
 
-import localForage from 'localforage';
-import { assert } from '../assert.ts';
 import { type DeferredFetch, DeferredFetchSchema } from './syncman.ts';
-import { DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
+import { assert } from '../assert.ts';
 
-assert(self.registration.sync);
+import { DeferredRegistrationSchema, DeferredSnapshotSchema, PushNotificationSchema } from '../../../model/src/api.ts';
+import { Status } from '../../../model/src/snapshot.ts';
 
 async function handleInstall() {
     const INDEX = '/index.html';
     const files = manifest.map(path => {
-        if (!path.endsWith(INDEX)) return path;
-        return path.slice(0, -INDEX.length) || '/';
+        if (path.endsWith(INDEX))
+            return path.slice(0, -INDEX.length) || '/';
+        return path;
     });
 
     // Pre-cache all the new assets
@@ -29,8 +30,8 @@ function* deleteAll(keys: Iterable<string>) {
 
 async function requestBackgroundSync(ty: string) {
     // We are offline, set a tag to insert snapshot.
-    await self.registration.sync.register(ty);
-    const tag = await self.registration.sync.getTags();
+    await registration.sync.register(ty);
+    const tag = await registration.sync.getTags();
     assert(tag.includes(ty));
 }
 
@@ -122,6 +123,39 @@ async function handleFetch(req: Request): Promise<Response> {
     }
 }
 
+async function handlePush(data: PushMessageData) {
+    const { title, creation, eval: staff, target, status } = PushNotificationSchema.parse(await data.json());
+    const timestamp = creation.valueOf();
+    const office = target ?? 'No Office';
+    switch (status) {
+        case Status.Register:
+            await registration.showNotification('New Document Registered', {
+                body: `${staff} has created a new document "${title}" for "${office}".`,
+                timestamp,
+            });
+            break;
+        case Status.Send:
+            await registration.showNotification('Document Sent', {
+                body: `${staff} has sent "${title}" to "${office}".`,
+                timestamp,
+            });
+            break;
+        case Status.Receive:
+            await registration.showNotification('Document Received', {
+                body: `${staff} has received "${title}" on behalf of "${office}".`,
+                timestamp,
+            });
+            break;
+        case Status.Terminate:
+            await registration.showNotification('Document Terminated', {
+                body: `${staff} has terminated the paper trail for "${title}" at "${office}".`,
+                timestamp,
+            });
+            break;
+        default: throw new Error('unknown status');
+    }
+}
+
 self.addEventListener('install', evt => {
     assert(evt instanceof ExtendableEvent);
     evt.waitUntil(handleInstall());
@@ -144,7 +178,9 @@ self.addEventListener('fetch', evt => {
 
 self.addEventListener('push', evt => {
     assert(evt instanceof PushEvent);
-    // TODO
+    const { data } = evt;
+    assert(data !== null);
+    evt.waitUntil(handlePush(data));
 }, { passive: true });
 
 self.addEventListener('sync', evt => {
