@@ -59,6 +59,7 @@
     "dependencies": {
         "@parcel/service-worker": "^2.8.3",
         "http-status-codes": "^2.2.0",
+        "qr-scanner": "^1.4.2",
         "svelte-qrcode": "^1.0.0",
         "svelte-spa-router": "^3.3.0",
         "zod": "^3.21.4"
