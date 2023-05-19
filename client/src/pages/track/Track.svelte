@@ -40,7 +40,10 @@
         const sub = await getSubscription(pushManager);
         await Vapid.sendSubscription(sub.toJSON());
         await Vapid.hookSubscription({ sub: sub.endpoint, doc });
-        alert('Successfully subscribed!');
+        topToastMessage.enqueue({
+            title: 'Subscribed to Document',
+            body: 'You will recieve updates for this document.',
+        });
     }
 
     function renderOverview(trail: PaperTrail[], allOffices: Record<string, string>) {
