@@ -56,5 +56,6 @@ jobs:
           PG_USER: 'runner'
           PG_PASSWORD: 'runner'
           PG_POOL: 1
-          VAPID_PUB_KEY: 'dmFwaWQtcHViLWtleQ=='
-          VAPID_PRV_KEY: 'dmFwaWQtcHJ2LWtleQ=='
+          VAPID_EMAIL: 'admin@example.com'
+          VAPID_PUB_KEY: 'BJwwAMC4V5JVBBRO1VByNpSRMwE-ftG2_sFi9V_qob2K0uQivsIJz3TtYVx1r6ENL0EmejcIbq_ZDqIJ7jYHM98'
+          VAPID_PRV_KEY: 'MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQguvFJHWsbj1o_H-Z0vtTdRRrJGqV9NOi71i6WoqWYu46hRANCAAScMADAuFeSVQQUTtVQcjaUkTMBPn7Rtv7BYvVf6qG9itLkIr7CCc907WFcda-hDS9BJno3CG6v2Q6iCe42BzPf'
