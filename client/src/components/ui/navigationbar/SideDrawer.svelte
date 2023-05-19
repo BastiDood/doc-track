@@ -13,6 +13,7 @@
     import StaffIcon from '../../icons/PersonMail.svelte';
     import AdminIcon from '../../icons/PersonInfo.svelte';
     import SettingsIcon from '../../icons/Settings.svelte';
+    import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
     import OfficeSelect from '../OfficeSelect.svelte';
 
     export let show = false;
@@ -45,13 +46,13 @@
         <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
         <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
         <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
-        <a href="#/metrics" use:active><EventsIcon alt="Go to Metrics" />Metrics</a>
+        <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
         <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
         <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
         <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
         <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
         <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
-        <a href="#/offices" use:active><SettingsIcon alt="Go to Offices" />Offices</a>
+        <a href="#/offices" use:active><EventsIcon alt="Go to Offices" />Offices</a>
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
