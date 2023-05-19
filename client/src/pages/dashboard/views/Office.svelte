@@ -49,14 +49,14 @@
     {/await}
 
     {#if ctx === null}
-    <!-- Don't render anything! Intentionally left blank to make type inference happy. -->
+        <!-- Don't render anything! Intentionally left blank to make type inference happy. -->
     {:else if ctx.mode === OfficeEvents.Create}
         <Modal showModal title="Create New Office">
-            <NewOffice on:done={resetContext}/>
+            <NewOffice on:done={resetContext} />
         </Modal>
     {:else if ctx.mode === OfficeEvents.Edit}
         <Modal showModal title="Edit Office" on:close={resetContext}>
-            <EditOffice currId={ctx.id} on:done={resetContext}/>
+            <EditOffice currId={ctx.id} on:done={resetContext} />
         </Modal>
     {/if}
 </article>
