@@ -51,8 +51,7 @@
         <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
         <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
         <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
-        <a href="#/settings" use:active><SettingsIcon alt="Go to Settings" />Settings</a>
-        <a href="#/sandbox" use:active><SettingsIcon alt="Go to Development Sandbox" />Sandbox</a>
+        <a href="#/offices" use:active><SettingsIcon alt="Go to Offices" />Offices</a>
     </section>
     <form method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
