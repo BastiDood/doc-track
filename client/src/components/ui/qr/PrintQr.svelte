@@ -8,6 +8,7 @@
     
     export let trackingNumber: string;
     export let showText = false as boolean;
+    export let allowRedirect = true as boolean;
     let showPrintQr = false;
 
     $: trackingUrl = `/track?id=${trackingNumber}`;
@@ -23,7 +24,11 @@
     <center>
         <QrGenerator url={trackingNumber} />
     </center>
-    <p>Tracking Number: <a href={trackingUrl}>{trackingNumber}</a></p>
+    {#if allowRedirect}
+        <p>Tracking Number: <a href={trackingUrl}>{trackingNumber}</a></p>
+    {:else}
+        <p>Tracking Number: {trackingNumber}</p>
+    {/if}
     <div id="bottom">
         <Button type={ButtonType.Primary} on:click={() => window.print()}>Print</Button>
         <Button type={ButtonType.Danger} on:click={() => (showPrintQr = false)}><Close alt="Close" /> Close</Button>
