@@ -2,16 +2,17 @@
     import type { PaperTrail } from '~model/api.ts';
 
     import Button from '../../components/ui/Button.svelte';
-    import NotificationIcon from '../../components/icons/Notification.svelte';
+    import Notification from '../../components/icons/Notification.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
 
-    import { register } from '../register.ts';
-    import { assert } from '../../assert.ts';
     import { Document } from '../../api/document.ts';
     import { Vapid } from '../../api/vapid.ts';
 
-    import { allOffices } from './../dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from './../dashboard/stores/ToastStore.ts';
+    import { allOffices } from '../dashboard/stores/OfficeStore.ts';
+    import { topToastMessage } from '../dashboard/stores/ToastStore.ts';
+
+    import { register } from '../register.ts';
+    import { assert } from '../../assert.ts';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -72,6 +73,7 @@
         };
     }
 
+
     let prev: Date | null = null;
     function computeTimeDiff(date: Date) {
         if (prev === null) {
@@ -93,99 +95,95 @@
     }
 </script>
 
+<TopBar open />
 <main>
-    <TopBar open></TopBar>
     {#if trackingNumber === null}
-        No tracking number selected.
+        <p>No tracking number provided.</p>
     {:else}
-        {#await Document.getPaperTrail(trackingNumber)}
+        {#await Promise.all([Document.getPaperTrail(trackingNumber), allOffices.load()])}
             Loading paper trail...
-        {:then trail}
-            {#await allOffices.load()}
-                Loading all offices...
-            {:then}
-                {@const overview = renderOverview(trail, $allOffices)}
-                {#if overview === null}
-                    <h1>Uh oh!</h1>
-                    <p>Something went wrong. Kindly re-check your tracking id above.</p>
-                {:else}
-                    <h2>Document {overview.title}</h2>
-                    <Button>
-                        <NotificationIcon alt="Bell icon for subscribing to push notifications" on:click={subscribePushNotifications} /> Subscribe to Push Notifications
-                    </Button>
-                    <section>
-                        <table>
+        {:then [trail, _]}
+            {@const overview = renderOverview(trail, $allOffices)}
+            {#if overview === null}
+                <h1>Uh oh!</h1>
+                <p>Something went wrong. Kindly re-check your tracking id above.</p>
+            {:else}
+                <h2>Document {overview.title}</h2>
+                <Button on:click={subscribePushNotifications}>
+                    <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
+                </Button>
+                <section>
+                    <table>
+                        <tr>
+                            <td><p class="header-color"><b>Overview</b></p></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><b>Document Title</b></td>
+                            <td>{overview.title}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Document Tracking Number</b></td>
+                            <td>{trackingNumber}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Document Category</b></td>
+                            <td>{overview.category}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Document For</b></td>
+                            <td>{overview.documentFor}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Document Remarks</b></td>
+                            <td>{overview.documentRemark}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Originating Office</b></td>
+                            <td>{overview.origin}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Current Office</b></td>
+                            <td>{overview.current}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Document Status</b></td>
+                            <td>{overview.status}</td>
+                    </table>
+                    <br />
+                    <table>
+                        <td><p class="header-color"><b>File Attachment</b></p></td>
+                        <tr>No file attachment.</tr>
+                    </table>
+                    <table>
+                        <td><p class="header-color"><b>Paper Trail</b></p></td>
+                        <tr>
+                            <td><b>Office</b></td>
+                            <td><b>Creation</b></td>
+                            <td><b>Time Elapsed</b></td>
+                            <td><b>Action</b></td>
+                            <td><b>Remarks</b></td>
+                            <td><b>Evaluator</b></td>
+                        </tr>
+                        {#each trail as { target, creation, status, remark, email }}
                             <tr>
-                                <td><p class="header-color"><b>Overview</b></p></td>
-                                <td></td>
+                                <td>
+                                    {#if target === null}
+                                        End
+                                    {:else}
+                                        {$allOffices[target]}
+                                    {/if}
+                                </td>
+                                <td>{creation.toLocaleString()}</td>
+                                <td>{computeTimeDiff(creation)}</td>
+                                <td>{status}</td>
+                                <td>{remark}</td>
+                                <td>{email}</td>
                             </tr>
-                            <tr>
-                                <td><b>Document Title</b></td>
-                                <td>{overview.title}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Document Tracking Number</b></td>
-                                <td>{trackingNumber}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Document Category</b></td>
-                                <td>{overview.category}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Document For</b></td>
-                                <td>{overview.documentFor}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Document Remarks</b></td>
-                                <td>{overview.documentRemark}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Originating Office</b></td>
-                                <td>{overview.origin}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Current Office</b></td>
-                                <td>{overview.current}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Document Status</b></td>
-                                <td>{overview.status}</td>
-                        </table>
-                        <br>
-                        <table>
-                            <td><p class="header-color"><b>File Attachment</b></p></td>
-                            <tr>No file attachment.</tr>
-                        </table>
-                        <br>
-                        <table>
-                            <td><p class="header-color"><b>Paper Trail</b></p></td>
-                            <tr>
-                                <td><b>Office</b></td>
-                                <td><b>Creation</b></td>
-                                <td><b>Time Elapsed</b></td>
-                                <td><b>Action</b></td>
-                                <td><b>Remarks</b></td>
-                                <td><b>Evaluator</b></td>
-                            </tr>
-                            {#each trail as { target, creation, status, remark, email }}
-                                <tr>
-                                    <td>
-                                        {#if target === null}
-                                            End
-                                        {:else}
-                                            {$allOffices[target]}
-                                        {/if}
-                                    </td>
-                                    <td>{creation.toLocaleString()}</td>
-                                    <td>{computeTimeDiff(creation)}</td>
-                                    <td>{status}</td>
-                                    <td>{remark}</td>
-                                    <td>{email}</td>
-                                </tr>
-                            {/each}
-                    </section>
-                {/if}
-            {/await}
+                        {/each}
+                    </table>
+                </section>
+            {/if}
         {/await}
     {/if}
 </main>
