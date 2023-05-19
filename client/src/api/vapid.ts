@@ -1,7 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { UnexpectedStatusCode } from './error.ts';
 import { assert } from '../assert.ts';
+import { BadContentNegotiation, InvalidInput, UnexpectedStatusCode } from './error.ts';
+
+import type { Notification } from '../../../model/src/notification.ts';
 
 export namespace Vapid {
     /** @returns VAPID public key of the server as raw bytes */
@@ -9,6 +11,20 @@ export namespace Vapid {
         const res = await fetch('/api/vapid', { headers: { 'Accept': 'application/octet-stream' } });
         if (res.status === Number(StatusCodes.OK)) return res.arrayBuffer();
         throw new UnexpectedStatusCode;
+    }
+
+    export async function hookSubscription({ sub, doc }: Notification) {
+        const res = await fetch(`/api/hook?doc=${doc}`, {
+            method: 'POST',
+            body: sub,
+            headers: { 'Content-Type': 'text/plain' },
+        });
+        switch (res.status) {
+            case StatusCodes.CREATED: return;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
     }
 
     /** Registers a push subscription to the server (for later use). */
