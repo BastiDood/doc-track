@@ -10,8 +10,6 @@
 
     import { topToastMessage } from '../../pages/dashboard/stores/ToastStore.ts';
 
-    export let maybeId = null as Document['id'] | null;
-
     const dispatch = createEventDispatcher();
     let camStart = false as boolean;
     let qrScanner = null as QrScanner | null;
@@ -35,8 +33,7 @@
         try {
             const { data } = await QrScanner.scanImage(first, { returnDetailedScanResult: true });
             if (!data) return;
-            maybeId = DocumentSchema.shape.id.parse(data.trim());
-            dispatch(Events.OnDocumentScan, maybeId);
+            dispatch(Events.OnDocumentScan, DocumentSchema.shape.id.parse(data.trim()));
         } catch (err) {
             topToastMessage.enqueue({ title: 'Failed to Find QR code.', body: JSON.stringify(err) });
         }
@@ -49,9 +46,8 @@
             videoElement,
             result => {
                 if (!result.data) return;
-                maybeId = DocumentSchema.shape.id.parse(result.data.trim());
                 stopCamera();
-                dispatch(Events.OnDocumentScan, maybeId);
+                dispatch(Events.OnDocumentScan, DocumentSchema.shape.id.parse(result.data.trim()));
             },
             {
                 highlightCodeOutline: true,
@@ -92,9 +88,7 @@
 <header>
     Upload a file with the QR code: <input type="file" accept="image/*" on:change={handleFileInput}>
 </header>
-{#if maybeId === null || maybeId === ''} 
-    <p> No valid QR code detected. </p>
-{/if}
+<p> No valid QR code detected. </p>
 
 <style>
     video {
