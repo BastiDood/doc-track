@@ -1,5 +1,6 @@
 <script lang="ts">
     import active from 'svelte-spa-router/active';
+    import { assert } from '../../../assert.ts';
     import { Office } from '~model/office.ts';
     import { userOffices } from '../../../pages/dashboard/stores/UserStore.ts';
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
@@ -32,6 +33,11 @@
     let showScan = false;
 
     $: dashboardState.setOffice(selectedOffice);
+
+    function scanHandler(e: CustomEvent) {
+        assert(typeof e.detail === "string" );
+        goToTrackingPage(e.detail);
+    }
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
@@ -66,7 +72,7 @@
 
 {#if showScan}
     <Modal showModal on:close={() => (showScan = false)} title="Scan/Select a File">
-        <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber} />
+        <QrScanner on:onDocumentScan={scanHandler} />
     </Modal>
 {/if}
 

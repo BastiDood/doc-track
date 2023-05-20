@@ -10,11 +10,17 @@
     import TextInput from '../components/ui/TextInput.svelte';
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
+    import { assert } from '../assert.ts';
 
     const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
     let showScan = false as boolean;
 
     let trackingNumber = '';
+
+    function scanHandler(e: CustomEvent) {
+        assert(typeof e.detail === "string" );
+        goToTrackingPage(e.detail);
+    }
 </script>
 
 <main>
@@ -38,7 +44,7 @@
     {/await}
     {#if showScan}
         <Modal showModal on:close={() => (showScan = false)} title="Scan/Select a File">
-            <QrScanner on:onDocumentScan={goToTrackingPage.bind(null, trackingNumber)} bind:maybeId={trackingNumber} />
+            <QrScanner on:onDocumentScan={scanHandler} />
         </Modal>
     {/if}
 </main>
