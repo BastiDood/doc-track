@@ -6,7 +6,7 @@ export class InsufficientPermissions extends Error {
 
 export class NoActiveOffice extends Error {
     constructor() {
-        super('no active office was selected')
+        super('no active office was selected');
     }
 }
 
