@@ -1,6 +1,5 @@
 <script lang="ts">
     import active from 'svelte-spa-router/active';
-    import { assert } from '../../../assert.ts';
     import { Office } from '~model/office.ts';
     import { userOffices } from '../../../pages/dashboard/stores/UserStore.ts';
     import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
@@ -34,9 +33,8 @@
 
     $: dashboardState.setOffice(selectedOffice);
 
-    function scanHandler(e: CustomEvent) {
-        assert(typeof e.detail === 'string' );
-        goToTrackingPage(e.detail);
+    function scanHandler({ detail }: CustomEvent<string>) {
+        goToTrackingPage(detail);
     }
 </script>
 

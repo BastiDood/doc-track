@@ -10,16 +10,14 @@
     import TextInput from '../components/ui/TextInput.svelte';
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
-    import { assert } from '../assert.ts';
 
     const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
     let showScan = false as boolean;
 
     let trackingNumber = '';
 
-    function scanHandler(e: CustomEvent) {
-        assert(typeof e.detail === 'string' );
-        goToTrackingPage(e.detail);
+    function scanHandler({ detail }: CustomEvent<string>) {
+        goToTrackingPage(detail);
     }
 </script>
 
