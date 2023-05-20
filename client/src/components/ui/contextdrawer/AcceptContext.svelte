@@ -8,7 +8,6 @@
 
     import Checkmark from '../../icons/Checkmark.svelte';
     import Close from '../../icons/Close.svelte';
-    import Camera from '../../icons/Camera.svelte';
 
     const dispatch = createEventDispatcher();
     export let showMenu = false;
@@ -27,13 +26,6 @@
         <div slot="contextIcon">
             <Close size={iconSize} alt="Decline Document" />
             Decline Document
-        </div>
-    </ContextElement>
-    <ContextDivider />
-    <ContextElement on:click={() => dispatch(Events.Camera)}>
-        <div slot="contextIcon">
-            <Camera size={iconSize} alt="Select an Image" />
-            Take a Picture / Choose a Image
         </div>
     </ContextElement>
 </ContextTemplate>
