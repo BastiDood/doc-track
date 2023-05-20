@@ -81,6 +81,7 @@ export namespace Document {
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new UncachedFetch;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -96,6 +97,7 @@ export namespace Document {
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new UncachedFetch;
             default: throw new UnexpectedStatusCode;
         }
     }
@@ -108,6 +110,7 @@ export namespace Document {
             case StatusCodes.OK: return PaperTrailSchema.array().parse(await res.json());
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new UncachedFetch;
             default: throw new UnexpectedStatusCode;
         }
     }
