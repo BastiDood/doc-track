@@ -27,6 +27,7 @@ export class UncachedFetch extends Error {
         super('resource was not cached and is unavailable offline');
     }
 }
+
 export class InvalidSession extends Error {
     constructor() {
         super('invalid or expired session');
