@@ -35,7 +35,7 @@
     $: dashboardState.setOffice(selectedOffice);
 
     function scanHandler(e: CustomEvent) {
-        assert(typeof e.detail === "string" );
+        assert(typeof e.detail === 'string' );
         goToTrackingPage(e.detail);
     }
 </script>

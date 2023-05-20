@@ -1,7 +1,7 @@
 <script lang="ts">
     import QrScanner from 'qr-scanner';
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
-    import { type Document, DocumentSchema } from '~model/document.ts';
+    import { type Document, DocumentSchema } from '../../../../model/src/document.ts';
 
     import Button from './Button.svelte';
 
