@@ -5,14 +5,14 @@ import { topToastMessage } from './ToastStore.ts';
 
 export const categoryList = asyncReadable(
     { active: [], retire: [] },
-    async() => {
+    () => {
         try {
-            return await Category.getAll();
+            return Category.getAll();
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
-            return Promise.resolve({ active: [], retire: [] });
         }
+        return Promise.resolve({ active: [], retire: [] });
     },
     { reloadable: true }
 );

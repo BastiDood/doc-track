@@ -8,14 +8,14 @@ import { topToastMessage } from './ToastStore.ts';
 
 export const userSession = asyncReadable(
     null,
-    async() => {
+    () => {
         try {
-            return await Session.getUser();
+            return Session.getUser();
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
-            return Promise.resolve(null);
         }
+        return Promise.resolve(null);
     },
     { reloadable: true }
 );
@@ -30,14 +30,14 @@ export const currentUser = derived(userSession, session => session === null ? nu
 
 export const userList = asyncReadable(
     [],
-    async() => {
+    () => {
         try {
-            return await User.getAll();
+            return User.getAll();
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
-            return Promise.resolve([]);
         }
+        return Promise.resolve([]);
     },
     { reloadable: true }
 );

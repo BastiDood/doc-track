@@ -3,64 +3,61 @@ import { dashboardState } from './DashboardState.ts';
 import { Metrics } from '../../../api/metrics.ts';
 import { assert } from '../../../assert.ts';
 import { topToastMessage } from './ToastStore.ts';
-import { NoActiveOffice } from '../../../api/error.ts';
 
 export const userSummary = asyncReadable(
     { },
-    async() => {
+    () => {
         try {
-            return await Metrics.generateUserSummary();
+            return Metrics.generateUserSummary();
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
-            return Promise.resolve({ });
         }
+        return Promise.resolve({ });
     },
     { reloadable: true }
 );
 
 export const localSummary = asyncDerived(
     dashboardState,
-    $dashboardState => {
-        const { currentOffice } = $dashboardState;
+    ({ currentOffice }) => {
         try {
-            if (currentOffice === null) throw new NoActiveOffice;
-            return Metrics.generateLocalSummary(currentOffice);
+            if (currentOffice !== null)
+                return Metrics.generateLocalSummary(currentOffice);
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
-            return Promise.resolve({ });
         }
+        return Promise.resolve({ });
     },
     { reloadable: true }
 );
 
 export const globalSummary = asyncReadable(
     { },
-    async() => {
+    () => {
         try {
-            return await Metrics.generateGlobalSummary();
+            return Metrics.generateGlobalSummary();
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
-            return Promise.resolve({ });
         }
+        return Promise.resolve({ });
     },
     { reloadable: true }
 );
 
 export const barcodeSummary = asyncDerived(
     dashboardState,
-    $dashboardState => {
-        const { currentOffice } = $dashboardState;
+    ({ currentOffice }) => {
         try {
-            if (currentOffice === null) throw new NoActiveOffice;
-            return Metrics.generateBarcodeSummary(currentOffice);
+            if (currentOffice !== null)
+                return Metrics.generateBarcodeSummary(currentOffice);
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
-            return Promise.resolve(null);
         }
+        return Promise.resolve(null);
     },
     { reloadable: true }
 );
