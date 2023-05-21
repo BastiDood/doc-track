@@ -8,6 +8,7 @@ import {
     InvalidSession,
     BadContentNegotiation,
     UnexpectedStatusCode,
+    UncachedFetch,
 } from './error.ts';
 
 import { type AllCategories, AllCategoriesSchema } from '../../../model/src/api.ts';
@@ -26,6 +27,7 @@ export namespace Category {
             case StatusCodes.OK: return AllCategoriesSchema.parse(await res.json());
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new UncachedFetch;
             default: throw new UnexpectedStatusCode;
         }
     }

@@ -1,37 +1,63 @@
 import { asyncReadable, asyncDerived } from '@square/svelte-store';
 import { dashboardState } from './DashboardState.ts';
 import { Metrics } from '../../../api/metrics.ts';
+import { assert } from '../../../assert.ts';
+import { topToastMessage } from './ToastStore.ts';
 
 export const userSummary = asyncReadable(
     { },
-    Metrics.generateUserSummary,
+    () => {
+        try {
+            return Metrics.generateUserSummary();
+        } catch (err) {
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
+        }
+        return Promise.resolve({ });
+    },
     { reloadable: true }
 );
 
 export const localSummary = asyncDerived(
     dashboardState,
-    $dashboardState => {
-        const { currentOffice } = $dashboardState;
-        return currentOffice === null
-            ? Promise.resolve({ })
-            : Metrics.generateLocalSummary(currentOffice);
+    ({ currentOffice }) => {
+        try {
+            if (currentOffice !== null)
+                return Metrics.generateLocalSummary(currentOffice);
+        } catch (err) {
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
+        }
+        return Promise.resolve({ });
     },
     { reloadable: true }
 );
 
 export const globalSummary = asyncReadable(
     { },
-    Metrics.generateGlobalSummary,
+    () => {
+        try {
+            return Metrics.generateGlobalSummary();
+        } catch (err) {
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
+        }
+        return Promise.resolve({ });
+    },
     { reloadable: true }
 );
 
 export const barcodeSummary = asyncDerived(
     dashboardState,
-    $dashboardState => {
-        const { currentOffice } = $dashboardState;
-        return currentOffice === null
-            ? Promise.resolve(null)
-            : Metrics.generateBarcodeSummary(currentOffice);
+    ({ currentOffice }) => {
+        try {
+            if (currentOffice !== null)
+                return Metrics.generateBarcodeSummary(currentOffice);
+        } catch (err) {
+            assert(err instanceof Error);
+            topToastMessage.enqueue({ title: err.name, body: err.message });
+        }
+        return Promise.resolve(null);
     },
     { reloadable: true }
 );

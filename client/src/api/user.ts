@@ -8,6 +8,7 @@ import {
     InvalidSession,
     BadContentNegotiation,
     UnexpectedStatusCode,
+    UncachedFetch,
 } from './error.ts';
 
 export namespace User {
@@ -21,6 +22,7 @@ export namespace User {
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.SERVICE_UNAVAILABLE: throw new UncachedFetch;
             default: throw new UnexpectedStatusCode;
         }
     }

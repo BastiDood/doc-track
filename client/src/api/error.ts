@@ -4,6 +4,12 @@ export class InsufficientPermissions extends Error {
     }
 }
 
+export class NoActiveOffice extends Error {
+    constructor() {
+        super('no active office was selected');
+    }
+}
+
 export class InvalidInput extends Error {
     constructor() {
         super('invalid input');
@@ -13,6 +19,12 @@ export class InvalidInput extends Error {
 export class DeferredSnap extends Error {
     constructor() {
         super('snapshot is deffered');
+    }
+}
+
+export class UncachedFetch extends Error {
+    constructor() {
+        super('resource was not cached and is unavailable offline');
     }
 }
 
