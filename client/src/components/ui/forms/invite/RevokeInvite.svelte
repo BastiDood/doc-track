@@ -6,13 +6,13 @@
     import { assert } from '../../../../assert.ts';
 
     import { Invite } from '../../../../api/invite.ts';
-    import { ButtonType, IconColor, Events } from '../../../types.ts';
+    import { ButtonType, IconColor, Events, ToastType } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
 
     import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore';
+    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
     import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
 
     export let email: Invitation['email'];
@@ -31,6 +31,7 @@
             });
             await inviteList.reload?.();
             dispatch(Events.Done);
+            topToastMessage.enqueue({ title: 'Invite Revocation', body: 'You have successfully revoked an invite.', type: ToastType.Success });
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });

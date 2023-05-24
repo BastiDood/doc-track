@@ -3,10 +3,10 @@
     import { assert } from '../../../../assert.ts';
     import { Invite } from '../../../../api/invite.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
-    import { Events } from '../../../types.ts';
+    import { Events, ToastType } from '../../../types.ts';
 
-    import Button from '../../Button.svelte';
-    import Checkmark from '../../../icons/Checkmark.svelte';
+    import Button from '../../Button.svelte.ts';
+    import Checkmark from '../../../icons/Checkmark.svelte.ts';
 
     import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
     import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
@@ -38,6 +38,7 @@
             await inviteList.reload?.();
             this.reset();
             dispatch(Events.Done);
+            topToastMessage.enqueue({ title: 'Invite Creation', body: 'You have successfully invited a new staff.', type: ToastType.Success });
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
