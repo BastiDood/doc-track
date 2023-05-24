@@ -62,6 +62,19 @@ export namespace Document {
         }
     }
 
+    export async function download(did: DocumentType['id']): Promise<Blob | null> {
+        const res = await fetch(`/api/document/download?doc=${did}`, {
+            headers: { 'Accept': 'application/pdf' },
+        });
+        switch (res.status) {
+            case StatusCodes.OK: return res.blob();
+            case StatusCodes.NOT_FOUND: return null;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
+
     export async function getDossier(oid: Office['id']): Promise<InboxEntry[]> {
         const res = await fetch(`/api/dossier?office=${oid}`, {
             credentials: 'same-origin',
