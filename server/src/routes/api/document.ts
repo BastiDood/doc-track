@@ -88,7 +88,7 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
     }
 
     const [ mime, _ ] = parseMediaType(ct);
-    if (mime !== 'application/x-www-form-urlencoded') {
+    if (mime !== 'multipart/form-data') {
         error(`[Document] Content negotiation failed for session ${sid}`);
         return new Response(null, { status: Status.NotAcceptable });
     }

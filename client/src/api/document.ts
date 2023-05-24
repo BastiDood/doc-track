@@ -30,7 +30,7 @@ import {
 export namespace Document {
     export async function create(
         oid: Office['id'],
-        data: File,
+        data: Blob,
         { id, title, category }: DocumentType,
         remark: Snapshot['remark'],
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
@@ -45,10 +45,7 @@ export namespace Document {
             credentials: 'same-origin',
             method: 'POST',
             body,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-url-encoded',
-            },
+            headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
             case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
@@ -62,9 +59,9 @@ export namespace Document {
         }
     }
 
-    export async function download(did: DocumentType['id']): Promise<Blob | null> {
+    export async function download(did: DocumentType['id'], mime: string): Promise<Blob | null> {
         const res = await fetch(`/api/document/download?doc=${did}`, {
-            headers: { 'Accept': 'application/pdf' },
+            headers: { 'Accept': mime },
         });
         switch (res.status) {
             case StatusCodes.OK: return res.blob();
