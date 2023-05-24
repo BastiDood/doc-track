@@ -6,10 +6,12 @@
     import { allOffices } from './stores/OfficeStore.ts';
     import { currentUser } from './stores/UserStore.ts';
     import { deferredSnaps } from './stores/DeferredStore.ts';
+    import { topToastMessage } from './stores/ToastStore.ts';
 
     import Toast from '../../components/ui/Toast.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import SideDrawer from '../../components/ui/navigationbar/SideDrawer.svelte';
+    import { ToastType } from '../../components/types.ts';
 
     import routes from './views/index.ts';
     import { register } from '../register.ts';
@@ -25,6 +27,9 @@
     function onSync(evt: MessageEvent<string>) {
         deferredSnaps.onDocumentSync(evt);
     }
+    
+    $: if (maybeOfficeName === null && $currentPage) 
+        topToastMessage.enqueue({ title: 'No office selected', body: 'Please select an office to continue.', type: ToastType.Info });
 </script>
 
 <svelte:head>
