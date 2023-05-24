@@ -141,6 +141,33 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
     }
 }
 
+export async function handleDownloadDocument(pool: Pool, req: Request, params: URLSearchParams) {
+    const did = params.get('doc');
+    if (!did) {
+        error('[Document] Missing document ID');
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const blob = await db.downloadFile(did);
+        if (blob === null) {
+            error(`[Document] File ${did} not found`);
+            return new Response(null, { status: Status.NotFound });
+        }
+
+        if (accepts(req, blob.type) === undefined) {
+            error(`[Document] Content negotiation failed for downloading file ${did}`);
+            return new Response(null, { status: Status.NotAcceptable });
+        }
+
+        info(`[Document] File ${did} fetched from the database`);
+        return new Response(blob);
+    } finally {
+        db.release();
+    }
+}
+
 /**
  * Gets the inbox of the current office.
  *

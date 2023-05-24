@@ -16,6 +16,7 @@ import {
 } from './api/category.ts';
 import {
     handleCreateDocument,
+    handleDownloadDocument,
     handleGetDossier,
     handleGetInbox,
     handleGetPaperTrail,
@@ -45,6 +46,7 @@ async function handleGet(pool: Pool, req: Request) {
         case '/api/batch': return handleGetEarliestAvailableBatch(pool, req, searchParams);
         case '/api/categories': return handleGetAllCategories(pool, req);
         case '/api/document': return handleGetPaperTrail(pool, req, searchParams);
+        case '/api/document/download': return handleDownloadDocument(pool, req, searchParams);
         case '/api/dossier': return handleGetDossier(pool, req, searchParams);
         case '/api/inbox': return handleGetInbox(pool, req, searchParams);
         case '/api/invites': return handleGetInvitedList(pool, req, searchParams);
