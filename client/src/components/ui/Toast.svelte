@@ -2,7 +2,6 @@
     import { topToastMessage } from '../../pages/dashboard/stores/ToastStore.ts';
 </script>
 
-<!-- TODO: For now, all toast messages are treated as errors. We should add a configuration for using different colors. -->
 {#if $topToastMessage !== null}
     {@const { title, body, type } = $topToastMessage}
     <div class={type}>
