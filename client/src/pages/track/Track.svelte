@@ -96,6 +96,8 @@
         prev = date;
         return `${days}d ${hours}h ${mins}m ${seconds}s`;
     }
+
+    import FileInput from './../../components/ui/FileInput.svelte';
 </script>
 
 <TopBar open />
@@ -116,6 +118,7 @@
                     <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
                 </Button>
                 <br />
+                <FileInput trackingNumber={trackingNumber} />
                 <PrintQr trackingNumber={trackingNumber} showText allowRedirect />
                 <section>
                     <table>
