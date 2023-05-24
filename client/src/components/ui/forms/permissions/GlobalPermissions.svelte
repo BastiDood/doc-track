@@ -48,7 +48,7 @@
             topToastMessage.enqueue({
                 type: ToastType.Success,
                 title: 'Global Permission',
-                body: "You have successfully edited a user's global permission.",
+                body: 'You have successfully edited a user\'s global permission.',
             });
             dispatch(Events.Done);
         } catch (err) {
