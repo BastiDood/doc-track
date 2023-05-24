@@ -20,6 +20,7 @@
     export let target: Snapshot['target'];
     export let creation: Snapshot['creation'];
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     $: targetName = target === null ? 'N/A' : $allOffices[target] ?? 'Unknown';
 </script>
 
