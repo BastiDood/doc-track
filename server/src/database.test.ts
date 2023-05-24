@@ -299,24 +299,25 @@ Deno.test('full OAuth flow', async t => {
         // TODO: Test if we are indeed the minimum batch
         const snap = { evaluator: USER.id, remark: 'Hello', target: office };
         const uuid = crypto.randomUUID();
+        const blob = new Blob;
 
         // Dossier must be empty before assigning
         assertEquals(await db.getDossier(office), [ ]);
 
         // Non-existent barcode
-        assertEquals(await db.assignBarcodeToDocument({ ...doc, id: uuid }, snap), BarcodeAssignmentError.BarcodeNotFound);
+        assertEquals(await db.assignBarcodeToDocument(blob, { ...doc, id: uuid }, snap), BarcodeAssignmentError.BarcodeNotFound);
 
         // Non-existent category
-        assertEquals(await db.assignBarcodeToDocument({ ...doc, category: 0 }, snap), BarcodeAssignmentError.CategoryNotFound);
+        assertEquals(await db.assignBarcodeToDocument(blob, { ...doc, category: 0 }, snap), BarcodeAssignmentError.CategoryNotFound);
 
         // Non-existent evaluator
-        assertEquals(await db.assignBarcodeToDocument(doc, { ...snap, evaluator: uuid }), BarcodeAssignmentError.EvaluatorNotFound);
+        assertEquals(await db.assignBarcodeToDocument(blob, doc, { ...snap, evaluator: uuid }), BarcodeAssignmentError.EvaluatorNotFound);
 
         // Dossier must still be empty after erroneous assignments
         assertEquals(await db.getDossier(office), [ ]);
 
         // Successful assignment
-        const creation = await db.assignBarcodeToDocument(doc, snap);
+        const creation = await db.assignBarcodeToDocument(blob, doc, snap);
         assertInstanceOf(creation, Date);
 
         // Dossier must include the newly registered document
@@ -343,7 +344,7 @@ Deno.test('full OAuth flow', async t => {
         }]);
 
         // Use already assigned barcode
-        assertEquals(await db.assignBarcodeToDocument(doc, snap), BarcodeAssignmentError.AlreadyAssigned);
+        assertEquals(await db.assignBarcodeToDocument(blob, doc, snap), BarcodeAssignmentError.AlreadyAssigned);
 
         // Dossier must be unaffected after errneous assignment
         assertEquals(await db.getDossier(office), expected);
@@ -506,10 +507,10 @@ Deno.test('full OAuth flow', async t => {
     });
 
     await t.step('fully populate the batch - cleanup', async () => {
-
         // Assign barcodes to documents
         for (const other of others) {
             const result = await db.assignBarcodeToDocument(
+                new Blob,
                 {
                     id: other,
                     category,
