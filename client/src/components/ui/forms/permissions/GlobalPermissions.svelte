@@ -45,7 +45,7 @@
                 permission: permsVal,
             });
             await userList.reload?.();
-            topToastMessage.enqueue({ title: 'Global Permission', body: "You have successfully edited a user's global permission.", type: ToastType.Success });
+            topToastMessage.enqueue({ title: 'Global Permission', body: 'You have successfully edited a user\'s global permission.', type: ToastType.Success });
             dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);

@@ -50,7 +50,7 @@
 
             // Reload the staffList store
             await staffList.reload?.();
-            topToastMessage.enqueue({ title: 'Local Permission', body: "You have successfully edited a staff's local permission.", type: ToastType.Success });
+            topToastMessage.enqueue({ title: 'Local Permission', body: 'You have successfully edited a staff\'s local permission.', type: ToastType.Success });
             dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);

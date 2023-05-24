@@ -40,7 +40,7 @@
         if (currentOffice === null) return;
         try {
             await earliestBatch.reload?.();
-            if ($earliestBatch === null || typeof $earliestBatch === 'undefined') 
+            if ($earliestBatch === null || typeof $earliestBatch === 'undefined')
                 topToastMessage.enqueue({ title: 'No available barcodes', body: 'Please generate a new batch.', type: ToastType.Info });
             else showDownloadBatch = true;
         } catch (err) {

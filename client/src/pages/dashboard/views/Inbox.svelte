@@ -39,7 +39,7 @@
     }
 
     function openCreateDocument() {
-        if ($earliestBatch === null || typeof $earliestBatch === 'undefined') 
+        if ($earliestBatch === null || typeof $earliestBatch === 'undefined')
             topToastMessage.enqueue({ title: 'No available barcodes', body: 'Please generate a new batch', type: ToastType.Info });
         else
             ctx = { docId: null, mode: Status.Register, context: null };
