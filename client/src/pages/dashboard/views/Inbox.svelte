@@ -4,7 +4,7 @@
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
-    import { IconSize } from '../../../components/types';
+    import { IconSize, ToastType } from '../../../components/types';
     import { Document } from '../../../../../model/src/document.ts';
     import { Status } from '../../../../../model/src/snapshot.ts';
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
@@ -16,7 +16,6 @@
     import { loadAll } from '@square/svelte-store';
     import { deferredSnaps } from '../stores/DeferredStore.ts';
     import { topToastMessage } from '../stores/ToastStore.ts';
-    import { ToastType } from '../../../components/types';
     import { earliestBatch } from '../stores/BatchStore.ts';
 
     enum ActiveMenu {

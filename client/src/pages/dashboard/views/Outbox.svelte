@@ -5,7 +5,7 @@
     import { earliestBatch } from '../stores/BatchStore.ts';
     import { topToastMessage } from '../stores/ToastStore.ts';
     
-    import { IconSize } from '../../../components/types';
+    import { IconSize, ToastType } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
@@ -15,7 +15,6 @@
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
     import { deferRegistrationCount } from '../stores/DeferredStore.ts';
     import { Document } from '../../../../../model/src/document.ts';
-    import { ToastType } from '../../../components/types';
 
     interface Context {
         docId: Document['id'] | null,
