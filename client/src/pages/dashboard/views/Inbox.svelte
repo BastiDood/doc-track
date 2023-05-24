@@ -15,6 +15,9 @@
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import { loadAll } from '@square/svelte-store';
     import { deferredSnaps } from '../stores/DeferredStore.ts';
+    import { topToastMessage } from '../stores/ToastStore.ts';
+    import { ToastType } from '../../../components/types';
+    import { earliestBatch } from '../stores/BatchStore.ts';
 
     enum ActiveMenu {
         ContextInbox,
@@ -36,7 +39,10 @@
     }
 
     function openCreateDocument() {
-        ctx = { docId: null, mode: Status.Register, context: null };
+        if ($earliestBatch === null || typeof $earliestBatch === 'undefined') 
+            topToastMessage.enqueue({ title: 'No available barcodes', body: 'Please generate a new batch', type: ToastType.Info });
+        else
+            ctx = { docId: null, mode: Status.Register, context: null };
     }
 
     function setOpenedContext(doc: Document['id'], context: ActiveMenu) {
