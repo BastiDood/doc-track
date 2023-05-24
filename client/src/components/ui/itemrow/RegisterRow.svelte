@@ -6,7 +6,7 @@
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, Events } from '../../types.ts';
-    import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
+    import { deferredSnaps } from '../../../stores/DeferredStore.ts';
     import { Document } from '../../../../../model/src/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';

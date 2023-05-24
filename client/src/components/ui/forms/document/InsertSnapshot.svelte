@@ -7,13 +7,14 @@
     import { Office } from '../../../../../../model/src/office.ts';
     import { IconColor, Events, ToastType } from '../../../types.ts';
     import { Document } from '~model/document.ts';
+    import { Office } from '~model/office.ts';
 
-    import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
-    import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
+    import { documentInbox, documentOutbox } from '../../../../stores/DocumentStore.ts';
+    import { allOffices } from '../../../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../stores/ToastStore.ts';
+    import { userSession } from '../../../../stores/UserStore.ts';
+    import { reloadMetrics } from '../../../../stores/MetricStore.ts';
+    import { deferredSnaps } from '../../../../stores/DeferredStore.ts';
     
     import { DeferredSnap } from '../../../../api/error.ts';
 

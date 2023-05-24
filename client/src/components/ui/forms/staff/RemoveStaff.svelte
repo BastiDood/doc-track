@@ -5,9 +5,9 @@
     import { Staff } from '~model/staff.ts';
     import { User } from '~model/user.ts';
     
-    import { staffList } from '../../../../pages/dashboard/stores/StaffStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { staffList } from '../../../../stores/StaffStore.ts';
+    import { allOffices } from '../../../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../stores/ToastStore.ts';
     
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';

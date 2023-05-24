@@ -11,9 +11,9 @@
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
 
-    import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { inviteList } from '../../../../stores/InviteStore.ts';
+    import { allOffices } from '../../../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
 
     export let email: Invitation['email'];
     export let office: Office['id'];

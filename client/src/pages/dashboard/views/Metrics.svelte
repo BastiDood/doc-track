@@ -4,10 +4,10 @@
     import MetricsSelect from '../../../components/ui/MetricsSelect.svelte';
     import { MetricsMode } from '../../../components/types.ts';
 
-    import { dashboardState } from '../stores/DashboardState.ts';
-    import { userSummary, localSummary, globalSummary } from '../stores/MetricStore.ts';
-    import { allOffices } from '../stores/OfficeStore.ts';
-    import { currentUser } from '../stores/UserStore.ts';
+    import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { userSummary, localSummary, globalSummary } from '../../../stores/MetricStore.ts';
+    import { allOffices } from '../../../stores/OfficeStore.ts';
+    import { currentUser } from '../../../stores/UserStore.ts';
 
     function selectSummary(user: Metrics, local: Metrics, global: Metrics, mode?: MetricsMode): Metrics {
         switch (mode) {

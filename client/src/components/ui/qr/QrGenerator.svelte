@@ -2,7 +2,7 @@
     import QRCode from 'qrcode';
 
     import { assert } from '../../../assert.ts';
-    import { topToastMessage } from '../../../pages/dashboard/stores/ToastStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
 
     export let url: string;
 

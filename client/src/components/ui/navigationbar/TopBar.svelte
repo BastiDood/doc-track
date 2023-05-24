@@ -1,15 +1,16 @@
 <script lang="ts">
+    import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { allOffices } from '../../../stores/OfficeStore.ts';
+    import { isOnline } from '../../../stores/NetState.ts';
+    import { deferredSnaps } from '../../../stores/DeferredStore.ts';
+    
     import Button from '../../../components/ui/Button.svelte';
     import Hamburger from '../../icons/Hamburger.svelte';
     import Logout from '../../icons/Logout.svelte';
+    import ChevronLeft from '../../icons/ChevronLeft.svelte';
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
-    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
-    import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
-    import { isOnline } from '../../../pages/dashboard/stores/NetState.ts';
-    import ChevronLeft from '../../icons/ChevronLeft.svelte';
-    import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
 
     // eslint-disable-next-line no-undefined
     export let user = undefined as User | undefined;

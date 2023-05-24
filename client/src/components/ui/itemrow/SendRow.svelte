@@ -6,7 +6,7 @@
     import type { Snapshot } from '~model/snapshot.ts';
     import { goToTrackingPage } from './util.ts';
 
-    import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
+    import { allOffices } from '../../../stores/OfficeStore.ts';
 
     import DocumentExport from '../../icons/DocumentExport.svelte';
     import RowTemplate from '../RowTemplate.svelte';

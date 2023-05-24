@@ -3,13 +3,13 @@
     import { createEventDispatcher } from 'svelte';
     import { Document as Api } from '../../../../api/document.ts';
 
-    import { earliestBatch } from '../../../../pages/dashboard/stores/BatchStore.ts';
-    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
-    import { documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
-    import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
-    import { reloadMetrics } from '../../../../pages/dashboard/stores/MetricStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
-    import { deferredSnaps } from '../../../../pages/dashboard/stores/DeferredStore.ts';
+    import { earliestBatch } from '../../../../stores/BatchStore.ts';
+    import { categoryList } from '../../../../stores/CategoryStore.ts';
+    import { documentOutbox } from '../../../../stores/DocumentStore.ts';
+    import { dashboardState } from '../../../../stores/DashboardState.ts';
+    import { reloadMetrics } from '../../../../stores/MetricStore.ts';
+    import { topToastMessage } from '../../../../stores/ToastStore.ts';
+    import { deferredSnaps } from '../../../../stores/DeferredStore.ts';
 
     import type { Category } from '../../../../.../../../../model/src/category.ts';
     import type { Document } from '../../../../.../../../../model/src/document.ts';

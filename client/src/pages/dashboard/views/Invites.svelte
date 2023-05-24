@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { dashboardState } from '../stores/DashboardState';
-    import { inviteList } from '../../../pages/dashboard/stores/InviteStore.ts';
+    import { dashboardState } from '../../../stores/DashboardState';
+    import { inviteList } from '../../../stores/InviteStore.ts';
     import { IconColor, IconSize } from '../../../components/types.ts';
 
     import Button from '../../../components/ui/Button.svelte';

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { allOffices } from '../stores/OfficeStore';
+    import { allOffices } from '../../../stores/OfficeStore';
     import { Office } from '~model/office';
 
     import Modal from '../../../components/ui/Modal.svelte';

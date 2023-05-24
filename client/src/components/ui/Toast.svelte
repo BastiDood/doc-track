@@ -1,5 +1,5 @@
 <script>
-    import { topToastMessage } from '../../pages/dashboard/stores/ToastStore.ts';
+    import { topToastMessage } from '../../stores/ToastStore.ts';
 </script>
 
 {#if $topToastMessage !== null}

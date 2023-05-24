@@ -3,17 +3,18 @@
     import { checkPerms } from './util.ts';
     import { assert } from '../../../../assert.ts';
 
+    import { topToastMessage } from '../../../../stores/ToastStore.ts';
+    import { userList } from '../../../../stores/UserStore.ts';
+
     import { User as Api } from '../../../../api/user.ts';
     import { IconColor, Events, ToastType } from '../../../types.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
     import { User } from '~model/user.ts';
+    import { Staff } from '~model/staff.ts';
 
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
-
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
-    import { userList } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { Staff } from '~model/staff.ts';
+    
 
     export let id: Staff['user_id'];
     export let permission: User['permission'];

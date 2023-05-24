@@ -5,8 +5,8 @@
     import { Document } from '../../api/document.ts';
     import { register } from '../register.ts';
 
-    import { allOffices } from '../dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../dashboard/stores/ToastStore.ts';
+    import { allOffices } from '../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../stores/ToastStore.ts';
     import { Vapid } from '../../api/vapid.ts';
 
     import Button from '../../components/ui/Button.svelte';

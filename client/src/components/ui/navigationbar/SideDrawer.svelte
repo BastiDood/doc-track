@@ -1,8 +1,8 @@
 <script lang="ts">
     import active from 'svelte-spa-router/active';
     import { Office } from '~model/office.ts';
-    import { userOffices } from '../../../pages/dashboard/stores/UserStore.ts';
-    import { dashboardState } from '../../../pages/dashboard/stores/DashboardState.ts';
+    import { userOffices } from '../../../stores/UserStore.ts';
+    import { dashboardState } from '../../../stores/DashboardState.ts';
     import { goToTrackingPage } from '../itemrow/util.ts';
 
     import InboxIcon from '../../icons/DocumentDownload.svelte';

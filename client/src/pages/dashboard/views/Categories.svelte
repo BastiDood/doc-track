@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Category } from '~model/category.ts';
 
-    import { categoryList } from '../stores/CategoryStore.ts';
+    import { categoryList } from '../../../stores/CategoryStore.ts';
     import { Category as Api } from '../../../api/category.ts';
 
     import Button from '../../../components/ui/Button.svelte';

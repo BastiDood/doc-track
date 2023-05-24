@@ -8,10 +8,10 @@
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
 
-    import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
-    import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { dashboardState } from '../../../../stores/DashboardState.ts';
+    import { inviteList } from '../../../../stores/InviteStore.ts';
+    import { topToastMessage } from '../../../../stores/ToastStore.ts';
+    import { userSession } from '../../../../stores/UserStore.ts';
 
     let email = '';
 

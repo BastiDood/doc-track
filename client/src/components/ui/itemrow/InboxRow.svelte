@@ -4,10 +4,10 @@
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, Events } from '../../types.ts';
-    import { Document } from '../../../../../model/src/document.ts';
+    import { Document } from '~model/document.ts';
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
-    import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
+    import { deferredSnaps } from '../../../stores/DeferredStore.ts';
     import { goToTrackingPage, findDeferredSnapshot } from './util.ts';
 
     export let iconSize: IconSize;

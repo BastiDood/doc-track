@@ -2,11 +2,11 @@
     import { assert } from '../../../assert.ts';
     import { Batch } from '../../../api/batch.ts';
 
-    import { earliestBatch } from '../stores/BatchStore.ts';
-    import { dashboardState } from '../stores/DashboardState.ts';
-    import { topToastMessage } from '../stores/ToastStore.ts';
-    import { barcodeSummary } from '../stores/MetricStore.ts';
-    import { allOffices } from '../stores/OfficeStore.ts';
+    import { earliestBatch } from '../../../stores/BatchStore.ts';
+    import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+    import { barcodeSummary } from '../../../stores/MetricStore.ts';
+    import { allOffices } from '../../../stores/OfficeStore.ts';
 
     import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
 

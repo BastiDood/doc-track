@@ -8,9 +8,9 @@
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
 
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
-    import { userOffices, userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
+    import { allOffices } from '../../../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../stores/ToastStore.ts';
+    import { userOffices, userSession } from '../../../../stores/UserStore.ts';
 
     async function handleSubmit(this: HTMLFormElement) {
         const node = this.elements.namedItem('officename');
