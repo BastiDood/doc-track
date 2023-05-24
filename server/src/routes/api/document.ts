@@ -18,7 +18,7 @@ interface UploadForm {
     category: Document['category'];
     title: Document['title'];
     remark: Snapshot['remark'];
-    file: Blob;
+    data: Blob;
 }
 
 function validateForm(form: FormData): UploadForm | null {
@@ -34,13 +34,13 @@ function validateForm(form: FormData): UploadForm | null {
     const remark = form.get('remark');
     if (typeof remark !== 'string') return null;
 
-    const file = form.get('file');
-    if (file instanceof Blob) return {
+    const data = form.get('data');
+    if (data instanceof Blob) return {
         id,
         category: parseInt(cat, 10),
         title,
         remark,
-        file,
+        data,
     };
 
     return null;
@@ -107,14 +107,14 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        const { file, remark, ...doc } = upload;
+        const { data, remark, ...doc } = upload;
         if ((staff.permission & Local.CreateDocument) === 0) {
             error(`[Document] User ${staff.user_id} cannot assign barcode ${doc.id} to document "${doc.title}"`);
             return new Response(null, { status: Status.Forbidden });
         }
 
         const barcodeResult: Date | BarcodeAssignmentError = await db.assignBarcodeToDocument(
-            file,
+            data,
             doc,
             {
                 remark,
