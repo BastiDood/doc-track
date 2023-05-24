@@ -245,6 +245,10 @@ Deno.test('full API integration test', async t => {
         // Dossier should be initially empty
         assertEquals(await Document.getDossier(oid), [ ]);
 
+        // Common file to be uploaded
+        const bytes = Uint8Array.of(65, 66, 67, 68);
+        const blob = new Blob([ bytes ], { type: 'text/plain' })
+
         for (const code of codes) {
             const batch = await Batch.getEarliestBatch(oid);
             assertInstanceOf(batch?.creation, Date);
@@ -253,6 +257,7 @@ Deno.test('full API integration test', async t => {
 
             const doc = await Document.create(
                 oid,
+                blob,
                 {
                     id: code,
                     title: 'Leave of Absence',
@@ -262,6 +267,11 @@ Deno.test('full API integration test', async t => {
             );
             assertInstanceOf(doc, Date);
             assert(new Date >= creation);
+
+            const downloaded = await Document.download(code, 'text/plain');
+            assertExists(downloaded);
+            const downloadedBytes = new Uint8Array(await downloaded.arrayBuffer());
+            assertEquals(downloadedBytes, bytes);
 
             const index: number = initial.codes.indexOf(code);
             assert(index >= 0);
