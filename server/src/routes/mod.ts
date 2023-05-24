@@ -14,7 +14,13 @@ import {
     handleDeleteCategory,
     handleActivateCategory,
 } from './api/category.ts';
-import { handleCreateDocument, handleGetDossier, handleGetInbox, handleGetPaperTrail, handleGetOutbox } from './api/document.ts';
+import {
+    handleCreateDocument,
+    handleGetDossier,
+    handleGetInbox,
+    handleGetPaperTrail,
+    handleGetOutbox
+} from './api/document.ts';
 import { handleAddInvitation, handleRevokeInvitation, handleGetInvitedList } from './api/invite.ts';
 import {
     handleGenerateGlobalSummary,
