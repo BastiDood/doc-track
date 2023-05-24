@@ -4,7 +4,7 @@
 
     import { assert } from '../../../../assert.ts';
     import { Category as Api } from '../../../../api/category.ts';
-    import { Events, IconColor } from '../../../types.ts';
+    import { Events, IconColor, ToastType } from '../../../types.ts';
 
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
@@ -21,6 +21,11 @@
         try {
             await Api.create(name);
             await categoryList.reload?.();
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Category Creation',
+                body: 'You successfully created a category.',
+            });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

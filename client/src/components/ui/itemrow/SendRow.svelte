@@ -4,7 +4,6 @@
     import type { Document } from '~model/document.ts';
     import type { Category } from '~model/category.ts';
     import type { Snapshot } from '~model/snapshot.ts';
-    import type { Office } from '~model/office.ts';
     import { goToTrackingPage } from './util.ts';
 
     import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
@@ -13,18 +12,21 @@
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize } from '../../types.ts';
-    
+
     export let iconSize: IconSize;
     export let doc: Document['id'];
     export let category: Category['name'];
     export let title: Document['title'];
-    export let target: Office['id'];
+    export let target: Snapshot['target'];
     export let creation: Snapshot['creation'];
-    
-    $: targetName = $allOffices[target] ?? 'No office.';
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    $: targetName = target === null ? 'N/A' : $allOffices[target] ?? 'Unknown';
 </script>
 
-<RowTemplate {iconSize} showOverflowIcon={false}
+<RowTemplate
+    {iconSize}
+    showOverflowIcon={false}
     on:rowContainerClick={() => goToTrackingPage(doc)}
 >
     <span class="chip category">{category}</span>

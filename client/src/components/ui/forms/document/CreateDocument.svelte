@@ -14,7 +14,7 @@
     import type { Category } from '../../../../.../../../../model/src/category.ts';
     import type { Document } from '../../../../.../../../../model/src/document.ts';
     import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
-    import { Events } from '../../../types.ts';
+    import { Events, ToastType } from '../../../types.ts';
     
     import { DeferredSnap } from '../../../../api/error.ts';
 
@@ -42,6 +42,11 @@
             await documentOutbox.reload?.();
             await reloadMetrics();
             dispatch(Events.Done);
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Document Creation',
+                body: 'You have successfully created a document.',
+            });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

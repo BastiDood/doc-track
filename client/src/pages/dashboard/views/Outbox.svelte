@@ -2,8 +2,10 @@
     import { Status } from '../../../../../model/src/snapshot.ts';
     import { dashboardState } from '../stores/DashboardState';
     import { documentOutbox } from '../stores/DocumentStore';
+    import { earliestBatch } from '../stores/BatchStore.ts';
+    import { topToastMessage } from '../stores/ToastStore.ts';
     
-    import { IconSize } from '../../../components/types';
+    import { IconSize, ToastType } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
@@ -33,7 +35,14 @@
     }
 
     function openCreateDocument() {
-        ctx = { docId: null, mode: Status.Register, context: false };
+        if ($earliestBatch === null || typeof $earliestBatch === 'undefined')
+            topToastMessage.enqueue({
+                type: ToastType.Info,
+                title: 'No available barcodes',
+                body: 'Please generate a new batch',
+            });
+        else
+            ctx = { docId: null, mode: Status.Register, context: false };
     }
 
     function resetContext() {

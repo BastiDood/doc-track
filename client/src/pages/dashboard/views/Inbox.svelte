@@ -4,7 +4,7 @@
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
-    import { IconSize } from '../../../components/types';
+    import { IconSize, ToastType } from '../../../components/types';
     import { Document } from '../../../../../model/src/document.ts';
     import { Status } from '../../../../../model/src/snapshot.ts';
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
@@ -15,6 +15,8 @@
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import { loadAll } from '@square/svelte-store';
     import { deferredSnaps } from '../stores/DeferredStore.ts';
+    import { topToastMessage } from '../stores/ToastStore.ts';
+    import { earliestBatch } from '../stores/BatchStore.ts';
 
     enum ActiveMenu {
         ContextInbox,
@@ -36,7 +38,14 @@
     }
 
     function openCreateDocument() {
-        ctx = { docId: null, mode: Status.Register, context: null };
+        if ($earliestBatch === null || typeof $earliestBatch === 'undefined')
+            topToastMessage.enqueue({
+                type: ToastType.Info,
+                title: 'No available barcodes',
+                body: 'Please generate a new batch',
+            });
+        else
+            ctx = { docId: null, mode: Status.Register, context: null };
     }
 
     function setOpenedContext(doc: Document['id'], context: ActiveMenu) {

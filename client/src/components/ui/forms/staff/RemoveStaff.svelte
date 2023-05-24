@@ -11,7 +11,7 @@
     
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
-    import { ButtonType, Events, IconColor } from '../../../types.ts';
+    import { ButtonType, Events, IconColor, ToastType } from '../../../types.ts';
     
 
     export let id: Staff['user_id'];
@@ -26,6 +26,11 @@
                 user_id: id,
             });
             await staffList.reload?.();
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Staff Removal',
+                body: 'You have successfully removed a staff.',
+            });
             dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);

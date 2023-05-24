@@ -21,6 +21,13 @@ export enum ButtonType {
     Danger = 'danger',
 }
 
+export enum ToastType {
+    Info = 'info',
+    Success = 'success',
+    Error = 'error',
+    Offline = 'offline'
+}
+
 export enum InputType {
     Text = 'text',
     Password = 'password',

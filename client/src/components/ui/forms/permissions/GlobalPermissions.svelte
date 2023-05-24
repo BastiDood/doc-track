@@ -4,7 +4,7 @@
     import { assert } from '../../../../assert.ts';
 
     import { User as Api } from '../../../../api/user.ts';
-    import { IconColor, Events } from '../../../types.ts';
+    import { IconColor, Events, ToastType } from '../../../types.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
     import { User } from '~model/user.ts';
 
@@ -45,6 +45,11 @@
                 permission: permsVal,
             });
             await userList.reload?.();
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Global Permission',
+                body: 'You have successfully edited a user\'s global permission.',
+            });
             dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);

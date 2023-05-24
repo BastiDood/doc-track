@@ -8,18 +8,17 @@
     import { barcodeSummary } from '../stores/MetricStore.ts';
     import { allOffices } from '../stores/OfficeStore.ts';
 
-    import GenerateBatch from '../../../components/ui/forms/batch/GenerateBatch.svelte';
     import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
 
     import Download from '../../../components/icons/Download.svelte';
     import Add from '../../../components/icons/Add.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
+    import { ToastType } from '../../../components/types.ts';
 
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
 
-    let showGenerateBatch = false;
     let showDownloadBatch = false;
 
     async function handleGenerate() {
@@ -30,7 +29,11 @@
             await Batch.generate(currentOffice as number);
             await earliestBatch.reload?.();
             await barcodeSummary.reload?.();
-            showGenerateBatch = true;
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Batch Generation',
+                body: 'You successfully generated a batch of barcodes.',
+            });
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
@@ -41,7 +44,14 @@
         if (currentOffice === null) return;
         try {
             await earliestBatch.reload?.();
-            showDownloadBatch = true;
+            if ($earliestBatch === null || typeof $earliestBatch === 'undefined')
+                topToastMessage.enqueue({
+                    type: ToastType.Info,
+                    title: 'No available barcodes',
+                    body: 'Please generate a new batch.',
+                });
+            else
+                showDownloadBatch = true;
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
@@ -82,10 +92,6 @@
             
                 <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
                     <FetchEarliest />
-                </Modal>
-            
-                <Modal title="Generate New Batch" bind:showModal={showGenerateBatch}>
-                    <GenerateBatch />
                 </Modal>
             </main>
         {/if}

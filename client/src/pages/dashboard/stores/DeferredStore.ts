@@ -8,6 +8,7 @@ import { assert } from '../../../assert.ts';
 import { DeferredFetchSchema } from '../../syncman.ts';
 
 import { topToastMessage } from './ToastStore.ts';
+import { ToastType } from '../../../components/types.ts';
 
 const deferStore = asyncWritable(
     [],
@@ -31,7 +32,11 @@ export const deferredSnaps = {
     load: deferStore.load.bind(deferStore),
     onDocumentSync(evt: MessageEvent<string>) {
         assert(evt.data === 'sync');
-        topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.' });
+        topToastMessage.enqueue({
+            type: ToastType.Offline,
+            title: 'Background Syncronization',
+            body: 'Syncronization successful.',
+        });
         deferStore.reset?.();
     },
     upsert(insert: DeferredSnapshot) {

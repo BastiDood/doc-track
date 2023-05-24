@@ -5,11 +5,11 @@
 
     import Button from '../../../components/ui/Button.svelte';
     import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
-    import InviteForm from '../../../components/ui/forms/office/AddInvite.svelte';
+    import InviteForm from '../../../components/ui/forms/invite/AddInvite.svelte';
     import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
-    import RevokeInvite from '../../../components/ui/forms/office/RevokeInvite.svelte';
+    import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
     import { Invitation } from '~model/invitation.ts';
 
     enum ActiveMenu {

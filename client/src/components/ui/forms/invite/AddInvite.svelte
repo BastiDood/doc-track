@@ -3,7 +3,7 @@
     import { assert } from '../../../../assert.ts';
     import { Invite } from '../../../../api/invite.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
-    import { Events } from '../../../types.ts';
+    import { Events, ToastType } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
@@ -36,6 +36,11 @@
         try {
             await Invite.add({ email, office, permission });
             await inviteList.reload?.();
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Invite Creation',
+                body: 'You have successfully invited a new staff.',
+            });
             this.reset();
             dispatch(Events.Done);
         } catch (err) {

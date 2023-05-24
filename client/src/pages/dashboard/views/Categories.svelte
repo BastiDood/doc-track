@@ -16,6 +16,9 @@
     import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
     import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
 
+    import { topToastMessage } from '../stores/ToastStore.ts';
+    import { ToastType } from '../../../components/types.ts';
+
     enum ActiveMenu {
         Create,
         Activate,
@@ -33,10 +36,14 @@
     $: ({ active, retire } = $categoryList);
 
     async function activate(cid: Category['id']) {
-        // TODO: inform user about the result of the operation
         await Api.activate(cid);
         await categoryList.reload?.();
         ctx = null;
+        topToastMessage.enqueue({
+            type: ToastType.Success,
+            title: 'Category Activation',
+            body: 'You successfully activated a category.',
+        });
     }
 
     function resetContext() {
@@ -44,9 +51,13 @@
     }
 
     async function remove(cid: Category['id']) {
-        // TODO: inform user about the result of the operation
         await Api.remove(cid);
         await categoryList.reload?.();
+        topToastMessage.enqueue({
+            title: 'Category Removal',
+            body: 'You successfully removed a category.',
+            type: ToastType.Success,
+        });
         resetContext();
     }
 
