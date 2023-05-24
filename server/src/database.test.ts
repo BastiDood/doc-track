@@ -299,7 +299,8 @@ Deno.test('full OAuth flow', async t => {
         // TODO: Test if we are indeed the minimum batch
         const snap = { evaluator: USER.id, remark: 'Hello', target: office };
         const uuid = crypto.randomUUID();
-        const blob = new Blob;
+        const bytes = Uint8Array.of(0, 1, 2, 3);
+        const blob = new Blob([bytes]);
 
         // Dossier must be empty before assigning
         assertEquals(await db.getDossier(office), [ ]);
@@ -319,6 +320,13 @@ Deno.test('full OAuth flow', async t => {
         // Successful assignment
         const creation = await db.assignBarcodeToDocument(blob, doc, snap);
         assertInstanceOf(creation, Date);
+
+        // Download the same file
+        const downloaded = await db.downloadFile(doc.id);
+        assertExists(downloaded);
+        assertStrictEquals(downloaded.type, 'application/octet-stream');
+        const downloadedBytes = new Uint8Array(await downloaded.arrayBuffer());
+        assertEquals(downloadedBytes, bytes);
 
         // Dossier must include the newly registered document
         const expected = [ { creation, doc: doc.id, title: doc.title, category: randomCategory } ];
