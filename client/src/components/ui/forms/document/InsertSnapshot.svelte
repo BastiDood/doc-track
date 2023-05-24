@@ -5,7 +5,7 @@
     import { Snapshot } from '../../../../api/snapshot.ts';
     import { Snapshot as SnapshotModel, Status } from '../../../../../../model/src/snapshot.ts';
     import { Office } from '../../../../../../model/src/office.ts';
-    import { IconColor, Events } from '../../../types.ts';
+    import { IconColor, Events, ToastType } from '../../../types.ts';
     import { Document } from '~model/document.ts';
 
     import { documentInbox, documentOutbox } from '../../../../pages/dashboard/stores/DocumentStore.ts';
@@ -35,9 +35,18 @@
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
 
-        if (status === Status.Receive) destOfficeId = userOfficeId;
-        if (status === Status.Terminate) destOfficeId = null;
-        else assert(destOfficeId !== null);
+        if (status === Status.Receive) {
+            destOfficeId = userOfficeId;
+            topToastMessage.enqueue({ title: 'Document Received', body: 'You have successfully received a document.', type: ToastType.Success });
+        }
+        else if (status === Status.Terminate) {
+            destOfficeId = null;
+            topToastMessage.enqueue({ title: 'Document Terminated', body: 'You have successfully terminated a document.', type: ToastType.Success });
+        }
+        else {
+            assert(destOfficeId !== null);
+            topToastMessage.enqueue({ title: 'Document Sent', body: 'You have successfully sent a document.', type: ToastType.Success });
+        }
         assert(docId);
 
         try {
