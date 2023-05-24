@@ -20,7 +20,7 @@
     export let target: Snapshot['target'];
     export let creation: Snapshot['creation'];
 
-    $: targetName = target === null ? 'N/A' : ($allOffices[target] ?? 'Unknown');
+    $: targetName = target === null ? 'N/A' : $allOffices[target] ?? 'Unknown';
 </script>
 
 <RowTemplate
