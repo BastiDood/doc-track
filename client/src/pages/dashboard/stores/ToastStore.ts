@@ -1,8 +1,10 @@
 import { writable } from '@square/svelte-store';
+import { ToastType } from '../../../components/types';
 
 export interface Toast {
     title: string;
     body: string;
+    type?: ToastType;
     timeout?: number;
 }
 
@@ -25,14 +27,15 @@ function bootstrap() {
         return;
     }
 
-    const { title, body, timeout } = first;
-    set({ title, body });
+    const { title, body, type, timeout } = first;
+    set({ title, body, type });
     handler = setTimeout(advance, timeout ?? 3000);
 }
 
 export const topToastMessage = {
     subscribe,
     enqueue(toast: Toast) {
+        toast.type ??= ToastType.Error;
         if (messages.push(toast) === 1) bootstrap();
     },
     dismiss() {
