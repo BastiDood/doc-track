@@ -7,15 +7,21 @@
     import { assert } from '../../assert.ts';
 
     export let trackingNumber = null as Document['id'] | null;
-    $: trackingNumber = trackingNumber === null ? '' : `/track?id=${id}`;
+    $: trackingNumber = trackingNumber === null ? '' : `/track?id=${trackingNumber}`;
 
     let fileUpload = null as File | null;
     const dispatch = createEventDispatcher();
 
     async function handleSubmit(this: HTMLFormElement) {
-
         try {
-            topToastMessage.enqueue({ title: `Uploading ifle...`, body: `Name: ${fileUpload.name}` });
+            console.log(`Uploading File ${fileUpload.name}`);
+            assert(fileUpload !== null);
+            assert(trackingNumber !== null);
+            assert(trackingNumber !== '');
+            assert(typeof fileUpload !== 'undefined');
+            assert(typeof fileUpload.name !== 'undefined');
+            
+            topToastMessage.enqueue({ title: `Uploading file...`, body: `Name: ${fileUpload.name}` });
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
@@ -24,7 +30,7 @@
 </script>
 
 <span>
-    <input bind:files={fileUpload} id="upload" multiple={false} type="file" />  
+    <input bind:value={fileUpload} id="upload" multiple={false} type="file" />  
     {#if typeof fileUpload !== 'undefined' && fileUpload !== null}
         <Button on:click={handleSubmit}>Upload</Button>
     {/if}
