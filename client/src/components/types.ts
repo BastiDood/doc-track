@@ -28,7 +28,6 @@ export enum ToastType {
     Offline = 'offline'
 }
 
-
 export enum InputType {
     Text = 'text',
     Password = 'password',
