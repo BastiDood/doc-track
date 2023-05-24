@@ -1,6 +1,6 @@
 import { asyncReadable } from '@square/svelte-store';
-import { assert } from '../../../assert.ts';
-import { Category } from '../../../api/category.ts';
+import { assert } from '../assert.ts';
+import { Category } from '../api/category.ts';
 import { topToastMessage } from './ToastStore.ts';
 
 export const categoryList = asyncReadable(

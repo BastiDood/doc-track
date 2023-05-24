@@ -1,7 +1,7 @@
 import { asyncReadable, asyncDerived } from '@square/svelte-store';
 import { dashboardState } from './DashboardState.ts';
-import { Metrics } from '../../../api/metrics.ts';
-import { assert } from '../../../assert.ts';
+import { Metrics } from '../api/metrics.ts';
+import { assert } from '../assert.ts';
 import { topToastMessage } from './ToastStore.ts';
 
 export const userSummary = asyncReadable(

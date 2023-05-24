@@ -1,7 +1,7 @@
 import { asyncDerived } from '@square/svelte-store';
-import { assert } from '../../../assert.ts';
+import { assert } from '../assert.ts';
 import { dashboardState } from './DashboardState.ts';
-import { Document } from '../../../api/document';
+import { Document } from '../api/document.ts';
 import { topToastMessage } from './ToastStore.ts';
 
 export const documentInbox = asyncDerived(

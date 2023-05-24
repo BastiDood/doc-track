@@ -1,11 +1,11 @@
 import { asyncWritable, derived } from '@square/svelte-store';
 import localForage from 'localforage';
 
-import { type DeferredSnapshot, DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../../../model/src/api.ts';
-import { Status } from '../../../../../model/src/snapshot.ts';
+import { type DeferredSnapshot, DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
+import { Status } from '../../../model/src/snapshot.ts';
 
-import { assert } from '../../../assert.ts';
-import { DeferredFetchSchema } from '../../syncman.ts';
+import { assert } from '../assert.ts';
+import { DeferredFetchSchema } from '../pages/syncman.ts';
 
 import { topToastMessage } from './ToastStore.ts';
 import { ToastType } from '../../../components/types.ts';

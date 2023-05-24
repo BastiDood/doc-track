@@ -1,9 +1,9 @@
 import { asyncReadable, derived } from '@square/svelte-store';
-import { assert } from '../../../assert.ts';
+import { assert } from '../assert.ts';
 import { allOffices } from './OfficeStore.ts';
-import { Session } from '../../../api/session.ts';
+import { Session } from '../api/session.ts';
 import { User as UserModel } from '~model/user.ts';
-import { User } from '../../../api/user.ts';
+import { User } from '../api/user.ts';
 import { topToastMessage } from './ToastStore.ts';
 
 export const userSession = asyncReadable(

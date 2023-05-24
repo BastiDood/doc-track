@@ -1,5 +1,5 @@
 import { writable } from '@square/svelte-store';
-import { sendNotification } from '../../../notification.ts';
+import { sendNotification } from '../notification.ts';
 
 const { subscribe, set } = writable(navigator.onLine);
 
