@@ -30,7 +30,11 @@
                 name: currName,
             });
             await allOffices.reload?.();
-            topToastMessage.enqueue({ title: 'Office Edit', body: 'You successfully edited an office.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Office Edit',
+                body: 'You successfully edited an office.',
+            });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

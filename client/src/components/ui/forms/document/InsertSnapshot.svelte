@@ -37,20 +37,30 @@
 
         if (status === Status.Receive) {
             destOfficeId = userOfficeId;
-            topToastMessage.enqueue({ title: 'Document Received', body: 'You have successfully received a document.', type: ToastType.Success });
-        }
-        else if (status === Status.Terminate) {
+            topToastMessage.enqueue({
+                title: 'Document Received',
+                body: 'You have successfully received a document.',
+                type: ToastType.Success,
+            });
+        } else if (status === Status.Terminate) {
             destOfficeId = null;
-            topToastMessage.enqueue({ title: 'Document Terminated', body: 'You have successfully terminated a document.', type: ToastType.Success });
-        }
-        else {
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Document Terminated',
+                body: 'You have successfully terminated a document.',
+            });
+        } else {
             assert(destOfficeId !== null);
-            topToastMessage.enqueue({ title: 'Document Sent', body: 'You have successfully sent a document.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Document Sent',
+                body: 'You have successfully sent a document.',
+            });
         }
         assert(docId);
 
         try {
-            await Snapshot.insert(userOfficeId,{
+            await Snapshot.insert(userOfficeId, {
                 doc: docId,
                 status,
                 remark: node.value,

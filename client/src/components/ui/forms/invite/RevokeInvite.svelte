@@ -25,12 +25,13 @@
         assert(email);
         assert(office);
         try {
-            await Invite.revoke({
-                office,
-                email,
-            });
+            await Invite.revoke({ office, email });
             await inviteList.reload?.();
-            topToastMessage.enqueue({ title: 'Invite Revocation', body: 'You have successfully revoked an invite.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Invite Revocation',
+                body: 'You have successfully revoked an invite.',
+            });
             dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);

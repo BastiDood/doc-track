@@ -42,7 +42,11 @@
             await documentOutbox.reload?.();
             await reloadMetrics();
             dispatch(Events.Done);
-            topToastMessage.enqueue({ title: 'Document Creation', body: 'You have successfully created a document.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Document Creation',
+                body: 'You have successfully created a document.',
+            });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

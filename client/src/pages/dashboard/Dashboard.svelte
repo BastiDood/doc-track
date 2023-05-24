@@ -29,7 +29,11 @@
     }
     
     $: if (maybeOfficeName === null && $currentPage)
-        topToastMessage.enqueue({ title: 'No office selected', body: 'Please select an office to continue.', type: ToastType.Info });
+        topToastMessage.enqueue({
+            type: ToastType.Info,
+            title: 'No office selected',
+            body: 'Please select an office to continue.',
+        });
 </script>
 
 <svelte:head>

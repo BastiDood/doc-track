@@ -21,7 +21,11 @@
         try {
             await Api.create(name);
             await categoryList.reload?.();
-            topToastMessage.enqueue({ title: 'Category Creation', body: 'You successfully created a category.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Category Creation',
+                body: 'You successfully created a category.',
+            });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

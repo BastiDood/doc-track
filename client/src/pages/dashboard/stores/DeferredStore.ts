@@ -32,7 +32,11 @@ export const deferredSnaps = {
     load: deferStore.load.bind(deferStore),
     onDocumentSync(evt: MessageEvent<string>) {
         assert(evt.data === 'sync');
-        topToastMessage.enqueue({ title: 'Background Syncronization', body: 'Syncronization successful.', type: ToastType.Offline });
+        topToastMessage.enqueue({
+            type: ToastType.Offline,
+            title: 'Background Syncronization',
+            body: 'Syncronization successful.',
+        });
         deferStore.reset?.();
     },
     upsert(insert: DeferredSnapshot) {

@@ -26,7 +26,11 @@
                 user_id: id,
             });
             await staffList.reload?.();
-            topToastMessage.enqueue({ title: 'Staff Removal', body: 'You have successfully removed a staff.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Staff Removal',
+                body: 'You have successfully removed a staff.',
+            });
             dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);

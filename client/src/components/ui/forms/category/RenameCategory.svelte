@@ -23,7 +23,11 @@
         try {
             await Api.rename({ id: cid, name: currName });
             await categoryList.reload?.();
-            topToastMessage.enqueue({ title: 'Category Rename', body: 'You successfully renamed a category.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Category Rename',
+                body: 'You successfully renamed a category.',
+            });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

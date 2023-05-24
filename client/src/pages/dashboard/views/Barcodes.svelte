@@ -29,7 +29,11 @@
             await Batch.generate(currentOffice as number);
             await earliestBatch.reload?.();
             await barcodeSummary.reload?.();
-            topToastMessage.enqueue({ title: 'Batch Generation', body: 'You successfully generated a batch of barcodes.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Batch Generation',
+                body: 'You successfully generated a batch of barcodes.',
+            });
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
@@ -41,8 +45,13 @@
         try {
             await earliestBatch.reload?.();
             if ($earliestBatch === null || typeof $earliestBatch === 'undefined')
-                topToastMessage.enqueue({ title: 'No available barcodes', body: 'Please generate a new batch.', type: ToastType.Info });
-            else showDownloadBatch = true;
+                topToastMessage.enqueue({
+                    type: ToastType.Info,
+                    title: 'No available barcodes',
+                    body: 'Please generate a new batch.',
+                });
+            else
+                showDownloadBatch = true;
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });

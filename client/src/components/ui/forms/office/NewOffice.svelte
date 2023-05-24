@@ -22,7 +22,11 @@
         try {
             await Office.create(node.value);
             await userOffices.reload?.(); // Reloads all relevant stores
-            topToastMessage.enqueue({ title: 'Office Creation', body: 'You successfully created a new office.', type: ToastType.Success });
+            topToastMessage.enqueue({
+                type: ToastType.Success,
+                title: 'Office Creation',
+                body: 'You successfully created a new office.',
+            });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);
