@@ -4,7 +4,7 @@
 
     import { assert } from '../../../../assert.ts';
     import { Category as Api } from '../../../../api/category.ts';
-    import { Events, IconColor } from '../../../types.ts';
+    import { Events, IconColor, ToastType } from '../../../types.ts';
 
     import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
     import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
@@ -23,6 +23,7 @@
         try {
             await Api.rename({ id: cid, name: currName });
             await categoryList.reload?.();
+            topToastMessage.enqueue({ title: 'Category Rename', body: 'You successfully renamed a category.', type: ToastType.Success });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

@@ -30,8 +30,8 @@
                 email,
             });
             await inviteList.reload?.();
-            dispatch(Events.Done);
             topToastMessage.enqueue({ title: 'Invite Revocation', body: 'You have successfully revoked an invite.', type: ToastType.Success });
+            dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });

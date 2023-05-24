@@ -36,9 +36,9 @@
         try {
             await Invite.add({ email, office, permission });
             await inviteList.reload?.();
+            topToastMessage.enqueue({ title: 'Invite Creation', body: 'You have successfully invited a new staff.', type: ToastType.Success });
             this.reset();
             dispatch(Events.Done);
-            topToastMessage.enqueue({ title: 'Invite Creation', body: 'You have successfully invited a new staff.', type: ToastType.Success });
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });

@@ -2,7 +2,7 @@
     import { createEventDispatcher } from 'svelte';
     import { checkPerms } from './util.ts';
     import { assert } from '../../../../assert.ts';
-    import { Events, IconColor } from '../../../types.ts';
+    import { Events, IconColor, ToastType } from '../../../types.ts';
     import { Staff as Api } from '../../../../api/staff.ts';
     import { Staff } from '~model/staff.ts';
     import { User } from '~model/user.ts';
@@ -50,6 +50,7 @@
 
             // Reload the staffList store
             await staffList.reload?.();
+            topToastMessage.enqueue({ title: 'Local Permission', body: "You have successfully edited a staff's local permission.", type: ToastType.Success });
             dispatch(Events.Done);
         } catch (err) {
             assert(err instanceof Error);

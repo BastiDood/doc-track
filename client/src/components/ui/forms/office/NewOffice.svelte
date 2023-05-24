@@ -2,7 +2,7 @@
     import { assert } from '../../../../assert.ts';
 
     import { Office } from '../../../../api/office.ts';
-    import { IconColor } from '../../../types.ts';
+    import { IconColor, ToastType } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -22,6 +22,7 @@
         try {
             await Office.create(node.value);
             await userOffices.reload?.(); // Reloads all relevant stores
+            topToastMessage.enqueue({ title: 'Office Creation', body: 'You successfully created a new office.', type: ToastType.Success });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);

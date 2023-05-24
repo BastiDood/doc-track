@@ -5,7 +5,7 @@
     import { Office as OfficeModel } from '~model/office.ts';
 
     import { Office } from '../../../../api/office.ts';
-    import { Events, IconColor } from '../../../types.ts';
+    import { Events, IconColor, ToastType } from '../../../types.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';
@@ -30,6 +30,7 @@
                 name: currName,
             });
             await allOffices.reload?.();
+            topToastMessage.enqueue({ title: 'Office Edit', body: 'You successfully edited an office.', type: ToastType.Success });
             this.reset();
         } catch (err) {
             assert(err instanceof Error);
