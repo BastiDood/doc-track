@@ -87,6 +87,7 @@ CREATE TABLE document(
     category SMALLINT NOT NULL REFERENCES category (id),
     title VARCHAR(40) NOT NULL,
     data BYTEA NOT NULL,
+    mime VARCHAR(128) NOT NULL,
     PRIMARY KEY (id)
 );
 
