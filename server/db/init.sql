@@ -86,6 +86,7 @@ CREATE TABLE document(
     id UUID NOT NULL REFERENCES barcode (code),
     category SMALLINT NOT NULL REFERENCES category (id),
     title VARCHAR(40) NOT NULL,
+    data BYTEA NOT NULL,
     PRIMARY KEY (id)
 );
 

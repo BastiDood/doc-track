@@ -323,13 +323,14 @@ export class Database {
      * @returns creation date if successfully added
      */
     async assignBarcodeToDocument(
+        blob: Blob,
         { id, category, title }: Document,
         { evaluator, remark, target }: Pick<Snapshot, 'evaluator' | 'remark' | 'target'>,
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
-        // TODO: Do Actual Document Upload
+        const bytes = new Uint8Array(await blob.arrayBuffer());
         try {
             const { rows: [ first, ...rest ] } = await this.#client
-                .queryObject`WITH results AS (INSERT INTO document (id,category,title) VALUES (${id},${category},${title}) RETURNING id)
+                .queryObject`WITH results AS (INSERT INTO document (id,category,title,file) VALUES (${id},${category},${title},${bytes}) RETURNING id)
                     INSERT INTO snapshot (doc,evaluator,remark,target) VALUES ((SELECT id from results),${evaluator},${remark},${target}) RETURNING creation`;
             assertStrictEquals(rest.length, 0);
             return SnapshotSchema.pick({ creation: true }).parse(first).creation;
