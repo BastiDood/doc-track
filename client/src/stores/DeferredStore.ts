@@ -7,8 +7,8 @@ import { Status } from '../../../model/src/snapshot.ts';
 import { assert } from '../assert.ts';
 import { DeferredFetchSchema } from '../pages/syncman.ts';
 
-import { topToastMessage } from './ToastStore.ts';
-import { ToastType } from '../../../components/types.ts';
+
+import { ToastType } from '../components/types.ts';
 
 const deferStore = asyncWritable(
     [],
