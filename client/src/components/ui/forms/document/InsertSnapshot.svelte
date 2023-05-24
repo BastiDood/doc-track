@@ -4,7 +4,6 @@
 
     import { Snapshot } from '../../../../api/snapshot.ts';
     import { Snapshot as SnapshotModel, Status } from '../../../../../../model/src/snapshot.ts';
-    import { Office } from '../../../../../../model/src/office.ts';
     import { IconColor, Events, ToastType } from '../../../types.ts';
     import { Document } from '~model/document.ts';
     import { Office } from '~model/office.ts';
