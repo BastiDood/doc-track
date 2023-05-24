@@ -30,16 +30,24 @@ import {
 export namespace Document {
     export async function create(
         oid: Office['id'],
-        doc: DocumentType,
+        data: File,
+        { id, title, category }: DocumentType,
         remark: Snapshot['remark'],
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
+        const body = new FormData;
+        body.set('id', id);
+        body.set('title', title);
+        body.set('category', category.toString());
+        body.set('remark', remark);
+        body.set('data', data);
+
         const res = await fetch(`/api/document?office=${oid}`, {
             credentials: 'same-origin',
             method: 'POST',
-            body: JSON.stringify({ ...doc, remark }),
+            body,
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/x-www-url-encoded',
             },
         });
         switch (res.status) {
