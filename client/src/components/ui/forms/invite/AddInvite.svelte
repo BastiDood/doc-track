@@ -5,8 +5,8 @@
     import { Global } from '../../../../../../model/src/permission.ts';
     import { Events, ToastType } from '../../../types.ts';
 
-    import Button from '../../Button.svelte.ts';
-    import Checkmark from '../../../icons/Checkmark.svelte.ts';
+    import Button from '../../Button.svelte';
+    import Checkmark from '../../../icons/Checkmark.svelte';
 
     import { dashboardState } from '../../../../pages/dashboard/stores/DashboardState.ts';
     import { inviteList } from '../../../../pages/dashboard/stores/InviteStore.ts';
