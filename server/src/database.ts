@@ -323,13 +323,15 @@ export class Database {
      * @returns creation date if successfully added
      */
     async assignBarcodeToDocument(
+        blob: Blob,
         { id, category, title }: Document,
         { evaluator, remark, target }: Pick<Snapshot, 'evaluator' | 'remark' | 'target'>,
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
-        // TODO: Do Actual Document Upload
+        const mime = blob.type || 'application/octet-stream';
+        const bytes = new Uint8Array(await blob.arrayBuffer());
         try {
             const { rows: [ first, ...rest ] } = await this.#client
-                .queryObject`WITH results AS (INSERT INTO document (id,category,title) VALUES (${id},${category},${title}) RETURNING id)
+                .queryObject`WITH results AS (INSERT INTO document (id,category,title,data,mime) VALUES (${id},${category},${title},${bytes},${mime}) RETURNING id)
                     INSERT INTO snapshot (doc,evaluator,remark,target) VALUES ((SELECT id from results),${evaluator},${remark},${target}) RETURNING creation`;
             assertStrictEquals(rest.length, 0);
             return SnapshotSchema.pick({ creation: true }).parse(first).creation;
@@ -395,6 +397,16 @@ export class Database {
                     INNER JOIN category AS c ON d.category = c.id
                 WHERE s.doc = ${doc} ORDER BY s.creation ASC`;
         return PaperTrailSchema.array().parse(rows);
+    }
+
+    async downloadFile(doc: Document['id']): Promise<Blob | null> {
+        const { rows: [ first, ...rest ] }  = await this.#client
+            .queryObject`SELECT mime,data FROM document WHERE id = ${doc} LIMIT 1`;
+        assertStrictEquals(rest.length, 0);
+
+        if (typeof first === 'undefined') return null;
+        const { data, mime } = z.object({ data: z.instanceof(Uint8Array), mime: z.string() }).parse(first);
+        return new Blob([ data ], { type: mime });
     }
 
     /** Gets a list of {@linkcode InboxEntry} such that they were registered from the given office.  */

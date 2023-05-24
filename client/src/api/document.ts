@@ -30,17 +30,22 @@ import {
 export namespace Document {
     export async function create(
         oid: Office['id'],
-        doc: DocumentType,
+        data: Blob,
+        { id, title, category }: DocumentType,
         remark: Snapshot['remark'],
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
+        const body = new FormData;
+        body.set('id', id);
+        body.set('title', title);
+        body.set('category', category.toString());
+        body.set('remark', remark);
+        body.set('data', data);
+
         const res = await fetch(`/api/document?office=${oid}`, {
             credentials: 'same-origin',
             method: 'POST',
-            body: JSON.stringify({ ...doc, remark }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
+            body,
+            headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
             case StatusCodes.CREATED: return SnapshotSchema.shape.creation.parse(await res.json());
@@ -50,6 +55,19 @@ export namespace Document {
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             case StatusCodes.SERVICE_UNAVAILABLE: throw new DeferredSnap;
+            default: throw new UnexpectedStatusCode;
+        }
+    }
+
+    export async function download(did: DocumentType['id'], mime: string): Promise<Blob | null> {
+        const res = await fetch(`/api/document/download?doc=${did}`, {
+            headers: { 'Accept': mime },
+        });
+        switch (res.status) {
+            case StatusCodes.OK: return res.blob();
+            case StatusCodes.NOT_FOUND: return null;
+            case StatusCodes.BAD_REQUEST: throw new InvalidInput;
+            case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             default: throw new UnexpectedStatusCode;
         }
     }

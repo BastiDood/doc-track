@@ -8,10 +8,43 @@ import { Pool } from 'postgres';
 import type { BarcodeAssignmentError, AllInbox, AllOutbox, InboxEntry, PaperTrail } from '~model/api.ts';
 import { Local } from '~model/permission.ts';
 
-import { DocumentSchema } from '~model/document.ts';
-import { SnapshotSchema } from '~model/snapshot.ts';
+import { type Document, DocumentSchema } from '~model/document.ts';
+import type { Snapshot } from '~model/snapshot.ts';
 
 import { Database } from '../../database.ts';
+
+interface UploadForm {
+    id: Document['id'];
+    category: Document['category'];
+    title: Document['title'];
+    remark: Snapshot['remark'];
+    data: Blob;
+}
+
+function validateForm(form: FormData): UploadForm | null {
+    const id = form.get('id');
+    if (typeof id !== 'string') return null;
+
+    const cat = form.get('category');
+    if (typeof cat !== 'string') return null;
+
+    const title = form.get('title');
+    if (typeof title !== 'string') return null;
+
+    const remark = form.get('remark');
+    if (typeof remark !== 'string') return null;
+
+    const data = form.get('data');
+    if (data instanceof Blob) return {
+        id,
+        category: parseInt(cat, 10),
+        title,
+        remark,
+        data,
+    };
+
+    return null;
+}
 
 /**
  * Creates a new document by assigning it an available barcode.
@@ -55,13 +88,13 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
     }
 
     const [ mime, _ ] = parseMediaType(ct);
-    if (mime !== 'application/json') {
+    if (mime !== 'multipart/form-data') {
         error(`[Document] Content negotiation failed for session ${sid}`);
         return new Response(null, { status: Status.NotAcceptable });
     }
 
-    const inputResult = DocumentSchema.and(SnapshotSchema.pick({ remark: true })).safeParse(await req.json());
-    if (!inputResult.success) {
+    const upload = validateForm(await req.formData());
+    if (upload === null) {
         error(`[Document] Bad document body for session ${sid}`);
         return new Response(null, { status: Status.BadRequest });
     }
@@ -74,17 +107,21 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
             return new Response(null, { status: Status.Unauthorized });
         }
 
-        const { remark, ...doc } = inputResult.data;
+        const { data, remark, ...doc } = upload;
         if ((staff.permission & Local.CreateDocument) === 0) {
             error(`[Document] User ${staff.user_id} cannot assign barcode ${doc.id} to document "${doc.title}"`);
             return new Response(null, { status: Status.Forbidden });
         }
 
-        const barcodeResult: Date | BarcodeAssignmentError = await db.assignBarcodeToDocument(doc, {
-            remark,
-            evaluator: staff.user_id,
-            target: oid,
-        });
+        const barcodeResult: Date | BarcodeAssignmentError = await db.assignBarcodeToDocument(
+            data,
+            doc,
+            {
+                remark,
+                evaluator: staff.user_id,
+                target: oid,
+            },
+        );
 
         if (barcodeResult instanceof Date) {
             info(`[Document] User ${staff.user_id} assigned barcode ${doc.id} to document "${doc.title}"`);
@@ -99,6 +136,33 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
             status: Status.Conflict,
             headers: { 'Content-Type': 'application/json' },
         });
+    } finally {
+        db.release();
+    }
+}
+
+export async function handleDownloadDocument(pool: Pool, req: Request, params: URLSearchParams) {
+    const did = params.get('doc');
+    if (!did) {
+        error('[Document] Missing document ID');
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const blob = await db.downloadFile(did);
+        if (blob === null) {
+            error(`[Document] File ${did} not found`);
+            return new Response(null, { status: Status.NotFound });
+        }
+
+        if (accepts(req, blob.type) === undefined) {
+            error(`[Document] Content negotiation failed for downloading file ${did}`);
+            return new Response(null, { status: Status.NotAcceptable });
+        }
+
+        info(`[Document] File ${did} fetched from the database`);
+        return new Response(blob);
     } finally {
         db.release();
     }
