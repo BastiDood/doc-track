@@ -330,7 +330,7 @@ export class Database {
         const bytes = new Uint8Array(await blob.arrayBuffer());
         try {
             const { rows: [ first, ...rest ] } = await this.#client
-                .queryObject`WITH results AS (INSERT INTO document (id,category,title,file) VALUES (${id},${category},${title},${bytes}) RETURNING id)
+                .queryObject`WITH results AS (INSERT INTO document (id,category,title,data) VALUES (${id},${category},${title},${bytes}) RETURNING id)
                     INSERT INTO snapshot (doc,evaluator,remark,target) VALUES ((SELECT id from results),${evaluator},${remark},${target}) RETURNING creation`;
             assertStrictEquals(rest.length, 0);
             return SnapshotSchema.pick({ creation: true }).parse(first).creation;
@@ -396,6 +396,15 @@ export class Database {
                     INNER JOIN category AS c ON d.category = c.id
                 WHERE s.doc = ${doc} ORDER BY s.creation ASC`;
         return PaperTrailSchema.array().parse(rows);
+    }
+
+    async downloadFile(doc: Document['id']): Promise<Uint8Array | null> {
+        const { rows: [ first, ...rest ] }  = await this.#client
+            .queryObject`SELECT data FROM document WHERE id = ${doc} LIMIT 1`;
+        assertStrictEquals(rest.length, 0);
+        if (typeof first === 'undefined') return null;
+        assertInstanceOf(first, Uint8Array);
+        return first;
     }
 
     /** Gets a list of {@linkcode InboxEntry} such that they were registered from the given office.  */
