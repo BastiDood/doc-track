@@ -24,6 +24,8 @@
     import TextInput from '../../TextInput.svelte';
     import QrGenerator from '../../qr/QrGenerator.svelte';
 
+    import FileInput from '../../FileInput.svelte';
+
     let id = null as Document['id'] | null;
     $: url = id === null ? '' : `/track?id=${id}`;
 
@@ -75,6 +77,9 @@
         Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
         <br />
         <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark:" required={false}></TextInput> 
+        {#if id}
+            <FileInput trackingNumber={id} /> 
+        {/if}
         <Button submit>Create Document</Button>
     </form>
 {/if}

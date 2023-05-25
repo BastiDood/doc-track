@@ -1,9 +1,9 @@
 <script lang="ts">
     import Button from './Button.svelte';
-import DownloadButton from '../icons/DocumentDownload.svelte';
-import Modal from './Modal.svelte';
-import { assert } from '../../assert.ts';
-import { topToastMessage } from '../../stores/ToastStore';
+    import DownloadButton from '../icons/DocumentDownload.svelte';
+    import Modal from './Modal.svelte';
+    import { assert } from '../../assert.ts';
+    import { topToastMessage } from '../../stores/ToastStore';
 
     export let trackingNumber = null as string | null;
     export let maxLimit = 20971520;
