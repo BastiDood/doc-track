@@ -56,13 +56,13 @@
         ctx = null;
     }
 
-    $: defer = deferredSnaps.load().catch(err => {
+    const defer = deferredSnaps.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
     });
 
-    $: inbox = documentInbox.load().catch(err => {
+    const inbox = documentInbox.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();

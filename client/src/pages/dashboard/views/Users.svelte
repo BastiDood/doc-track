@@ -33,7 +33,7 @@
         ctx = null;
     }
 
-    $: users = userList.load().catch(err => {
+    const users = userList.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();

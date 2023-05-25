@@ -50,13 +50,13 @@
         ctx = null;
     }
 
-    $: defer = deferRegistrationCount.load().catch(err => {
+    const defer = deferRegistrationCount.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
     });
 
-    $: outbox = documentOutbox.load().catch(err => {
+    const outbox = documentOutbox.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();

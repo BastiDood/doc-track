@@ -58,7 +58,7 @@
         }
     }
 
-    $: barcodeSum = barcodeSummary.load().catch(err => {
+    const barcodeSum = barcodeSummary.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
