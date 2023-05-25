@@ -15,21 +15,29 @@
     let path = null as string | null;
     let showFileInput = false;
     let outputText = '';
-
-    $: outputText = toUpload !== null ? `File selected: ${toUpload.name}` : '';
-    export let maxLimit = 20000000;
+    let maxLimitText = '';
+    export let maxLimit = 20971520;
+    $: maxLimitText = convertToScale(maxLimit);
+    $: outputText = outputText === '' ? '' : outputText;
     $: if (files) {
 		for (const file of files) {
 			toUpload = file;
 		}
 	}
+
+    function convertToScale(bytes: number) {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes === 0) return '0 Byte';
+        const i = Math.floor(Math.log(bytes + 1) / Math.log(1024));
+        return `${Math.round((bytes + 1) / Math.pow(1024, i))} ${sizes[i]}`;
+    }
+    
     const dispatch = createEventDispatcher();
-    function validateFile() {
-        assert(typeof toUpload !== 'undefined' && toUpload);
-        assert(typeof toUpload.size !== 'undefined' && toUpload.size);
-        if (toUpload.size > maxLimit) {
-            throw new Error(`File size must be less than ${maxLimit} bytes.`);
-        }
+
+    async function validateFile() {
+        assert(typeof files !== 'undefined' && files);
+        assert(toUpload && typeof toUpload !== 'undefined');    
+        outputText = toUpload.size > maxLimit ? `File size must be less than ${maxLimitText}.` : `Size: ${convertToScale(toUpload.size)}`;
     }
 
     async function handleSubmit(this: HTMLFormElement) {
@@ -39,8 +47,10 @@
             assert(trackingNumber !== '');
             assert(typeof files !== 'undefined' && files);
             assert(toUpload && typeof toUpload !== 'undefined');    
+            
             if(toUpload.size > maxLimit) {
-                topToastMessage.enqueue({ title: 'File too large', body: `File size must be less than ${maxLimit} bytes.` });
+                outputText = `File size must be less than ${maxLimitText}.`;
+                topToastMessage.enqueue({ title: 'File too large', body: `File size must be less than ${maxLimitText}.` });
                 return;
             }
             console.log(`Successfully uploaded file "${toUpload.name}" (${toUpload.size} bytes)`);
@@ -49,6 +59,8 @@
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
+
+    
 </script>
 
 <Button on:click={() => (showFileInput = true)}>
@@ -58,11 +70,16 @@
     <input bind:files on:change={validateFile} bind:value={path} id="upload" multiple={false} type="file" capture={true} />  
     {#if typeof files !== 'undefined' && files !== null}
         <br>
-        <p>{outputText}</p>
+        <p id="error">File Size: {outputText}</p>
         <Button on:click={handleSubmit}>Upload "{toUpload?.name ?? 'No file Selected'}"</Button>
     {/if}
 </Modal>
 
 <style>
     @import url('../../pages/vars.css');
+
+    #error {
+        color: var(--danger-color);
+        display: block;
+    }
 </style>    
