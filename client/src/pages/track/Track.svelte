@@ -98,7 +98,7 @@
         return `${days}d ${hours}h ${mins}m ${seconds}s`;
     }
 
-    const allOffice = allOffices.load().catch(err => {
+    const allOfficeReady = allOffices.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
@@ -110,7 +110,7 @@
     {#if trackingNumber === null}
         <p>No tracking number provided.</p>
     {:else}
-        {#await Promise.all([Document.getPaperTrail(trackingNumber), allOffice])}
+        {#await Promise.all([Document.getPaperTrail(trackingNumber), allOfficeReady])}
             Loading paper trail...
         {:then [trail, _]}
             {@const overview = renderOverview(trail, $allOffices)}

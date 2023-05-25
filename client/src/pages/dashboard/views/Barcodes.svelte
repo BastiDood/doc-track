@@ -59,7 +59,7 @@
         }
     }
 
-    const barcodeSum = barcodeSummary.load().catch(err => {
+    const barcodeSumReady = barcodeSummary.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
@@ -69,7 +69,7 @@
 {#if currentOffice === null}
     You must select an office before accessing the Barcodes page.
 {:else}
-    {#await barcodeSum}
+    {#await barcodeSumReady}
         Loading barcode metrics...
     {:then} 
         {#if $barcodeSummary === null}

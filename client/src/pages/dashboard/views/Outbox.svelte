@@ -51,13 +51,13 @@
         ctx = null;
     }
 
-    const defer = deferRegistrationCount.load().catch(err => {
+    const deferReady = deferRegistrationCount.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
     });
 
-    const outbox = documentOutbox.load().catch(err => {
+    const outboxReady = documentOutbox.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
@@ -72,7 +72,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await Promise.all([outbox, defer])}
+    {#await Promise.all([outboxReady, deferReady])}
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>

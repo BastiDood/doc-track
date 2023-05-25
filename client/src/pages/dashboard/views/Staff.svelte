@@ -55,7 +55,7 @@
         ctx = null;
     }
 
-    const staffs = staffList.load().catch(err => {
+    const staffReady = staffList.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
@@ -65,7 +65,7 @@
 {#if currentOffice === null}
     You must select an office before accessing the Staff page.
 {:else}
-    {#await staffs}
+    {#await staffReady}
         <p>Loading staff page...</p>
     {:then}
         <h1>Staffs of {officeName}</h1>

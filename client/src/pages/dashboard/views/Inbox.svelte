@@ -57,13 +57,13 @@
         ctx = null;
     }
 
-    const defer = deferredSnaps.load().catch(err => {
+    const deferReady = deferredSnaps.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
     });
 
-    const inbox = documentInbox.load().catch(err => {
+    const inboxReady = documentInbox.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
@@ -79,7 +79,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await Promise.all([inbox, defer])}
+    {#await Promise.all([inboxReady, deferReady])}
         <p>Loading inbox...</p>
     {:then}
         <h2>Pending Acceptance</h2>

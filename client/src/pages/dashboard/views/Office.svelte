@@ -30,7 +30,7 @@
         ctx = null;
     }
 
-    const offices = allOffices.load().catch(err => {
+    const officeReady = allOffices.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
@@ -42,7 +42,7 @@
         Create an Office
     </Button>
 
-    {#await offices}
+    {#await officeReady}
         <p>Loading office page...</p>
     {:then}
         <h1>Offices</h1>

@@ -34,14 +34,14 @@
         ctx = null;
     }
 
-    const users = userList.load().catch(err => {
+    const usersReady = userList.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
     });
 </script>
 
-{#await users}
+{#await usersReady}
     <p>Loading users page...</p>
 {:then}
     <h1>Users</h1>

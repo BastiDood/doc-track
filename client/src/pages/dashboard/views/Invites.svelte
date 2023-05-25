@@ -45,7 +45,7 @@
         ctx = null;
     }
 
-    const invite = inviteList.load().catch(err => {
+    const inviteReady = inviteList.load().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
@@ -60,7 +60,7 @@
         <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
     </Button>
 
-    {#await invite}
+    {#await inviteReady}
         Loading invite list.
     {:then}
         {#if $inviteList.length === 0 || currentOffice === null}
