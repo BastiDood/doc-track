@@ -16,6 +16,12 @@ export class InvalidInput extends Error {
     }
 }
 
+export class TooLarge extends Error {
+    constructor() {
+        super('payload is too large');
+    }
+}
+
 export class DeferredSnap extends Error {
     constructor() {
         super('snapshot is deffered');

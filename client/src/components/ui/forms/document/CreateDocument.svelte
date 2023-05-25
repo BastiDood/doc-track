@@ -1,7 +1,16 @@
 <script lang="ts">
-    import { assert } from '../../../../assert.ts';
     import { createEventDispatcher } from 'svelte';
+    import { z } from 'zod';
+
+    import type { Category } from '~model/category.ts';
+    import type { Document } from '~model/document.ts';
+    import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
+
     import { Document as Api } from '../../../../api/document.ts';
+    import { DeferredSnap } from '../../../../api/error.ts';
+
+    import { assert } from '../../../../assert.ts';
+    import { Events, ToastType } from '../../../types.ts';
 
     import { earliestBatch } from '../../../../stores/BatchStore.ts';
     import { categoryList } from '../../../../stores/CategoryStore.ts';
@@ -11,32 +20,54 @@
     import { topToastMessage } from '../../../../stores/ToastStore.ts';
     import { deferredSnaps } from '../../../../stores/DeferredStore.ts';
 
-    import type { Category } from '../../../../.../../../../model/src/category.ts';
-    import type { Document } from '../../../../.../../../../model/src/document.ts';
-    import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
-    import { Events, ToastType } from '../../../types.ts';
-    
-    import { DeferredSnap } from '../../../../api/error.ts';
-
     import Button from '../../Button.svelte';
     import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
-    import TextInput from '../../TextInput.svelte';
     import QrGenerator from '../../qr/QrGenerator.svelte';
+    import TextInput from '../../TextInput.svelte';
 
     let id = null as Document['id'] | null;
-    $: url = id === null ? '' : `/track?id=${id}`;
-
     let category: Category['id'] | null = null;
     let title: Document['title'] = '';
     let remark: Snapshot['remark'] = '';
+    let fileList = null as FileList | null;
+    $: [file, ...rest] = fileList ?? [];
+
     const dispatch = createEventDispatcher();
 
+    const MAX_FILE_SIZE = 20971520;
+    const SIZES = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    function convertToScale(bytes: number) {
+        if (bytes === 0) return '0 Byte';
+        const i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), 4);
+        const size = SIZES[i];
+        assert(typeof size !== 'undefined');
+        return `${Math.round(bytes / 1024 ** i)} ${size}`;
+    }
+
     async function handleSubmit(this: HTMLFormElement) {
+        if (!this.reportValidity()) return;
+
         const oid = $dashboardState.currentOffice;
-        if (oid === null || id === null || category === null) return;
+        if (oid === null) return;
+
+        const blob = z.instanceof(File).parse(file);
+        assert(z.instanceof(File).array().parse(rest).length === 0);
+
+        // 20 MB
+        if (blob.size >= MAX_FILE_SIZE) {
+            topToastMessage.enqueue({
+                title: 'File Size Limit Exceeded (20 MB)',
+                body: `The size of the file you submitted is ${convertToScale(blob.size)}.`,
+            });
+            return;
+        }
+
+        assert(id !== null);
+        assert(category !== null);
+
         try {
-            const result = await Api.create(oid, { id, title, category }, remark);
+            const result = await Api.create(oid, blob, { id, title, category }, remark);
             assert(result instanceof Date);
             await earliestBatch.reload?.();
             await documentOutbox.reload?.();
@@ -64,18 +95,25 @@
 {#if $earliestBatch === null || typeof $earliestBatch === 'undefined'}
     No available barcodes.
 {:else}
+    {@const bytes = file?.size ?? 0}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
-        {#if url}
-            <div><QrGenerator {url} /></div>
+        {#if id !== null}
+            <div><QrGenerator url="/track?id={id}" /></div>
         {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
         <br />
         Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
         <br />
         <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark:" required={false}></TextInput> 
-        <Button submit>Create Document</Button>
+        <br />
+        <input type="file" multiple={false} required bind:files={fileList} />
+        {#if typeof file !== 'undefined'}
+            {convertToScale(file.size)}
+        {/if}
+        <br />
+        <Button submit disabled={bytes >= MAX_FILE_SIZE}>Create Document</Button>
     </form>
 {/if}
 

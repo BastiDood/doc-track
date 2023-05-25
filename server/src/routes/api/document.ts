@@ -99,6 +99,11 @@ export async function handleCreateDocument(pool: Pool, req: Request, params: URL
         return new Response(null, { status: Status.BadRequest });
     }
 
+    if (upload.data.size >= 20971520) {
+        error(`[Document] Session ${sid} uploaded a file that is too large`);
+        return new Response(null, { status: Status.RequestEntityTooLarge });
+    }
+
     const db = await Database.fromPool(pool);
     try {
         const staff = await db.getStaffFromSession(sid, oid);

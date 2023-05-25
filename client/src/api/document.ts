@@ -22,9 +22,10 @@ import {
     InvalidInput,
     InvalidSession,
     BadContentNegotiation,
-    UnexpectedStatusCode,
     DeferredSnap,
+    TooLarge,
     UncachedFetch,
+    UnexpectedStatusCode,
 } from './error.ts';
 
 export namespace Document {
@@ -54,6 +55,7 @@ export namespace Document {
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
+            case StatusCodes.REQUEST_TOO_LONG: throw new TooLarge;
             case StatusCodes.SERVICE_UNAVAILABLE: throw new DeferredSnap;
             default: throw new UnexpectedStatusCode;
         }
