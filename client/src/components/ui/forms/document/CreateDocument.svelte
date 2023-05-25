@@ -29,6 +29,8 @@
     let id = null as Document['id'] | null;
     $: url = id === null ? '' : `/track?id=${id}`;
 
+    let file = null as File | null;
+
     let category: Category['id'] | null = null;
     let title: Document['title'] = '';
     let remark: Snapshot['remark'] = '';
@@ -38,7 +40,13 @@
         const oid = $dashboardState.currentOffice;
         if (oid === null || id === null || category === null) return;
         try {
-            const result = await Api.create(oid, { id, title, category }, remark);
+            assert(file !== null);
+            console.log(file.type);
+            const buffer = await file.arrayBuffer();
+
+            let final_blob = new Blob([buffer], { type: file.type });
+
+            const result = await Api.create(oid, final_blob, { id, title, category }, remark);
             assert(result instanceof Date);
             await earliestBatch.reload?.();
             await documentOutbox.reload?.();
@@ -78,7 +86,7 @@
         <br />
         <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark:" required={false}></TextInput> 
         {#if id}
-            <FileInput trackingNumber={id} /> 
+            <FileInput trackingNumber={id} bind:toUpload={file} /> 
         {/if}
         <Button submit>Create Document</Button>
     </form>

@@ -14,7 +14,7 @@
     let outputText = '';
     let path = null as string | null;
     let showFileInput = false;
-    let toUpload = null as File | null;
+    export let toUpload = null as File | null;
 
     $: outputText = outputText === '' ? '' : outputText;
     // Get first element from FileList
@@ -24,8 +24,8 @@
     function convertToScale(bytes: number) {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         if (bytes === 0) return '0 Byte';
-        let i = Math.min(Math.floor(Math.log(bytes + 1) / Math.log(1024)), 4);
-        return `${Math.round((bytes + 1) / 1024 ** i)} ${sizes[i] ?? sizes[4]}`;
+        let i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), 4);
+        return `${Math.round(bytes / 1024 ** i)} ${sizes[i] ?? sizes[4]}`;
     }
 
     $: maxLimitText = convertToScale(maxLimit);
@@ -47,7 +47,7 @@
             assert(toUpload && typeof toUpload !== 'undefined');
 
             if (!validateFile()) return;
-            console.log(`Successfully uploaded file "${toUpload.name}" (${toUpload.size} bytes)`);
+            showFileInput = false;
         } catch (err) {
             assert(err instanceof Error);
             topToastMessage.enqueue({ title: err.name, body: err.message });
@@ -62,7 +62,7 @@
     <input bind:files on:change={validateFile} bind:value={path} id="upload" multiple={false} type="file" capture={true} />  
     {#if typeof files !== 'undefined' && files !== null}
         <br>
-        <p id="error">File Size: {outputText}</p>
+        <p id="upload-feedback">{outputText}</p>
         <Button on:click={handleSubmit}>Upload "{toUpload?.name ?? 'No file Selected'}"</Button>
     {/if}
 </Modal>
@@ -70,7 +70,7 @@
 <style>
     @import url('../../pages/vars.css');
 
-    #error {
+    #upload-feedback {
         color: var(--danger-color);
         display: block;
     }
