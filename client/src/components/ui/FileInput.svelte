@@ -8,6 +8,7 @@
     import DownloadButton from '../icons/DocumentDownload.svelte';
 
     export let trackingNumber = null as string | null;
+    export let maxLimit = 20971520;
     $: trackingNumber = trackingNumber === null ? '' : `/track?id=${trackingNumber}`;
 
     let files = null as FileList | null;
@@ -16,14 +17,14 @@
     let showFileInput = false;
     let outputText = '';
     let maxLimitText = '';
-    export let maxLimit = 20971520;
+
     $: maxLimitText = convertToScale(maxLimit);
     $: outputText = outputText === '' ? '' : outputText;
     $: if (files) {
-		for (const file of files) {
-			toUpload = file;
-		}
-	}
+        for (const file of files) {
+            toUpload = file;
+        }
+    }
 
     function convertToScale(bytes: number) {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -31,7 +32,7 @@
         const i = Math.floor(Math.log(bytes + 1) / Math.log(1024));
         return `${Math.round((bytes + 1) / Math.pow(1024, i))} ${sizes[i]}`;
     }
-    
+
     const dispatch = createEventDispatcher();
 
     async function validateFile() {
@@ -57,8 +58,6 @@
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
-
-    
 </script>
 
 <Button on:click={() => (showFileInput = true)}>
