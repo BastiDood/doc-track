@@ -6,7 +6,7 @@
     import { assert } from '../../assert.ts';
     import DownloadButton from '../icons/DocumentDownload.svelte';
 
-    export let trackingNumber = null as Document['id'] | null;
+    export let trackingNumber = null as string | null;
     $: trackingNumber = trackingNumber === null ? '' : `/track?id=${trackingNumber}`;
 
     let files = null as FileList | null;
@@ -47,10 +47,9 @@
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
-
 </script>
 <Button on:click={() => (showFileInput = true)}>
-    <DownloadButton alt="Browse system or drag file..." />Browser system or drag file...
+    <DownloadButton alt="Download Button" />Browse from system...
 </Button>
 <Modal title="Upload File" bind:showModal={showFileInput}>
     <input bind:files on:change={validateFile} bind:value={path} id="upload" multiple={false} type="file" capture={true} />  
