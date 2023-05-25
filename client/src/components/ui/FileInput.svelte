@@ -1,22 +1,20 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
-
-    import Modal from './Modal.svelte';
     import Button from './Button.svelte';
-    import { topToastMessage } from '../../stores/ToastStore';
-    import { assert } from '../../assert.ts';
-    import DownloadButton from '../icons/DocumentDownload.svelte';
+import DownloadButton from '../icons/DocumentDownload.svelte';
+import Modal from './Modal.svelte';
+import { assert } from '../../assert.ts';
+import { topToastMessage } from '../../stores/ToastStore';
 
     export let trackingNumber = null as string | null;
     export let maxLimit = 20971520;
     $: trackingNumber = trackingNumber === null ? '' : `/track?id=${trackingNumber}`;
 
     let files = null as FileList | null;
-    let toUpload = null as File | null;
+    let maxLimitText = '';
+    let outputText = '';
     let path = null as string | null;
     let showFileInput = false;
-    let outputText = '';
-    let maxLimitText = '';
+    let toUpload = null as File | null;
 
     $: outputText = outputText === '' ? '' : outputText;
     // Get first element from FileList
@@ -26,9 +24,9 @@
     function convertToScale(bytes: number) {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         if (bytes === 0) return '0 Byte';
-        const i = Math.min(Math.floor(Math.log(bytes + 1) / Math.log(1024)), 4);
-        if (i > 4) return 'File size unsupported';
-        return `${Math.round((bytes + 1) / 1024 ** i)} ${i < 4 ? sizes[i] : sizes[4]}`;
+        let i = Math.min(Math.floor(Math.log(bytes + 1) / Math.log(1024)), 4);
+        if (!sizes[i]) i = 4;
+        return `${Math.round((bytes + 1) / 1024 ** i)} ${sizes[i]}`;
     }
 
     $: maxLimitText = convertToScale(maxLimit);
