@@ -390,7 +390,7 @@ export class Database {
 
     async getPaperTrail(doc: Document['id']): Promise<PaperTrail[]> {
         const { rows } = await this.#client
-            .queryObject`SELECT s.creation,s.status,s.target,s.remark,d.title,c.name AS category,u.name,u.email,u.picture
+            .queryObject`SELECT s.creation,s.status,s.target,s.remark,d.title,d.mime,c.name AS category,u.name,u.email,u.picture
                 FROM snapshot AS s
                     INNER JOIN users AS u ON s.evaluator = u.id
                     INNER JOIN document AS d ON s.doc = d.id

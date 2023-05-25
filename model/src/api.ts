@@ -42,7 +42,7 @@ export const BarcodeAssignmentErrorSchema = z.nativeEnum(BarcodeAssignmentError)
 export const PaperTrailSchema = SnapshotSchema
     .pick({ creation: true, status: true, target: true, remark: true })
     .extend({ category: CategorySchema.shape.name })
-    .merge(DocumentSchema.pick({ title: true }))
+    .merge(DocumentSchema.pick({ title: true, mime: true }))
     .merge(UserSchema.pick({ name: true, email: true, picture: true }));
 export type PaperTrail = z.infer<typeof PaperTrailSchema>;
 
