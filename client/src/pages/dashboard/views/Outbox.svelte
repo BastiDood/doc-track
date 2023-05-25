@@ -16,6 +16,7 @@
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
     import { deferRegistrationCount } from '../../../stores/DeferredStore.ts';
     import { Document } from '../../../../../model/src/document.ts';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     interface Context {
         docId: Document['id'] | null,
@@ -92,6 +93,8 @@
         {#each $documentOutbox.pending as entry (entry.doc)}
             <SendRow {...entry} iconSize={IconSize.Large} />
         {/each}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 {#if ctx === null}

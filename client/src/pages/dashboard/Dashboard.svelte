@@ -16,6 +16,7 @@
 
     import routes from './views/index.ts';
     import { register } from '../register.ts';
+    import PageUnavailable from '../../components/ui/PageUnavailable.svelte';
 
     let toggleDrawer = false;
 
@@ -61,6 +62,8 @@
             <section>
                 <Router {routes} />
             </section>
+        {:catch err}
+            <PageUnavailable {err} />
         {/await}
     </main>
     <Toast />

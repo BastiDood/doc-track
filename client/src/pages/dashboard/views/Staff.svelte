@@ -13,6 +13,7 @@
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         EditStaff,
@@ -82,6 +83,8 @@
         {:else}
             No staff members exist in "{officeName}".
         {/each}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 

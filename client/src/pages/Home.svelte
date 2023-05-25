@@ -12,6 +12,7 @@
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
     import { assert } from '../assert.ts';
+    import PageUnavailable from '../components/ui/PageUnavailable.svelte';
 
     const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
     let showScan = false as boolean;
@@ -47,6 +48,8 @@
                 </a>
             </div>
         </div>
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
     {#if showScan}
         <Modal showModal on:close={() => (showScan = false)} title="Scan/Select a File">

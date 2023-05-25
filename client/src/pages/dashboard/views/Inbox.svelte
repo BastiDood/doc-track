@@ -17,6 +17,7 @@
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         ContextInbox,
@@ -104,6 +105,8 @@
                 on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
             />
         {/each}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 

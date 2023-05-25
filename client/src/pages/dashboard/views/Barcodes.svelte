@@ -15,6 +15,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import { ToastType } from '../../../components/types.ts';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
@@ -101,6 +102,8 @@
                 </Modal>
             </main>
         {/if}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 

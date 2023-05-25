@@ -9,6 +9,7 @@
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonContextGlobal from '../../../components/ui/contextdrawer/PersonContextGlobal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     interface Context {
         id: User['id'],
@@ -57,6 +58,8 @@
     {:else}
         No users exist.
     {/each}
+{:catch err}
+    <PageUnavailable {err} />
 {/await}
 {#if ctx === null} 
     <!-- Do not display anything! -->

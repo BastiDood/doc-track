@@ -13,6 +13,7 @@
     import Notification from '../../components/icons/Notification.svelte';
     import PrintQr from '../../components/ui/qr/PrintQr.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
+    import PageUnavailable from '../../components/ui/PageUnavailable.svelte';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -196,6 +197,8 @@
                     </table>
                 </section>
             {/if}
+        {:catch err}
+            <PageUnavailable {err} />
         {/await}
     {/if}
 </main>

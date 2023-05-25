@@ -12,6 +12,7 @@
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import { IconSize } from '../../../components/types';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum OfficeEvents {
         Create,
@@ -54,6 +55,8 @@
         {:else}
             No offices exist.
         {/each}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 
     {#if ctx === null}

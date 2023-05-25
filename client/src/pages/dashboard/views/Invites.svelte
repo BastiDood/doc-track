@@ -14,6 +14,7 @@
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
     import { Invitation } from '~model/invitation.ts';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         CreateInvite,
@@ -76,6 +77,8 @@
                 />
             {/each}
         {/if}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 {#if ctx === null}
