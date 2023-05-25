@@ -1,5 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+    import { z } from 'zod';
+
     import type { Category } from '~model/category.ts';
     import type { Document } from '~model/document.ts';
     import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
@@ -28,17 +30,19 @@
     let category: Category['id'] | null = null;
     let title: Document['title'] = '';
     let remark: Snapshot['remark'] = '';
-    let fileList: FileList | null = null;
-    $: ([ file, ...rest ] = fileList ?? []);
+    let fileList = null as FileList | null;
+    $: [file, ...rest] = fileList ?? [];
 
     const dispatch = createEventDispatcher();
 
     const MAX_FILE_SIZE = 20971520;
-    const SIZES = [ 'Bytes', 'KB', 'MB', 'GB', 'TB' ];
+    const SIZES = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     function convertToScale(bytes: number) {
         if (bytes === 0) return '0 Byte';
         const i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), 4);
-        return `${Math.round(bytes / 1024 ** i)} ${SIZES[i]}`;
+        const size = SIZES[i];
+        assert(typeof size !== 'undefined');
+        return `${Math.round(bytes / 1024 ** i)} ${size}`;
     }
 
     async function handleSubmit(this: HTMLFormElement) {
@@ -47,15 +51,14 @@
         const oid = $dashboardState.currentOffice;
         if (oid === null) return;
 
-        assert(fileList !== null);
-        assert(typeof file !== 'undefined');
-        assert(rest.length === 0);
+        const blob = z.instanceof(File).parse(file);
+        assert(z.instanceof(File).array().parse(rest).length === 0);
 
         // 20 MB
-        if (file.size >= MAX_FILE_SIZE) {
+        if (blob.size >= MAX_FILE_SIZE) {
             topToastMessage.enqueue({
                 title: 'File Size Limit Exceeded (20 MB)',
-                body: `The size of the file you submitted is ${convertToScale(file.size)}.`,
+                body: `The size of the file you submitted is ${convertToScale(blob.size)}.`,
             });
             return;
         }
@@ -64,7 +67,7 @@
         assert(category !== null);
 
         try {
-            const result = await Api.create(oid, file, { id, title, category }, remark);
+            const result = await Api.create(oid, blob, { id, title, category }, remark);
             assert(result instanceof Date);
             await earliestBatch.reload?.();
             await documentOutbox.reload?.();
