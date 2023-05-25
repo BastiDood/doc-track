@@ -2,7 +2,7 @@
     import { createEventDispatcher } from 'svelte';
     import Modal from './Modal.svelte';
     import Button from './Button.svelte';
-    import { topToastMessage } from '../../pages/dashboard/stores/ToastStore.ts';
+    import { topToastMessage } from '../../stores/ToastStore';
     import { assert } from '../../assert.ts';
     import DownloadButton from '../icons/DocumentDownload.svelte';
 
