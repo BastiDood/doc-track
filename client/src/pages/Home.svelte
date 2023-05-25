@@ -22,7 +22,7 @@
         goToTrackingPage(detail);
     }
 
-    $: reg = register().catch(err => {
+    const reg = register().catch(err => {
         assert(err instanceof Error);
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
