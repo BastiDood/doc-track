@@ -14,10 +14,7 @@ export const documentInbox = asyncDerived(
     dashboardState,
     ({ currentOffice }) => {
         return currentOffice === null
-            ? Promise.resolve({
-                pending: [],
-                accept: [],
-            })
+            ? Promise.resolve({ pending: [], accept: [] })
             : Document.getInbox(currentOffice);
     },
     { reloadable: true }
@@ -35,10 +32,7 @@ export const documentOutbox = asyncDerived(
     dashboardState,
     ({ currentOffice }) => {
         return currentOffice === null
-            ? Promise.resolve({
-                pending: [],
-                ready: [],
-            })
+            ? Promise.resolve({ pending: [], ready: [] })
             : Document.getOutbox(currentOffice);
     },
     { reloadable: true }
