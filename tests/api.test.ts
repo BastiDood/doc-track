@@ -223,8 +223,6 @@ Deno.test('full API integration test', async t => {
         assertNotStrictEquals(bid, 0);
         assertStrictEquals(codes.length, 10);
         assert(new Date >= creation);
-
-        // TODO: Test Getter for Earliest Batch
     });
 
     const cName = b64encode(crypto.getRandomValues(new Uint8Array(8)));

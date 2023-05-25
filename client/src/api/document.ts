@@ -31,7 +31,7 @@ export namespace Document {
     export async function create(
         oid: Office['id'],
         data: Blob,
-        { id, title, category }: DocumentType,
+        { id, title, category }: Pick<DocumentType, 'id' | 'title' | 'category'>,
         remark: Snapshot['remark'],
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
         const body = new FormData;
