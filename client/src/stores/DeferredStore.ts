@@ -1,12 +1,11 @@
 import { asyncWritable, derived } from '@square/svelte-store';
 import localForage from 'localforage';
-
+import { topToastMessage } from './ToastStore.ts';
 import { type DeferredSnapshot, DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
 import { Status } from '../../../model/src/snapshot.ts';
 
 import { assert } from '../assert.ts';
 import { DeferredFetchSchema } from '../pages/syncman.ts';
-
 
 import { ToastType } from '../components/types.ts';
 
@@ -26,6 +25,17 @@ const deferStore = asyncWritable(
     },
 );
 
+/**
+ * The deferredSnaps store contains the snapshots that are deferred until next sync event.
+ *
+ * # Store Details
+ * - Contains an array of DeferredSchemas. This store can be accessed to retrieve a list of documents that are yet to be synced to the server.
+ *
+ * # Methods
+ * - `subscribe, reset, load` => vanilla methods.
+ * - `onDocumentSync(evt: MessageEvent)` => prompts a toast message notifying the user that the sync is succesfull.
+ * - `upsert(insert: DeferredSnapshot)` => appends the passed document to the store, and replaces if there
+ */
 export const deferredSnaps = {
     subscribe: deferStore.subscribe,
     reset: deferStore.reset?.bind(deferStore),

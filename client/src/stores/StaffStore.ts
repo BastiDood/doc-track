@@ -4,6 +4,13 @@ import { Staff } from '../api/staff.ts';
 import { assert } from '../assert.ts';
 import { topToastMessage } from './ToastStore.ts';
 
+/**
+ * This store contains the staff members of the currently selected office.
+ * 
+ * # Store Details
+ * - The store returns an array of staff members in the form of {@linkcode StaffMember}.
+ * - An empty array otherwise.
+ */
 export const staffList = asyncDerived(
     dashboardState,
     ({ currentOffice }) => {

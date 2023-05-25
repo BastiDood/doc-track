@@ -21,4 +21,11 @@ addEventListener('offline', async() => {
     });
 });
 
+/**
+ * This store contains a boolean value designating the network state of DocTrack
+ * 
+ * # Store Details
+ * - `true` => Connection with the server is online.
+ * - `false` => Offline otherwise.
+ */
 export const isOnline = { subscribe };

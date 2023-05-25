@@ -32,6 +32,17 @@ function bootstrap() {
     handler = setTimeout(advance, timeout ?? 3000);
 }
 
+/**
+ * This store handles the toast messages being displayed to the user.
+ * 
+ * # Store Details
+ * - Allows components to prompt a toast message to the user by passing a {@linkcode Toast} object to the `enqueue` method.
+ * - Dismisses the current presented message through `dismiss`.
+ * 
+ * # Methods
+ * - `enqueue` => Adds a toast message object to the queue.
+ * - `dismiss` => Dismisses the currently displayed toast message object.
+ */
 export const topToastMessage = {
     subscribe,
     enqueue(toast: Toast) {
