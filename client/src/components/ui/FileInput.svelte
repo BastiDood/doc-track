@@ -20,23 +20,22 @@
 
     $: outputText = outputText === '' ? '' : outputText;
     // Get first element from FileList
-    $: if (files) 
+    $: if (files)
         for (const file of files) toUpload = file;
 
     function convertToScale(bytes: number) {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         if (bytes === 0) return '0 Byte';
         const i = Math.floor(Math.log(bytes + 1) / Math.log(1024));
-        return `${Math.round((bytes + 1) / (1024**i))} ${sizes[i]}`;
+        if (i > 4) return 'File size unsupported';
+        return `${Math.round((bytes + 1) / 1024 ** i)} ${sizes[i]}`;
     }
 
     $: maxLimitText = convertToScale(maxLimit);
 
-    const dispatch = createEventDispatcher();
-
     function validateFile() {
         if (typeof files === 'undefined' || !files) return false;
-        if (!toUpload || typeof toUpload === 'undefined') return false; 
+        if (!toUpload || typeof toUpload === 'undefined') return false;
         outputText = toUpload.size > maxLimit ? `File size must be less than ${maxLimitText}.` : `Size: ${convertToScale(toUpload.size)}`;
         return toUpload.size <= maxLimit;
     }
@@ -50,7 +49,7 @@
             assert(typeof files !== 'undefined' && files);
             assert(toUpload && typeof toUpload !== 'undefined');
 
-            if(!validateFile()) return;
+            if (!validateFile()) return;
             console.log(`Successfully uploaded file "${toUpload.name}" (${toUpload.size} bytes)`);
         } catch (err) {
             assert(err instanceof Error);
