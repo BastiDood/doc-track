@@ -96,7 +96,6 @@
         prev = date;
         return `${days}d ${hours}h ${mins}m ${seconds}s`;
     }
-
 </script>
 
 <TopBar open />
