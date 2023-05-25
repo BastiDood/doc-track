@@ -42,6 +42,12 @@
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
     });
+
+    const sessionReady = currentUser.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 <svelte:head>
@@ -50,24 +56,22 @@
 
 <svelte:window on:message={onSync} />
 
-{#if $currentUser === null}
-    <p>Loading user...</p>
-{:else}
-    <TopBar user={$currentUser} bind:open={toggleDrawer} />
+{#await Promise.all([reg, sessionReady])}
+    Loading user and service Worker...
+{:then} 
+    {#if $currentUser !== null}
+        <TopBar user={$currentUser} bind:open={toggleDrawer} />
+    {/if}
     <main on:click={() => (toggleDrawer &&= false)} on:keydown>
-        {#await reg}
-            <p>Waiting for service worker...</p>
-        {:then}
-            <SideDrawer show={toggleDrawer} />
-            <section>
-                <Router {routes} />
-            </section>
-        {:catch err}
-            <PageUnavailable {err} />
-        {/await}
+        <SideDrawer show={toggleDrawer} />
+        <section>
+            <Router {routes} />
+        </section>
     </main>
     <Toast />
-{/if}
+{:catch err}
+    <PageUnavailable {err} />
+{/await}
 
 <style>
     :global(body) {
