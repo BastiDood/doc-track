@@ -35,24 +35,22 @@
     const dispatch = createEventDispatcher();
 
     async function validateFile() {
-        assert(typeof files !== 'undefined' && files);
-        assert(toUpload && typeof toUpload !== 'undefined');    
+        if(typeof files === 'undefined' || !files) return false;
+        if(!toUpload || typeof toUpload === 'undefined') return false; 
         outputText = toUpload.size > maxLimit ? `File size must be less than ${maxLimitText}.` : `Size: ${convertToScale(toUpload.size)}`;
+        return toUpload.size > maxLimit;
     }
 
     async function handleSubmit(this: HTMLFormElement) {
         try {
+            // We still have to call these due to linting not detecting validateFile() checkers.
             assert(files !== null);    
             assert(trackingNumber !== null);
             assert(trackingNumber !== '');
             assert(typeof files !== 'undefined' && files);
             assert(toUpload && typeof toUpload !== 'undefined');    
             
-            if(toUpload.size > maxLimit) {
-                outputText = `File size must be less than ${maxLimitText}.`;
-                topToastMessage.enqueue({ title: 'File too large', body: `File size must be less than ${maxLimitText}.` });
-                return;
-            }
+            if(!validateFile()) return;
             console.log(`Successfully uploaded file "${toUpload.name}" (${toUpload.size} bytes)`);
         } catch (err) {
             assert(err instanceof Error);
