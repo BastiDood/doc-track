@@ -349,6 +349,7 @@ Deno.test('full OAuth flow', async t => {
             email: USER.email,
             picture: USER.picture,
             title: doc.title,
+            mime: 'application/octet-stream',
         }]);
 
         // Use already assigned barcode
@@ -405,6 +406,7 @@ Deno.test('full OAuth flow', async t => {
                 email: USER.email,
                 picture: USER.picture,
                 title: doc.title,
+                mime: 'application/octet-stream',
             });
         })
 

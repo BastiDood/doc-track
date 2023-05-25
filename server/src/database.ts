@@ -324,7 +324,7 @@ export class Database {
      */
     async assignBarcodeToDocument(
         blob: Blob,
-        { id, category, title }: Document,
+        { id, category, title }: Pick<Document, 'id' | 'category' | 'title'>,
         { evaluator, remark, target }: Pick<Snapshot, 'evaluator' | 'remark' | 'target'>,
     ): Promise<Snapshot['creation'] | BarcodeAssignmentError> {
         const mime = blob.type || 'application/octet-stream';
