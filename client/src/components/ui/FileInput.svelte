@@ -1,9 +1,10 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import type { Document } from '../../api/document.ts';
+    import Modal from './Modal.svelte';
     import Button from './Button.svelte';
     import { topToastMessage } from '../../pages/dashboard/stores/ToastStore.ts';
     import { assert } from '../../assert.ts';
+    import DownloadButton from '../icons/DocumentDownload.svelte';
 
     export let trackingNumber = null as Document['id'] | null;
     $: trackingNumber = trackingNumber === null ? '' : `/track?id=${trackingNumber}`;
@@ -11,6 +12,7 @@
     let files = null as FileList | null;
     let toUpload = null as File | null;
     let path = null as string | null;
+    let showFileInput = false;
     export let maxLimit = 20000000;
     $: if (files) {
 		for (const file of files) {
@@ -45,13 +47,17 @@
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
+
 </script>
-<span>
+<Button on:click={() => (showFileInput = true)}>
+    <DownloadButton alt="Browse system or drag file..." />Browser system or drag file...
+</Button>
+<Modal title="Upload File" bind:showModal={showFileInput}>
     <input bind:files on:change={validateFile} bind:value={path} id="upload" multiple={false} type="file" capture={true} />  
     {#if typeof files !== 'undefined' && files !== null}
         <Button on:click={handleSubmit}>Upload "{toUpload?.name ?? 'No file Selected'}"</Button>
     {/if}
-</span>
+</Modal>
 
 <style>
     @import url('../../pages/vars.css');
