@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { dashboardState } from '../stores/DashboardState';
-    import { staffList } from '../stores/StaffStore';
-    import { allOffices } from '../stores/OfficeStore';
+    import { dashboardState } from '../../../stores/DashboardState';
+    import { staffList } from '../../../stores/StaffStore';
+    import { allOffices } from '../../../stores/OfficeStore';
     import { Staff } from '~model/staff';
     import { User } from '~model/user';
 

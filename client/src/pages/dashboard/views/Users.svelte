@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { userList } from '../stores/UserStore';
-
-    import { IconSize } from '../../../components/types';
+    import { userList } from '../../../stores/UserStore';
     import { User } from '~model/user';
+    
+    import { IconSize } from '../../../components/types';
     import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';

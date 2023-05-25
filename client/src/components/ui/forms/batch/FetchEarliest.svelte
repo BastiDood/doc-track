@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { userSession } from '../../../../pages/dashboard/stores/UserStore.ts';
-    import { earliestBatch } from '../../../../pages/dashboard/stores/BatchStore.ts';
+    import { userSession } from '../../../../stores/UserStore.ts';
+    import { earliestBatch } from '../../../../stores/BatchStore.ts';
     import PrintQr from '../../qr/PrintQr.svelte';
 </script>
 

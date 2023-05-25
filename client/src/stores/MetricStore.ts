@@ -1,9 +1,16 @@
 import { asyncReadable, asyncDerived } from '@square/svelte-store';
 import { dashboardState } from './DashboardState.ts';
-import { Metrics } from '../../../api/metrics.ts';
-import { assert } from '../../../assert.ts';
+import { Metrics } from '../api/metrics.ts';
+import { assert } from '../assert.ts';
 import { topToastMessage } from './ToastStore.ts';
 
+/**
+ * The userSummary store contains metrics for the currently logged in user.
+ *
+ * # Store Details
+ * - Contains a record of the metric and the relevant value for the logged in user.
+ * - Is an empty store otherwise.
+ */
 export const userSummary = asyncReadable(
     { },
     () => {
@@ -18,6 +25,13 @@ export const userSummary = asyncReadable(
     { reloadable: true }
 );
 
+/**
+ * The localSummary store contains metrics for the currently selected ofice.
+ *
+ * # Store Details
+ * - Contains a record of the metric and the relevant value for the currently selected office.
+ * - Is an empty store otherwise.
+ */
 export const localSummary = asyncDerived(
     dashboardState,
     ({ currentOffice }) => {
@@ -33,6 +47,13 @@ export const localSummary = asyncDerived(
     { reloadable: true }
 );
 
+/**
+ * The globalSummary store contains the entire system-wide metrics.
+ *
+ * # Store Details
+ * - Contains a record of the metrics that correspond to all snapshots in the system.
+ * - Is an empty store otherwise.
+ */
 export const globalSummary = asyncReadable(
     { },
     () => {
@@ -47,6 +68,13 @@ export const globalSummary = asyncReadable(
     { reloadable: true }
 );
 
+/**
+ * The barcodeSummary store contains information regarding the barcodes used and pending or a selected office.
+ *
+ * # Store Details
+ * - Contains a numerical value for `assigned` and `pending` barcodes in the form of a {@linkcode BarcodeMetricsSchema}
+ * - Is `null` otherwise.
+ */
 export const barcodeSummary = asyncDerived(
     dashboardState,
     ({ currentOffice }) => {

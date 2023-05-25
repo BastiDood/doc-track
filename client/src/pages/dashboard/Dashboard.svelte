@@ -1,12 +1,12 @@
 <script lang="ts">
     import Router from 'svelte-spa-router';
 
-    import { currentPage } from './stores/CurrentPage.ts';
-    import { dashboardState } from './stores/DashboardState.ts';
-    import { allOffices } from './stores/OfficeStore.ts';
-    import { currentUser } from './stores/UserStore.ts';
-    import { deferredSnaps } from './stores/DeferredStore.ts';
-    import { topToastMessage } from './stores/ToastStore.ts';
+    import { currentPage } from '../../stores/CurrentPage.ts';
+    import { dashboardState } from '../../stores/DashboardState.ts';
+    import { allOffices } from '../../stores/OfficeStore.ts';
+    import { currentUser } from '../../stores/UserStore.ts';
+    import { deferredSnaps } from '../../stores/DeferredStore.ts';
+    import { topToastMessage } from '../../stores/ToastStore.ts';
 
     import Toast from '../../components/ui/Toast.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';

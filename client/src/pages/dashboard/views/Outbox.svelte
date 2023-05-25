@@ -1,9 +1,9 @@
 <script lang="ts">
     import { Status } from '../../../../../model/src/snapshot.ts';
-    import { dashboardState } from '../stores/DashboardState';
-    import { documentOutbox } from '../stores/DocumentStore';
-    import { earliestBatch } from '../stores/BatchStore.ts';
-    import { topToastMessage } from '../stores/ToastStore.ts';
+    import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { documentOutbox } from '../../../stores/DocumentStore.ts';
+    import { earliestBatch } from '../../../stores/BatchStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
     
     import { IconSize, ToastType } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
@@ -13,7 +13,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
-    import { deferRegistrationCount } from '../stores/DeferredStore.ts';
+    import { deferRegistrationCount } from '../../../stores/DeferredStore.ts';
     import { Document } from '../../../../../model/src/document.ts';
 
     interface Context {

@@ -11,8 +11,8 @@
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
 
-    import { allOffices } from '../../../../pages/dashboard/stores/OfficeStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { allOffices } from '../../../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../../stores/ToastStore.ts';
 
     export let currId: OfficeModel['id'];
     let currName: OfficeModel['name'] | undefined;

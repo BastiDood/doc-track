@@ -1,5 +1,5 @@
 import { writable } from '@square/svelte-store';
-import { sendNotification } from '../../../notification.ts';
+import { sendNotification } from '../notification.ts';
 
 const { subscribe, set } = writable(navigator.onLine);
 
@@ -21,4 +21,11 @@ addEventListener('offline', async() => {
     });
 });
 
+/**
+ * This store contains a boolean value designating the network state of DocTrack
+ *
+ * # Store Details
+ * - `true` => Connection with the server is online.
+ * - `false` => Offline otherwise.
+ */
 export const isOnline = { subscribe };

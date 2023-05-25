@@ -6,8 +6,8 @@
     import { Category as Api } from '../../../../api/category.ts';
     import { Events, IconColor, ToastType } from '../../../types.ts';
 
-    import { categoryList } from '../../../../pages/dashboard/stores/CategoryStore.ts';
-    import { topToastMessage } from '../../../../pages/dashboard/stores/ToastStore.ts';
+    import { categoryList } from '../../../../stores/CategoryStore.ts';
+    import { topToastMessage } from '../../../../stores/ToastStore.ts';
 
     import TextInput from '../../TextInput.svelte';
     import Button from '../../Button.svelte';

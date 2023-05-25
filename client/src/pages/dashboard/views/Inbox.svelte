@@ -1,6 +1,10 @@
 <script lang="ts">
-    import { dashboardState } from '../stores/DashboardState';
-    import { documentInbox } from '../stores/DocumentStore';
+    import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { documentInbox } from '../../../stores/DocumentStore';
+    import { deferredSnaps } from '../../../stores/DeferredStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+    import { earliestBatch } from '../../../stores/BatchStore.ts';
+
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
@@ -14,9 +18,6 @@
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import { loadAll } from '@square/svelte-store';
-    import { deferredSnaps } from '../stores/DeferredStore.ts';
-    import { topToastMessage } from '../stores/ToastStore.ts';
-    import { earliestBatch } from '../stores/BatchStore.ts';
 
     enum ActiveMenu {
         ContextInbox,

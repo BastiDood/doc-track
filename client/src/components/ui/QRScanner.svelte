@@ -8,7 +8,7 @@
     import { assert } from '../../assert.ts';
     import { Events, ButtonType } from '../types.ts';
 
-    import { topToastMessage } from '../../pages/dashboard/stores/ToastStore.ts';
+    import { topToastMessage } from '../../stores/ToastStore.ts';
 
     const dispatch = createEventDispatcher();
     let camStart = false as boolean;

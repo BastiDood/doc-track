@@ -7,7 +7,7 @@
     import { IconSize, Events } from '../../types.ts';
     import { Invitation } from '../../../../../model/src/invitation.ts';
     import { Office } from '~model/office.ts';
-    import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
+    import { allOffices } from '../../../stores/OfficeStore.ts';
     export let iconSize: IconSize;
 
     // From invitation.ts

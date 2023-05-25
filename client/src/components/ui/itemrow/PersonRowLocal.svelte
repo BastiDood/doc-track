@@ -5,7 +5,7 @@
     import RowTemplate from '../RowTemplate.svelte';
 
     import { IconSize, Events } from '../../types.ts';
-    import { allOffices } from '../../../pages/dashboard/stores/OfficeStore.ts';
+    import { allOffices } from '../../../stores/OfficeStore.ts';
     import { User } from '../../../../../model/src/user.ts';
     import { Staff } from '../../../../../model/src/staff.ts';
     

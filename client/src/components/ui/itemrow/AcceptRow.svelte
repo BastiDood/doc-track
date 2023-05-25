@@ -9,7 +9,7 @@
     import { Category } from '~model/category.ts';
     import { Snapshot } from '~model/snapshot.ts';
     import { goToTrackingPage, findDeferredSnapshot } from './util.ts';
-    import { deferredSnaps } from '../../../pages/dashboard/stores/DeferredStore.ts';
+    import { deferredSnaps } from '../../../stores/DeferredStore.ts';
 
     export let iconSize: IconSize;
     export let doc: Document['id'];
