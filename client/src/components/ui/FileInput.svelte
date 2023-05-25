@@ -25,8 +25,7 @@ import { topToastMessage } from '../../stores/ToastStore';
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         if (bytes === 0) return '0 Byte';
         let i = Math.min(Math.floor(Math.log(bytes + 1) / Math.log(1024)), 4);
-        if (!sizes[i]) i = 4;
-        return `${Math.round((bytes + 1) / 1024 ** i)} ${sizes[i]}`;
+        return `${Math.round((bytes + 1) / 1024 ** i)} ${sizes[i] ?? sizes[4]}`;
     }
 
     $: maxLimitText = convertToScale(maxLimit);
