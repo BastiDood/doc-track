@@ -21,31 +21,50 @@
     import Button from '../../Button.svelte';
     import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
-    import FileInput from '../../FileInput.svelte';
     import QrGenerator from '../../qr/QrGenerator.svelte';
     import TextInput from '../../TextInput.svelte';
 
     let id = null as Document['id'] | null;
-    $: url = id === null ? '' : `/track?id=${id}`;
-
-    let file = null as File | null;
-
     let category: Category['id'] | null = null;
     let title: Document['title'] = '';
     let remark: Snapshot['remark'] = '';
+    let fileList: FileList | null = null;
+    $: ([ file, ...rest ] = fileList ?? []);
+
     const dispatch = createEventDispatcher();
 
+    const MAX_FILE_SIZE = 20971520;
+    const SIZES = [ 'Bytes', 'KB', 'MB', 'GB', 'TB' ];
+    function convertToScale(bytes: number) {
+        if (bytes === 0) return '0 Byte';
+        const i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), 4);
+        return `${Math.round(bytes / 1024 ** i)} ${SIZES[i]}`;
+    }
+
     async function handleSubmit(this: HTMLFormElement) {
+        if (!this.reportValidity()) return;
+
         const oid = $dashboardState.currentOffice;
-        if (oid === null || id === null || category === null) return;
+        if (oid === null) return;
+
+        assert(fileList !== null);
+        assert(typeof file !== 'undefined');
+        assert(rest.length === 0);
+
+        // 20 MB
+        if (file.size >= MAX_FILE_SIZE) {
+            topToastMessage.enqueue({
+                title: 'File Size Limit Exceeded (20 MB)',
+                body: `The size of the file you submitted is ${convertToScale(file.size)}.`,
+            });
+            return;
+        }
+
+        assert(id !== null);
+        assert(category !== null);
+
         try {
-            assert(file !== null);
-            console.log(file.type);
-            const buffer = await file.arrayBuffer();
-
-            let final_blob = new Blob([buffer], { type: file.type });
-
-            const result = await Api.create(oid, final_blob, { id, title, category }, remark);
+            const result = await Api.create(oid, file, { id, title, category }, remark);
             assert(result instanceof Date);
             await earliestBatch.reload?.();
             await documentOutbox.reload?.();
@@ -73,21 +92,25 @@
 {#if $earliestBatch === null || typeof $earliestBatch === 'undefined'}
     No available barcodes.
 {:else}
+    {@const bytes = file?.size ?? 0}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
         <br />
-        {#if url}
-            <div><QrGenerator {url} /></div>
+        {#if id !== null}
+            <div><QrGenerator url="/track?id={id}" /></div>
         {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
         <br />
         Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
         <br />
         <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark:" required={false}></TextInput> 
-        {#if id}
-            <FileInput trackingNumber={id} bind:toUpload={file} /> 
+        <br />
+        <input type="file" multiple={false} required bind:files={fileList} />
+        {#if typeof file !== 'undefined'}
+            {convertToScale(file.size)}
         {/if}
-        <Button submit>Create Document</Button>
+        <br />
+        <Button submit disabled={bytes >= MAX_FILE_SIZE}>Create Document</Button>
     </form>
 {/if}
 
