@@ -1,10 +1,8 @@
 import { asyncReadable, derived } from '@square/svelte-store';
-import { assert } from '../assert.ts';
 import { allOffices } from './OfficeStore.ts';
 import { Session } from '../api/session.ts';
 import { User as UserModel } from '~model/user.ts';
 import { User } from '../api/user.ts';
-import { topToastMessage } from './ToastStore.ts';
 
 /**
  * This store contains all the information re: the current user logged in.
@@ -16,15 +14,7 @@ import { topToastMessage } from './ToastStore.ts';
  */
 export const userSession = asyncReadable(
     null,
-    () => {
-        try {
-            return Session.getUser();
-        } catch (err) {
-            assert(err instanceof Error);
-            topToastMessage.enqueue({ title: err.name, body: err.message });
-        }
-        return Promise.resolve(null);
-    },
+    Session.getUser,
     { reloadable: true }
 );
 
@@ -52,15 +42,7 @@ export const currentUser = derived(userSession, session => session === null ? nu
  */
 export const userList = asyncReadable(
     [],
-    () => {
-        try {
-            return User.getAll();
-        } catch (err) {
-            assert(err instanceof Error);
-            topToastMessage.enqueue({ title: err.name, body: err.message });
-        }
-        return Promise.resolve([]);
-    },
+    User.getAll,
     { reloadable: true }
 );
 
