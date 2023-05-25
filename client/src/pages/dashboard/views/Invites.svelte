@@ -1,7 +1,10 @@
 <script lang="ts">
     import { dashboardState } from '../../../stores/DashboardState';
     import { inviteList } from '../../../stores/InviteStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { IconColor, IconSize } from '../../../components/types.ts';
+    import { assert } from '../../../assert.ts';
+    
 
     import Button from '../../../components/ui/Button.svelte';
     import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
@@ -40,6 +43,12 @@
     function resetContext() {
         ctx = null;
     }
+
+    $: invite = inviteList.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    })
 </script>
 
 {#if currentOffice === null}
@@ -50,7 +59,7 @@
         <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
     </Button>
 
-    {#await inviteList.load()}
+    {#await invite}
         Loading invite list.
     {:then}
         {#if $inviteList.length === 0 || currentOffice === null}

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Router from 'svelte-spa-router';
+    import { assert } from '../../assert.ts';
 
     import { currentPage } from '../../stores/CurrentPage.ts';
     import { dashboardState } from '../../stores/DashboardState.ts';
@@ -34,6 +35,12 @@
             title: 'No office selected',
             body: 'Please select an office to continue.',
         });
+    
+    $: reg = register().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        throw err;
+    })
 </script>
 
 <svelte:head>
@@ -47,15 +54,13 @@
 {:else}
     <TopBar user={$currentUser} bind:open={toggleDrawer} />
     <main on:click={() => (toggleDrawer &&= false)} on:keydown>
-        {#await register()}
+        {#await reg}
             <p>Waiting for service worker...</p>
         {:then}
             <SideDrawer show={toggleDrawer} />
             <section>
                 <Router {routes} />
             </section>
-        {:catch error}
-            <p>{error} <a href="/auth/login">Try logging in again?</a></p>
         {/await}
     </main>
     <Toast />

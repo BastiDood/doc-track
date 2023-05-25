@@ -1,6 +1,8 @@
 <script lang="ts">
     import { userList } from '../../../stores/UserStore';
+    import { topToastMessage } from '../../../stores/ToastStore';
     import { User } from '~model/user';
+    import { assert } from '../../../assert';
     
     import { IconSize } from '../../../components/types';
     import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
@@ -26,12 +28,19 @@
         ctxcpy.showEdit = true;
         ctx = ctxcpy;
     }
+
     function resetContext() {
         ctx = null;
     }
+
+    $: users = userList.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    })
 </script>
 
-{#await userList.load()}
+{#await users}
     <p>Loading users page...</p>
 {:then}
     <h1>Users</h1>

@@ -2,8 +2,10 @@
     import { dashboardState } from '../../../stores/DashboardState';
     import { staffList } from '../../../stores/StaffStore';
     import { allOffices } from '../../../stores/OfficeStore';
+    import { topToastMessage } from '../../../stores/ToastStore';
     import { Staff } from '~model/staff';
     import { User } from '~model/user';
+    import { assert } from '../../../assert';
 
     import { IconSize } from '../../../components/types';
     import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
@@ -51,12 +53,18 @@
     function resetContext() {
         ctx = null;
     }
+
+    $: staffs = staffList.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    })
 </script>
 
 {#if currentOffice === null}
     You must select an office before accessing the Staff page.
 {:else}
-    {#await staffList.load()}
+    {#await staffs}
         <p>Loading staff page...</p>
     {:then}
         <h1>Staffs of {officeName}</h1>

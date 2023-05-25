@@ -4,6 +4,7 @@
     import { documentOutbox } from '../../../stores/DocumentStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
+    import { assert } from '../../../assert.ts';
     
     import { IconSize, ToastType } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
@@ -48,6 +49,18 @@
     function resetContext() {
         ctx = null;
     }
+
+    $: defer = deferRegistrationCount.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    });
+
+    $: outbox = documentOutbox.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    })
 </script>
 {#if currentOffice === null}
     You must select an office before accessing the Outbox page.
@@ -58,7 +71,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await Promise.all([documentOutbox.load(), deferRegistrationCount.load()])}
+    {#await Promise.all([outbox, defer])}
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>

@@ -1,6 +1,8 @@
 <script lang="ts">
     import { allOffices } from '../../../stores/OfficeStore';
+    import { topToastMessage } from '../../../stores/ToastStore';
     import { Office } from '~model/office';
+    import { assert } from '../../../assert';
 
     import Modal from '../../../components/ui/Modal.svelte';
     import RowTemplate from '../../../components/ui/RowTemplate.svelte';
@@ -26,6 +28,12 @@
     function resetContext() {
         ctx = null;
     }
+
+    $: offices = allOffices.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    })
 </script>
 
 <article>
@@ -33,7 +41,7 @@
         Create an Office
     </Button>
 
-    {#await allOffices.load()}
+    {#await offices}
         <p>Loading office page...</p>
     {:then}
         <h1>Offices</h1>

@@ -5,13 +5,18 @@
     import { IconSize } from '../../../components/types.ts';
 
     $: ({ currentOffice } = $dashboardState);
+    $: dossier = Api.getDossier(currentOffice).catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    })
 </script>
 
 {#if currentOffice === null}
     You must select an office before accessing the Dossier page.
 {:else}
     <h1>Dossier</h1>
-    {#await Api.getDossier(currentOffice)}
+    {#await dossier}
         Loading registered documents.
     {:then reg}
         {#each reg as entry (entry.doc)}

@@ -4,7 +4,7 @@
     import { deferredSnaps } from '../../../stores/DeferredStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
-
+    import { assert } from '../../../assert.ts';
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
@@ -56,6 +56,18 @@
     function resetContext() {
         ctx = null;
     }
+
+    $: defer = deferredSnaps.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    });
+
+    $: inbox = documentInbox.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message});
+        return Promise.reject();
+    })
 </script>    
 
 {#if currentOffice === null}
@@ -67,7 +79,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await loadAll([documentInbox, deferredSnaps])}
+    {#await Promise.all([inbox, defer])}
         <p>Loading inbox...</p>
     {:then}
         <h2>Pending Acceptance</h2>
