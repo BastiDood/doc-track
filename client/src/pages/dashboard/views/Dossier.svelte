@@ -1,5 +1,7 @@
 <script>
     import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+    import { assert } from '../../../assert.ts';
     import { Document as Api } from '../../../api/document.ts';
     import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
     import { IconSize } from '../../../components/types.ts';
@@ -7,9 +9,9 @@
     $: ({ currentOffice } = $dashboardState);
     $: dossier = Api.getDossier(currentOffice).catch(err => {
         assert(err instanceof Error);
-        topToastMessage.enqueue({ title: err.name, body: err.message});
+        topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
-    })
+    });
 </script>
 
 {#if currentOffice === null}

@@ -52,15 +52,15 @@
 
     $: defer = deferRegistrationCount.load().catch(err => {
         assert(err instanceof Error);
-        topToastMessage.enqueue({ title: err.name, body: err.message});
+        topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
     });
 
     $: outbox = documentOutbox.load().catch(err => {
         assert(err instanceof Error);
-        topToastMessage.enqueue({ title: err.name, body: err.message});
+        topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
-    })
+    });
 </script>
 {#if currentOffice === null}
     You must select an office before accessing the Outbox page.

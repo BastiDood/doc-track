@@ -17,7 +17,6 @@
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
-    import { loadAll } from '@square/svelte-store';
 
     enum ActiveMenu {
         ContextInbox,
@@ -59,15 +58,15 @@
 
     $: defer = deferredSnaps.load().catch(err => {
         assert(err instanceof Error);
-        topToastMessage.enqueue({ title: err.name, body: err.message});
+        topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
     });
 
     $: inbox = documentInbox.load().catch(err => {
         assert(err instanceof Error);
-        topToastMessage.enqueue({ title: err.name, body: err.message});
+        topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
-    })
+    });
 </script>    
 
 {#if currentOffice === null}

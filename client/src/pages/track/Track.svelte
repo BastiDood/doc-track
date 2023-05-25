@@ -13,7 +13,6 @@
     import Notification from '../../components/icons/Notification.svelte';
     import PrintQr from '../../components/ui/qr/PrintQr.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
-    import DocumentBlank from '../../components/icons/DocumentBlank.svelte';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -100,7 +99,7 @@
 
     $: allOffice = allOffices.load().catch(err => {
         assert(err instanceof Error);
-        topToastMessage.enqueue({ title: err.name, body: err.message});
+        topToastMessage.enqueue({ title: err.name, body: err.message });
         return Promise.reject();
     });
 </script>
