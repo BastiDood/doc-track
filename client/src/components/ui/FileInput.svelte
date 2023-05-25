@@ -26,9 +26,9 @@
     function convertToScale(bytes: number) {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         if (bytes === 0) return '0 Byte';
-        const i = Math.floor(Math.log(bytes + 1) / Math.log(1024));
+        const i = Math.min(Math.floor(Math.log(bytes + 1) / Math.log(1024)), 4);
         if (i > 4) return 'File size unsupported';
-        return `${Math.round((bytes + 1) / 1024 ** i)} ${sizes[i]}`;
+        return `${Math.round((bytes + 1) / 1024 ** i)} ${i < 4 ? sizes[i] : sizes[4]}`;
     }
 
     $: maxLimitText = convertToScale(maxLimit);
