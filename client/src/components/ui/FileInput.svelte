@@ -14,6 +14,9 @@
     let toUpload = null as File | null;
     let path = null as string | null;
     let showFileInput = false;
+    let outputText = '';
+
+    $: outputText = toUpload !== null ? `File selected: ${toUpload.name}` : '';
     export let maxLimit = 20000000;
     $: if (files) {
 		for (const file of files) {
@@ -21,8 +24,10 @@
 		}
 	}
     const dispatch = createEventDispatcher();
-    function validateFile(file: File) {
-        if (file.size > maxLimit) {
+    function validateFile() {
+        assert(typeof toUpload !== 'undefined' && toUpload);
+        assert(typeof toUpload.size !== 'undefined' && toUpload.size);
+        if (toUpload.size > maxLimit) {
             throw new Error(`File size must be less than ${maxLimit} bytes.`);
         }
     }
@@ -35,11 +40,7 @@
             assert(typeof files !== 'undefined' && files);
             assert(toUpload && typeof toUpload !== 'undefined');    
             if(toUpload.size > maxLimit) {
-                console.log("Invalid file");
                 topToastMessage.enqueue({ title: 'File too large', body: `File size must be less than ${maxLimit} bytes.` });
-                files = null;
-                toUpload = null;
-                path = null;
                 return;
             }
             console.log(`Successfully uploaded file "${toUpload.name}" (${toUpload.size} bytes)`);
@@ -56,15 +57,12 @@
 <Modal title="Upload File" bind:showModal={showFileInput}>
     <input bind:files on:change={validateFile} bind:value={path} id="upload" multiple={false} type="file" capture={true} />  
     {#if typeof files !== 'undefined' && files !== null}
+        <br>
+        <p>{outputText}</p>
         <Button on:click={handleSubmit}>Upload "{toUpload?.name ?? 'No file Selected'}"</Button>
     {/if}
 </Modal>
 
 <style>
     @import url('../../pages/vars.css');
-    span {
-        border: 1px solid var(--color-primary);
-        display: inline-block;
-        padding: var(--padding-small);
-    }
 </style>    
