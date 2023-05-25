@@ -6,7 +6,7 @@ import { topToastMessage } from './ToastStore.ts';
 
 /**
  * The userSummary store contains metrics for the currently logged in user.
- * 
+ *
  * # Store Details
  * - Contains a record of the metric and the relevant value for the logged in user.
  * - Is an empty store otherwise.
@@ -27,7 +27,7 @@ export const userSummary = asyncReadable(
 
 /**
  * The localSummary store contains metrics for the currently selected ofice.
- * 
+ *
  * # Store Details
  * - Contains a record of the metric and the relevant value for the currently selected office.
  * - Is an empty store otherwise.
@@ -49,7 +49,7 @@ export const localSummary = asyncDerived(
 
 /**
  * The globalSummary store contains the entire system-wide metrics.
- * 
+ *
  * # Store Details
  * - Contains a record of the metrics that correspond to all snapshots in the system.
  * - Is an empty store otherwise.
@@ -70,7 +70,7 @@ export const globalSummary = asyncReadable(
 
 /**
  * The barcodeSummary store contains information regarding the barcodes used and pending or a selected office.
- * 
+ *
  * # Store Details
  * - Contains a numerical value for `assigned` and `pending` barcodes in the form of a {@linkcode BarcodeMetricsSchema}
  * - Is `null` otherwise.

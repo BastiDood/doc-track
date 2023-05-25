@@ -9,7 +9,7 @@ import { topToastMessage } from './ToastStore.ts';
 /**
  * This store contains all the information re: the current user logged in.
  * NOTE: Please use {@linkcode currentUser} to get derived information of the user instead.
- * 
+ *
  * # Store Details
  * - Contains all the details pertaining to the currently logged in user in the form of an {@linkcode FullSession}.
  * - Is `null` otherwise.
@@ -30,7 +30,7 @@ export const userSession = asyncReadable(
 
 /**
  * This store contains the {@linkcode UserModel} of the currently logged in user.
- * 
+ *
  * # Store Details
  * - Contains all the details pertaining to the currently logged in user in the form of a {@linkcode UserModel}.
  * - Is `null` otherwise.
@@ -45,7 +45,7 @@ export const currentUser = derived(userSession, session => session === null ? nu
 
 /**
  * This store contains all of the users in the DocTrack system as an array of {@linkcode UserType}.
- * 
+ *
  * # Store Details
  * - Contains all the users in the system as an array of {@linkcode UserType}.
  * - An empty array otherwise.
@@ -66,7 +66,7 @@ export const userList = asyncReadable(
 
 /**
  * This store contains all off the offices the {@linkcode currentUser} is a member of in the form of a OfficeID, OfficeName record.
- * 
+ *
  * # Store Details
  * - Contains all the office that the {@linkcode currentUser} is part of in an OfficeID, Name record pair.
  * - Contains an empty array otherwise.
