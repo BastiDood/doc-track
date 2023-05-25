@@ -1,7 +1,14 @@
 <script lang="ts">
-    import { assert } from '../../../../assert.ts';
     import { createEventDispatcher } from 'svelte';
+    import type { Category } from '~model/category.ts';
+    import type { Document } from '~model/document.ts';
+    import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
+
     import { Document as Api } from '../../../../api/document.ts';
+    import { DeferredSnap } from '../../../../api/error.ts';
+
+    import { assert } from '../../../../assert.ts';
+    import { Events, ToastType } from '../../../types.ts';
 
     import { earliestBatch } from '../../../../stores/BatchStore.ts';
     import { categoryList } from '../../../../stores/CategoryStore.ts';
@@ -11,20 +18,12 @@
     import { topToastMessage } from '../../../../stores/ToastStore.ts';
     import { deferredSnaps } from '../../../../stores/DeferredStore.ts';
 
-    import type { Category } from '../../../../.../../../../model/src/category.ts';
-    import type { Document } from '../../../../.../../../../model/src/document.ts';
-    import { Snapshot, Status } from '../../../../.../../../../model/src/snapshot.ts';
-    import { Events, ToastType } from '../../../types.ts';
-    
-    import { DeferredSnap } from '../../../../api/error.ts';
-
     import Button from '../../Button.svelte';
     import BarcodeSelect from '../../BarcodeSelect.svelte';
     import CategorySelect from '../../CategorySelect.svelte';
-    import TextInput from '../../TextInput.svelte';
-    import QrGenerator from '../../qr/QrGenerator.svelte';
-
     import FileInput from '../../FileInput.svelte';
+    import QrGenerator from '../../qr/QrGenerator.svelte';
+    import TextInput from '../../TextInput.svelte';
 
     let id = null as Document['id'] | null;
     $: url = id === null ? '' : `/track?id=${id}`;
