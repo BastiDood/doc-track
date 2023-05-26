@@ -17,6 +17,8 @@
     import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
     import OfficeSelect from '../OfficeSelect.svelte';
 
+    import LogoSidedrawer from '../../logo/LogoSidedrawer.svelte';
+
     export let show = false;
 
     import { ButtonType, IconColor } from '../../types.ts';
@@ -41,6 +43,7 @@
 <nav class:show on:click|stopPropagation on:keypress>
     <section>
         <header>
+            <LogoSidedrawer alt='Logo' />
             {#if Object.getOwnPropertyNames($userOffices).length === 0}
                 No office detected!
             {:else}
