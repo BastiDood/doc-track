@@ -339,18 +339,20 @@ Deno.test('full OAuth flow', async t => {
         assertStrictEquals(info.codes.length, 9);
 
         // Paper trail should contain one 
-        assertEquals(await db.getPaperTrail(doc.id), [{
-            status: Status.Register,
-            creation,
-            category: randomCategory,
-            remark: snap.remark,
-            target: snap.target,
-            name: USER.name,
-            email: USER.email,
-            picture: USER.picture,
+        assertEquals(await db.getPaperTrail(doc.id), {
             title: doc.title,
+            category: randomCategory,
             mime: 'application/octet-stream',
-        }]);
+            trail: [{
+                status: Status.Register,
+                creation,
+                remark: snap.remark,
+                target: snap.target,
+                name: USER.name,
+                email: USER.email,
+                picture: USER.picture,
+            }],
+        });
 
         // Use already assigned barcode
         assertEquals(await db.assignBarcodeToDocument(blob, doc, snap), BarcodeAssignmentError.AlreadyAssigned);
@@ -395,18 +397,15 @@ Deno.test('full OAuth flow', async t => {
         assertStrictEquals(result.eval, USER.name);
 
         await t.step('view latest snapshot in paper trail', async () => {
-            const trail = await db.getPaperTrail(chosen);
-            assertEquals(trail.at(-1), {
+            const meta = await db.getPaperTrail(chosen);
+            assertEquals(meta?.trail.at(-1), {
                 status: Status.Send,
                 creation: result.creation,
-                category: randomCategory,
                 remark: snapshot.remark,
                 target: office,
                 name: USER.name,
                 email: USER.email,
                 picture: USER.picture,
-                title: doc.title,
-                mime: 'application/octet-stream',
             });
         })
 

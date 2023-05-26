@@ -10,11 +10,11 @@ import {
     type AllOffices,
     type AllOutbox,
     type BarcodeMetrics,
+    type DocumentPaperTrail,
     type FullSession,
     type GeneratedBatch,
     type InboxEntry,
     type MinBatch,
-    type PaperTrail,
     type PushNotification,
     type StaffMember,
     AllCategoriesSchema,
@@ -23,11 +23,11 @@ import {
     AllOutboxSchema,
     BarcodeAssignmentError,
     BarcodeMetricsSchema,
+    DocumentPaperTrailSchema,
     FullSessionSchema,
     InboxEntrySchema,
     InsertSnapshotError,
     MinBatchSchema,
-    PaperTrailSchema,
     PushNotificationSchema,
     StaffMemberSchema,
 } from '~model/api.ts';
@@ -388,15 +388,17 @@ export class Database {
         }
     }
 
-    async getPaperTrail(doc: Document['id']): Promise<PaperTrail[]> {
-        const { rows } = await this.#client
-            .queryObject`SELECT s.creation,s.status,s.target,s.remark,d.title,d.mime,c.name AS category,u.name,u.email,u.picture
-                FROM snapshot AS s
-                    INNER JOIN users AS u ON s.evaluator = u.id
-                    INNER JOIN document AS d ON s.doc = d.id
-                    INNER JOIN category AS c ON d.category = c.id
-                WHERE s.doc = ${doc} ORDER BY s.creation ASC`;
-        return PaperTrailSchema.array().parse(rows);
+    async getPaperTrail(doc: Document['id']): Promise<DocumentPaperTrail | null> {
+        const { rows: [ first, ...rest ] } = await this.#client
+            .queryObject`WITH trail AS (SELECT s.creation,s.status,s.target,s.remark,u.name,u.email,u.picture
+                FROM snapshot s INNER JOIN users u ON s.evaluator = u.id ORDER BY s.creation ASC),
+                meta AS (SELECT d.title,d.mime,c.name AS cat FROM document d INNER JOIN category c ON c.id = d.category WHERE d.id = ${doc} LIMIT 1),
+                _ AS (SELECT row_to_json(trail) AS ts FROM trail)
+                SELECT json_build_object('title',m.title,'mime',m.mime,'category',m.cat,'trail',json_agg(_.ts)) AS result FROM _,meta m GROUP BY m.title,m.mime,m.cat`
+        assertStrictEquals(rest.length, 0);
+        return typeof first === 'undefined'
+            ? null
+            : z.object({ result: DocumentPaperTrailSchema }).parse(first).result;
     }
 
     async downloadFile(doc: Document['id']): Promise<Blob | null> {

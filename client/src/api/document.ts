@@ -7,13 +7,13 @@ import {
     type AllInbox,
     type AllOutbox,
     type BarcodeAssignmentError,
+    type DocumentPaperTrail,
     type InboxEntry,
-    type PaperTrail,
     AllInboxSchema,
     AllOutboxSchema,
     BarcodeAssignmentErrorSchema,
+    DocumentPaperTrailSchema,
     InboxEntrySchema,
-    PaperTrailSchema,
 } from '../../../model/src/api.ts';
 import { type Snapshot, SnapshotSchema } from '../../../model/src/snapshot.ts';
 
@@ -122,12 +122,13 @@ export namespace Document {
         }
     }
 
-    export async function getPaperTrail(doc: DocumentType['id']): Promise<PaperTrail[]> {
+    export async function getPaperTrail(doc: DocumentType['id']): Promise<DocumentPaperTrail | null> {
         const res = await fetch(`/api/document?doc=${doc}`, {
             headers: { 'Accept': 'application/json' },
         });
         switch (res.status) {
-            case StatusCodes.OK: return PaperTrailSchema.array().parse(await res.json());
+            case StatusCodes.OK: return DocumentPaperTrailSchema.parse(await res.json());
+            case StatusCodes.NOT_FOUND: return null;
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.NOT_ACCEPTABLE: throw new BadContentNegotiation;
             case StatusCodes.SERVICE_UNAVAILABLE: throw new UncachedFetch;
