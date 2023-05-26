@@ -29,6 +29,10 @@ jobs:
       - name: Setup Deployment
         run: |
           mkdir deploy
+          mkdir deploy/model
+          mkdir deploy/client
+          mkdir deploy/client/dist
+          mkdir deploy/server
           mv model deploy/model
           mv client/dist deploy/client/dist
           mv server deploy/server
