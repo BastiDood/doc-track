@@ -3,7 +3,7 @@ import { contentType } from 'content-type';
 import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
-import { resolve, join } from 'path';
+import { join } from 'path';
 import { extname } from 'posix';
 
 import { handleGetEarliestAvailableBatch, handleGenerateBatch } from './api/batch.ts';
@@ -37,7 +37,7 @@ import { handleGetUsers, handleSetUserPermissions } from './api/user.ts';
 import { handleHook, handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 
-const STATIC_ROOT = resolve(import.meta.url, '../../../client/dist');
+const STATIC_ROOT = import.meta.resolve('../../../client/dist');
 info(`[Static] file server hosted at ${STATIC_ROOT}`);
 
 async function handleGet(pool: Pool, req: Request) {
