@@ -1,16 +1,19 @@
 <script lang="ts">
     import { dashboardState } from '../../../stores/DashboardState';
     import { inviteList } from '../../../stores/InviteStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { IconColor, IconSize } from '../../../components/types.ts';
+    import { assert } from '../../../assert.ts';
+    
 
     import Button from '../../../components/ui/Button.svelte';
-    import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
     import InviteForm from '../../../components/ui/forms/invite/AddInvite.svelte';
     import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
     import { Invitation } from '~model/invitation.ts';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         CreateInvite,
@@ -19,27 +22,29 @@
     interface Context {
         email: Invitation['email'] | null;
         office: Invitation['office'] | null;
-        contextMenu: boolean | null;
         inviteModal: ActiveMenu | null;
     }
 
     $: ({ currentOffice } = $dashboardState);
     let ctx = null as Context | null;
 
-    function openContextMenu(email: Invitation['email'], office: Invitation['office']) {
-        ctx = { email: email, office: office, contextMenu: true, inviteModal: null };
-    }
-
     function openRevokeInvite(email: Invitation['email'], office: Invitation['office']) {
-        ctx = { email: email, office: office, contextMenu: false, inviteModal: ActiveMenu.RevokeInvite };
+        ctx = { email: email, office: office, inviteModal: ActiveMenu.RevokeInvite };
     }
 
     function openCreateInvite() {
-        ctx = { email: null, office: null, contextMenu: null, inviteModal: ActiveMenu.CreateInvite };
+        ctx = { email: null, office: null, inviteModal: ActiveMenu.CreateInvite };
     }
+
     function resetContext() {
         ctx = null;
     }
+
+    const inviteReady = inviteList.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 {#if currentOffice === null}
@@ -50,7 +55,7 @@
         <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
     </Button>
 
-    {#await inviteList.load()}
+    {#await inviteReady}
         Loading invite list.
     {:then}
         {#if $inviteList.length === 0 || currentOffice === null}
@@ -63,30 +68,26 @@
                     permission={permission}
                     iconSize={IconSize.Large}
                     creation={creation}
-                    on:overflowClick={openContextMenu.bind(null, email, currentOffice)}
+                    on:overflowClick={openRevokeInvite.bind(null, email, currentOffice)}
                 />
             {/each}
         {/if}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 {#if ctx === null}
     <!-- Do not render anything! -->
 {:else if ctx.inviteModal === ActiveMenu.CreateInvite && currentOffice}
-    <Modal title="Invite User" showModal>
+    <Modal title="Invite User" showModal on:close={resetContext}>
             <InviteForm />
     </Modal>
 {:else if ctx.inviteModal === ActiveMenu.RevokeInvite && ctx.email !== null && ctx.office !== null}
-    <Modal title="Remove Invitation" showModal>
+    <Modal title="Remove Invitation" showModal on:close={resetContext}>
             <RevokeInvite
                 on:done={resetContext}
                 email={ctx.email}
                 office={ctx.office}
             />
     </Modal>
-{:else if ctx.contextMenu && ctx.email !== null && currentOffice}
-    <InviteContext
-        show
-        on:done={resetContext}
-        on:removeInvitation={openRevokeInvite.bind(null, ctx.email, currentOffice)}
-    />
 {/if}

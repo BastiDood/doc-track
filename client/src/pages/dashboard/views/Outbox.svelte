@@ -4,6 +4,7 @@
     import { documentOutbox } from '../../../stores/DocumentStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
+    import { assert } from '../../../assert.ts';
     
     import { IconSize, ToastType } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
@@ -15,6 +16,7 @@
     import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
     import { deferRegistrationCount } from '../../../stores/DeferredStore.ts';
     import { Document } from '../../../../../model/src/document.ts';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     interface Context {
         docId: Document['id'] | null,
@@ -48,6 +50,18 @@
     function resetContext() {
         ctx = null;
     }
+
+    const deferReady = deferRegistrationCount.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
+
+    const outboxReady = documentOutbox.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 {#if currentOffice === null}
     You must select an office before accessing the Outbox page.
@@ -58,7 +72,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await Promise.all([documentOutbox.load(), deferRegistrationCount.load()])}
+    {#await Promise.all([outboxReady, deferReady])}
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>
@@ -79,6 +93,8 @@
         {#each $documentOutbox.pending as entry (entry.doc)}
             <SendRow {...entry} iconSize={IconSize.Large} />
         {/each}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 {#if ctx === null}

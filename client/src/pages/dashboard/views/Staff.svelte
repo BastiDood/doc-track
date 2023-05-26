@@ -2,8 +2,10 @@
     import { dashboardState } from '../../../stores/DashboardState';
     import { staffList } from '../../../stores/StaffStore';
     import { allOffices } from '../../../stores/OfficeStore';
+    import { topToastMessage } from '../../../stores/ToastStore';
     import { Staff } from '~model/staff';
     import { User } from '~model/user';
+    import { assert } from '../../../assert';
 
     import { IconSize } from '../../../components/types';
     import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
@@ -11,6 +13,7 @@
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         EditStaff,
@@ -51,12 +54,18 @@
     function resetContext() {
         ctx = null;
     }
+
+    const staffReady = staffList.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 {#if currentOffice === null}
     You must select an office before accessing the Staff page.
 {:else}
-    {#await staffList.load()}
+    {#await staffReady}
         <p>Loading staff page...</p>
     {:then}
         <h1>Staffs of {officeName}</h1>
@@ -74,6 +83,8 @@
         {:else}
             No staff members exist in "{officeName}".
         {/each}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 

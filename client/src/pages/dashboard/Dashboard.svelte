@@ -1,5 +1,6 @@
 <script lang="ts">
     import Router from 'svelte-spa-router';
+    import { assert } from '../../assert.ts';
 
     import { currentPage } from '../../stores/CurrentPage.ts';
     import { dashboardState } from '../../stores/DashboardState.ts';
@@ -15,6 +16,7 @@
 
     import routes from './views/index.ts';
     import { register } from '../register.ts';
+    import PageUnavailable from '../../components/ui/PageUnavailable.svelte';
 
     let toggleDrawer = false;
 
@@ -34,6 +36,18 @@
             title: 'No office selected',
             body: 'Please select an office to continue.',
         });
+    
+    const reg = register().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
+
+    const sessionReady = currentUser.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 <svelte:head>
@@ -43,24 +57,22 @@
 
 <svelte:window on:message={onSync} />
 
-{#if $currentUser === null}
-    <p>Loading user...</p>
-{:else}
-    <TopBar user={$currentUser} bind:open={toggleDrawer} />
+{#await Promise.all([reg, sessionReady])}
+    <p>Loading user and service Worker...</p>
+{:then} 
+    {#if $currentUser !== null}
+        <TopBar user={$currentUser} bind:open={toggleDrawer} />
+    {/if}
     <main on:click={() => (toggleDrawer &&= false)} on:keydown>
-        {#await register()}
-            <p>Waiting for service worker...</p>
-        {:then}
-            <SideDrawer show={toggleDrawer} />
-            <section>
-                <Router {routes} />
-            </section>
-        {:catch error}
-            <p>{error} <a href="/auth/login">Try logging in again?</a></p>
-        {/await}
+        <SideDrawer show={toggleDrawer} />
+        <section>
+            <Router {routes} />
+        </section>
     </main>
     <Toast />
-{/if}
+{:catch err}
+    <PageUnavailable {err} />
+{/await}
 
 <style>
     :global(body) {

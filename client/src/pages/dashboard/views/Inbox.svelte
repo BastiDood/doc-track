@@ -4,7 +4,7 @@
     import { deferredSnaps } from '../../../stores/DeferredStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
-
+    import { assert } from '../../../assert.ts';
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
@@ -17,7 +17,7 @@
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
-    import { loadAll } from '@square/svelte-store';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         ContextInbox,
@@ -56,6 +56,18 @@
     function resetContext() {
         ctx = null;
     }
+
+    const deferReady = deferredSnaps.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
+
+    const inboxReady = documentInbox.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>    
 
 {#if currentOffice === null}
@@ -67,7 +79,7 @@
         Register and Stage a New Document
     </Button>
 
-    {#await loadAll([documentInbox, deferredSnaps])}
+    {#await Promise.all([inboxReady, deferReady])}
         <p>Loading inbox...</p>
     {:then}
         <h2>Pending Acceptance</h2>
@@ -93,6 +105,8 @@
                 on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
             />
         {/each}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 

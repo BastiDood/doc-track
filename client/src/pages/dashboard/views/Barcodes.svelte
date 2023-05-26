@@ -15,6 +15,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import { ToastType } from '../../../components/types.ts';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
@@ -57,12 +58,18 @@
             topToastMessage.enqueue({ title: err.name, body: err.message });
         }
     }
+
+    const barcodeSumReady = barcodeSummary.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 {#if currentOffice === null}
     You must select an office before accessing the Barcodes page.
 {:else}
-    {#await barcodeSummary.load()}
+    {#await barcodeSumReady}
         Loading barcode metrics...
     {:then} 
         {#if $barcodeSummary === null}
@@ -95,6 +102,8 @@
                 </Modal>
             </main>
         {/if}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 
