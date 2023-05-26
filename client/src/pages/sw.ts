@@ -60,6 +60,11 @@ async function pushEntriesToServer() {
     // TODO: UI facing indicator of entries being pushed.
 }
 
+async function formDataExtractorId(req: Request) {
+    const formData = await req.formData();
+    return DeferredRegistrationSchema.shape.id.parse(formData.get('id'));
+}
+
 async function handleDocumentPost(req: Request): Promise<Response> {
     try {
         const res = await fetch(req.clone());
@@ -70,10 +75,10 @@ async function handleDocumentPost(req: Request): Promise<Response> {
 
         // Extract document information and status from json body.
         const { pathname } = new URL(req.url);
-        const json: unknown = await req.clone().json();
+        const cloned = req.clone();
         const key = pathname.startsWith('/api/snapshot')
-            ? DeferredSnapshotSchema.parse(json).doc
-            : DeferredRegistrationSchema.parse(json).id;
+            ? DeferredSnapshotSchema.parse(await cloned.json()).doc
+            : await formDataExtractorId(cloned);
 
         // Request a background sync by assigning a tag.
         await requestBackgroundSync(key);
