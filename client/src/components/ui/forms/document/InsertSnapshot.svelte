@@ -38,6 +38,7 @@
 
         switch (status) {
             case Status.Register:
+            case Status.Receive:
                 destOfficeId = userOfficeId;
                 break;
             case Status.Terminate:
