@@ -62,7 +62,7 @@
     {#if ctx === null}
         <!-- Don't render anything! Intentionally left blank to make type inference happy. -->
     {:else if ctx.mode === OfficeEvents.Create}
-        <Modal showModal title="Create New Office">
+        <Modal showModal title="Create New Office" on:close={resetContext}>
             <NewOffice on:done={resetContext} />
         </Modal>
     {:else if ctx.mode === OfficeEvents.Edit}

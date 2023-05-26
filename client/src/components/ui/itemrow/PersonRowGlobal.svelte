@@ -5,6 +5,7 @@
 
     import { IconSize, Events } from '../../types.ts';
     import { User } from '../../../../../model/src/user.ts';
+    import Edit from '../../icons/Edit.svelte';
     export let iconSize: IconSize;
     
     // From user.ts
@@ -29,4 +30,5 @@
         <span class="chip permission">Permissions: {permission.toString(2).padStart(8, '0')}</span>
     </span>
     <img class="{iconSize} rounded" src={picture} alt={name} slot="icon" />
+    <Edit slot="overflow" alt="Edit Icon" size={IconSize.Large} />
 </RowTemplate>
