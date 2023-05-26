@@ -15,6 +15,7 @@
     import AdminIcon from '../../icons/PersonInfo.svelte';
     import SettingsIcon from '../../icons/Settings.svelte';
     import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
+    import MainLogo from '../../icons/MainLogo.svelte';
     import OfficeSelect from '../OfficeSelect.svelte';
 
     export let show = false;
@@ -26,8 +27,8 @@
     import Button from '../../ui/Button.svelte';
     import Search from '../../icons/Search.svelte';
     import Camera from '../../icons/Camera.svelte';
-    let trackingNumber: string | null = '';
 
+    let trackingNumber: string | undefined;
     let selectedOffice: Office['id'] | null = null;
     let showScan = false;
 
@@ -40,15 +41,18 @@
 
 <nav class:show on:click|stopPropagation on:keypress>
     <section>
+        <div id="logo">
+            <MainLogo alt="Main DocTrack Logo" />
+        </div>
         <header>
             {#if Object.getOwnPropertyNames($userOffices).length === 0}
                 No office detected!
             {:else}
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
-            <div>
+            <div id="controls">
                 <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
-                <TextInput placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
+                <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
                 <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
             </div>
         </header>
@@ -75,7 +79,17 @@
 {/if}
 
 <style>
-    @import url('../../../pages/vars.css');
+    #logo {
+        margin: auto;
+        width: 60%;
+        text-align: center;
+    }
+
+    #controls {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+    }
 
     nav {
         background-color: var(--dashboard-sidedrawer);
@@ -127,11 +141,5 @@
     section > a:hover, input[type="submit"]:hover, :global(a.active) {
         background-color: var(--hover-color);
         border-right: var(--spacing-small) solid var(--primary-color);
-    }
-
-    div {
-        display: flex;
-        align-items: stretch;
-        flex-direction: column;
     }
 </style>
