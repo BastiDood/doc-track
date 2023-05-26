@@ -12,6 +12,5 @@
     #logo {
         width: 60%;
         height: 60%;
-        max-width: 512px;
     }
 </style>

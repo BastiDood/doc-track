@@ -42,8 +42,10 @@
 
 <nav class:show on:click|stopPropagation on:keypress>
     <section>
-        <header>
+        <center>
             <LogoSidedrawer alt='Logo' />
+        </center>
+        <header>
             {#if Object.getOwnPropertyNames($userOffices).length === 0}
                 No office detected!
             {:else}
@@ -79,6 +81,10 @@
 
 <style>
     @import url('../../../pages/vars.css');
+
+    center {
+        margin: 0;
+    }
 
     nav {
         background-color: var(--dashboard-sidedrawer);

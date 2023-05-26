@@ -51,6 +51,7 @@
 </script>
 
 <svelte:head>
+    <link rel='favicon' type='image/png' href='../../components/logo/MainLogo.svelte/LogoIcon-256.png' />
     <title>{pageName} - {officeName}</title>
 </svelte:head>
 
