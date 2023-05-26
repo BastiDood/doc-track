@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PaperTrail } from '~model/api.ts';
+    import type { DocumentPaperTrail, PaperTrail } from '~model/api.ts';
     import { Document as DocumentModel } from '~model/document.ts';
     import { assert } from '../../assert.ts';
     import { Document } from '../../api/document.ts';
@@ -57,8 +57,6 @@
 
         if (typeof first !== 'undefined' && typeof last !== 'undefined')
             return {
-                title: first.title,
-                category: first.category,
                 documentFor: first.remark,
                 documentRemark: last.remark,
                 status: first.status,
@@ -69,8 +67,6 @@
         assert(typeof first !== 'undefined' && typeof last === 'undefined');
         const origin = first.target === null ? null : allOffices[first.target] ?? null;
         return {
-            title: first.title,
-            category: first.category,
             documentFor: first.remark,
             documentRemark: first.remark,
             status: first.status,
@@ -109,17 +105,17 @@
 <TopBar open />
 <main>
     {#if trackingNumber === null}
-        <p>No tracking number provided.</p>
+        No tracking number provided.
     {:else}
         {#await Promise.all([Document.getPaperTrail(trackingNumber), allOfficeReady])}
             Loading paper trail...
-        {:then [trail, _]}
-            {@const overview = renderOverview(trail, $allOffices)}
-            {#if overview === null}
+        {:then [meta, _]}
+            {#if meta === null}
                 <h1>Uh oh!</h1>
-                <p>Something went wrong. Kindly re-check your tracking id above.</p>
+                <p>Document does not exist.</p>
             {:else}
-                <h2>Document {overview.title}</h2>
+                {@const overview = renderOverview(meta.trail, $allOffices)}
+                <h2>Document {meta.title}</h2>
                 <Button on:click={subscribePushNotifications.bind(null, trackingNumber)}>
                     <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
                 </Button>
@@ -132,36 +128,39 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td><b>Document Title</b></td>
-                            <td>{overview.title}</td>
-                        </tr>
-                        <tr>
                             <td><b>Document Tracking Number</b></td>
                             <td>{trackingNumber}</td>
                         </tr>
                         <tr>
+                            <td><b>Document Title</b></td>
+                            <td>{meta.title}</td>
+                        </tr>
+                        <tr>
                             <td><b>Document Category</b></td>
-                            <td>{overview.category}</td>
+                            <td>{meta.category}</td>
                         </tr>
-                        <tr>
-                            <td><b>Document For</b></td>
-                            <td>{overview.documentFor}</td>
-                        </tr>
-                        <tr>
-                            <td><b>Document Remarks</b></td>
-                            <td>{overview.documentRemark}</td>
-                        </tr>
-                        <tr>
-                            <td><b>Originating Office</b></td>
-                            <td>{overview.origin}</td>
-                        </tr>
-                        <tr>
-                            <td><b>Current Office</b></td>
-                            <td>{overview.current}</td>
-                        </tr>
-                        <tr>
-                            <td><b>Document Status</b></td>
-                            <td>{overview.status}</td>
+                        {#if overview !== null}
+                            <tr>
+                                <td><b>Document For</b></td>
+                                <td>{overview.documentFor}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Document Remarks</b></td>
+                                <td>{overview.documentRemark}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Originating Office</b></td>
+                                <td>{overview.origin}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Current Office</b></td>
+                                <td>{overview.current}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Document Status</b></td>
+                                <td>{overview.status}</td>
+                            </tr>
+                        {/if}
                     </table>
                     <br />
                     <table>
@@ -179,7 +178,7 @@
                             <td><b>Remarks</b></td>
                             <td><b>Evaluator</b></td>
                         </tr>
-                        {#each trail as { target, creation, status, remark, email }}
+                        {#each meta.trail as { target, creation, status, remark, email }}
                             <tr>
                                 <td>
                                     {#if target === null}
