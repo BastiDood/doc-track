@@ -94,7 +94,11 @@
         } catch (err) {
             if (err instanceof DeferredSnap) {
                 await deferredSnaps.upsert({ status, doc: docId });
-                topToastMessage.enqueue({ title: err.name, body: `${docId} is deferred.`, type: ToastType.Offline });
+                topToastMessage.enqueue({
+                    title: err.name,
+                    body: `${docId} is deferred.`,
+                    type: ToastType.Offline,
+                });
                 dispatch(Events.Done);
                 return;
             }
