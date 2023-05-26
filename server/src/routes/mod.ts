@@ -37,7 +37,9 @@ import { handleGetUsers, handleSetUserPermissions } from './api/user.ts';
 import { handleHook, handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 
-const STATIC_ROOT = import.meta.resolve('../../../client/dist').slice(8);
+// HACK: Use a more robust way to resolve Linux and Windows file paths.
+const { pathname } = new URL(import.meta.resolve('../../../client/dist'));
+const STATIC_ROOT = pathname[2] === ':' ? pathname.slice(3) : pathname;
 info(`[Static] file server hosted at ${STATIC_ROOT}`);
 
 async function handleGet(pool: Pool, req: Request) {
