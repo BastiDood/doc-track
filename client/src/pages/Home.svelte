@@ -9,14 +9,11 @@
     import Camera from '../components/icons/Camera.svelte';
     import Search from '../components/icons/Search.svelte';
     import TextInput from '../components/ui/TextInput.svelte';
+    import MainLogo from '../components/logo/MainLogo.svelte';
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
     import { assert } from '../assert.ts';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
-
-    import MainLogo from '../components/logo/MainLogo.svelte';
-
-    import MainLogo from '../components/logo/MainLogo.svelte';
 
     const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
     let showScan = false as boolean;
