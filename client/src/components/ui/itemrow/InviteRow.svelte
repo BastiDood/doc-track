@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
 
+    import Close from '../../icons/Close.svelte';
     import PersonMail from '../../icons/PersonMail.svelte';
     import RowTemplate from '../RowTemplate.svelte';
 
@@ -31,4 +32,5 @@
         <span class="chip timestamp">{creation.toLocaleString()}</span>
     </span>
     <PersonMail size={iconSize} slot="icon" alt="An invited person" />
+    <Close slot="overflow" alt="Close Icon" size={IconSize.Large} />
 </RowTemplate>
