@@ -15,9 +15,8 @@
     import AdminIcon from '../../icons/PersonInfo.svelte';
     import SettingsIcon from '../../icons/Settings.svelte';
     import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
+    import MainLogo from '../../icons/MainLogo.svelte';
     import OfficeSelect from '../OfficeSelect.svelte';
-
-    import LogoSidedrawer from '../../icons/LogoSidedrawer.svelte';
 
     export let show = false;
 
@@ -43,7 +42,7 @@
 <nav class:show on:click|stopPropagation on:keypress>
     <section>
         <div id="logo">
-            <LogoSidedrawer alt='Logo' />
+            <MainLogo alt="Main DocTrack Logo" />
         </div>
         <header>
             {#if Object.getOwnPropertyNames($userOffices).length === 0}
@@ -51,7 +50,7 @@
             {:else}
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
-            <div>
+            <div id="controls">
                 <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
                 <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
                 <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
@@ -80,10 +79,16 @@
 {/if}
 
 <style>
-    @import url('../../../pages/vars.css');
-
     #logo {
         margin: auto;
+        width: 60%;
+        text-align: center;
+    }
+
+    #controls {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
     }
 
     nav {
@@ -136,11 +141,5 @@
     section > a:hover, input[type="submit"]:hover, :global(a.active) {
         background-color: var(--hover-color);
         border-right: var(--spacing-small) solid var(--primary-color);
-    }
-
-    div {
-        display: flex;
-        align-items: stretch;
-        flex-direction: column;
     }
 </style>
