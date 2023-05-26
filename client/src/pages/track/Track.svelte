@@ -115,8 +115,9 @@
                 <h1>Uh oh!</h1>
                 <p>Document does not exist.</p>
             {:else}
-                {@const overview = renderOverview(meta.trail, $allOffices)}
-                <h2>Document {meta.title}</h2>
+                {@const { title, category, mime, trail } = meta}
+                {@const overview = renderOverview(trail, $allOffices)}
+                <h2>Document {title}</h2>
                 <Button on:click={subscribePushNotifications.bind(null, trackingNumber)}>
                     <Notification alt="Bell icon for subscribing to push notifications" /> Subscribe to Push Notifications
                 </Button>
@@ -134,11 +135,11 @@
                         </tr>
                         <tr>
                             <td><b>Document Title</b></td>
-                            <td>{meta.title}</td>
+                            <td>{title}</td>
                         </tr>
                         <tr>
                             <td><b>Document Category</b></td>
-                            <td>{meta.category}</td>
+                            <td>{category}</td>
                         </tr>
                         {#if overview !== null}
                             <tr>
@@ -166,7 +167,7 @@
                     <br />
                     <table>
                         <td><p class="header-color"><b>File Attachment</b></p></td>
-                        <tr><a download type={meta.mime} href="/api/document/download?doc={trackingNumber}">{trackingNumber}</a></tr>
+                        <tr><a download type={mime} href="/api/document/download?doc={trackingNumber}">{trackingNumber}</a></tr>
                     </table>
                     <br />
                     <table>
@@ -179,7 +180,7 @@
                             <td><b>Remarks</b></td>
                             <td><b>Evaluator</b></td>
                         </tr>
-                        {#each meta.trail as { target, creation, status, remark, email }}
+                        {#each trail as { target, creation, status, remark, email }}
                             <tr>
                                 <td>
                                     {#if target === null}
