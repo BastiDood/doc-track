@@ -34,31 +34,19 @@
         const node = this.elements.namedItem('snap-remark');
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
-
-        if (status === Status.Receive) {
-            destOfficeId = userOfficeId;
-            topToastMessage.enqueue({
-                title: 'Document Received',
-                body: 'You have successfully received a document.',
-                type: ToastType.Success,
-            });
-        } else if (status === Status.Terminate) {
-            destOfficeId = null;
-            topToastMessage.enqueue({
-                type: ToastType.Success,
-                title: 'Document Terminated',
-                body: 'You have successfully terminated a document.',
-            });
-        } else {
-            assert(destOfficeId !== null);
-            topToastMessage.enqueue({
-                type: ToastType.Success,
-                title: 'Document Sent',
-                body: 'You have successfully sent a document.',
-            });
-        }
         assert(docId);
 
+        switch (status) {
+            case Status.Register:
+                destOfficeId = userOfficeId;
+                break;
+            case Status.Send:
+                destOfficeId = null;
+                break;
+            default:
+                assert(destOfficeId !== null);
+        }
+    
         try {
             await Snapshot.insert(userOfficeId, {
                 doc: docId,
@@ -67,6 +55,38 @@
                 target: destOfficeId,
             });
 
+            switch (status) {
+                case Status.Register:
+                    topToastMessage.enqueue({
+                        title: 'Document Received',
+                        body: 'You have successfully received a document.',
+                        type: ToastType.Success,
+                    });
+                    break;
+                case Status.Send:
+                    topToastMessage.enqueue({
+                        type: ToastType.Success,
+                        title: 'Document Sent',
+                        body: 'You have successfully sent a document.',
+                    });
+                    break;
+                case Status.Receive:
+                    topToastMessage.enqueue({
+                        type: ToastType.Success,
+                        title: 'Document Received',
+                        body: 'You have successfully received a document.',
+                    });
+                    break;
+                case Status.Terminate:
+                    topToastMessage.enqueue({
+                        type: ToastType.Success,
+                        title: 'Document Terminated',
+                        body: 'You have successfully terminated a document.',
+                    });
+                    break;
+                default:
+                    throw new Error('unexpected status type');
+            }
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
             await reloadMetrics();
@@ -74,7 +94,11 @@
         } catch (err) {
             if (err instanceof DeferredSnap) {
                 await deferredSnaps.upsert({ status, doc: docId });
-                topToastMessage.enqueue({ title: err.name, body: `${docId} is deferred.` });
+                topToastMessage.enqueue({
+                    title: err.name,
+                    body: `${docId} is deferred.`,
+                    type: ToastType.Offline,
+                });
                 dispatch(Events.Done);
                 return;
             }
@@ -86,16 +110,16 @@
 
 <p>You are currently adding a snapshot as {$userSession?.email} in office {userOfficeId}.</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-    Document Barcode ID: {docId}
+    <p>Document Barcode ID: {docId}</p>
     <br />
     {#if status === Status.Terminate || status === Status.Receive}
-        Set Target Office: This Office.
+        <p>Set Target Office: This Office.</p>
     {:else}
-        Set Target Office: <OfficeSelect offices={$allOffices} bind:oid={destOfficeId} />
+        <p>Set Target Office: <OfficeSelect offices={$allOffices} bind:oid={destOfficeId} /></p>
     {/if}
     
     <br />
-    Set Status As: <StatusSelect disabled bind:value={status} />
+    <p>Set Status As: <StatusSelect disabled bind:value={status} /></p>
     <br />
     <TextInput name="snap-remark" label="Remarks: " placeholder="Optional" />
     <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>

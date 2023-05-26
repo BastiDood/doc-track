@@ -1,7 +1,7 @@
 import { asyncWritable, derived } from '@square/svelte-store';
 import localForage from 'localforage';
 import { topToastMessage } from './ToastStore.ts';
-import { type DeferredSnapshot, DeferredRegistrationSchema, DeferredSnapshotSchema } from '../../../model/src/api.ts';
+import { type DeferredSnapshot, DeferredSnapshotSchema } from '../../../model/src/api.ts';
 import { Status } from '../../../model/src/snapshot.ts';
 
 import { assert } from '../assert.ts';
@@ -18,7 +18,7 @@ const deferStore = asyncWritable(
             const defer = DeferredFetchSchema.parse(await localForage.getItem(key));
             const { pathname } = new URL(defer.url);
             return pathname.startsWith('/api/document')
-                ? { doc: DeferredRegistrationSchema.parse(JSON.parse(defer.body)).id, status: Status.Register }
+                ? { doc: key, status: Status.Register }
                 : DeferredSnapshotSchema.parse(JSON.parse(defer.body));
         });
         return Promise.all(deferred);
@@ -43,7 +43,7 @@ export const deferredSnaps = {
     onDocumentSync(evt: MessageEvent<string>) {
         assert(evt.data === 'sync');
         topToastMessage.enqueue({
-            type: ToastType.Offline,
+            type: ToastType.Success,
             title: 'Background Syncronization',
             body: 'Syncronization successful.',
         });

@@ -53,7 +53,7 @@
                 <Edit slot="overflow" alt="Edit Icon" size={IconSize.Large} />
             </RowTemplate>
         {:else}
-            No offices exist.
+            <p>No offices exist.</p>
         {/each}
     {:catch err}
         <PageUnavailable {err} />

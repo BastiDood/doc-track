@@ -83,7 +83,11 @@
             assert(err instanceof Error);
             if (err instanceof DeferredSnap) {
                 await deferredSnaps.upsert({ status: Status.Register, doc: id });
-                topToastMessage.enqueue({ title: err.name, body: `${id} is deferred.` });
+                topToastMessage.enqueue({
+                    title: 'Deferred Document',
+                    body: `${id} is deferred.`,
+                    type: ToastType.Offline,
+                });
                 dispatch(Events.Done);
                 return;
             }
@@ -93,7 +97,7 @@
 </script>
 
 {#if $earliestBatch === null || typeof $earliestBatch === 'undefined'}
-    No available barcodes.
+    <p>No available barcodes.</p>
 {:else}
     {@const bytes = file?.size ?? 0}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>

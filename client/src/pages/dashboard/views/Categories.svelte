@@ -72,7 +72,7 @@
                 {name}
             </RowTemplate>
         {:else}
-            No active categories.
+            <p>No active categories.</p>
         {/each}
     </section>
     <section>
@@ -83,7 +83,7 @@
                 {name}
             </RowTemplate>
         {:else}
-            No retired categories.
+            <p>No retired categories.</p>
         {/each}
     </section>
 </article>
