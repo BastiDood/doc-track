@@ -37,5 +37,6 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: doctrack
-          entrypoint: ./server/src/main.ts
           root: ./deploy
+          entrypoint: ./server/src/main.ts
+          import-map: ./server/deno.json
