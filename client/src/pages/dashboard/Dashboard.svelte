@@ -57,7 +57,7 @@
 <svelte:window on:message={onSync} />
 
 {#await Promise.all([reg, sessionReady])}
-    Loading user and service Worker...
+    <p>Loading user and service Worker...</p>
 {:then} 
     {#if $currentUser !== null}
         <TopBar user={$currentUser} bind:open={toggleDrawer} />
