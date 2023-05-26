@@ -2,14 +2,15 @@
     import { fade } from 'svelte/transition';
     
     import './../../components/icons/icon-styles.css';
+
     export let alt: string;
 
     const iconUrl = new URL('../../assets/icons/LogoMain.svg', import.meta.url);
 </script>
 
-<img id='logo' {alt} src="{iconUrl.pathname}" on:click on:keydown in:fade={ { delay: 100, duration: 1000 } } />
+<img {alt} src={iconUrl.pathname} on:click on:keydown in:fade={{ delay: 100, duration: 1000 }} />
 {#each 'DOCTRACK' as char, i}
-<span class="letter-doctrack" in:fade={ { delay: 500 + i * 150, duration: 150 } }>{char}</span>
+    <span class="letter-doctrack" in:fade={{ delay: 500 + i * 150, duration: 150 }}>{char}</span>
 {/each}
 <br>
 <div id='logo-container'>
@@ -18,11 +19,12 @@
 
 <style>
     @import url('../../pages/vars.css');
+
     #logo-container {
         letter-spacing: 0.12em;
     }
 
-    #logo {
+    img {
         width: 100%;
         height: 100%;
         max-width: 512px;
