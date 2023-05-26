@@ -8,13 +8,13 @@
     const iconUrl = new URL('../../assets/icons/LogoMain.svg', import.meta.url);
 </script>
 
-<img id='logo' {alt} src="{iconUrl.pathname}" on:click on:keydown in:fade={ {delay: 100, duration: 1000} } />
+<img id='logo' {alt} src="{iconUrl.pathname}" on:click on:keydown in:fade={ { delay: 100, duration: 1000 } } />
 {#each 'DOCTRACK' as char, i}
-<span class="letter-doctrack" in:fade={ {delay: 500 + i * 150, duration: 150} }>{char}</span>
+<span class="letter-doctrack" in:fade={ { delay: 500 + i * 150, duration: 150 } }>{char}</span>
 {/each}
 <br>
 <div id='logo-container'>
-    <span class='letter-description' in:fade={ {delay: 2000, duration: 200} }><b>Document Tracking System</b></span>
+    <span class='letter-description' in:fade={ { delay: 2000, duration: 200 } }><b>Document Tracking System</b></span>
 </div>
 
 <style>
