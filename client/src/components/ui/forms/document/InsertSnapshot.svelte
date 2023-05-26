@@ -34,31 +34,19 @@
         const node = this.elements.namedItem('snap-remark');
         assert(node instanceof HTMLInputElement);
         assert(node.type === 'text');
-
-        if (status === Status.Receive) {
-            destOfficeId = userOfficeId;
-            topToastMessage.enqueue({
-                title: 'Document Received',
-                body: 'You have successfully received a document.',
-                type: ToastType.Success,
-            });
-        } else if (status === Status.Terminate) {
-            destOfficeId = null;
-            topToastMessage.enqueue({
-                type: ToastType.Success,
-                title: 'Document Terminated',
-                body: 'You have successfully terminated a document.',
-            });
-        } else {
-            assert(destOfficeId !== null);
-            topToastMessage.enqueue({
-                type: ToastType.Success,
-                title: 'Document Sent',
-                body: 'You have successfully sent a document.',
-            });
-        }
         assert(docId);
 
+        switch (status) {
+            case Status.Register:
+                destOfficeId = userOfficeId;
+                break;
+            case Status.Send:
+                destOfficeId = null;
+                break;
+            default:
+                assert(destOfficeId !== null);
+        }
+    
         try {
             await Snapshot.insert(userOfficeId, {
                 doc: docId,
@@ -67,6 +55,38 @@
                 target: destOfficeId,
             });
 
+            switch (status) {
+                case Status.Register:
+                    topToastMessage.enqueue({
+                        title: 'Document Received',
+                        body: 'You have successfully received a document.',
+                        type: ToastType.Success,
+                    });
+                    break;
+                case Status.Send:
+                    topToastMessage.enqueue({
+                        type: ToastType.Success,
+                        title: 'Document Sent',
+                        body: 'You have successfully sent a document.',
+                    });
+                    break;
+                case Status.Receive:
+                    topToastMessage.enqueue({
+                        type: ToastType.Success,
+                        title: 'Document Received',
+                        body: 'You have successfully received a document.',
+                    });
+                    break;
+                case Status.Terminate:
+                    topToastMessage.enqueue({
+                        type: ToastType.Success,
+                        title: 'Document Terminated',
+                        body: 'You have successfully terminated a document.',
+                    });
+                    break;
+                default:
+                    throw new Error('unexpected status type');
+            }
             await documentInbox.reload?.();
             await documentOutbox.reload?.();
             await reloadMetrics();
