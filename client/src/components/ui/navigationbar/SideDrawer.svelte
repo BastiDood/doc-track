@@ -28,8 +28,8 @@
     import Button from '../../ui/Button.svelte';
     import Search from '../../icons/Search.svelte';
     import Camera from '../../icons/Camera.svelte';
-    let trackingNumber: string | null = '';
 
+    let trackingNumber: string | undefined;
     let selectedOffice: Office['id'] | null = null;
     let showScan = false;
 
