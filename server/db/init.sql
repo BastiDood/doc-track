@@ -7,10 +7,8 @@ CREATE EXTENSION pgcrypto;
 CREATE DOMAIN GoogleUserId AS VARCHAR(255) NOT NULL;
 CREATE DOMAIN AuthorizationCode AS VARCHAR(256) NOT NULL;
 
--- Expiration Times
+CREATE DOMAIN Email AS VARCHAR(32) NOT NULL;
 CREATE DOMAIN Expiration AS TIMESTAMPTZ NOT NULL CHECK(VALUE > NOW());
-
--- Permission Bits
 CREATE DOMAIN LocalPermission AS BIT VARYING(12) NOT NULL DEFAULT B'0';
 CREATE DOMAIN GlobalPermission AS BIT VARYING(8) NOT NULL DEFAULT B'0';
 
@@ -24,7 +22,7 @@ CREATE TABLE users(
     -- Google-assigned globally unique key.
     id GoogleUserId,
     name VARCHAR(40) NOT NULL,
-    email VARCHAR(32) UNIQUE NOT NULL,
+    email Email UNIQUE,
     picture VARCHAR(256) NOT NULL,
     permission GlobalPermission,
     PRIMARY KEY (id)
@@ -120,7 +118,7 @@ CREATE TABLE notification(
 
 CREATE TABLE invitation(
     office SMALLSERIAL NOT NULL REFERENCES office (id),
-    email VARCHAR(20) NOT NULL,
+    email Email,
     permission LocalPermission NOT NULL,
     creation TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (office, email)
