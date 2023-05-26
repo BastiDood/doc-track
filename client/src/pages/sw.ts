@@ -117,7 +117,7 @@ async function handleFetch(req: Request): Promise<Response> {
     // For any other fetch.
     try {
         const res = await fetch(req);
-        if (url.pathname.startsWith('/api/') || url.hostname.endsWith('googleusercontent.com'))
+        if ((url.pathname.startsWith('/api/') || url.hostname.endsWith('googleusercontent.com')) && !url.pathname.startsWith('/api/document/download'))
             await cache.put(url, res.clone());
         return res;
     } catch (error) {
