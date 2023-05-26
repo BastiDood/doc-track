@@ -33,9 +33,9 @@ jobs:
           mkdir deploy/client
           mkdir deploy/client/dist
           mkdir deploy/server
-          mv model deploy/model
-          mv client/dist deploy/client/dist
-          mv server deploy/server
+          cp -r model deploy/model
+          cp -r client/dist deploy/client/dist
+          cp -r server deploy/server
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
