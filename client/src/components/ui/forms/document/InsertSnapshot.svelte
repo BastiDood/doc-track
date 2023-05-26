@@ -40,7 +40,7 @@
             case Status.Register:
                 destOfficeId = userOfficeId;
                 break;
-            case Status.Send:
+            case Status.Terminate:
                 destOfficeId = null;
                 break;
             default:
