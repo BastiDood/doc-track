@@ -37,7 +37,7 @@ import { handleGetUsers, handleSetUserPermissions } from './api/user.ts';
 import { handleHook, handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 
-const STATIC_ROOT = resolve(Deno.cwd(), '../client/dist');
+const STATIC_ROOT = resolve(import.meta.url, '../../../client/dist');
 info(`[Static] file server hosted at ${STATIC_ROOT}`);
 
 async function handleGet(pool: Pool, req: Request) {
