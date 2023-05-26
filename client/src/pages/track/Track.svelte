@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { DocumentPaperTrail, PaperTrail } from '~model/api.ts';
+    import type { PaperTrail } from '~model/api.ts';
     import { Document as DocumentModel } from '~model/document.ts';
+
     import { assert } from '../../assert.ts';
     import { Document } from '../../api/document.ts';
     import { register } from '../register.ts';
@@ -165,7 +166,7 @@
                     <br />
                     <table>
                         <td><p class="header-color"><b>File Attachment</b></p></td>
-                        <tr>No file attachment.</tr>
+                        <tr><a download type={meta.mime} href="/api/document/download?doc={trackingNumber}">{trackingNumber}</a></tr>
                     </table>
                     <br />
                     <table>
