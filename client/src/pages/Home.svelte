@@ -1,10 +1,9 @@
 <script lang="ts">
-    import { topToastMessage } from '../stores/ToastStore.ts';
-    import Button from '../components/ui/Button.svelte';
-    import { goToTrackingPage } from '../components/ui/itemrow/util.ts';
-    import { register } from './register.ts';
-    import { ButtonType, IconColor } from '../components/types.ts';
+    import { fade } from 'svelte/transition';
 
+    import { register } from './register.ts';
+
+    import Button from '../components/ui/Button.svelte';
     import Google from '../components/icons/Google.svelte';
     import Camera from '../components/icons/Camera.svelte';
     import Search from '../components/icons/Search.svelte';
@@ -14,6 +13,10 @@
     import QrScanner from '../components/ui/QRScanner.svelte';
     import { assert } from '../assert.ts';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
+
+    import { topToastMessage } from '../stores/ToastStore.ts';
+    import { goToTrackingPage } from '../components/ui/itemrow/util.ts';
+    import { ButtonType, IconColor } from '../components/types.ts';
 
     let showScan = false as boolean;
 
@@ -34,8 +37,15 @@
     {#await reg}
         Waiting for service worker...
     {:then}
-        <div class="middle-container">
+        <div class="middle-container" in:fade={{ duration: 1000 }}>
             <MainLogo alt='Logo' />
+            <div id="doctrack">
+                {#each 'DOCTRACK' as char, i}
+                    {@const delay = 500 + i * 150}
+                    <div in:fade={{ delay, duration: 150 }}>{char}</div>
+                {/each}
+            </div>
+            <b in:fade={{ delay: 2000, duration: 200 }}>Document Tracking System</b>
             <a href="/auth/login">
                 <Button type={ButtonType.Primary}><Google color={IconColor.White} alt="Log in with UP Mail" />Log in with University of the Philippines Mail</Button>
             </a>
@@ -58,8 +68,6 @@
 </main>
 
 <style>
-    @import url('global.css');
-
     main {
         display: flex;
         align-items: center;
@@ -70,6 +78,13 @@
 
     a {
         text-decoration: none;
+    }
+
+    b {
+        display: block;
+        color: var(--text-color);
+        font-size: 1.5rem;
+        font-weight: 400;
     }
 
     .middle-container {
@@ -83,5 +98,14 @@
     .search-container {
         padding: var(--spacing-small);
         margin: 0 auto;
+    }
+
+    #doctrack {
+        color: var(--primary-color);
+        display: flex;
+        font-size: 2rem;
+        font-weight: 700;
+        justify-content: center;
+        gap: 0.75rem;
     }
 </style>
