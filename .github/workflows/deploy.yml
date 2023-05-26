@@ -1,0 +1,40 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Needed for auth with Deno Deploy
+      contents: read # Needed to clone the repository
+    steps:
+      - name: Setup Repository
+        uses: actions/checkout@v3
+      - name: Install `pnpm`
+        run: npm install -g pnpm
+      - name: Install `model` Dependencies
+        run: pnpm install
+        working-directory: model
+      - name: Install `client` Dependencies
+        run: pnpm install
+        working-directory: client
+      - name: Build Project
+        run: pnpm build
+        working-directory: client
+      - name: Setup Deployment
+        run: |
+          mkdir deploy
+          mv model deploy/model
+          mv client/dist deploy/client/dist
+          mv server deploy/server
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: doctrack
+          entrypoint: server/src/main.ts
+          root: deploy
