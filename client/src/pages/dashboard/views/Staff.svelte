@@ -63,7 +63,7 @@
 </script>
 
 {#if currentOffice === null}
-    You must select an office before accessing the Staff page.
+    <p>You must select an office before accessing the Staff page.</p>
 {:else}
     {#await staffReady}
         <p>Loading staff page...</p>
@@ -81,7 +81,7 @@
                 on:overflowClick={openContextMenu.bind(null, id, currentOffice, email, permission)} 
             />
         {:else}
-            No staff members exist in "{officeName}".
+            <p>No staff members exist in "{officeName}".</p>
         {/each}
     {:catch err}
         <PageUnavailable {err} />

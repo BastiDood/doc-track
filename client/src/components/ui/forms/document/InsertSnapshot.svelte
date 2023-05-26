@@ -106,16 +106,16 @@
 
 <p>You are currently adding a snapshot as {$userSession?.email} in office {userOfficeId}.</p>
 <form on:submit|preventDefault|stopPropagation={handleSubmit}>
-    Document Barcode ID: {docId}
+    <p>Document Barcode ID: {docId}</p>
     <br />
     {#if status === Status.Terminate || status === Status.Receive}
-        Set Target Office: This Office.
+        <p>Set Target Office: This Office.</p>
     {:else}
-        Set Target Office: <OfficeSelect offices={$allOffices} bind:oid={destOfficeId} />
+        <p>Set Target Office: <OfficeSelect offices={$allOffices} bind:oid={destOfficeId} /></p>
     {/if}
     
     <br />
-    Set Status As: <StatusSelect disabled bind:value={status} />
+    <p>Set Status As: <StatusSelect disabled bind:value={status} /></p>
     <br />
     <TextInput name="snap-remark" label="Remarks: " placeholder="Optional" />
     <Button submit> <Checkmark color={IconColor.White} alt="Submit this Document" /> Submit this Document</Button>

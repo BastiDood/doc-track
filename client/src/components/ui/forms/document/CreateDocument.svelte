@@ -93,7 +93,7 @@
 </script>
 
 {#if $earliestBatch === null || typeof $earliestBatch === 'undefined'}
-    No available barcodes.
+    <p>No available barcodes.</p>
 {:else}
     {@const bytes = file?.size ?? 0}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>

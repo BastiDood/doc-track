@@ -48,7 +48,7 @@
             on:overflowClick={openEdit.bind(null, id, permission)} 
         />
     {:else}
-        No users exist.
+        <p>No users exist.</p>
     {/each}
 {:catch err}
     <PageUnavailable {err} />

@@ -67,15 +67,14 @@
 </script>
 
 {#if currentOffice === null}
-    You must select an office before accessing the Barcodes page.
+    <p>You must select an office before accessing the Barcodes page.</p>
 {:else}
     {#await barcodeSumReady}
-        Loading barcode metrics...
+        <p>Loading barcode metrics...</p>
     {:then} 
         {#if $barcodeSummary === null}
-            No office is selected.
+            <p>No office is selected.</p>
         {:else}
-            Barcodes page of office {officeName}.
             <h1>Barcodes</h1>
             <main>
                 <table>

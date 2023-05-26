@@ -41,7 +41,7 @@
     {#each Object.entries($allOffices) as [id, name] (id)}
         <p>{id}: {name}</p>
     {:else}
-        No offices available
+        <p>No offices available.</p>
     {/each}
 </section>
 <article>

@@ -48,7 +48,7 @@
 </script>
 
 {#if currentOffice === null}
-    You must select an office before accessing the Invites page.
+    <p>You must select an office before accessing the Invites page.</p>
 {:else}
     <h1>Invitations</h1>
     <Button on:click={openCreateInvite.bind(null)}>
@@ -56,7 +56,7 @@
     </Button>
 
     {#await inviteReady}
-        Loading invite list.
+        <p>Loading invite list.</p>
     {:then}
         {#if $inviteList.length === 0 || currentOffice === null}
                 <h3>No invite backlogs, yay!</h3>

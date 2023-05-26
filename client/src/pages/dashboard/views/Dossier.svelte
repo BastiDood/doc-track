@@ -20,7 +20,7 @@
 {:else}
     <h1>Dossier</h1>
     {#await dossier}
-        Loading registered documents.
+        <p>Loading registered documents.</p>
     {:then reg}
         {#each reg as entry (entry.doc)}
             <RegisterRow 
@@ -29,7 +29,7 @@
                 iconSize={IconSize.Large} 
             />
         {:else}
-            No documents were created in this office yet.
+            <p>No documents were created in this office yet.</p>
         {/each}
     {:catch err}
         <PageUnavailable {err} />

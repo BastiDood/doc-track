@@ -28,7 +28,7 @@
 </script>
 
 {#if currentOffice === null}
-    You must select an office before accessing the Metrics page.
+    <p>You must select an office before accessing the Metrics page.</p>
 {:else}
     <h1>Metrics</h1>
     {#if mode === MetricsMode.User}
