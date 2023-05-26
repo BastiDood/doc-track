@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir deploy
           mkdir deploy/client
-          mv -v model/ deploy/
+          mv -v model/src deploy/model
           mv -v client/dist/ deploy/client/
           mv -v server/ deploy/
       - name: Print the Deployment Folder
