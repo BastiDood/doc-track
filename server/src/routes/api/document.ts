@@ -174,7 +174,7 @@ export async function handleDownloadDocument(pool: Pool, req: Request, params: U
         }
 
         info(`[Document] File ${did} fetched from the database`);
-        const ext = extension(blob.type);
+        const ext = extension(blob.type) || 'bin';
         return new Response(blob, {
             headers: { 'Content-Disposition': `attachment; filename=${did}.${ext}` },
         });
