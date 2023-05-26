@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { InvalidSession } from "../../api/error";
+    import { InvalidSession } from '../../api/error';
 
     export let err = null as Error | null;
 </script>
