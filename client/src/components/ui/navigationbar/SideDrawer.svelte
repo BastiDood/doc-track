@@ -17,7 +17,7 @@
     import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
     import OfficeSelect from '../OfficeSelect.svelte';
 
-    import LogoSidedrawer from '../../../assets/logo/LogoSidedrawer.svelte';
+    import LogoSidedrawer from '../../icons/LogoSidedrawer.svelte';
 
     export let show = false;
 
