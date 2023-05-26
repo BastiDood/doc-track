@@ -15,7 +15,6 @@
     import { assert } from '../assert.ts';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
 
-    const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
     let showScan = false as boolean;
 
     let trackingNumber = '';
