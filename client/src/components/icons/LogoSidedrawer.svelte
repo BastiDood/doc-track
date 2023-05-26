@@ -5,11 +5,10 @@
     const iconUrl = new URL('../../assets/icons/LogoMain.svg', import.meta.url);
 </script>
 
-<img id='logo' {alt} src="{iconUrl.pathname}" on:click on:keydown />
-
+<img {alt} src={iconUrl.pathname} on:click on:keydown />
 
 <style>
-    #logo {
+    img {
         width: 60%;
         height: 60%;
     }
