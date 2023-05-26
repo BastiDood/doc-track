@@ -19,6 +19,7 @@
         color: white;
         position: fixed;
         width: 100%;
+        z-index: 99999;
     }
 
     h3, p {
