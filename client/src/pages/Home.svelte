@@ -14,6 +14,8 @@
     import { assert } from '../assert.ts';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
 
+    import MainLogo from '../components/logo/MainLogo.svelte';
+
     const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
     let showScan = false as boolean;
 
@@ -35,7 +37,7 @@
         Waiting for service worker...
     {:then}
         <div class="middle-container">
-            <img src={placeholderSrc} alt="DocTrack Logo" />
+            <MainLogo />
             <h3>DocTrack: Document Tracking System</h3>
             <a href="/auth/login">
                 <Button type={ButtonType.Primary}><Google color={IconColor.White} alt="Log in with UP Mail" />Log in with University of the Philippines Mail</Button>
