@@ -38,4 +38,4 @@ jobs:
         with:
           project: doctrack
           entrypoint: ./server/src/main.ts
-          root: deploy
+          root: ./deploy
