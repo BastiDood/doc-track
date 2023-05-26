@@ -391,7 +391,7 @@ export class Database {
     async getPaperTrail(doc: Document['id']): Promise<DocumentPaperTrail | null> {
         const { rows: [ first, ...rest ] } = await this.#client
             .queryObject`WITH trail AS (SELECT s.creation,s.status,s.target,s.remark,u.name,u.email,u.picture
-                FROM snapshot s INNER JOIN users u ON s.evaluator = u.id ORDER BY s.creation ASC),
+                FROM snapshot s INNER JOIN users u ON s.evaluator = u.id WHERE s.doc = ${doc} ORDER BY s.creation ASC),
                 meta AS (SELECT d.title,d.mime,c.name AS cat FROM document d INNER JOIN category c ON c.id = d.category WHERE d.id = ${doc} LIMIT 1),
                 _ AS (SELECT row_to_json(trail) AS ts FROM trail)
                 SELECT json_build_object('title',m.title,'mime',m.mime,'category',m.cat,'trail',json_agg(_.ts)) AS result FROM _,meta m GROUP BY m.title,m.mime,m.cat`
