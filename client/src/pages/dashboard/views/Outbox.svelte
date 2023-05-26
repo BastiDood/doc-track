@@ -63,8 +63,9 @@
         throw err;
     });
 </script>
+
 {#if currentOffice === null}
-    You must select an office before accessing the Outbox page.
+    <p>You must select an office before accessing the Outbox page.</p>
 {:else}
     <h1>Outbox</h1>
     

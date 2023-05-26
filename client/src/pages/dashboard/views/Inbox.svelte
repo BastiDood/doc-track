@@ -71,7 +71,7 @@
 </script>    
 
 {#if currentOffice === null}
-    You must select an office before accessing the Inbox page.
+    <p>You must select an office before accessing the Inbox page.</p>
 {:else}
     <h1>Inbox</h1>
 
