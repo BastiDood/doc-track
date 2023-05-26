@@ -42,9 +42,9 @@
 
 <nav class:show on:click|stopPropagation on:keypress>
     <section>
-        <center>
+        <div id="logo">
             <LogoSidedrawer alt='Logo' />
-        </center>
+        </div>
         <header>
             {#if Object.getOwnPropertyNames($userOffices).length === 0}
                 No office detected!
@@ -82,8 +82,8 @@
 <style>
     @import url('../../../pages/vars.css');
 
-    center {
-        margin: 0;
+    #logo {
+        margin: auto;
     }
 
     nav {
