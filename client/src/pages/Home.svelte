@@ -28,8 +28,7 @@
         Waiting for service worker...
     {:then}
         <div class="middle-container">
-            <MainLogo />
-            <h3>DocTrack: Document Tracking System</h3>
+            <MainLogo alt='Logo' />
             <a href="/auth/login">
                 <Button type={ButtonType.Primary}><Google color={IconColor.White} alt="Log in with UP Mail" />Log in with University of the Philippines Mail</Button>
             </a>
@@ -64,14 +63,9 @@
         text-decoration: none;
     }
 
-    img {
-        border-radius: var(--border-radius);
-        max-width: 512px;
-    }
-
     .middle-container {
         text-align: center;
-        padding: var(--spacing-small);
+        padding: var(--spacing-large);
         border: var(--spacing-tiny) solid var(--primary-color);
         background-color: var(--login-bg);
         border-radius: var(--border-radius);
