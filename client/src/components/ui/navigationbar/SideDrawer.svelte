@@ -53,7 +53,7 @@
             {/if}
             <div>
                 <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
-                <TextInput placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
+                <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
                 <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
             </div>
         </header>
