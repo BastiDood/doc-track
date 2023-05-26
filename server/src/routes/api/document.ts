@@ -5,7 +5,13 @@ import { error, info } from 'log';
 import { accepts } from 'negotiation';
 import { Pool } from 'postgres';
 
-import type { BarcodeAssignmentError, AllInbox, AllOutbox, InboxEntry, PaperTrail } from '~model/api.ts';
+import type {
+    AllInbox,
+    AllOutbox,
+    BarcodeAssignmentError,
+    DocumentPaperTrail,
+    InboxEntry
+} from '~model/api.ts';
 import { Local } from '~model/permission.ts';
 
 import { type Document, DocumentSchema } from '~model/document.ts';
@@ -349,7 +355,7 @@ export async function handleGetDossier(pool: Pool, req: Request, params: URLSear
  * - Accepts the document ID via the `doc` query parameter.
  *
  * # Outputs
- * - `200` => returns {@linkcode PaperTrail} array as JSON in the {@linkcode Response} body
+ * - `200` => returns {@linkcode DocumentPaperTrail} array as JSON in the {@linkcode Response} body
  * - `400` => provided document ID is not a valid UUID
  * - `406` => content negotiation failed
  */
@@ -368,9 +374,15 @@ export async function handleGetPaperTrail(pool: Pool, req: Request, params: URLS
 
     const db = await Database.fromPool(pool);
     try {
-        const trail: PaperTrail[] = await db.getPaperTrail(result.data);
+        const trail: DocumentPaperTrail | null = await db.getPaperTrail(result.data);
+        if (trail === null) {
+            error(`[Document] Paper for document ${result.data} doesn't exist`);
+            return new Response(null, { status: Status.NotFound });
+        }
+
+        info(`[Document] Successfully retrieved paper trail for document ${result.data}`)
         return new Response(JSON.stringify(trail), {
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
         });
     } finally {
         db.release();
