@@ -1,6 +1,8 @@
 <script lang="ts">
     import { allOffices } from '../../../stores/OfficeStore';
+    import { topToastMessage } from '../../../stores/ToastStore';
     import { Office } from '~model/office';
+    import { assert } from '../../../assert';
 
     import Modal from '../../../components/ui/Modal.svelte';
     import RowTemplate from '../../../components/ui/RowTemplate.svelte';
@@ -10,6 +12,7 @@
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import { IconSize } from '../../../components/types';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum OfficeEvents {
         Create,
@@ -26,6 +29,12 @@
     function resetContext() {
         ctx = null;
     }
+
+    const officeReady = allOffices.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 <article>
@@ -33,7 +42,7 @@
         Create an Office
     </Button>
 
-    {#await allOffices.load()}
+    {#await officeReady}
         <p>Loading office page...</p>
     {:then}
         <h1>Offices</h1>
@@ -46,6 +55,8 @@
         {:else}
             No offices exist.
         {/each}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 
     {#if ctx === null}

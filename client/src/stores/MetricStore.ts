@@ -13,15 +13,7 @@ import { topToastMessage } from './ToastStore.ts';
  */
 export const userSummary = asyncReadable(
     { },
-    () => {
-        try {
-            return Metrics.generateUserSummary();
-        } catch (err) {
-            assert(err instanceof Error);
-            topToastMessage.enqueue({ title: err.name, body: err.message });
-        }
-        return Promise.resolve({ });
-    },
+    Metrics.generateUserSummary,
     { reloadable: true }
 );
 
@@ -35,14 +27,9 @@ export const userSummary = asyncReadable(
 export const localSummary = asyncDerived(
     dashboardState,
     ({ currentOffice }) => {
-        try {
-            if (currentOffice !== null)
-                return Metrics.generateLocalSummary(currentOffice);
-        } catch (err) {
-            assert(err instanceof Error);
-            topToastMessage.enqueue({ title: err.name, body: err.message });
-        }
-        return Promise.resolve({ });
+        return currentOffice === null
+            ? Promise.resolve({ })
+            : Metrics.generateLocalSummary(currentOffice);
     },
     { reloadable: true }
 );
@@ -56,15 +43,7 @@ export const localSummary = asyncDerived(
  */
 export const globalSummary = asyncReadable(
     { },
-    () => {
-        try {
-            return Metrics.generateGlobalSummary();
-        } catch (err) {
-            assert(err instanceof Error);
-            topToastMessage.enqueue({ title: err.name, body: err.message });
-        }
-        return Promise.resolve({ });
-    },
+    Metrics.generateGlobalSummary,
     { reloadable: true }
 );
 

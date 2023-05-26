@@ -13,6 +13,7 @@
     import Notification from '../../components/icons/Notification.svelte';
     import PrintQr from '../../components/ui/qr/PrintQr.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
+    import PageUnavailable from '../../components/ui/PageUnavailable.svelte';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -96,6 +97,12 @@
         prev = date;
         return `${days}d ${hours}h ${mins}m ${seconds}s`;
     }
+
+    const allOfficeReady = allOffices.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 <TopBar open />
@@ -103,7 +110,7 @@
     {#if trackingNumber === null}
         <p>No tracking number provided.</p>
     {:else}
-        {#await Promise.all([Document.getPaperTrail(trackingNumber), allOffices.load()])}
+        {#await Promise.all([Document.getPaperTrail(trackingNumber), allOfficeReady])}
             Loading paper trail...
         {:then [trail, _]}
             {@const overview = renderOverview(trail, $allOffices)}
@@ -190,6 +197,8 @@
                     </table>
                 </section>
             {/if}
+        {:catch err}
+            <PageUnavailable {err} />
         {/await}
     {/if}
 </main>

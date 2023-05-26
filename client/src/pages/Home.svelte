@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { topToastMessage } from '../stores/ToastStore.ts';
     import Button from '../components/ui/Button.svelte';
     import { goToTrackingPage } from '../components/ui/itemrow/util.ts';
     import { register } from './register.ts';
@@ -10,6 +11,8 @@
     import TextInput from '../components/ui/TextInput.svelte';
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
+    import { assert } from '../assert.ts';
+    import PageUnavailable from '../components/ui/PageUnavailable.svelte';
 
     const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
     let showScan = false as boolean;
@@ -19,10 +22,16 @@
     function scanHandler({ detail }: CustomEvent<string>) {
         goToTrackingPage(detail);
     }
+
+    const reg = register().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 <main>
-    {#await register()}
+    {#await reg}
         Waiting for service worker...
     {:then}
         <div class="middle-container">
@@ -39,6 +48,8 @@
                 </a>
             </div>
         </div>
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
     {#if showScan}
         <Modal showModal on:close={() => (showScan = false)} title="Scan/Select a File">

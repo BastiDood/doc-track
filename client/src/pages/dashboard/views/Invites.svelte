@@ -1,7 +1,10 @@
 <script lang="ts">
     import { dashboardState } from '../../../stores/DashboardState';
     import { inviteList } from '../../../stores/InviteStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { IconColor, IconSize } from '../../../components/types.ts';
+    import { assert } from '../../../assert.ts';
+    
 
     import Button from '../../../components/ui/Button.svelte';
     import InviteContext from '../../../components/ui/contextdrawer/InviteContext.svelte';
@@ -11,6 +14,7 @@
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
     import { Invitation } from '~model/invitation.ts';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         CreateInvite,
@@ -40,6 +44,12 @@
     function resetContext() {
         ctx = null;
     }
+
+    const inviteReady = inviteList.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
 {#if currentOffice === null}
@@ -50,7 +60,7 @@
         <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
     </Button>
 
-    {#await inviteList.load()}
+    {#await inviteReady}
         Loading invite list.
     {:then}
         {#if $inviteList.length === 0 || currentOffice === null}
@@ -67,6 +77,8 @@
                 />
             {/each}
         {/if}
+    {:catch err}
+        <PageUnavailable {err} />
     {/await}
 {/if}
 {#if ctx === null}

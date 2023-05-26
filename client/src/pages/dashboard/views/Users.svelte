@@ -1,12 +1,15 @@
 <script lang="ts">
     import { userList } from '../../../stores/UserStore';
+    import { topToastMessage } from '../../../stores/ToastStore';
     import { User } from '~model/user';
+    import { assert } from '../../../assert';
     
     import { IconSize } from '../../../components/types';
     import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonContextGlobal from '../../../components/ui/contextdrawer/PersonContextGlobal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     interface Context {
         id: User['id'],
@@ -26,12 +29,19 @@
         ctxcpy.showEdit = true;
         ctx = ctxcpy;
     }
+
     function resetContext() {
         ctx = null;
     }
+
+    const usersReady = userList.load().catch(err => {
+        assert(err instanceof Error);
+        topToastMessage.enqueue({ title: err.name, body: err.message });
+        throw err;
+    });
 </script>
 
-{#await userList.load()}
+{#await usersReady}
     <p>Loading users page...</p>
 {:then}
     <h1>Users</h1>
@@ -48,6 +58,8 @@
     {:else}
         No users exist.
     {/each}
+{:catch err}
+    <PageUnavailable {err} />
 {/await}
 {#if ctx === null} 
     <!-- Do not display anything! -->
