@@ -37,6 +37,19 @@ async function loadCachedResource<T>(name: string, url: string, schema: z.ZodTyp
     return json;
 }
 
+async function loadCachedResourceWrapper<T>(name: string, url: string, schema: z.ZodType<T>): Promise<T> {
+    try {
+        const data = await loadCachedResource(name, url, schema);
+        info('Cache API detected');
+        return data;
+    } catch (err) {
+        assert(err instanceof ReferenceError);
+        const res = await fetch(url);
+        const json = await res.json();
+        return schema.parse(json);
+    }
+}
+
 const DISCOVERY_URL = 'https://accounts.google.com/.well-known/openid-configuration';
 const DiscoveryDocumentSchema = z.object({
     issuer: z.string().url(),
@@ -47,13 +60,13 @@ const DiscoveryDocumentSchema = z.object({
     jwks_uri: z.string().url(),
 });
 export function getDiscoveryDocument() {
-    return loadCachedResource('discovery', DISCOVERY_URL, DiscoveryDocumentSchema);
+    return loadCachedResourceWrapper('discovery', DISCOVERY_URL, DiscoveryDocumentSchema);
 }
 
 const CertsResponse = z.object({ keys: KeySchema.passthrough().array() });
 export async function getCerts() {
     const { jwks_uri } = await getDiscoveryDocument();
-    const { keys } = await loadCachedResource('certs', jwks_uri, CertsResponse);
+    const { keys } = await loadCachedResourceWrapper('certs', jwks_uri, CertsResponse);
     const map = new Map<string, CryptoKey>();
     for (const jwk of keys) {
         const options = jwk.alg === 'RS256'
