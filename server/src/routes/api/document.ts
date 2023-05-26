@@ -1,4 +1,5 @@
 import { getCookies } from 'cookie';
+import { extension } from 'extension';
 import { parseMediaType } from 'parse-media-type';
 import { Status } from 'http';
 import { error, info } from 'log';
@@ -173,7 +174,10 @@ export async function handleDownloadDocument(pool: Pool, req: Request, params: U
         }
 
         info(`[Document] File ${did} fetched from the database`);
-        return new Response(blob);
+        const ext = extension(blob.type);
+        return new Response(blob, {
+            headers: { 'Content-Disposition': `attachment; filename=${did}.${ext}` },
+        });
     } finally {
         db.release();
     }

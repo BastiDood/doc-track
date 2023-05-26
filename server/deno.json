@@ -32,6 +32,7 @@
         "cookie": "https://deno.land/std@0.185.0/http/cookie.ts",
         "content-type": "https://deno.land/std@0.185.0/media_types/content_type.ts",
         "datetime": "https://deno.land/std@0.185.0/datetime/constants.ts",
+        "extension": "https://deno.land/std@0.185.0/media_types/extension.ts",
         "hex": "https://deno.land/std@0.185.0/encoding/hex.ts",
         "http": "https://deno.land/std@0.185.0/http/http_status.ts",
         "log": "https://deno.land/std@0.185.0/log/mod.ts",

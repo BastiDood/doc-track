@@ -83,6 +83,8 @@
     "https://deno.land/std@0.185.0/media_types/_db.ts": "7606d83e31f23ce1a7968cbaee852810c2cf477903a095696cdc62eaab7ce570",
     "https://deno.land/std@0.185.0/media_types/_util.ts": "916efbd30b6148a716f110e67a4db29d6949bf4048997b754415dd7e42c52378",
     "https://deno.land/std@0.185.0/media_types/content_type.ts": "ad98a5aa2d95f5965b2796072284258710a25e520952376ed432b0937ce743bc",
+    "https://deno.land/std@0.185.0/media_types/extension.ts": "a7cd28c9417143387cdfed27d4e8607ebcf5b1ec27eb8473d5b000144689fe65",
+    "https://deno.land/std@0.185.0/media_types/extensions_by_type.ts": "43806d6a52a0d6d965ada9d20e60a982feb40bc7a82268178d94edb764694fed",
     "https://deno.land/std@0.185.0/media_types/format_media_type.ts": "f5e1073c05526a6f5a516ac5c5587a1abd043bf1039c71cde1166aa4328c8baf",
     "https://deno.land/std@0.185.0/media_types/get_charset.ts": "18b88274796fda5d353806bf409eb1d2ddb3f004eb4bd311662c4cdd8ac173db",
     "https://deno.land/std@0.185.0/media_types/parse_media_type.ts": "835c4112e1357e95b4f10d7cdea5ae1801967e444f48673ff8f1cb4d32af9920",
