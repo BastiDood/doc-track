@@ -14,6 +14,7 @@
     import PrintQr from '../../components/ui/qr/PrintQr.svelte';
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import PageUnavailable from '../../components/ui/PageUnavailable.svelte';
+    import Toast from '../../components/ui/Toast.svelte';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -201,6 +202,7 @@
             <PageUnavailable {err} />
         {/await}
     {/if}
+    <Toast />
 </main>
 
 <style>

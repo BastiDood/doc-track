@@ -13,6 +13,7 @@
     import QrScanner from '../components/ui/QRScanner.svelte';
     import { assert } from '../assert.ts';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
+    import Toast from '../components/ui/Toast.svelte';
 
     const placeholderSrc = new URL('../assets/images/logo-background.png', import.meta.url);
     let showScan = false as boolean;
@@ -56,6 +57,7 @@
             <QrScanner on:onDocumentScan={scanHandler} />
         </Modal>
     {/if}
+    <Toast />
 </main>
 
 <style>
