@@ -83,7 +83,7 @@
             assert(err instanceof Error);
             if (err instanceof DeferredSnap) {
                 await deferredSnaps.upsert({ status: Status.Register, doc: id });
-                topToastMessage.enqueue({ title: err.name, body: `${id} is deferred.` });
+                topToastMessage.enqueue({ title: err.name, body: `${id} is deferred.`, type: ToastType.Offline });
                 dispatch(Events.Done);
                 return;
             }

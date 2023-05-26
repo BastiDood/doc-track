@@ -43,7 +43,7 @@ export const deferredSnaps = {
     onDocumentSync(evt: MessageEvent<string>) {
         assert(evt.data === 'sync');
         topToastMessage.enqueue({
-            type: ToastType.Offline,
+            type: ToastType.Success,
             title: 'Background Syncronization',
             body: 'Syncronization successful.',
         });

@@ -16,6 +16,7 @@
     import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
     import PageUnavailable from '../../components/ui/PageUnavailable.svelte';
     import Toast from '../../components/ui/Toast.svelte';
+    import { ToastType } from '../../components/types.ts';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -46,6 +47,7 @@
         topToastMessage.enqueue({
             title: 'Subscribed to Document',
             body: 'You will recieve updates for this document.',
+            type: ToastType.Success,
         });
     }
 

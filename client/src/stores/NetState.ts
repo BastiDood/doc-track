@@ -1,5 +1,7 @@
 import { writable } from '@square/svelte-store';
 import { sendNotification } from '../notification.ts';
+import { topToastMessage } from './ToastStore.ts';
+import { ToastType } from '../components/types.ts';
 
 const { subscribe, set } = writable(navigator.onLine);
 
@@ -18,6 +20,11 @@ addEventListener('offline', async() => {
     await sendNotification('Connection lost.', {
         body: 'Actions will be queued when the connection returns.',
         tag: 'net-status',
+    });
+    topToastMessage.enqueue({
+        title: 'Currently Offline',
+        body: 'Actions will be cached and will be pushed when the connection returns.',
+        type: ToastType.Offline,
     });
 });
 
