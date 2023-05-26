@@ -33,10 +33,18 @@ jobs:
           mv -v model/ deploy/
           mv -v client/dist/ deploy/client/
           mv -v server/ deploy/
+      - name: Print the Deployment Folder
+        run: |
+          ls -l deploy
+          ls -l deploy/server
+          ls -l deploy/model
+          ls -l deploy/client/dist
+          ls -l deploy/client/dist/dashboard
+          ls -l deploy/client/dist/track
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: doctrack
-          root: ./deploy
+          root: deploy
           entrypoint: ./server/src/main.ts
           import-map: ./server/deno.json
