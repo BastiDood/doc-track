@@ -18,7 +18,8 @@ async function handleInstall() {
 
     // Pre-cache all the new assets
     const cache = await caches.open(version);
-    return cache.addAll(files);
+    const unique = new Set(files);
+    return cache.addAll(Array.from(unique));
 }
 
 function* deleteAll(keys: Iterable<string>) {
@@ -129,6 +130,7 @@ async function handleFetch(req: Request): Promise<Response> {
     }
 }
 
+const { href: ICON_URL } = new URL('../assets/logo/DocTrack-256x256.png', import.meta.url);
 async function handlePush(data: PushMessageData) {
     const { title, creation, eval: staff, target, status } = PushNotificationSchema.parse(await data.json());
     const timestamp = creation.valueOf();
@@ -136,24 +138,32 @@ async function handlePush(data: PushMessageData) {
     switch (status) {
         case Status.Register:
             await registration.showNotification('New Document Registered', {
+                lang: 'EN',
+                icon: ICON_URL,
                 body: `${staff} has created a new document "${title}" for "${office}".`,
                 timestamp,
             });
             break;
         case Status.Send:
             await registration.showNotification('Document Sent', {
+                lang: 'EN',
+                icon: ICON_URL,
                 body: `${staff} has sent "${title}" to "${office}".`,
                 timestamp,
             });
             break;
         case Status.Receive:
             await registration.showNotification('Document Received', {
+                lang: 'EN',
+                icon: ICON_URL,
                 body: `${staff} has received "${title}" on behalf of "${office}".`,
                 timestamp,
             });
             break;
         case Status.Terminate:
             await registration.showNotification('Document Terminated', {
+                lang: 'EN',
+                icon: ICON_URL,
                 body: `${staff} has terminated the paper trail for "${title}" at "${office}".`,
                 timestamp,
             });
