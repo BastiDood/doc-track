@@ -14,7 +14,7 @@
 <style>
     div {
         padding: var(--spacing-small);
-        border-radius: var(--spacing-normal);
+        border-radius: var(--spacing-large) var(--spacing-large) 0 0;
         bottom: 0;
         box-sizing: border-box;
         color: white;
