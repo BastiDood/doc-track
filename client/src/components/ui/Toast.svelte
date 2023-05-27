@@ -1,10 +1,11 @@
 <script>
+    import { slide } from 'svelte/transition';
     import { topToastMessage } from '../../stores/ToastStore.ts';
 </script>
 
 {#if $topToastMessage !== null}
     {@const { title, body, type } = $topToastMessage}
-    <div class={type}>
+    <div class={type} transition:slide>
         <h3>{title}</h3>
         <p>{body}</p>
     </div>
@@ -13,7 +14,7 @@
 <style>
     div {
         padding: var(--spacing-small);
-        border-radius: var(--spacing-normal);
+        border-radius: var(--spacing-large) var(--spacing-large) 0 0;
         bottom: 0;
         box-sizing: border-box;
         color: white;
