@@ -36,7 +36,7 @@ The online version of `DocTrack` is hosted through [Deno Deploy][denodeploy] and
 [denodeploy]: https://deno.com/deploy/
 [pgsql]: https://www.postgresql.org/
 
-<detail open>
+<details open>
     <summary>
         Highlights
     </summary>
@@ -66,7 +66,7 @@ The online version of `DocTrack` is hosted through [Deno Deploy][denodeploy] and
         &nbsp;
         <img width="49%" src="./docs/10.png" alt="categories" /> 
     </div>
-</detail>
+</details>
 
 # Program Features
 
