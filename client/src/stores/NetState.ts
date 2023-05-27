@@ -24,6 +24,7 @@ addEventListener('offline', async() => {
     topToastMessage.enqueue({
         title: 'Currently Offline',
         body: 'Actions will be cached and will be pushed when the connection returns.',
+        timeout: 8000,
         type: ToastType.Offline,
     });
 });
