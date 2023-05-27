@@ -42,29 +42,29 @@ The online version of `DocTrack` is hosted through [Deno Deploy][denodeploy] and
     </summary>
     <br />
     <div align="center">
-        <img width="49%" src="./docs/1.png" alt="doc-man" /> 
+        <img width="49%" src="./docs/features/doc-man.png" alt="doc-man" /> 
         &nbsp;
-        <img width="49%" src="./docs/2.png" alt="paper-trail" /> 
+        <img width="49%" src="./docs/features/paper-trail.png" alt="paper-trail" /> 
     </div>
     <div align="center">
-        <img width="49%" src="./docs/3.png" alt="ofline-usage" /> 
+        <img width="49%" src="./docs/features/offline-usage.png" alt="ofline-usage" /> 
         &nbsp;
-        <img width="49%" src="./docs/4.png" alt="notifs-alert" /> 
+        <img width="49%" src="./docs/features/notifs-alert.png" alt="notifs-alert" /> 
     </div>
     <div align="center">
-        <img width="49%" src="./docs/5.png" alt="barcode-qr" /> 
+        <img width="49%" src="./docs/features/barcode-qr.png" alt="barcode-qr" /> 
         &nbsp;
-        <img width="49%" src="./docs/6.png" alt="qr-scan" /> 
+        <img width="49%" src="./docs/features/qr-scan.png" alt="qr-scan" /> 
     </div>
     <div align="center">
-        <img width="49%" src="./docs/7.png" alt="office-man" /> 
+        <img width="49%" src="./docs/features/office-man.png" alt="office-man" /> 
         &nbsp;
-        <img width="49%" src="./docs/8.png" alt="user-man" /> 
+        <img width="49%" src="./docs/features/user-man.png" alt="user-man" /> 
     </div>
     <div align="center">
-        <img width="49%" src="./docs/9.png" alt="metrics" /> 
+        <img width="49%" src="./docs/features/metrics.png" alt="metrics" /> 
         &nbsp;
-        <img width="49%" src="./docs/10.png" alt="categories" /> 
+        <img width="49%" src="./docs/features/categories.png" alt="categories" /> 
     </div>
 </details>
 
