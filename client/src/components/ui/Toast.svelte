@@ -1,10 +1,11 @@
 <script>
+    import { slide } from 'svelte/transition';
     import { topToastMessage } from '../../stores/ToastStore.ts';
 </script>
 
 {#if $topToastMessage !== null}
     {@const { title, body, type } = $topToastMessage}
-    <div class={type}>
+    <div class={type} transition:slide>
         <h3>{title}</h3>
         <p>{body}</p>
     </div>
