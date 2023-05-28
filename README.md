@@ -1,6 +1,6 @@
 <div align="center">
 
-<img alt="DocTrack Logo" src="client/src/assets/icons/LogoMain.svg" width=200/>
+<img alt="DocTrack Logo" src="client/src/assets/icons/doctrack.svg" width="200" />
 
 # DocTrack 
 
