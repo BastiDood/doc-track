@@ -92,6 +92,6 @@ To locally host `DocTrack`, see the respective `README.md` of the [Client][clien
 # Project Members
 
 * [Macaraeg, Marc Gabriel C.](https://github.com/SporadicToast)
-* [Ortiz, Sebastian Luis S.](https://github.com/Some-Dood)
+* [Ortiz, Sebastian Luis S.](https://github.com/BastiDood)
 * [Ruaya, Justin Jose R.](https://github.com/justinruaya123)
 * [Sarmiento, Alquen Antonio D.](https://github.com/Arukuen)
