@@ -70,20 +70,22 @@ The online version of `DocTrack` is hosted through [Deno Deploy][denodeploy] and
 
 # Program Features
 
-1. **📄Document Management** - Store, organize, and send PDFs and other forms of documents between registered offices and organizations.
-2. **🔍Document Tracking** - Track the lifecycle of documents, including creation, sending, receiving and termination for archiving through the `Paper Trail`. Gain visibility to document statuses and history for comprehensive auditing.
-3. **🔁Offline Usage** - Create, receive, send and terminate documents even when you are offline and allow the system to push the changes to the server the when your internet connection resumes through the Progressive Web Application.
-4. **🔔Notification and Alerts** - Receive real-time notifications and alerts for document status updates. Stay informed about criticial activities to ensure timely actions.
-5. **#️⃣Barcodes and QR Generation** - Assign barcodes and QR codes that uniquely identify a document in the system that can be given to stakeholders for them to check the status of their document in real time.
-6. **📸QR Code Scanning** - Allow documents to be scanned for their QR codes that correspond to their unique identifier for workflow automation.
-7. **💼Office Management** - Manage offices and their staff, invite personnel and assign individual and granular permissions to individual task members for security, integrity and auditing purposes.
-8. **📶Metrics** - View metrics on individuals, offices and system wide operations to for auditing purposes.
-9. **📁Categories** - Create document categories to properly label files and documents in the entire system.
-10. **👨🏻‍💼User Management** - Grant system-wide permissions to other uses that will manage the system.
+1. **📄 Document Management** - Store, organize, and send documents between registered offices and organizations.
+2. **🔍 Document Tracking** - Track the lifecycle of documents. Creation, transmission, reception, and termination times are archived in the _Paper Trail_. Gain visibility into document statuses and history for comprehensive audits.
+3. **🔁 Offline Usage** - Create, receive, send, and terminate documents even when you are offline. Leveraging [Progressive Web App] technologies, DocTrack pushes changes to the server once an internet connection is established.
+4. **🔔 Notification and Alerts** - Receive real-time notifications and alerts for document status updates. Stay informed about criticial activities to ensure timely actions.
+5. **#️⃣ Barcodes and QR Generation** - Assign barcodes and QR codes that uniquely identify a document in the system. Stakeholders may uses these "tracking numbers" to check the status of their documents in real-time.
+6. **📸 QR Code Scanning** - For more efficient workflow automation, DocTrack can scan physical documents for their unique system-assigned QR codes.
+7. **💼 Office Management** - Manage offices and their staff, invite personnel, and assign granular permissions to individual staff members.
+8. **📶 Metrics** - View metrics on individuals, offices, and system-wide operations for auditing purposes.
+9. **📁 Categories** - Create categories to properly label files and documents in the entire system.
+10. **👨🏻‍💼 User Management** - Grant system-wide permissions to other users that will manage the system.
+
+[Progressive Web App]: https://web.dev/progressive-web-apps/
 
 # Usage
 
-To locally host `DocTrack`, see the respective `README.md` of the [Client][clientrme], [Model][modelrme], [Server][serverrme].
+To locally host `DocTrack`, see the respective `README.md` for the [client][clientrme], [model][modelrme], and [server][serverrme] code.
 
 [clientrme]: ./client/README.md
 [modelrme]: ./model/README.md
