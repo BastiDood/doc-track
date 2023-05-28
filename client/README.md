@@ -22,4 +22,4 @@ pnpm build
 ```
 
 # Copying
-Available at `COPYING.md`.
+Available at [`COPYING.md`](../COPYING.md).
