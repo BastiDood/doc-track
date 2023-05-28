@@ -18,23 +18,22 @@
 
 # Introduction
 
-`DocTrack` is a robust, open-source document tracking system that utilizes modern web stacks to meet the demands of document management in the modern age. It offers a powerful and intuitive platform to efficiently manage and monitor documents within an organization or in any collaborative environment.
+**DocTrack** is a robust, open-source document tracking system that utilizes a modern web stack to meet the demands of document management in the modern age. It offers a powerful and intuitive platform to efficiently manage and monitor documents within an organization or in any collaborative environment.
 
-This is a course requirement for the CS 191/192 Software Engineering Courses of the [Department of Computer Science][dcs], [College of Engineering][coe], [University of the Philippines, Diliman][upd] under the guidance of [Ma. Rowena C. Solamo](https://dcs.upd.edu.ph/people/rowena-solamo/) for AY 2022-2023.
+With a strong focus on modern web development paradigms, DocTrack is a proof-of-concept on the usage of modern web technologies (such as [Svelte] + [Typescript] in the front-end and [Deno] + [PostgreSQL] in the back-end) to develop a Progressive Web Application that can handle offline usage, deferred operations, and resource caching.
 
-With a strong focus on modern web paradigms in development: `DocTrack` is a proof-of-concept on the usage of modern web frameworks such as [Svelte][svelte] and [Typescript][ts] in the front-end, [Deno][deno] and [Postgresql][pgsql] to handle the back-end, to create a single-page, Progressive Web Application that can handle offline use, deferred operations and resource caching.
-
-The online version of `DocTrack` is hosted through [Deno Deploy][denodeploy] and is accessible [here][dtrack].
+The online version of DocTrack is hosted through [Deno Deploy] and is accessible [here][dtrack].
 
 [dtrack]: https://doctrack.deno.dev/
 [dcs]: https://dcs.upd.edu.ph/
 [coe]: https://coe.upd.edu.ph/
 [upd]: https://upd.edu.ph/
-[svelte]: https://svelte.dev/
-[ts]: https://www.typescriptlang.org/
-[deno]: https://deno.com/
-[denodeploy]: https://deno.com/deploy/
-[pgsql]: https://www.postgresql.org/
+
+[Svelte]: https://svelte.dev/
+[TypeScript]: https://www.typescriptlang.org/
+[Deno]: https://deno.com/
+[Deno Deploy]: https://deno.com/deploy/
+[PostgreSQL]: https://www.postgresql.org/
 
 <details open>
     <summary>
@@ -85,13 +84,15 @@ The online version of `DocTrack` is hosted through [Deno Deploy][denodeploy] and
 
 # Usage
 
-To locally host `DocTrack`, see the respective `README.md` for the [client][clientrme], [model][modelrme], and [server][serverrme] code.
+To locally host `DocTrack`, see the respective `README.md` for the [client], [model], and [server] code.
 
-[clientrme]: ./client/README.md
-[modelrme]: ./model/README.md
-[serverrme]: ./server/README.md
+[client]: ./client/README.md
+[model]: ./model/README.md
+[server]: ./server/README.md
 
 # Project Members
+
+> This is a course requirement for the CS 191/192 Software Engineering Courses of the [Department of Computer Science][dcs], [College of Engineering][coe], [University of the Philippines, Diliman][upd] under the guidance of [Ma. Rowena C. Solamo](https://dcs.upd.edu.ph/people/rowena-solamo/) for AY 2022-2023.
 
 * [Macaraeg, Marc Gabriel C.](https://github.com/SporadicToast)
 * [Ortiz, Sebastian Luis S.](https://github.com/BastiDood)
