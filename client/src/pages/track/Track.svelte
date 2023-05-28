@@ -182,7 +182,7 @@
                             <td><b>Remarks</b></td>
                             <td><b>Evaluator</b></td>
                         </tr>
-                        {#each trail as { target, creation, status, remark, email }}
+                        {#each trail as { target, creation, status, remark, name, picture, email }}
                             <tr>
                                 <td>
                                     {#if target === null}
@@ -195,7 +195,10 @@
                                 <td>{computeTimeDiff(creation)}</td>
                                 <td>{status}</td>
                                 <td>{remark}</td>
-                                <td>{email}</td>
+                                <td class="evaluator">
+                                    <img src={picture} alt={name} />
+                                    <a href="mailto:{email}">{name}</a>
+                                </td>
                             </tr>
                         {/each}
                     </table>
@@ -209,8 +212,6 @@
 </main>
 
 <style>
-    @import url('../../pages/vars.css');
-
     .header-color {
         color: blue;
         font-size: var(--font-size-large);
@@ -230,5 +231,16 @@
         border: 1px solid;
         border-radius: var(--border-radius);
         border-color : var(--color-primary);
+    }
+
+    .evaluator {
+        align-items: center;
+        display: flex;
+        gap: var(--spacing-normal);
+    }
+
+    .evaluator > img {
+        border-radius: 50%;
+        height: 2rem;
     }
 </style>
