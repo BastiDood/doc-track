@@ -13,7 +13,11 @@ import { encode } from 'base64url';
 import { Pool } from 'postgres';
 import { validate } from 'uuid';
 
-import { BarcodeAssignmentError, InsertSnapshotError } from '~model/api.ts';
+import {
+    AddStaffError,
+    BarcodeAssignmentError,
+    InsertSnapshotError
+} from '~model/api.ts';
 import type { Category } from "~model/category.ts";
 import { Status } from '~model/snapshot.ts';
 
@@ -152,6 +156,15 @@ Deno.test('full OAuth flow', async t => {
 
             assertEquals(await db.getStaff(invite.office), [ { ...USER, permission: invite.permission } ]);
             assertArrayIncludes(await db.getUsers(), [ { ...USER, permission: 0 } ]);
+        });
+
+        await t.step('manual addition of staff', async () => {
+            const newOffice = await db.createOffice('DocTrack');
+            const noUser = crypto.randomUUID();
+            assertStrictEquals(await db.addExistingUserAsStaff(noUser, office), AddStaffError.UserNotExists);
+            assertStrictEquals(await db.addExistingUserAsStaff(noUser, newOffice), AddStaffError.UserNotExists);
+            assertStrictEquals(await db.addExistingUserAsStaff(USER.id, 0), AddStaffError.OfficeNotExists);
+            assertStrictEquals(await db.addExistingUserAsStaff(USER.id, newOffice), null);
         });
     });
 
