@@ -1,7 +1,7 @@
 import { unreachable } from 'asserts';
 import { getCookies } from 'cookie';
 import { Status } from 'http';
-import { error, info } from 'log';
+import { error, info, warning } from 'log';
 import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
@@ -66,6 +66,9 @@ export async function handleAddStaff(pool: Pool, req: Request, params: URLSearch
         }
 
         switch (result) {
+            case AddStaffError.AlreadyExists:
+                warning(`[Staff] User ${staff.user_id} attempted to add staff ${user} of office ${oid}`);
+                return new Response(null, { status: Status.Conflict });
             case AddStaffError.UserNotExists:
                 error(`[Staff] User ${staff.user_id} attempted to add non-existent user ${user} to office ${oid}`);
                 break;
