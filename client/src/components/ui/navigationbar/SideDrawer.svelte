@@ -5,7 +5,7 @@
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { goToTrackingPage } from '../itemrow/util.ts';
     import { checkPerms } from '../forms/permissions/util.ts';
-    import { Global, Local } from '../../../../../model/src/permission.ts';
+    import { Local } from '../../../../../model/src/permission.ts';
 
     import InboxIcon from '../../icons/DocumentDownload.svelte';
     import OutboxIcon from '../../icons/DocumentExport.svelte';
@@ -41,8 +41,6 @@
     }
 
     $: localPermission = selectedOffice ? $userSession?.local_perms[selectedOffice] : null;
-    $: globalPermission = $userSession?.global_perms;
-
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
