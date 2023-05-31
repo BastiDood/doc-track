@@ -32,7 +32,12 @@ import {
 import { handleCreateOffice, handleGetAllOffices, handleUpdateOffice } from './api/office.ts';
 import { handleGetUserFromSession } from './api/session.ts';
 import { handleInsertSnapshot } from './api/snapshot.ts';
-import { handleGetStaff, handleSetStaffPermissions, handleRemoveStaff } from './api/staff.ts';
+import {
+    handleAddStaff,
+    handleGetStaff,
+    handleSetStaffPermissions,
+    handleRemoveStaff,
+} from './api/staff.ts';
 import { handleGetUsers, handleSetUserPermissions } from './api/user.ts';
 import { handleHook, handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
@@ -101,6 +106,7 @@ function handlePost(pool: Pool, req: Request) {
         case '/api/hook': return handleHook(pool, req, searchParams);
         case '/api/office': return handleCreateOffice(pool, req);
         case '/api/snapshot': return handleInsertSnapshot(pool, req, searchParams);
+        case '/api/staff': return handleAddStaff(pool, req, searchParams);
         case '/api/vapid': return handleSubscribe(pool, req);
         case '/auth/logout': return handleLogout(pool, req);
         default:

@@ -1,3 +1,4 @@
+import { unreachable } from 'asserts';
 import { getCookies } from 'cookie';
 import { Status } from 'http';
 import { error, info } from 'log';
@@ -5,9 +6,86 @@ import { accepts } from 'negotiation';
 import { parseMediaType } from 'parse-media-type';
 import { Pool } from 'postgres';
 
+import { AddStaffError } from '~model/api.ts';
 import { Local } from '~model/permission.ts';
 
 import { Database } from '../../database.ts';
+
+/**
+ * Gets a list of the current staff members in an office.
+ *
+ * # Inputs
+ * - Requires a valid session ID of a system administrator.
+ * - Accepts the office ID of the session via the `office` query parameter.
+ * - Accepts the office ID of the session via the `user` query parameter.
+ *
+ * # Outputs
+ * - `200` => list of resolved users
+ * - `400` => `office` and `user` parameters are unacceptable
+ * - `401` => session ID is absent, expired, or otherwise malformed
+ * - `403` => session has insufficient permissions
+ * - `404` => user or office does not exist
+ * - `406` => content negotiation failed
+ */
+export async function handleAddStaff(pool: Pool, req: Request, params: URLSearchParams) {
+    const { sid } = getCookies(req.headers);
+    if (!sid) {
+        error('[Staff] Absent session ID');
+        return new Response(null, { status: Status.Unauthorized });
+    }
+
+    if (accepts(req, 'application/json') === undefined) {
+        error(`[Staff] Session ${sid} cannot accept JSON`);
+        return new Response(null, { status: Status.NotAcceptable });
+    }
+
+    const user = params.get('user');
+    if (!user) {
+        error(`[Staff] Session ${sid} provided no user ID`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const office = params.get('office');
+    const oid = office ? parseInt(office, 10) : NaN;
+    if (isNaN(oid)) {
+        error(`[Staff] Session ${sid} provided invalid office ID`);
+        return new Response(null, { status: Status.BadRequest });
+    }
+
+    const db = await Database.fromPool(pool);
+    try {
+        const staff = await db.getStaffFromSession(sid, oid);
+        if (staff === null) {
+            error(`[Staff] Invalid session ${sid}`);
+            return new Response(null, { status: Status.Unauthorized });
+        }
+
+        if ((staff.permission & Local.AddStaff) === 0) {
+            error(`[Category] User ${staff.user_id} cannot read the staff list in office ${oid}`);
+            return new Response(null, { status: Status.Forbidden });
+        }
+
+        const result = await db.addExistingUserAsStaff(user, oid);
+        if (result === null) {
+            info(`[Staff] User ${staff.user_id} successfully added user ${user} to office ${oid}`);
+            return new Response(null, { status: Status.Created });
+        }
+
+        switch (result) {
+            case AddStaffError.UserNotExists:
+                error(`[Staff] User ${staff.user_id} attempted to add non-existent user ${user} to office ${oid}`);
+                break;
+            case AddStaffError.OfficeNotExists:
+                error(`[Staff] User ${staff.user_id} attempted to add ${user} to non-existent office ${oid}`);
+                break;
+            default: unreachable();
+        }
+
+        return new Response(null, { status: Status.NotFound });
+    } finally {
+        db.release();
+    }
+}
 
 /**
  * Gets a list of the current staff members in an office.
@@ -63,7 +141,6 @@ export async function handleGetStaff(pool: Pool, req: Request, params: URLSearch
     } finally {
         db.release();
     }
-
 }
 
 /**
