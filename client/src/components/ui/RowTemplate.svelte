@@ -31,8 +31,9 @@
     @import url('../../pages/vars.css');
 
     article {
-        align-items: center;
         display: flex;
+        align-items: center;
+        justify-content: space-between;
         border-style: solid;
         border-width: var(--spacing-tiny);
         border-radius: var(--border-radius);
@@ -46,7 +47,7 @@
     }
 
     #middle {
-        flex: 1 0 auto;
+        flex: 1 auto;
     }
 
     .defer {
