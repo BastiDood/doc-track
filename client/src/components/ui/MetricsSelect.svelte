@@ -6,16 +6,16 @@
     import { Staff } from '~model/staff.ts';
 
     export let value: MetricsMode | undefined;
-    export let localPermission: Staff['permission'] | null;
-    export let globalPermission: User['permission'] | null;
+    export let localPermission: Staff['permission'];
+    export let globalPermission: User['permission'];
 </script>
 
 <select required bind:value>
     <option value={MetricsMode.User}>User Summary</option>
-    {#if !localPermission || checkPerms(localPermission, Local.ViewMetrics)}
+    {#if checkPerms(localPermission, Local.ViewMetrics)}
         <option value={MetricsMode.Local}>Local Summary</option>
     {/if}
-    {#if !globalPermission || checkPerms(globalPermission, Global.ViewMetrics)}
+    {#if checkPerms(globalPermission, Global.ViewMetrics)}
         <option value={MetricsMode.Global}>Global Summary</option>
     {/if}
 </select>

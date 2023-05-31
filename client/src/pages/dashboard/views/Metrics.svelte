@@ -31,7 +31,7 @@
     $: globalPermission = $userSession?.global_perms ?? null;
 </script>
 
-{#if currentOffice === null}
+{#if localPermission === null || globalPermission === null}
     <p>You must select an office before accessing the Metrics page.</p>
 {:else}
     <h1>Metrics</h1>
