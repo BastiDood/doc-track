@@ -49,7 +49,7 @@
 <nav class:show on:click|stopPropagation on:keypress>
     <header id="controls">
         {#if user !== undefined}
-            <div id="greet">Hello {user.name}!</div>
+            <div>Hello {user.name}!</div>
         {/if}
         {#if Object.getOwnPropertyNames($userOffices).length === 0}
             No office detected!
@@ -75,7 +75,7 @@
             <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
         
         {/if}
-        
+
         <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
         <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
         <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
@@ -94,13 +94,6 @@
 {/if}
 
 <style>
-    #greet {
-        margin: var(--spacing-normal);
-        border-radius: var(--border-radius);
-        padding: var(--spacing-normal);
-        background-color: var(--primary-color);
-        color: white;
-    }
     #controls {
         display: flex;
         align-items: stretch;
