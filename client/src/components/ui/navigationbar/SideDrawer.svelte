@@ -76,7 +76,7 @@
         <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
         <a href="#/offices" use:active><EventsIcon alt="Go to Offices" />Offices</a>
     </section>
-    <form method="POST" action="/auth/logout">
+    <form id="logout" method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
     </form>
 </nav>

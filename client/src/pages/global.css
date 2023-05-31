@@ -35,7 +35,7 @@ p {
     padding: 0;
 }
 
-form {
+form:not(#logout) {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
