@@ -19,7 +19,7 @@
         cursor: pointer;
         display: inline-flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: center;
         column-gap: var(--spacing-normal);
     }
 
