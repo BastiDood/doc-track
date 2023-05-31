@@ -165,6 +165,7 @@ Deno.test('full OAuth flow', async t => {
             assertStrictEquals(await db.addExistingUserAsStaff(noUser, newOffice), AddStaffError.UserNotExists);
             assertStrictEquals(await db.addExistingUserAsStaff(USER.id, 0), AddStaffError.OfficeNotExists);
             assertStrictEquals(await db.addExistingUserAsStaff(USER.id, newOffice), null);
+            assertStrictEquals(await db.addExistingUserAsStaff(USER.id, newOffice), AddStaffError.AlreadyExists);
         });
     });
 
