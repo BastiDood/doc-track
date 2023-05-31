@@ -14,7 +14,7 @@
     import Add from '../../../components/icons/Add.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import { ToastType } from '../../../components/types.ts';
+    import { IconColor, ToastType } from '../../../components/types.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     $: ({ currentOffice } = $dashboardState);
@@ -90,10 +90,10 @@
                 <br />
                 
                 <Button on:click={handleDownload}>
-                    <Download alt="download" />Download Stickers
+                    <Download alt="download" color={IconColor.White} />Download Stickers
                 </Button>
                 <Button on:click={handleGenerate}>
-                    <Add alt="add" /> Generate New Batch
+                    <Add alt="add" color={IconColor.White} /> Generate New Batch
                 </Button>
             
                 <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
