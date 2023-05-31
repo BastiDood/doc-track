@@ -25,18 +25,12 @@ import { Database } from '../../database.ts';
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => user or office does not exist
- * - `406` => content negotiation failed
  */
 export async function handleAddStaff(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);
     if (!sid) {
         error('[Staff] Absent session ID');
         return new Response(null, { status: Status.Unauthorized });
-    }
-
-    if (accepts(req, 'application/json') === undefined) {
-        error(`[Staff] Session ${sid} cannot accept JSON`);
-        return new Response(null, { status: Status.NotAcceptable });
     }
 
     const user = params.get('user');
