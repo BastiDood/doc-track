@@ -40,6 +40,7 @@ export enum BarcodeAssignmentError {
 export const BarcodeAssignmentErrorSchema = z.nativeEnum(BarcodeAssignmentError);
 
 export enum AddStaffError {
+    AlreadyExists,,
     UserNotExists,
     OfficeNotExists,
 }

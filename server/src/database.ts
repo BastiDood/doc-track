@@ -4,7 +4,7 @@ import { range } from 'itertools';
 import { Pool, PoolClient, PostgresError } from 'postgres';
 import { z } from 'zod';
 
-import { AddStaffError,
+import {
     type AllCategories,
     type AllInbox,
     type AllOffices,
@@ -17,6 +17,7 @@ import { AddStaffError,
     type MinBatch,
     type PushNotification,
     type StaffMember,
+    AddStaffError,
     AllCategoriesSchema,
     AllInboxSchema,
     AllOfficesSchema,
@@ -235,6 +236,9 @@ export class Database {
             assertInstanceOf(err, PostgresError);
             const { fields: { code, constraint } } = err;
             switch (code) {
+                case '23505':
+                    assertEquals(constraint, 'staff_pkey');
+                    return AddStaffError.AlreadyExists;
                 case '23503':
                     switch (constraint) {
                         case 'staff_user_id_fkey': return AddStaffError.UserNotExists;
