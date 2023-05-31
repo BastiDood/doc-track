@@ -1,6 +1,6 @@
 @import url(../../../pages/vars.css);
 
-img .rounded {
+.rounded {
     border-radius: 50%;
 }
 
