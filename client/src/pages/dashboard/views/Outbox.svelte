@@ -17,6 +17,7 @@
     import { deferRegistrationCount } from '../../../stores/DeferredStore.ts';
     import { Document } from '../../../../../model/src/document.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
 
     interface Context {
         docId: Document['id'] | null,
@@ -67,33 +68,42 @@
 {#if currentOffice === null}
     <p>You must select an office before accessing the Outbox page.</p>
 {:else}
-    <h1>Outbox</h1>
+    <header>
+        <h1>Outbox</h1>    
+        <Button on:click={openCreateDocument.bind(null)}>
+            Register and Stage a New Document
+        </Button>
+    </header>
     
-    <Button on:click={openCreateDocument.bind(null)}>
-        Register and Stage a New Document
-    </Button>
-
     {#await Promise.all([outboxReady, deferReady])}
         <p>Loading outbox...</p>
     {:then}
         <h2>Staged Registered Documents</h2>
-        {#each $documentOutbox.ready as { doc, category, creation, title } (doc)}
-            <RegisterRow 
-                {doc}
-                {category}
-                {title}
-                {creation}
-                iconSize={IconSize.Large} 
-                on:overflowClick={openContext.bind(null, doc)}
-            />
-        {/each}
-        {#if $deferRegistrationCount > 0}
-            There are {$deferRegistrationCount} document/s awaiting to be registered on the next Background Sync.
-        {/if}
+        <EnumerationContainer>
+            {#each $documentOutbox.ready as { doc, category, creation, title } (doc)}
+                <RegisterRow 
+                    {doc}
+                    {category}
+                    {title}
+                    {creation}
+                    iconSize={IconSize.Large} 
+                    on:overflowClick={openContext.bind(null, doc)}
+                />
+            {:else}
+                <p>Your office does not have registered documents ready to be sent.</p>
+            {/each}
+            {#if $deferRegistrationCount > 0}
+                <p>There are {$deferRegistrationCount} document/s awaiting to be registered on the next Background Sync.</p>
+            {/if}
+        </EnumerationContainer>
         <h2>Sent Documents</h2>
-        {#each $documentOutbox.pending as entry (entry.doc)}
-            <SendRow {...entry} iconSize={IconSize.Large} />
-        {/each}
+        <EnumerationContainer>
+            {#each $documentOutbox.pending as entry (entry.doc)}
+                <SendRow {...entry} iconSize={IconSize.Large} />
+            {:else}
+                <p>Your office currently has no documents pending to be accepted by another office.</p>
+            {/each}
+        </EnumerationContainer>
     {:catch err}
         <PageUnavailable {err} />
     {/await}
@@ -122,3 +132,12 @@
         /> 
     </Modal>
 {/if}
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+

@@ -14,6 +14,7 @@
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
 
     enum ActiveMenu {
         EditStaff,
@@ -68,21 +69,26 @@
     {#await staffReady}
         <p>Loading staff page...</p>
     {:then}
+        <header>
         <h1>Staffs of {officeName}</h1>
-        {#each $staffList.filter(s => s.permission !== 0) as { id, name, email, permission, picture } (id)}
-            <PersonRowLocal
-                {id}
-                {email}
-                {name}
-                {permission}
-                {picture}
-                office={currentOffice}
-                iconSize={IconSize.Large} 
-                on:overflowClick={openContextMenu.bind(null, id, currentOffice, email, permission)} 
-            />
-        {:else}
-            <p>No staff members exist in "{officeName}".</p>
-        {/each}
+        <!-- TODO: Put addStaff button here. -->
+        </header>
+        <EnumerationContainer>
+            {#each $staffList.filter(s => s.permission !== 0) as { id, name, email, permission, picture } (id)}
+                <PersonRowLocal
+                    {id}
+                    {email}
+                    {name}
+                    {permission}
+                    {picture}
+                    office={currentOffice}
+                    iconSize={IconSize.Large} 
+                    on:overflowClick={openContextMenu.bind(null, id, currentOffice, email, permission)} 
+                />
+            {:else}
+                <p>No staff members exist in "{officeName}".</p>
+            {/each}
+        </EnumerationContainer>
     {:catch err}
         <PageUnavailable {err} />
     {/await}

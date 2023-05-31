@@ -6,6 +6,7 @@
     import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
     import { IconSize } from '../../../components/types.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
 
     $: ({ currentOffice } = $dashboardState);
 
@@ -26,15 +27,17 @@
     {#await loadDossier(currentOffice)}
         <p>Loading registered documents.</p>
     {:then reg}
-        {#each reg as entry (entry.doc)}
-            <RegisterRow 
-                {...entry}
-                showOverflowIcon={false}
-                iconSize={IconSize.Large} 
-            />
-        {:else}
-            <p>No documents were created in this office yet.</p>
-        {/each}
+        <EnumerationContainer>
+            {#each reg as entry (entry.doc)}
+                <RegisterRow 
+                    {...entry}
+                    showOverflowIcon={false}
+                    iconSize={IconSize.Large} 
+                />
+            {:else}
+                <p>No documents were created in this office yet.</p>
+            {/each}
+        </EnumerationContainer> 
     {:catch err}
         <PageUnavailable {err} />
     {/await}

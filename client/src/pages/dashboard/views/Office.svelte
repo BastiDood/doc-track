@@ -13,6 +13,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import { IconSize } from '../../../components/types';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
 
     enum OfficeEvents {
         Create,
@@ -37,43 +38,46 @@
     });
 </script>
 
-<article>
-    <Button on:click={() => (ctx = { id: 0, mode: OfficeEvents.Create })}>
-        Create an Office
-    </Button>
-
-    {#await officeReady}
-        <p>Loading office page...</p>
-    {:then}
+{#await officeReady}
+    <p>Loading office page...</p>
+{:then}
+    <header>
         <h1>Offices</h1>
+        <Button on:click={() => (ctx = { id: 0, mode: OfficeEvents.Create })}>
+            Create an Office
+        </Button>
+    </header>
+    <EnumerationContainer>
         {#each Object.entries($allOffices) as [id, name] (id)} 
             <RowTemplate on:overflowClick={() => (ctx = { id: Number(id), mode: OfficeEvents.Edit })}>
-                <Events slot="icon" alt="Events Icon" />
+                <Events slot="icon" alt="Events Icon" size={IconSize.Large}/>
                 {name}
                 <Edit slot="overflow" alt="Edit Icon" size={IconSize.Large} />
             </RowTemplate>
         {:else}
             <p>No offices exist.</p>
         {/each}
-    {:catch err}
-        <PageUnavailable {err} />
-    {/await}
+    </EnumerationContainer>
+{:catch err}
+    <PageUnavailable {err} />
+{/await}
 
-    {#if ctx === null}
-        <!-- Don't render anything! Intentionally left blank to make type inference happy. -->
-    {:else if ctx.mode === OfficeEvents.Create}
-        <Modal showModal title="Create New Office" on:close={resetContext}>
-            <NewOffice on:done={resetContext} />
-        </Modal>
-    {:else if ctx.mode === OfficeEvents.Edit}
-        <Modal showModal title="Edit Office" on:close={resetContext}>
-            <EditOffice currId={ctx.id} on:done={resetContext} />
-        </Modal>
-    {/if}
-</article>
+{#if ctx === null}
+    <!-- Don't render anything! Intentionally left blank to make type inference happy. -->
+{:else if ctx.mode === OfficeEvents.Create}
+    <Modal showModal title="Create New Office" on:close={resetContext}>
+        <NewOffice on:done={resetContext} />
+    </Modal>
+{:else if ctx.mode === OfficeEvents.Edit}
+    <Modal showModal title="Edit Office" on:close={resetContext}>
+        <EditOffice currId={ctx.id} on:done={resetContext} />
+    </Modal>
+{/if}
 
 <style>
-    article {
-        margin: var(--spacing-medium);
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 </style>

@@ -14,6 +14,7 @@
     import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
     import { Invitation } from '~model/invitation.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
 
     enum ActiveMenu {
         CreateInvite,
@@ -50,17 +51,17 @@
 {#if currentOffice === null}
     <p>You must select an office before accessing the Invites page.</p>
 {:else}
-    <h1>Invitations</h1>
-    <Button on:click={openCreateInvite.bind(null)}>
-        <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
-    </Button>
+    <header>
+        <h1>Invitations</h1>
+        <Button on:click={openCreateInvite.bind(null)}>
+            <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
+        </Button>
+    </header>
 
     {#await inviteReady}
         <p>Loading invite list.</p>
     {:then}
-        {#if $inviteList.length === 0 || currentOffice === null}
-                <h3>No invite backlogs, yay!</h3>
-        {:else}
+        <EnumerationContainer>
             {#each $inviteList as { email, permission, creation } (email)}
                 <InviteRow
                     email={email}
@@ -70,8 +71,10 @@
                     creation={creation}
                     on:overflowClick={openRevokeInvite.bind(null, email, currentOffice)}
                 />
+            {:else}
+                <p>Your office is currently not inviting anyone</p>
             {/each}
-        {/if}
+        </EnumerationContainer> 
     {:catch err}
         <PageUnavailable {err} />
     {/await}
@@ -91,3 +94,11 @@
             />
     </Modal>
 {/if}
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>

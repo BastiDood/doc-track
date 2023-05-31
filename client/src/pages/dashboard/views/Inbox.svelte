@@ -18,6 +18,7 @@
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
 
     enum ActiveMenu {
         ContextInbox,
@@ -73,38 +74,47 @@
 {#if currentOffice === null}
     <p>You must select an office before accessing the Inbox page.</p>
 {:else}
-    <h1>Inbox</h1>
-
-    <Button on:click={openCreateDocument.bind(null)}>
-        Register and Stage a New Document
-    </Button>
+    <header>
+        <h1>Inbox</h1>
+        <Button on:click={openCreateDocument.bind(null)}>
+            Register and Stage a New Document
+        </Button>
+    </header>
 
     {#await Promise.all([inboxReady, deferReady])}
         <p>Loading inbox...</p>
     {:then}
         <h2>Pending Acceptance</h2>
-        {#each $documentInbox.pending as { creation, category, title, doc } (doc)}
-            <AcceptRow
-                {doc}
-                {category}
-                {title}
-                {creation}
-                iconSize = {IconSize.Large}
-                on:overflowClick = {setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
-            />
-        {/each}
+        <EnumerationContainer>
+            {#each $documentInbox.pending as { creation, category, title, doc } (doc)}
+                <AcceptRow
+                    {doc}
+                    {category}
+                    {title}
+                    {creation}
+                    iconSize = {IconSize.Large}
+                    on:overflowClick = {setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
+                />
+            {:else}
+                <p>Your office does not have any documents pending to be accepted.</p>
+            {/each}
+        </EnumerationContainer>
 
         <h2>Office Inbox</h2>
-        {#each $documentInbox.accept as { creation, category, title, doc } (doc)}
-            <InboxRow
-                {doc}
-                {category}
-                {title}
-                {creation}
-                iconSize={IconSize.Large}
-                on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
-            />
-        {/each}
+        <EnumerationContainer>
+            {#each $documentInbox.accept as { creation, category, title, doc } (doc)}
+                <InboxRow
+                    {doc}
+                    {category}
+                    {title}
+                    {creation}
+                    iconSize={IconSize.Large}
+                    on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
+                />
+            {:else}
+                <p>Your office does not have any documents in its inbox.</p>
+            {/each}
+        </EnumerationContainer>
     {:catch err}
         <PageUnavailable {err} />
     {/await}
@@ -141,3 +151,11 @@
         /> 
     </Modal>
 {/if}
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
