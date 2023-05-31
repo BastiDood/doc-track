@@ -19,7 +19,8 @@
         cursor: pointer;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-around;
+        column-gap: var(--spacing-normal);
     }
 
     button:hover {
