@@ -39,6 +39,14 @@ export enum BarcodeAssignmentError {
 
 export const BarcodeAssignmentErrorSchema = z.nativeEnum(BarcodeAssignmentError);
 
+export enum AddStaffError {
+    AlreadyExists,
+    UserNotExists,
+    OfficeNotExists,
+}
+
+export const AddStaffErrorSchema = z.nativeEnum(AddStaffError);
+
 export const PaperTrailSchema = SnapshotSchema
     .pick({ creation: true, status: true, target: true, remark: true })
     .merge(UserSchema.pick({ name: true, email: true, picture: true }));

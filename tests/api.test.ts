@@ -25,6 +25,7 @@ import { Staff } from '~client/api/staff.ts';
 import { User } from '~client/api/user.ts';
 import { Vapid } from '~client/api/vapid.ts';
 
+import type { Office as OfficeType } from '~model/office.ts';
 import { Local } from '~model/permission.ts';
 import { Status } from '~model/snapshot.ts';
 
@@ -32,43 +33,50 @@ import { Database } from '~server/database.ts';
 import { env } from '~server/env.ts';
 import { handleRequest } from '~server/routes/mod.ts';
 
+async function createUser(db: Database, office: OfficeType['id']) {
+    // Randomly generate an email for uniqueness
+    const randomEmail = b64encode(crypto.getRandomValues(new Uint8Array(6)));
+    assertStrictEquals(randomEmail.length, 8);
+
+    // Invite mock email to the system
+    const permission = 4095;
+    const email = `${randomEmail}@up.edu.ph`;
+    const creation = await db.upsertInvitation({
+        office,
+        permission,
+        email,
+    });
+    assertExists(creation);
+
+    // Construct mock user
+    const user = {
+        id: crypto.randomUUID(),
+        name: 'Hello World',
+        picture: 'https://doctrack.app/profile/user.png',
+        email,
+    };
+
+    // Formally integrate user into the system
+    const offices = await db.insertInvitedUser(user);
+    assertExists(offices);
+    const [ first, ...rest ] = offices;
+    assertStrictEquals(rest.length, 0);
+    assertEquals(first, { office, permission });
+
+    return user;
+}
+
 async function setup(pool: Pool) {
     const db = await Database.fromPool(pool);
     try {
         // Create mock office
         const oid = await db.createOffice('DocTrack');
+        const dummyOid = await db.createOffice('FakeDocTrack');
         assertNotStrictEquals(oid, 0);
 
-        // Randomly generate an email for uniqueness
-        const randomEmail = b64encode(crypto.getRandomValues(new Uint8Array(6)));
-        assertStrictEquals(randomEmail.length, 8);
-
-        // Invite mock email to the system
-        const permission = 4095;
-        const email = `${randomEmail}@up.edu.ph`;
-        const creation = await db.upsertInvitation({
-            office: oid,
-            permission,
-            email,
-        });
-        assertExists(creation);
-
-        // Construct mock user
-        const user = {
-            id: crypto.randomUUID(),
-            name: 'Hello World',
-            picture: 'https://doctrack.app/profile/user.png',
-            email,
-        };
-
-        // Formally integrate user into the system
-        const offices = await db.insertInvitedUser(user);
-        assertExists(offices);
-        const [ first, ...rest ] = offices;
-        assertStrictEquals(rest.length, 0);
-        assertEquals(first, { office: oid, permission });
-
         // Set as superuser
+        const user = await createUser(db, oid);
+        const dummy = await createUser(db, dummyOid);
         assert(await db.setUserPermissions(user.id, 255));
 
         // Construct a full valid session
@@ -81,7 +89,7 @@ async function setup(pool: Pool) {
         assertExists(pending);
         assertEquals(pending.expiration, expiration);
         assert(bytewiseEquals(pending.nonce, nonce));
-        return { oid, sid: id, user };
+        return { oid, sid: id, user, dummy };
     } finally {
         db.release();
     }
@@ -97,7 +105,7 @@ Deno.test('full API integration test', async t => {
     }, 1, false);
 
     // Set up mock session
-    const { oid, sid, user } = await setup(pool);
+    const { oid, sid, user, dummy } = await setup(pool);
 
     // Mock the `fetch` function and its cookie store
     const origFetch = globalThis.fetch;
@@ -178,8 +186,10 @@ Deno.test('full API integration test', async t => {
             office: oid,
             user_id: user.id,
             permission: 4095,
-        }))
-    );
+        })));
+
+    await t.step('Staff API - adding existing user to the office staff list', async () =>
+        assert(await Staff.add(dummy.id, oid)));
 
     await t.step('Session API', async () => {
         const session = await Session.getUser();
@@ -342,7 +352,7 @@ Deno.test('full API integration test', async t => {
     });
 
     await t.step('Staff API - retirement', async () => {
-        assertEquals(await Staff.get(oid), [ { ...user, permission: 4095 } ]);
+        assertEquals(await Staff.get(oid), [ { ...dummy, permission: 0 }, { ...user, permission: 4095 } ]);
         const result = await Staff.remove({
             office: oid,
             user_id: user.id,

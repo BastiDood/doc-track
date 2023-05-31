@@ -17,6 +17,7 @@ import {
     type MinBatch,
     type PushNotification,
     type StaffMember,
+    AddStaffError,
     AllCategoriesSchema,
     AllInboxSchema,
     AllOfficesSchema,
@@ -222,6 +223,33 @@ export class Database {
 
         await transaction.commit();
         return invites;
+    }
+
+    /** Adds a pre-existing user into an office as a new staff member. Returns `null` for success. */
+    async addExistingUserAsStaff(uid: User['id'], oid: Office['id']): Promise<AddStaffError | null> {
+        try {
+            const { rowCount } = await this.#client
+                .queryArray`INSERT INTO staff (user_id,office) VALUES (${uid},${oid})`;
+            assertStrictEquals(rowCount, 1);
+            return null;
+        } catch (err) {
+            assertInstanceOf(err, PostgresError);
+            const { fields: { code, constraint } } = err;
+            switch (code) {
+                case '23505':
+                    assertEquals(constraint, 'staff_pkey');
+                    return AddStaffError.AlreadyExists;
+                case '23503':
+                    switch (constraint) {
+                        case 'staff_user_id_fkey': return AddStaffError.UserNotExists;
+                        case 'staff_office_fkey': return AddStaffError.OfficeNotExists;
+                        default: break;
+                    }
+                // falls through
+                default:
+                    unreachable();
+            }
+        }
     }
 
     /** Gets all of the current staff members for a given office ID. */
