@@ -60,13 +60,13 @@
                 <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
             </div>
         </header>
-        {#if !localPermission || checkPerms(localPermission, Local.ViewInbox)}
+        {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
             <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
             <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
             <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
         {/if}
         <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
-        {#if !localPermission || checkPerms(localPermission, Local.ViewBatch)}
+        {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
             <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
         {/if}
         <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
