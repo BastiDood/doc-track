@@ -46,6 +46,12 @@ export class BadContentNegotiation extends Error {
     }
 }
 
+export class AlreadyMember extends Error {
+    constructor() {
+        super('user is already a member of the office');
+    }
+}
+
 export class UnexpectedStatusCode extends Error {
     constructor() {
         super('unexpected status code');

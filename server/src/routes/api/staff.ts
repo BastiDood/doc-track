@@ -25,6 +25,7 @@ import { Database } from '../../database.ts';
  * - `401` => session ID is absent, expired, or otherwise malformed
  * - `403` => session has insufficient permissions
  * - `404` => user or office does not exist
+ * - `409` => user is already a member of the office
  */
 export async function handleAddStaff(pool: Pool, req: Request, params: URLSearchParams) {
     const { sid } = getCookies(req.headers);

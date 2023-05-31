@@ -6,10 +6,11 @@ import type { Staff as StaffType } from '../../../model/src/staff.ts';
 import type { User } from '../../../model/src/user.ts';
 
 import {
+    AlreadyMember,
+    BadContentNegotiation,
     InsufficientPermissions,
     InvalidInput,
     InvalidSession,
-    BadContentNegotiation,
     UnexpectedStatusCode,
     UncachedFetch,
 } from './error.ts';
@@ -26,6 +27,7 @@ export namespace Staff {
             case StatusCodes.BAD_REQUEST: throw new InvalidInput;
             case StatusCodes.UNAUTHORIZED: throw new InvalidSession;
             case StatusCodes.FORBIDDEN: throw new InsufficientPermissions;
+            case StatusCodes.CONFLICT: throw new AlreadyMember;
             default: throw new UnexpectedStatusCode;
         }
     }
