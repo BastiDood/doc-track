@@ -18,6 +18,7 @@
     import { Document } from '../../../../../model/src/document.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import DocumentAdd from '../../../components/icons/DocumentAdd.svelte';
 
     interface Context {
         docId: Document['id'] | null,
@@ -71,6 +72,7 @@
     <header>
         <h1>Outbox</h1>    
         <Button on:click={openCreateDocument.bind(null)}>
+            <DocumentAdd alt="Create document" color={IconColor.White}/>
             Register and Stage a New Document
         </Button>
     </header>

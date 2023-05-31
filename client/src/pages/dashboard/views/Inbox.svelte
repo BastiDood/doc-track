@@ -19,6 +19,7 @@
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import DocumentAdd from '../../../components/icons/DocumentAdd.svelte';
 
     enum ActiveMenu {
         ContextInbox,
@@ -77,6 +78,7 @@
     <header>
         <h1>Inbox</h1>
         <Button on:click={openCreateDocument.bind(null)}>
+            <DocumentAdd alt="Create document" color={IconColor.White}/>
             Register and Stage a New Document
         </Button>
     </header>
