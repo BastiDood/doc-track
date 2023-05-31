@@ -39,6 +39,9 @@ form {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    margin: var(--spacing-large);
+    padding: var(--spacing-normal);
+    row-gap: var(--spacing-small);
 }
 
 dialog::backdrop {
