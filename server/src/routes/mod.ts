@@ -3,7 +3,7 @@ import { contentType } from 'content-type';
 import { Status } from 'http';
 import { error, info } from 'log';
 import { Pool } from 'postgres';
-import { join } from 'path';
+import { fromFileUrl, join } from 'path';
 import { extname } from 'posix';
 
 import { handleGetEarliestAvailableBatch, handleGenerateBatch } from './api/batch.ts';
@@ -37,9 +37,7 @@ import { handleGetUsers, handleSetUserPermissions } from './api/user.ts';
 import { handleHook, handleSubscribe, handleVapidPublicKey } from './api/vapid.ts';
 import { handleCallback, handleLogin, handleLogout } from './auth/mod.ts';
 
-// HACK: Use a more robust way to resolve Linux and Windows file paths.
-const { pathname } = new URL(import.meta.resolve('../../../client/dist'));
-const STATIC_ROOT = pathname[2] === ':' ? pathname.slice(3) : pathname;
+const STATIC_ROOT = fromFileUrl(import.meta.resolve('../../../client/dist'));
 info(`[Static] file server hosted at ${STATIC_ROOT}`);
 
 async function handleGet(pool: Pool, req: Request) {
