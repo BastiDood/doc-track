@@ -7,7 +7,8 @@
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../../../stores/MetricStore.ts';
     import { allOffices } from '../../../stores/OfficeStore.ts';
-    import { currentUser } from '../../../stores/UserStore.ts';
+    import { currentUser, userSession } from '../../../stores/UserStore.ts';
+    
 
     function selectSummary(user: Metrics, local: Metrics, global: Metrics, mode?: MetricsMode): Metrics {
         switch (mode) {
@@ -25,6 +26,9 @@
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
     $: userName = $currentUser?.name ?? 'No user name.';
+
+    $: localPermission = currentOffice ? $userSession?.local_perms[currentOffice] : undefined;
+    $: globalPermission = $userSession?.global_perms;
 </script>
 
 {#if currentOffice === null}
@@ -41,7 +45,7 @@
     <main>
         <div class='header'>
             <h3>Report</h3>
-            <MetricsSelect bind:value={mode} />
+            <MetricsSelect bind:value={mode} localPermission={localPermission} globalPermission={globalPermission}/>
         </div>
         <table>
             <tr>
