@@ -6,7 +6,7 @@
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { assert } from '../../../assert.ts';
     
-    import { IconSize, ToastType } from '../../../components/types';
+    import { IconSize, ToastType, IconColor } from '../../../components/types';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';

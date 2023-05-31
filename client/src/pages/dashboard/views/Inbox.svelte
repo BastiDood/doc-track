@@ -8,7 +8,7 @@
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
-    import { IconSize, ToastType } from '../../../components/types';
+    import { IconSize, ToastType, IconColor } from '../../../components/types';
     import { Document } from '../../../../../model/src/document.ts';
     import { Status } from '../../../../../model/src/snapshot.ts';
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
