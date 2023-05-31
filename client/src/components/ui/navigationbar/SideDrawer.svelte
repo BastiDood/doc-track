@@ -49,7 +49,7 @@
 <nav class:show on:click|stopPropagation on:keypress>
     <header id="controls">
         {#if user !== undefined}
-            <div>Hello {user.name}!</div>
+            <div id="greet">Hello {user.name}!</div>
         {/if}
         {#if Object.getOwnPropertyNames($userOffices).length === 0}
             No office detected!
@@ -88,6 +88,13 @@
 {/if}
 
 <style>
+    #greet {
+        margin: var(--spacing-normal);
+        border-radius: var(--border-radius);
+        padding: var(--spacing-normal);
+        background-color: var(--primary-color);
+        color: white;
+    }
     #controls {
         display: flex;
         align-items: stretch;
