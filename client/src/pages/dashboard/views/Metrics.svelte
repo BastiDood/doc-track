@@ -9,7 +9,6 @@
     import { allOffices } from '../../../stores/OfficeStore.ts';
     import { currentUser, userSession } from '../../../stores/UserStore.ts';
     
-
     function selectSummary(user: Metrics, local: Metrics, global: Metrics, mode?: MetricsMode): Metrics {
         switch (mode) {
             case MetricsMode.User: return user;
