@@ -40,7 +40,9 @@
         goToTrackingPage(detail);
     }
 
-    $: localPermission = selectedOffice ? $userSession?.local_perms[selectedOffice] : null;
+    $: localPermission = selectedOffice === null
+        ? null
+        : $userSession?.local_perms[selectedOffice] ?? null;
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
