@@ -4,6 +4,7 @@
     import { userOffices, userSession } from '../../../stores/UserStore.ts';
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { goToTrackingPage } from '../itemrow/util.ts';
+    import { User } from '~model/user.ts';
     import { checkPerms } from '../forms/permissions/util.ts';
     import { Local } from '../../../../../model/src/permission.ts';
 
@@ -17,7 +18,6 @@
     import AdminIcon from '../../icons/PersonInfo.svelte';
     import SettingsIcon from '../../icons/Settings.svelte';
     import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
-    import MainLogo from '../../icons/MainLogo.svelte';
     import OfficeSelect from '../OfficeSelect.svelte';
 
     import { ButtonType, IconColor } from '../../types.ts';
@@ -28,6 +28,7 @@
     import Search from '../../icons/Search.svelte';
     import Camera from '../../icons/Camera.svelte';
 
+    export let user: User | undefined;
     export let show = false;
 
     let trackingNumber: string | undefined;
@@ -47,20 +48,18 @@
 
 <nav class:show on:click|stopPropagation on:keypress>
     <section>
-        <div id="logo">
-            <MainLogo alt="Main DocTrack Logo" />
-        </div>
-        <header>
+        <header id="controls">
+            {#if user !== undefined}
+                <span>Hello {user.name}!</span>
+            {/if}
             {#if Object.getOwnPropertyNames($userOffices).length === 0}
                 No office detected!
             {:else}
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
-            <div id="controls">
                 <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
                 <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
                 <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
-            </div>
         </header>
         {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
             <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
@@ -89,12 +88,6 @@
 {/if}
 
 <style>
-    #logo {
-        margin: auto;
-        width: 60%;
-        text-align: center;
-    }
-
     #controls {
         display: flex;
         align-items: stretch;

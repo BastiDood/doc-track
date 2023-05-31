@@ -63,7 +63,7 @@
         <TopBar user={$currentUser} bind:open={toggleDrawer} />
     {/if}
     <main on:click={() => (toggleDrawer &&= false)} on:keydown>
-        <SideDrawer show={toggleDrawer} />
+        <SideDrawer user={$currentUser} show={toggleDrawer} />
         <section>
             <Router {routes} />
         </section>
@@ -74,6 +74,8 @@
 {/await}
 
 <style>
+    @import url('../vars.css');
+
     :global(body) {
         display: flex;
         flex-direction: column;
@@ -88,5 +90,6 @@
     section {
         height: 100%;
         overflow-y: auto;
+        margin: var(--spacing-large);
     }
 </style>
