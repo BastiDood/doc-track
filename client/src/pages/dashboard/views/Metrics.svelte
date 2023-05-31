@@ -8,7 +8,6 @@
     import { userSummary, localSummary, globalSummary } from '../../../stores/MetricStore.ts';
     import { allOffices } from '../../../stores/OfficeStore.ts';
     import { currentUser, userSession } from '../../../stores/UserStore.ts';
-    
     function selectSummary(user: Metrics, local: Metrics, global: Metrics, mode?: MetricsMode): Metrics {
         switch (mode) {
             case MetricsMode.User: return user;
@@ -44,7 +43,7 @@
     <main>
         <div class='header'>
             <h3>Report</h3>
-            <MetricsSelect bind:value={mode} localPermission={localPermission} globalPermission={globalPermission}/>
+            <MetricsSelect bind:value={mode} {localPermission} {globalPermission} />
         </div>
         <table>
             <tr>
