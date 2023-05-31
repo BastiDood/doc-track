@@ -35,6 +35,12 @@ p {
     padding: 0;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
 dialog::backdrop {
     background: rgba(0, 0, 0, 0.3);
 }
