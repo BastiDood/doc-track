@@ -27,8 +27,8 @@
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
     $: userName = $currentUser?.name ?? 'No user name.';
 
-    $: localPermission = currentOffice ? $userSession?.local_perms[currentOffice] : undefined;
-    $: globalPermission = $userSession?.global_perms;
+    $: localPermission = (currentOffice ? $userSession?.local_perms[currentOffice] : null) ?? null;
+    $: globalPermission = $userSession?.global_perms ?? null;
 </script>
 
 {#if currentOffice === null}

@@ -1,13 +1,13 @@
 <script lang="ts">
     import { MetricsMode } from '../types.ts';
     import { checkPerms } from './forms/permissions/util.ts';
-    import { Global, Local } from '../../../../model/src/permission.ts'
+    import { Global, Local } from '../../../../model/src/permission.ts';
     import { User } from '~model/user.ts';
     import { Staff } from '~model/staff.ts';
 
     export let value: MetricsMode | undefined;
-    export let localPermission: Staff['permission'] | undefined;
-    export let globalPermission: User['permission'] | undefined;
+    export let localPermission: Staff['permission'] | null;
+    export let globalPermission: User['permission'] | null;
 </script>
 
 <select required bind:value>
