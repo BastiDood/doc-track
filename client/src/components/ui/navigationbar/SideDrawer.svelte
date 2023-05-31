@@ -47,25 +47,25 @@
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
-    <section>
-        <header id="controls">
-            {#if user !== undefined}
-                <span>Hello {user.name}!</span>
-            {/if}
-            {#if Object.getOwnPropertyNames($userOffices).length === 0}
-                No office detected!
-            {:else}
-                <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
-            {/if}
-                <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
-                <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
-                <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
-        </header>
-        {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
-            <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
-            <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
-            <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
+    <header id="controls">
+        {#if user !== undefined}
+            <div>Hello {user.name}!</div>
         {/if}
+        {#if Object.getOwnPropertyNames($userOffices).length === 0}
+            No office detected!
+        {:else}
+            <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
+        {/if}
+        <div>
+            <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
+            <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
+        </div>
+        <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
+    </header>
+    <section>
+        <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
+        <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
+        <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
         <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
         {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
             <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
@@ -94,6 +94,11 @@
         flex-direction: column;
     }
 
+    header > div {
+        display: flex;
+        justify-content: center;
+    }
+
     nav {
         background-color: var(--dashboard-sidedrawer);
         display: flex;
@@ -116,6 +121,10 @@
         margin: var(--large);
     }
     
+    section {
+        overflow-y: auto;
+    }
+
     section > a {
         border-right: var(--spacing-small) solid transparent;
         color: initial;
