@@ -16,7 +16,7 @@
     <div class="icon"><slot name="icon" /></div>
     <div id="middle">
         <div><slot></slot></div>
-        <div class="subtext"><slot name="secondary"></slot></div>
+        <div><slot name="secondary"></slot></div>
     </div>
     {#if showOverflowIcon}
         <div class="overflow" on:keydown on:click|stopPropagation={() => dispatch(Events.OverflowClick)}>
@@ -46,10 +46,6 @@
 
     #middle {
         flex: 1 0 auto;
-    }
-
-    .subtext {
-        font-size: var(--small);
     }
 
     .defer {
