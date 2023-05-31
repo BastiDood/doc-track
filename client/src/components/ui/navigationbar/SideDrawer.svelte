@@ -1,9 +1,11 @@
 <script lang="ts">
     import active from 'svelte-spa-router/active';
     import { Office } from '~model/office.ts';
-    import { userOffices } from '../../../stores/UserStore.ts';
+    import { userOffices, userSession } from '../../../stores/UserStore.ts';
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { goToTrackingPage } from '../itemrow/util.ts';
+    import { checkPerms } from '../forms/permissions/util.ts';
+    import { Local } from '../../../../../model/src/permission.ts';
 
     import InboxIcon from '../../icons/DocumentDownload.svelte';
     import OutboxIcon from '../../icons/DocumentExport.svelte';
@@ -18,8 +20,6 @@
     import MainLogo from '../../icons/MainLogo.svelte';
     import OfficeSelect from '../OfficeSelect.svelte';
 
-    export let show = false;
-
     import { ButtonType, IconColor } from '../../types.ts';
     import QrScanner from '../QRScanner.svelte';
     import Modal from '../Modal.svelte';
@@ -27,6 +27,8 @@
     import Button from '../../ui/Button.svelte';
     import Search from '../../icons/Search.svelte';
     import Camera from '../../icons/Camera.svelte';
+
+    export let show = false;
 
     let trackingNumber: string | undefined;
     let selectedOffice: Office['id'] | null = null;
@@ -37,6 +39,10 @@
     function scanHandler({ detail }: CustomEvent<string>) {
         goToTrackingPage(detail);
     }
+
+    $: localPermission = selectedOffice === null
+        ? null
+        : $userSession?.local_perms[selectedOffice] ?? null;
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
@@ -56,11 +62,15 @@
                 <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
             </div>
         </header>
-        <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
-        <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
-        <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
+        {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
+            <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
+            <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
+            <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
+        {/if}
         <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
-        <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
+        {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
+            <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
+        {/if}
         <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
         <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
         <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>

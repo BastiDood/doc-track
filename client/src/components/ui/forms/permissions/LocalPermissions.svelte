@@ -11,6 +11,7 @@
     import { staffList } from '../../../../stores/StaffStore.ts';
     import { allOffices } from '../../../../stores/OfficeStore.ts';
     import { topToastMessage } from '../../../../stores/ToastStore.ts';
+    import { userSession } from '../../../../stores/UserStore.ts';
 
     import Button from '../../Button.svelte';
     import Edit from '../../../icons/Edit.svelte';
@@ -50,6 +51,7 @@
 
             // Reload the staffList store
             await staffList.reload?.();
+            await userSession.reload?.();
             topToastMessage.enqueue({
                 type: ToastType.Success,
                 title: 'Local Permission',

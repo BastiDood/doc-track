@@ -4,7 +4,7 @@
     import { assert } from '../../../../assert.ts';
 
     import { topToastMessage } from '../../../../stores/ToastStore.ts';
-    import { userList } from '../../../../stores/UserStore.ts';
+    import { userList, userSession } from '../../../../stores/UserStore.ts';
 
     import { User as Api } from '../../../../api/user.ts';
     import { IconColor, Events, ToastType } from '../../../types.ts';
@@ -46,6 +46,7 @@
                 permission: permsVal,
             });
             await userList.reload?.();
+            await userSession.reload?.();
             topToastMessage.enqueue({
                 type: ToastType.Success,
                 title: 'Global Permission',

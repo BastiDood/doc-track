@@ -7,8 +7,7 @@
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../../../stores/MetricStore.ts';
     import { allOffices } from '../../../stores/OfficeStore.ts';
-    import { currentUser } from '../../../stores/UserStore.ts';
-
+    import { currentUser, userSession } from '../../../stores/UserStore.ts';
     function selectSummary(user: Metrics, local: Metrics, global: Metrics, mode?: MetricsMode): Metrics {
         switch (mode) {
             case MetricsMode.User: return user;
@@ -25,9 +24,12 @@
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
     $: userName = $currentUser?.name ?? 'No user name.';
+
+    $: localPermission = (currentOffice ? $userSession?.local_perms[currentOffice] : null) ?? null;
+    $: globalPermission = $userSession?.global_perms ?? null;
 </script>
 
-{#if currentOffice === null}
+{#if localPermission === null || globalPermission === null}
     <p>You must select an office before accessing the Metrics page.</p>
 {:else}
     <h1>Metrics</h1>
@@ -41,7 +43,7 @@
     <main>
         <div class='header'>
             <h3>Report</h3>
-            <MetricsSelect bind:value={mode} />
+            <MetricsSelect bind:value={mode} {localPermission} {globalPermission} />
         </div>
         <table>
             <tr>
