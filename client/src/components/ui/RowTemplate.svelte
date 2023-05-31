@@ -38,6 +38,7 @@
         border-radius: var(--border-radius);
         gap: var(--spacing-normal);
         padding: var(--spacing-small);
+        background-color: white;
     }
 
     article > div {
