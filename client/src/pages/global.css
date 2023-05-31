@@ -10,7 +10,7 @@ body {
     background: var(--dashboard-bg);
     color: var(--text-color);
     font-family: 'Open Sans', sans-serif;
-    font-size: var(--normal);
+    font-size: clamp(var(--lower-font-size), 2vw, var(--upper-font-size));
     height: 100%;
     margin: 0;
     padding: 0;

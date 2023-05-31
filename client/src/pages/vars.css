@@ -13,7 +13,8 @@
     --success-bg: #2A9A0A;
 
     --text-color: #000000;
-    --font-size: 16px;
+    --lower-font-size: 12px;
+    --upper-font-size: 18px;
     --x-large: 2.5rem;
     --large: 1.5rem;
     --medium: 1.25rem;
