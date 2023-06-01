@@ -54,24 +54,12 @@
         border-width: 0px;
         background-color: var(--success-bg);
     }
-    .track.completed .is-complete:after {
-        border-color: white;
-        border-width: 0px 3px 3px 0;
-        width: 7px;
-        left: 11px;
-        opacity: 1;
-    }
-    .track p {
-        margin-top: 8px;
-        margin-bottom: 0;
-        line-height: 20px;
-    }
     .track.completed p{color: var(--text-color);}
     .track p{color: var(--offline-color);}
     .track::before {
         content: '';
         display: block;
-        height: 3px;
+        height: 0.5rem;
         width: 30vw;
         background-color: var(--pending-bg);
         top: 1.5rem;
@@ -81,5 +69,4 @@
     }
     .track:first-child:before{display: none;}
     .track.completed:before{background-color: var(--success-bg);}
-
   </style>
