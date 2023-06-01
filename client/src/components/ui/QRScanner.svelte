@@ -69,28 +69,32 @@
     onDestroy(stopCamera);
 </script>
 
-<video bind:this={videoElement}><track kind="captions"></video>
-{#await QrScanner.hasCamera()}
-    Loading cameras...
-{:then hasCamera}
-    {#if hasCamera}
-        <header>
-            {#if camStart}
-                <Button type={ButtonType.Secondary} on:click={stopCamera}>End Capture</Button>
-            {:else}
-                <Button on:click={startCamera}>Start Capture</Button>
-            {/if}
-        </header>
-    {:else}
-        <p>No cameras available.</p>
-    {/if}
-{/await}
-<header>
-    Upload a file with the QR code: <input type="file" accept="image/*" on:change={handleFileInput}>
-</header>
-<p> No valid QR code detected. </p>
+<div>
+    <video bind:this={videoElement}><track kind="captions"></video>
+    {#await QrScanner.hasCamera()}
+        Loading cameras...
+    {:then hasCamera}
+        {#if hasCamera}
+                {#if camStart}
+                    <p> No valid QR code detected. </p>
+                    <Button type={ButtonType.Secondary} on:click={stopCamera}>End Capture</Button>
+                {:else}
+                    <Button on:click={startCamera}>Start Capture</Button>
+                {/if}
+        {:else}
+            <p>No cameras available.</p>
+        {/if}
+    {/await}
+        <p>Upload a file with the QR code: </p>
+        <input type="file" accept="image/*" on:change={handleFileInput}>
+</div>
 
 <style>
+    div {
+        display: flex;
+        flex-direction: column;   
+    }
+    
     video {
         height: 400px;   
         border: var(--primary-color) var(--spacing-normal);
