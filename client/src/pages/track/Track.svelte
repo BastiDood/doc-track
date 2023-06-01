@@ -21,6 +21,7 @@
     import QrGenerator from '../../components/ui/qr/QrGenerator.svelte';
     import TrackingProgress from '../../components/ui/TrackingProgress.svelte';
     import DocumentDownload from '../../components/icons/DocumentDownload.svelte';
+    import { Office, Office } from '../../api/office.ts';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');
@@ -213,8 +214,10 @@
                                     <td>
                                         {#if target === null}
                                             End
+                                        {:else if (typeof $allOffices[target] !== 'undefined')}
+                                            {$allOffices[target]}    
                                         {:else}
-                                            {$allOffices[target]}
+                                            Unknown Office
                                         {/if}
                                     </td>
                                     <td>{creation.toLocaleString()}</td>
