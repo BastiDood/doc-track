@@ -17,8 +17,6 @@
 {/if}
 
 <style>
-    @import url('../../pages/vars.css');
-
     input {
         border: var(--primary-color) 2px solid;
         border-radius: var(--border-radius);
