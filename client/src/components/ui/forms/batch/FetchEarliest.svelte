@@ -6,6 +6,7 @@
 
     let printForm = false;
 </script>
+
 <div>
     {#if typeof $earliestBatch?.codes === 'undefined'}
         <p>No batch available.</p>
@@ -13,10 +14,10 @@
         <p>You successfully fetched the earliest batch as {$userSession?.email}</p>
         {#if printForm}
             <section>
-                {#each $earliestBatch.codes as code (code)}
+                {#each $earliestBatch.codes as url (url)}
                     <article>
-                        <QrGenerator url={code} />
-                        <div>{code}</div>
+                        <QrGenerator {url} />
+                        <div>{url}</div>
                     </article>
                 {/each}
             </section>
@@ -26,6 +27,7 @@
         {/if}
     {/if}
 </div>
+
 <style>
     div {
         display: flex;
