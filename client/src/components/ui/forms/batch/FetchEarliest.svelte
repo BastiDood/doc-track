@@ -1,16 +1,52 @@
 <script lang="ts">
     import { userSession } from '../../../../stores/UserStore.ts';
     import { earliestBatch } from '../../../../stores/BatchStore.ts';
-    import PrintQr from '../../qr/PrintQr.svelte';
-</script>
+    import Button from '../../Button.svelte';
+    import QrGenerator from '../../qr/QrGenerator.svelte';
 
-{#if typeof $earliestBatch?.codes === 'undefined'}
-    <p>No batch available.</p>
-{:else}
-    <p>You successfully fetched the earliest batch as {$userSession?.email}</p>
-    <ul>
-        {#each $earliestBatch.codes as code (code)}
-            <li><PrintQr trackingNumber={code} allowRedirect={false} /> {code}</li>   
-        {/each}
-    </ul>
-{/if}
+    let printForm = false;
+</script>
+<div>
+    {#if typeof $earliestBatch?.codes === 'undefined'}
+        <p>No batch available.</p>
+    {:else}
+        
+        <p>You successfully fetched the earliest batch as {$userSession?.email}</p>
+        
+        {#if printForm}
+            <section>
+                {#each $earliestBatch.codes as code (code)}
+                    <article>
+                        <QrGenerator url={code}/>
+                        <div>{code}</div>
+                    </article>
+                {/each}
+            </section>
+            <Button on:click={()=> window.print()}>Print Barcodes</Button>
+        {:else}
+            <Button on:click={()=> printForm = true}>Render Barcode Batch</Button>
+        {/if}
+    {/if}
+</div>
+<style>
+    div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    section {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 90svw;
+        justify-content: center;
+    }
+
+    article {
+        display: flex;
+        flex-direction: column;
+        border: 3px dotted black;
+        max-width: 148px;
+        margin: var(--spacing-tiny);
+        pad: var(--spacing-tiny);
+    }
+</style>
