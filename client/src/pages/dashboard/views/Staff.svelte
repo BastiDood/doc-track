@@ -74,7 +74,8 @@
             <!-- TODO: Put addStaff button here. -->
         </header>
         <Container ty={ContainerType.Enumeration}>
-            {#each $staffList.filter(s => s.permission !== 0) as { id, name, email, permission, picture } (id)}
+            {@const staff = $staffList.filter(s => s.permission !== 0)}
+            {#each staff as { id, name, email, permission, picture } (id)}
                 <PersonRowLocal
                     {id}
                     {email}
