@@ -1,6 +1,7 @@
 <script lang="ts">
     import { fade } from 'svelte/transition';
 
+    import { assert } from '../assert.ts';
     import { register } from './register.ts';
 
     import Button from '../components/ui/Button.svelte';
@@ -11,7 +12,6 @@
     import MainLogo from '../components/icons/MainLogo.svelte';
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
-    import { assert } from '../assert.ts';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
     import Toast from '../components/ui/Toast.svelte';
 
@@ -53,7 +53,7 @@
             <section>
                 <TextInput placeholder="Enter tracking number here..." label="Tracking Number:" name="track-number" bind:value={trackingNumber} />
                 <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
-                <a href={`/track?id=${trackingNumber}`}>
+                <a href="/track?id={trackingNumber}">
                     <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
                 </a>
             </section>
@@ -113,5 +113,4 @@
         justify-content: space-evenly;
         align-items: center;
     }
-
 </style>

@@ -23,7 +23,7 @@
             </section>
             <Button on:click={()=> window.print()}>Print Barcodes</Button>
         {:else}
-            <Button on:click={()=> { printForm = true; }}>Render Barcode Batch</Button>
+            <Button on:click={()=> (printForm = true)}>Render Barcode Batch</Button>
         {/if}
     {/if}
 </div>
