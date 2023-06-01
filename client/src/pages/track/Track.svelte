@@ -213,10 +213,10 @@
                                     <td>
                                         {#if target === null}
                                             End
-                                        {:else if (typeof $allOffices[target] !== 'undefined')}
-                                            {$allOffices[target]}    
-                                        {:else}
+                                        {:else if typeof $allOffices[target] === 'undefined'}
                                             Unknown Office
+                                        {:else}
+                                            {$allOffices[target]}
                                         {/if}
                                     </td>
                                     <td>{creation.toLocaleString()}</td>
