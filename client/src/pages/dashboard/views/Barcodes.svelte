@@ -81,14 +81,22 @@
                 
                 <main>
                     <table>
-                        <tr>
-                            <td>Unused</td>
-                            <td>{$barcodeSummary.pending}</td>
-                        </tr>
-                        <tr>
-                            <td>Used</td>
-                            <td>{$barcodeSummary.assigned}</td>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <td>Barcode Status</td>
+                                <td>Amount of Barcodes</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Unused</td>
+                                <td>{$barcodeSummary.pending}</td>
+                            </tr>
+                            <tr>
+                                <td>Used</td>
+                                <td>{$barcodeSummary.assigned}</td>
+                            </tr>
+                        </tbody>
                     </table>
                     <br />
                     

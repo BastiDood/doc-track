@@ -48,22 +48,30 @@
                 <MetricsSelect bind:value={mode} {localPermission} {globalPermission} />
             </div>
             <table>
-                <tr>
-                    <td>Registered</td>
-                    <td>{metric.Register ?? 0}</td>
-                </tr>
-                <tr>
-                    <td>Sent</td>
-                    <td>{metric.Send ?? 0}</td>
-                </tr>
-                <tr>
-                    <td>Received</td>
-                    <td>{metric.Receive ?? 0}</td>
-                </tr>
-                <tr>
-                    <td>Tagged as Terminal</td>
-                    <td>{metric.Terminate ?? 0}</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Amount of Logged Documents</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Registered</td>
+                        <td>{metric.Register ?? 0}</td>
+                    </tr>
+                    <tr>
+                        <td>Sent</td>
+                        <td>{metric.Send ?? 0}</td>
+                    </tr>
+                    <tr>
+                        <td>Received</td>
+                        <td>{metric.Receive ?? 0}</td>
+                    </tr>
+                    <tr>
+                        <td>Tagged as Terminal</td>
+                        <td>{metric.Terminate ?? 0}</td>
+                    </tr>
+                </tbody>
             </table>
         </article>
     </Container>
