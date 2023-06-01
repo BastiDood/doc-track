@@ -19,12 +19,12 @@
 
     .enumeration {
         background-color: var(--dashboard-sidedrawer);
-        box-shadow: var(--spacing-small) var(--spacing-small) var(--spacing-small) 0px var(--shadow-color);
+        box-shadow: var(--spacing-small) var(--spacing-small) var(--spacing-small) 0 var(--shadow-color);
     }
 
     .divider {
         border: var(--spacing-tiny) solid var(--secondary-color);
-        box-shadow: var(--spacing-normal) var(--spacing-normal) var(--spacing-small) 0px var(--shadow-color);
+        box-shadow: var(--spacing-normal) var(--spacing-normal) var(--spacing-small) 0 var(--shadow-color);
         background-color: white;
     }
 </style>

@@ -47,14 +47,14 @@
         border-radius: 50%;
         height: 3rem;
         width: 3rem;
-        border: 0px solid var(--dashboard-sidedrawer);
+        border: 0 solid var(--dashboard-sidedrawer);
         background-color: var(--pending-bg);
         margin: 0 auto;
     }
 
     .track.completed .is-complete{
         border-color: var(--success-bg);
-        border-width: 0px;
+        border-width: 0;
         background-color: var(--success-bg);
     }
 
@@ -73,7 +73,7 @@
         left: -15vw;
         z-index: 0;
     }
-    
+
     .track:first-child:before{display: none;}
 
     .track.completed:before{background-color: var(--success-bg);}

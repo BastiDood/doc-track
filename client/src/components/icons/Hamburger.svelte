@@ -34,7 +34,7 @@
     }
 
     .open #top {
-        transform: translate(6px, 0px) rotate(45deg);
+        transform: translate(6px, 0) rotate(45deg);
     }
 
     .open #middle {

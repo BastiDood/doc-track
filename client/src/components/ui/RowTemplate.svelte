@@ -28,8 +28,6 @@
 </article>
 
 <style>
-    @import url('../../pages/vars.css');
-
     article {
         display: flex;
         align-items: center;
