@@ -48,7 +48,7 @@
 
 <nav class:show on:click|stopPropagation on:keypress>
     <header id="controls">
-        {#if user !== undefined}
+        {#if typeof user !== 'undefined'}
             <div>Hello {user.name}!</div>
         {/if}
         {#if Object.getOwnPropertyNames($userOffices).length === 0}

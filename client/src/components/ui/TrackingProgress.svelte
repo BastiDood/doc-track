@@ -1,21 +1,21 @@
 <script lang="ts">
-    import { PaperTrail } from "~model/api";
-    import { Status } from "../../../../model/src/snapshot";
+    import { PaperTrail } from '~model/api';
+    import { Status } from '../../../../model/src/snapshot';
 
     export let trail: PaperTrail[];
 
-    const registerDate = trail.find(trail => trail.status == Status.Register)?.creation;
-    const inSystemDate = trail.find(trail => trail.status == Status.Send || trail.status == Status.Terminate)?.creation;
-    const terminateDate = trail.find(trail => trail.status == Status.Terminate)?.creation;
+    const registerDate = trail.find(trail => trail.status === Status.Register)?.creation;
+    const inSystemDate = trail.find(trail => trail.status === Status.Send || trail.status === Status.Terminate)?.creation;
+    const terminateDate = trail.find(trail => trail.status === Status.Terminate)?.creation;
 </script>
 <section>
     <div>
         <div class="row justify-content-between">
-            <div class="track" class:completed={registerDate||inSystemDate||terminateDate}>
+            <div class="track completed">
                 <span class="is-complete"></span>
                 <p>Registered<br><span>{registerDate?.toDateString() ?? 'Pending'}</span></p>
             </div>
-            <div class="track" class:completed={inSystemDate||terminateDate}>
+            <div class="track" class:completed={inSystemDate ?? terminateDate}>
                 <span class="is-complete"></span>
                 <p>In System<br><span>{inSystemDate?.toDateString() ?? 'Pending'}</span></p>
             </div>
