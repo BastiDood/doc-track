@@ -75,43 +75,42 @@
     {:then} 
         <h1>Barcodes</h1>
         <Container ty={ContainerType.Divider}>
-            {#if $barcodeSummary === null}
-                <p>No office is selected.</p>
-            {:else}
-                
-                <main>
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>Barcode Status</td>
-                                <td>Amount of Barcodes</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Unused</td>
-                                <td>{$barcodeSummary.pending}</td>
-                            </tr>
-                            <tr>
-                                <td>Used</td>
-                                <td>{$barcodeSummary.assigned}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br />
+            <section>
+                {#if $barcodeSummary === null}
+                    <p>No office is selected.</p>
+                {:else}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Barcode Status</td>
+                                    <td>Amount of Barcodes</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Unused</td>
+                                    <td>{$barcodeSummary.pending}</td>
+                                </tr>
+                                <tr>
+                                    <td>Used</td>
+                                    <td>{$barcodeSummary.assigned}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        
+                        <Button on:click={handleDownload}>
+                            <Download alt="download" color={IconColor.White} />Download Stickers
+                        </Button>
+                        <Button on:click={handleGenerate}>
+                            <Add alt="add" color={IconColor.White} /> Generate New Batch
+                        </Button>
                     
-                    <Button on:click={handleDownload}>
-                        <Download alt="download" color={IconColor.White} />Download Stickers
-                    </Button>
-                    <Button on:click={handleGenerate}>
-                        <Add alt="add" color={IconColor.White} /> Generate New Batch
-                    </Button>
-                
-                    <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
-                        <FetchEarliest />
-                    </Modal>
-                </main>
-            {/if}
+                        <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
+                            <FetchEarliest />
+                        </Modal>
+                {/if}
+            </section>
         </Container>
     {:catch err}
         <PageUnavailable {err} />
@@ -119,18 +118,9 @@
 {/if}
 
 <style>
-    main {
+    section {
         display: flex;
         flex-direction: column;
-        height: 100%;
-        place-items: center;
-    }
-
-    table {
-        border-collapse: collapse;
-    }
-
-    table, td {
-        border: 1px solid;
+        align-items: center;
     }
 </style>

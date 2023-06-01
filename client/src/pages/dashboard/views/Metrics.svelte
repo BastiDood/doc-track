@@ -92,11 +92,6 @@
     }
 
     table {
-        border-collapse: collapse;
         width: 50vw;
-    }
-
-    table, td {
-        border: 1px solid;
     }
 </style>

@@ -44,6 +44,28 @@ form:not(#logout) {
     row-gap: var(--spacing-small);
 }
 
+table {
+    border-style: hidden;
+    box-shadow: 0 0 0 var(--spacing-small) var(--shadow-color);
+    border-collapse: collapse;
+    border-radius: var(--border-radius);
+    margin: var(--spacing-normal);
+}
+
+td {
+    padding: var(--spacing-normal);
+    border: 0;
+}
+
+tr:nth-child(even) {
+    background-color: var(--hover-color);
+}
+
+thead {
+    background-color: var(--primary-color);
+    color: white;
+}
+
 dialog::backdrop {
     background: rgba(0, 0, 0, 0.3);
 }
@@ -67,3 +89,4 @@ dialog[open]::backdrop {
 .danger {
     background-color: var(--danger-color);
 }
+
