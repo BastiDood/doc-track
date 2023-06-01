@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { PaperTrail } from '~model/api';
+    import type { PaperTrail } from '~model/api';
     import { Status } from '../../../../model/src/snapshot';
 
     export let trail: PaperTrail[];
