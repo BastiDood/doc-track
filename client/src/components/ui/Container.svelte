@@ -3,6 +3,7 @@
 
     export let ty: ContainerType;
 </script>
+
 <section class={ty}>
     <slot></slot>
 </section>

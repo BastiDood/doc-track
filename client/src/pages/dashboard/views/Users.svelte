@@ -89,6 +89,7 @@
 {:catch err}
     <PageUnavailable {err} />
 {/await}
+
 {#if ctx === null} 
     <!-- Do not display anything! -->
 {:else if ctx.showEdit}
