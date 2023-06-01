@@ -20,15 +20,15 @@
 
 <section class="justify-content-between">
     <div class="completed">
-        <span class="is-complete"></span>
+        <p class="is-complete"></p>
         <p>Registered<br><span>{registerDate ?? 'Pending'}</span></p>
     </div>
     <div class:completed={inSystemDate ?? terminateDate}>
-        <span class="is-complete"></span>
+        <p class="is-complete"></p>
         <p>In System<br><span>{inSystemDate ?? 'Pending'}</span></p>
     </div>
     <div class:completed={terminateDate}>
-        <span class="is-complete"></span>
+        <p class="is-complete"></p>
         <p>Terminated<br><span>{terminateDate ?? 'Pending'}</span></p>
     </div>
 </section>
@@ -50,7 +50,6 @@
     }
 
     .is-complete {
-        display: block;
         position: relative;
         border-radius: 50%;
         height: 3rem;
