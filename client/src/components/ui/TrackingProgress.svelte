@@ -4,44 +4,52 @@
 
     export let trail: PaperTrail[];
 
-    $: registerDate = trail.find(trail => trail.status === Status.Register)?.creation;
-    $: inSystemDate = trail.find(trail => trail.status === Status.Send || trail.status === Status.Terminate)?.creation;
-    $: terminateDate = trail.find(trail => trail.status === Status.Terminate)?.creation;
+    $: registerDate = trail
+        .find(trail => trail.status === Status.Register)
+        ?.creation
+        .toDateString();
+    $: inSystemDate = trail
+        .find(trail => trail.status === Status.Send || trail.status === Status.Terminate)
+        ?.creation
+        .toDateString();
+    $: terminateDate = trail
+        .find(trail => trail.status === Status.Terminate)
+        ?.creation
+        .toDateString();
 </script>
-<section>
-    <div>
-        <div class="row justify-content-between">
-            <div class="track completed">
-                <span class="is-complete"></span>
-                <p>Registered<br><span>{registerDate?.toDateString() ?? 'Pending'}</span></p>
-            </div>
-            <div class="track" class:completed={inSystemDate ?? terminateDate}>
-                <span class="is-complete"></span>
-                <p>In System<br><span>{inSystemDate?.toDateString() ?? 'Pending'}</span></p>
-            </div>
-            <div class="track" class:completed={terminateDate}>
-                <span class="is-complete"></span>
-                <p>Terminated<br><span>{terminateDate?.toDateString() ?? 'Pending'}</span></p>
-            </div>
-        </div>
+
+<section class="justify-content-between">
+    <div class="completed">
+        <span class="is-complete"></span>
+        <p>Registered<br><span>{registerDate ?? 'Pending'}</span></p>
+    </div>
+    <div class:completed={inSystemDate ?? terminateDate}>
+        <span class="is-complete"></span>
+        <p>In System<br><span>{inSystemDate ?? 'Pending'}</span></p>
+    </div>
+    <div class:completed={terminateDate}>
+        <span class="is-complete"></span>
+        <p>Terminated<br><span>{terminateDate ?? 'Pending'}</span></p>
     </div>
 </section>
 
-
-  <style>
-    .row {
+<style>
+    section {
         display: flex;
-        flex-direction: row;
     }
 
-    .track{
+    div {
         text-align: center;
         width: 33vw;
         position: relative;
         display: block;
     }
 
-    .track .is-complete{
+    p {
+        color: var(--offline-color);
+    }
+
+    .is-complete {
         display: block;
         position: relative;
         border-radius: 50%;
@@ -52,17 +60,17 @@
         margin: 0 auto;
     }
 
-    .track.completed .is-complete{
+    .completed > .is-complete {
         border-color: var(--success-bg);
         border-width: 0;
         background-color: var(--success-bg);
     }
 
-    .track.completed p{color: var(--text-color);}
+    div.completed > p {
+        color: var(--text-color);
+    }
 
-    .track p{color: var(--offline-color);}
-    
-    .track::before {
+    div::before {
         content: '';
         display: block;
         height: 0.5rem;
@@ -74,7 +82,11 @@
         z-index: 0;
     }
 
-    .track:first-child:before{display: none;}
+    div:first-child::before{
+        display: none;
+    }
 
-    .track.completed:before{background-color: var(--success-bg);}
-  </style>
+    div.completed::before{
+        background-color: var(--success-bg);
+    }
+</style>
