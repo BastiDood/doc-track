@@ -21,7 +21,7 @@
     }
 
     interface Context {
-        id: Office['id'],
+        id?: Office['id'],
         mode: OfficeEvents,
     }
 
@@ -43,7 +43,7 @@
 {:then}
     <header>
         <h1>Offices</h1>
-        <Button on:click={() => (ctx = { id: 0, mode: OfficeEvents.Create })}>
+        <Button on:click={() => (ctx = { mode: OfficeEvents.Create })}>
             Create an Office
         </Button>
     </header>
@@ -68,7 +68,7 @@
     <Modal showModal title="Create New Office" on:close={resetContext}>
         <NewOffice on:done={resetContext} />
     </Modal>
-{:else if ctx.mode === OfficeEvents.Edit}
+{:else if ctx.mode === OfficeEvents.Edit || ctx.id}
     <Modal showModal title="Edit Office" on:close={resetContext}>
         <EditOffice currId={ctx.id} on:done={resetContext} />
     </Modal>

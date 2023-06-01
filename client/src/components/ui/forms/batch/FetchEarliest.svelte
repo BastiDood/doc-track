@@ -10,9 +10,7 @@
     {#if typeof $earliestBatch?.codes === 'undefined'}
         <p>No batch available.</p>
     {:else}
-        
         <p>You successfully fetched the earliest batch as {$userSession?.email}</p>
-        
         {#if printForm}
             <section>
                 {#each $earliestBatch.codes as code (code)}
@@ -24,7 +22,7 @@
             </section>
             <Button on:click={()=> window.print()}>Print Barcodes</Button>
         {:else}
-            <Button on:click={()=> printForm = true}>Render Barcode Batch</Button>
+            <Button on:click={()=> { printForm = true; }}>Render Barcode Batch</Button>
         {/if}
     {/if}
 </div>

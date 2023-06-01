@@ -33,12 +33,14 @@
         display: flex;
         flex-direction: row;
     }
+
     .track{
         text-align: center;
         width: 33vw;
         position: relative;
         display: block;
     }
+
     .track .is-complete{
         display: block;
         position: relative;
@@ -49,13 +51,17 @@
         background-color: var(--pending-bg);
         margin: 0 auto;
     }
+
     .track.completed .is-complete{
         border-color: var(--success-bg);
         border-width: 0px;
         background-color: var(--success-bg);
     }
+
     .track.completed p{color: var(--text-color);}
+
     .track p{color: var(--offline-color);}
+    
     .track::before {
         content: '';
         display: block;
@@ -67,6 +73,8 @@
         left: -15vw;
         z-index: 0;
     }
+    
     .track:first-child:before{display: none;}
+
     .track.completed:before{background-color: var(--success-bg);}
   </style>

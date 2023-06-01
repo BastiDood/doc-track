@@ -239,10 +239,6 @@
 </main>
 
 <style>
-    @import url('../global.css');
-
-    @import url('../vars.css');
-
     main {
         margin: var(--spacing-large);
         gap: var(--spacing-large);

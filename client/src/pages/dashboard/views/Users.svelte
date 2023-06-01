@@ -42,14 +42,14 @@
     <header>
         <h1>Users</h1>    
         {#if !showUnprev}
-            <Button on:click={() => showUnprev = true}>Show Unprivileged Users</Button>
+            <Button on:click={() => {showUnprev = true;}}>Show Unprivileged Users</Button>
         {/if}
     </header>
     <Container ty={ContainerType.Divider}>
         <h2>System Operators</h2>
         <Container ty={ContainerType.Enumeration}>
-            {@const admin = $userList.filter(u => u.permission > 0)}
-            {#each admin as { id, name, email, picture, permission } (id)}
+            {@const admins = $userList.filter(u => u.permission > 0)}
+            {#each admins as { id, name, email, picture, permission } (id)}
                 <PersonRowGlobal
                     {id}
                     {name}
@@ -68,8 +68,8 @@
         <Container ty={ContainerType.Divider}>
             <h2>Unprivileged Users</h2>
             <Container ty={ContainerType.Enumeration}>
-                {@const user = $userList.filter(u => u.permission === 0)}
-                {#each user as { id, name, email, picture, permission } (id)}
+                {@const users = $userList.filter(u => u.permission === 0)}
+                {#each users as { id, name, email, picture, permission } (id)}
                     <PersonRowGlobal
                         {id}
                         {name}
