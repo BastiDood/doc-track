@@ -3,7 +3,7 @@
     import Button from '../Button.svelte';
     import Modal from '../Modal.svelte';
     import QrGenerator from './QrGenerator.svelte';
-    import { ButtonType } from '../../types.ts';
+    import { ButtonType, IconColor } from '../../types.ts';
     import Close from '../../icons/Close.svelte';
     
     export let trackingNumber: string;
@@ -15,7 +15,7 @@
 </script>
 
 <Button on:click={() => (showPrintQr = true)}>
-    <DownloadButton alt="Download icon for printing QR codes" />
+    <DownloadButton color={IconColor.White} alt="Download icon for printing QR codes" />
     {#if showText}
         Print QR Code
     {/if}
