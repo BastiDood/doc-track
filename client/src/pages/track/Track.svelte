@@ -190,7 +190,7 @@
                     <a download type={mime} href="/api/document/download?doc={trackingNumber}">
                         <div class="column download">
                                 <DocumentDownload size={IconSize.Large} alt="Download the attached document."/>
-                                {trackingNumber}  
+                                Download File Attachment 
                         </div>
                     </a>
                 </Container>
