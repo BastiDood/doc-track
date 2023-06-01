@@ -4,9 +4,9 @@
 
     export let trail: PaperTrail[];
 
-    const registerDate = trail.find(trail => trail.status === Status.Register)?.creation;
-    const inSystemDate = trail.find(trail => trail.status === Status.Send || trail.status === Status.Terminate)?.creation;
-    const terminateDate = trail.find(trail => trail.status === Status.Terminate)?.creation;
+    $: registerDate = trail.find(trail => trail.status === Status.Register)?.creation;
+    $: inSystemDate = trail.find(trail => trail.status === Status.Send || trail.status === Status.Terminate)?.creation;
+    $: terminateDate = trail.find(trail => trail.status === Status.Terminate)?.creation;
 </script>
 <section>
     <div>
