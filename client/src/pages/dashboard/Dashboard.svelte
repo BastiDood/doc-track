@@ -74,8 +74,6 @@
 {/await}
 
 <style>
-    @import url('../vars.css');
-
     :global(body) {
         display: flex;
         flex-direction: column;

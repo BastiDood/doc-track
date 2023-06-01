@@ -140,7 +140,7 @@
                         <h3 class="removemargin">{category}</h3>
                     </div>
                 </section>
-                <TrackingProgress {trail}/>
+                <TrackingProgress {trail} />
                 <Container ty={ContainerType.Divider}>
                     <table>
                         <thead>

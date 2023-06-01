@@ -72,7 +72,7 @@
     <Container ty={ContainerType.Enumeration}>
         {#each active as { id, name } (id)}
             <RowTemplate on:overflowClick={() => (ctx = { cid: id, mode: ActiveMenu.Remove })}>
-                <DocumentBlank slot="icon" alt="Document Icon" size={IconSize.Large}/>
+                <DocumentBlank slot="icon" alt="Document Icon" size={IconSize.Large} />
                 {name}
             </RowTemplate>
         {:else}
@@ -85,7 +85,7 @@
     <Container ty={ContainerType.Enumeration}>
         {#each retire as { id, name} (id)}
             <RowTemplate on:overflowClick={() => (ctx = { cid: id, mode: ActiveMenu.Activate })}>
-                <DocumentBlank slot="icon" alt="Document Icon" size={IconSize.Large}/>
+                <DocumentBlank slot="icon" alt="Document Icon" size={IconSize.Large} />
                 {name}
             </RowTemplate>
         {:else}

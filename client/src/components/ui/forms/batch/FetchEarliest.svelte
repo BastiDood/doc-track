@@ -17,7 +17,7 @@
             <section>
                 {#each $earliestBatch.codes as code (code)}
                     <article>
-                        <QrGenerator url={code}/>
+                        <QrGenerator url={code} />
                         <div>{code}</div>
                     </article>
                 {/each}

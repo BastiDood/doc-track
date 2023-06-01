@@ -7,7 +7,7 @@
     const iconUrl = new URL('../../assets/icons/doctrack.svg', import.meta.url);
 </script>
 
-<img {alt} class:mini={mini} src={iconUrl.pathname} on:click on:keydown />
+<img {alt} class:mini src={iconUrl.pathname} on:click on:keydown />
 
 <style>
     .mini {

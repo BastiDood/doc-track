@@ -72,7 +72,7 @@
     <header>
         <h1>Outbox</h1>    
         <Button on:click={openCreateDocument.bind(null)}>
-            <DocumentAdd alt="Create document" color={IconColor.White}/>
+            <DocumentAdd alt="Create document" color={IconColor.White} />
             Register and Stage a New Document
         </Button>
     </header>

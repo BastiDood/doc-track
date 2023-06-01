@@ -54,7 +54,7 @@
     <header>
         <h1>Invitations</h1>
         <Button on:click={openCreateInvite.bind(null)}>
-            <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
+            <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" /> Invite User
         </Button>
     </header>
     {#await inviteReady}

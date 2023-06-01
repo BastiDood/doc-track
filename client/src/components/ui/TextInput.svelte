@@ -7,7 +7,7 @@
     export let value: string | number = '';
 </script>
 
-{#if (label)}
+{#if label}
     <label>
         {label}
         <input type="text" {placeholder} {name} {disabled} {required} bind:value />

@@ -103,23 +103,18 @@
     {@const bytes = file?.size ?? 0}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
-        <br />
         {#if id !== null}
             <div><QrGenerator url="/track?id={id}" /></div>
         {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
-        <br />
         Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
-        <br />
         <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark:" required={false}></TextInput> 
-        <br />
         <input type="file" multiple={false} required bind:files={fileList} />
         {#if typeof file !== 'undefined'}
             {convertToScale(file.size)}
         {/if}
-        <br />
         <Button submit disabled={bytes >= MAX_FILE_SIZE}>
-            <DocumentAdd alt="Create document" color={IconColor.White}/>
+            <DocumentAdd alt="Create document" color={IconColor.White} />
             Create Document
         </Button>
     </form>

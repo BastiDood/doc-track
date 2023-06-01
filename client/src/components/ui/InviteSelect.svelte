@@ -9,7 +9,6 @@
         <label>
             <input type="radio" name="selected-invite" bind:group={value} value={email}>{email} ({permission.toString(2).padStart(9, '0')})
         </label>
-        <br />
     {/each}
 </section>
 

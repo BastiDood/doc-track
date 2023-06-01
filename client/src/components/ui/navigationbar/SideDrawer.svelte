@@ -4,7 +4,7 @@
     import { userOffices, userSession } from '../../../stores/UserStore.ts';
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { goToTrackingPage } from '../itemrow/util.ts';
-    import { User } from '~model/user.ts';
+    import type { User } from '~model/user.ts';
     import { checkPerms } from '../forms/permissions/util.ts';
     import { Local } from '../../../../../model/src/permission.ts';
 
@@ -100,6 +100,11 @@
         flex-direction: column;
     }
 
+    form {
+        margin: 0;
+        padding: 0;
+    }
+    
     header > div {
         display: flex;
         justify-content: center;

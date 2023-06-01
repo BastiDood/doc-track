@@ -90,8 +90,7 @@
             <input type="checkbox" name="perms" value={Global.ViewMetrics} />
             View Metrics
         </label>
-        
-        <Button submit><Checkmark alt="Invite User" color={IconColor.White}/>Invite User</Button> 
+        <Button submit><Checkmark alt="Invite User" color={IconColor.White} />Invite User</Button> 
     </form>
 </article>
 

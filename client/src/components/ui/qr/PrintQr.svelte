@@ -31,7 +31,7 @@
     {/if}
     <div id="bottom">
         <Button type={ButtonType.Primary} on:click={() => window.print()}>Print</Button>
-        <Button type={ButtonType.Danger} on:click={() => (showPrintQr = false)}><Close alt="Close" color={IconColor.White}/> Close</Button>
+        <Button type={ButtonType.Danger} on:click={() => (showPrintQr = false)}><Close alt="Close" color={IconColor.White} /> Close</Button>
     </div>
 </Modal>
 

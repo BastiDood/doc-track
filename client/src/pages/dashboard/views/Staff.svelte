@@ -70,8 +70,8 @@
         <p>Loading staff page...</p>
     {:then}
         <header>
-        <h1>Staffs of {officeName}</h1>
-        <!-- TODO: Put addStaff button here. -->
+            <h1>Staffs of {officeName}</h1>
+            <!-- TODO: Put addStaff button here. -->
         </header>
         <Container ty={ContainerType.Enumeration}>
             {#each $staffList.filter(s => s.permission !== 0) as { id, name, email, permission, picture } (id)}

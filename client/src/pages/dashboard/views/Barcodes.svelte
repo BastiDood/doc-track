@@ -79,36 +79,33 @@
                 {#if $barcodeSummary === null}
                     <p>No office is selected.</p>
                 {:else}
-                        <table>
-                            <thead>
-                                <tr>
-                                    <td>Barcode Status</td>
-                                    <td>Amount of Barcodes</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Unused</td>
-                                    <td>{$barcodeSummary.pending}</td>
-                                </tr>
-                                <tr>
-                                    <td>Used</td>
-                                    <td>{$barcodeSummary.assigned}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br />
-                        
-                        <Button on:click={handleDownload}>
-                            <Download alt="download" color={IconColor.White} />Download Stickers
-                        </Button>
-                        <Button on:click={handleGenerate}>
-                            <Add alt="add" color={IconColor.White} /> Generate New Batch
-                        </Button>
-                    
-                        <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
-                            <FetchEarliest />
-                        </Modal>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Barcode Status</td>
+                                <td>Amount of Barcodes</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Unused</td>
+                                <td>{$barcodeSummary.pending}</td>
+                            </tr>
+                            <tr>
+                                <td>Used</td>
+                                <td>{$barcodeSummary.assigned}</td>
+                            </tr>
+                        </tbody>
+                    </table>    
+                    <Button on:click={handleDownload}>
+                        <Download alt="download" color={IconColor.White} />Download Stickers
+                    </Button>
+                    <Button on:click={handleGenerate}>
+                        <Add alt="add" color={IconColor.White} /> Generate New Batch
+                    </Button>
+                    <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
+                        <FetchEarliest />
+                    </Modal>
                 {/if}
             </section>
         </Container>

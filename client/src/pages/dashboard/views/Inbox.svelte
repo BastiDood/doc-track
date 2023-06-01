@@ -78,7 +78,7 @@
     <header>
         <h1>Inbox</h1>
         <Button on:click={openCreateDocument.bind(null)}>
-            <DocumentAdd alt="Create document" color={IconColor.White}/>
+            <DocumentAdd alt="Create document" color={IconColor.White} />
             Register and Stage a New Document
         </Button>
     </header>
@@ -95,8 +95,8 @@
                         {category}
                         {title}
                         {creation}
-                        iconSize = {IconSize.Large}
-                        on:overflowClick = {setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
+                        iconSize={IconSize.Large}
+                        on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
                     />
                 {:else}
                     <p>Your office does not have any documents pending to be accepted.</p>

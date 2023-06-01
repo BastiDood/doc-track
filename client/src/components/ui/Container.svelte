@@ -3,13 +3,11 @@
 
     export let ty: ContainerType;
 </script>
-<section class="{ty}">
+<section class={ty}>
     <slot></slot>
 </section>
 
 <style>
-    @import url('../../pages/vars.css');
-
     section {
         margin: var(--spacing-small);
         padding: var(--spacing-large);

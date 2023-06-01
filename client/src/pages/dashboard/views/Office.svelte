@@ -50,7 +50,7 @@
     <Container ty={ContainerType.Enumeration}>
         {#each Object.entries($allOffices) as [id, name] (id)} 
             <RowTemplate on:overflowClick={() => (ctx = { id: Number(id), mode: OfficeEvents.Edit })}>
-                <Events slot="icon" alt="Events Icon" size={IconSize.Large}/>
+                <Events slot="icon" alt="Events Icon" size={IconSize.Large} />
                 {name}
                 <Edit slot="overflow" alt="Edit Icon" size={IconSize.Large} />
             </RowTemplate>
