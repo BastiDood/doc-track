@@ -10,6 +10,7 @@
     import Modal from '../../../components/ui/Modal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import Container from '../../../components/ui/Container.svelte';
+    import Button from '../../../components/ui/Button.svelte';
 
     interface Context {
         id: User['id'],
@@ -18,6 +19,7 @@
     }
 
     let ctx = null as Context | null;
+    let showUnprev = false;
 
     function openEdit(id: User['id'], permissions: User['permission']) {
         ctx = { id: id, permissions: permissions, showEdit: true };
@@ -37,22 +39,53 @@
 {#await usersReady}
     <p>Loading users page...</p>
 {:then}
-    <h1>Users</h1>
-    <Container ty={ContainerType.Enumeration}>
-        {#each $userList as { id, name, email, picture, permission } (id)}
-            <PersonRowGlobal
-                {id}
-                {name}
-                {email}
-                {picture}
-                {permission}
-                iconSize={IconSize.Large} 
-                on:overflowClick={openEdit.bind(null, id, permission)} 
-            />
-        {:else}
-            <p>No users exist.</p>
-        {/each}
+    <header>
+        <h1>Users</h1>    
+        {#if !showUnprev}
+            <Button on:click={() => showUnprev = true}>Show Unprivileged Users</Button>
+        {/if}
+    </header>
+    <Container ty={ContainerType.Divider}>
+        <h2>System Operators</h2>
+        <Container ty={ContainerType.Enumeration}>
+            {@const admin = $userList.filter(u => u.permission > 0)}
+            {#each admin as { id, name, email, picture, permission } (id)}
+                <PersonRowGlobal
+                    {id}
+                    {name}
+                    {email}
+                    {picture}
+                    {permission}
+                    iconSize={IconSize.Large} 
+                    on:overflowClick={openEdit.bind(null, id, permission)} 
+                />
+            {:else}
+                <p>No users exist.</p>
+            {/each}
+        </Container>
     </Container>
+    {#if showUnprev}
+        <Container ty={ContainerType.Divider}>
+            <h2>Unprivileged Users</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {@const user = $userList.filter(u => u.permission === 0)}
+                {#each user as { id, name, email, picture, permission } (id)}
+                    <PersonRowGlobal
+                        {id}
+                        {name}
+                        {email}
+                        {picture}
+                        {permission}
+                        iconSize={IconSize.Large} 
+                        on:overflowClick={openEdit.bind(null, id, permission)} 
+                    />
+                {:else}
+                    <p>No users exist.</p>
+                {/each}
+            </Container>
+        </Container>
+    {/if}
+    
 {:catch err}
     <PageUnavailable {err} />
 {/await}
@@ -68,4 +101,10 @@
     </Modal>
 {/if}
 
-
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
