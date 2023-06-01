@@ -2,7 +2,7 @@
     import { dashboardState } from '../../../stores/DashboardState';
     import { inviteList } from '../../../stores/InviteStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
-    import { IconColor, IconSize } from '../../../components/types.ts';
+    import { IconColor, IconSize, ContainerType } from '../../../components/types.ts';
     import { assert } from '../../../assert.ts';
     
 
@@ -14,7 +14,7 @@
     import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
     import { Invitation } from '~model/invitation.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
-    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import Container from '../../../components/ui/Container.svelte';
 
     enum ActiveMenu {
         CreateInvite,
@@ -57,11 +57,10 @@
             <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
         </Button>
     </header>
-
     {#await inviteReady}
         <p>Loading invite list.</p>
     {:then}
-        <EnumerationContainer>
+        <Container ty={ContainerType.Enumeration}>
             {#each $inviteList as { email, permission, creation } (email)}
                 <InviteRow
                     email={email}
@@ -74,7 +73,7 @@
             {:else}
                 <p>Your office is currently not inviting anyone</p>
             {/each}
-        </EnumerationContainer> 
+        </Container> 
     {:catch err}
         <PageUnavailable {err} />
     {/await}

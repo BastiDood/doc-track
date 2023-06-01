@@ -11,9 +11,9 @@
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
     import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
     import Button from '../../../components/ui/Button.svelte';
-    import { IconSize } from '../../../components/types';
+    import { IconSize, ContainerType } from '../../../components/types';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
-    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import Container from '../../../components/ui/Container.svelte';
 
     enum OfficeEvents {
         Create,
@@ -47,7 +47,7 @@
             Create an Office
         </Button>
     </header>
-    <EnumerationContainer>
+    <Container ty={ContainerType.Enumeration}>
         {#each Object.entries($allOffices) as [id, name] (id)} 
             <RowTemplate on:overflowClick={() => (ctx = { id: Number(id), mode: OfficeEvents.Edit })}>
                 <Events slot="icon" alt="Events Icon" size={IconSize.Large}/>
@@ -57,7 +57,7 @@
         {:else}
             <p>No offices exist.</p>
         {/each}
-    </EnumerationContainer>
+    </Container>
 {:catch err}
     <PageUnavailable {err} />
 {/await}

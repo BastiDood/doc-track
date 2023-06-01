@@ -7,14 +7,14 @@
     import { User } from '~model/user';
     import { assert } from '../../../assert';
 
-    import { IconSize } from '../../../components/types';
+    import { IconSize, ContainerType } from '../../../components/types';
     import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
-    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import Container from '../../../components/ui/Container.svelte';
 
     enum ActiveMenu {
         EditStaff,
@@ -73,7 +73,7 @@
         <h1>Staffs of {officeName}</h1>
         <!-- TODO: Put addStaff button here. -->
         </header>
-        <EnumerationContainer>
+        <Container ty={ContainerType.Enumeration}>
             {#each $staffList.filter(s => s.permission !== 0) as { id, name, email, permission, picture } (id)}
                 <PersonRowLocal
                     {id}
@@ -88,7 +88,7 @@
             {:else}
                 <p>No staff members exist in "{officeName}".</p>
             {/each}
-        </EnumerationContainer>
+        </Container>
     {:catch err}
         <PageUnavailable {err} />
     {/await}

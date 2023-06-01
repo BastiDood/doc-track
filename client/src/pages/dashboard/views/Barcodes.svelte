@@ -14,8 +14,9 @@
     import Add from '../../../components/icons/Add.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import { IconColor, ToastType } from '../../../components/types.ts';
+    import { ContainerType, IconColor, ToastType } from '../../../components/types.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import Container from '../../../components/ui/Container.svelte';
 
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
@@ -72,35 +73,38 @@
     {#await barcodeSumReady}
         <p>Loading barcode metrics...</p>
     {:then} 
-        {#if $barcodeSummary === null}
-            <p>No office is selected.</p>
-        {:else}
-            <h1>Barcodes</h1>
-            <main>
-                <table>
-                    <tr>
-                        <td>Unused</td>
-                        <td>{$barcodeSummary.pending}</td>
-                    </tr>
-                    <tr>
-                        <td>Used</td>
-                        <td>{$barcodeSummary.assigned}</td>
-                    </tr>
-                </table>
-                <br />
+        <h1>Barcodes</h1>
+        <Container ty={ContainerType.Divider}>
+            {#if $barcodeSummary === null}
+                <p>No office is selected.</p>
+            {:else}
                 
-                <Button on:click={handleDownload}>
-                    <Download alt="download" color={IconColor.White} />Download Stickers
-                </Button>
-                <Button on:click={handleGenerate}>
-                    <Add alt="add" color={IconColor.White} /> Generate New Batch
-                </Button>
-            
-                <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
-                    <FetchEarliest />
-                </Modal>
-            </main>
-        {/if}
+                <main>
+                    <table>
+                        <tr>
+                            <td>Unused</td>
+                            <td>{$barcodeSummary.pending}</td>
+                        </tr>
+                        <tr>
+                            <td>Used</td>
+                            <td>{$barcodeSummary.assigned}</td>
+                        </tr>
+                    </table>
+                    <br />
+                    
+                    <Button on:click={handleDownload}>
+                        <Download alt="download" color={IconColor.White} />Download Stickers
+                    </Button>
+                    <Button on:click={handleGenerate}>
+                        <Add alt="add" color={IconColor.White} /> Generate New Batch
+                    </Button>
+                
+                    <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
+                        <FetchEarliest />
+                    </Modal>
+                </main>
+            {/if}
+        </Container>
     {:catch err}
         <PageUnavailable {err} />
     {/await}

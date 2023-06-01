@@ -4,9 +4,9 @@
     import { assert } from '../../../assert.ts';
     import { Document as Api } from '../../../api/document.ts';
     import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
-    import { IconSize } from '../../../components/types.ts';
+    import { IconSize, ContainerType } from '../../../components/types.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
-    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import Container from '../../../components/ui/Container.svelte';
 
     $: ({ currentOffice } = $dashboardState);
 
@@ -27,7 +27,7 @@
     {#await loadDossier(currentOffice)}
         <p>Loading registered documents.</p>
     {:then reg}
-        <EnumerationContainer>
+        <Container ty={ContainerType.Enumeration}>
             {#each reg as entry (entry.doc)}
                 <RegisterRow 
                     {...entry}
@@ -37,7 +37,7 @@
             {:else}
                 <p>No documents were created in this office yet.</p>
             {/each}
-        </EnumerationContainer> 
+        </Container> 
     {:catch err}
         <PageUnavailable {err} />
     {/await}

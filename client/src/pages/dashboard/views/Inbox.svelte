@@ -8,7 +8,7 @@
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
-    import { IconSize, ToastType, IconColor } from '../../../components/types';
+    import { IconSize, ToastType, IconColor, ContainerType } from '../../../components/types';
     import { Document } from '../../../../../model/src/document.ts';
     import { Status } from '../../../../../model/src/snapshot.ts';
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
@@ -18,7 +18,7 @@
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
-    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import Container from '../../../components/ui/Container.svelte';
     import DocumentAdd from '../../../components/icons/DocumentAdd.svelte';
 
     enum ActiveMenu {
@@ -86,37 +86,41 @@
     {#await Promise.all([inboxReady, deferReady])}
         <p>Loading inbox...</p>
     {:then}
-        <h2>Pending Acceptance</h2>
-        <EnumerationContainer>
-            {#each $documentInbox.pending as { creation, category, title, doc } (doc)}
-                <AcceptRow
-                    {doc}
-                    {category}
-                    {title}
-                    {creation}
-                    iconSize = {IconSize.Large}
-                    on:overflowClick = {setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
-                />
-            {:else}
-                <p>Your office does not have any documents pending to be accepted.</p>
-            {/each}
-        </EnumerationContainer>
+        <Container ty={ContainerType.Divider}>
+            <h2>Pending Acceptance</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {#each $documentInbox.pending as { creation, category, title, doc } (doc)}
+                    <AcceptRow
+                        {doc}
+                        {category}
+                        {title}
+                        {creation}
+                        iconSize = {IconSize.Large}
+                        on:overflowClick = {setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
+                    />
+                {:else}
+                    <p>Your office does not have any documents pending to be accepted.</p>
+                {/each}
+            </Container>
+        </Container>
 
-        <h2>Office Inbox</h2>
-        <EnumerationContainer>
-            {#each $documentInbox.accept as { creation, category, title, doc } (doc)}
-                <InboxRow
-                    {doc}
-                    {category}
-                    {title}
-                    {creation}
-                    iconSize={IconSize.Large}
-                    on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
-                />
-            {:else}
-                <p>Your office does not have any documents in its inbox.</p>
-            {/each}
-        </EnumerationContainer>
+        <Container ty={ContainerType.Divider}>
+            <h2>Office Inbox</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {#each $documentInbox.accept as { creation, category, title, doc } (doc)}
+                    <InboxRow
+                        {doc}
+                        {category}
+                        {title}
+                        {creation}
+                        iconSize={IconSize.Large}
+                        on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
+                    />
+                {:else}
+                    <p>Your office does not have any documents in its inbox.</p>
+                {/each}
+            </Container>
+        </Container>
     {:catch err}
         <PageUnavailable {err} />
     {/await}

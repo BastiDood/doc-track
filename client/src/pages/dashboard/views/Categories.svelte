@@ -4,7 +4,7 @@
     import { categoryList } from '../../../stores/CategoryStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { Category as Api } from '../../../api/category.ts';
-    import { IconSize, ToastType } from '../../../components/types.ts';
+    import { ContainerType, IconSize, ToastType } from '../../../components/types.ts';
 
     import Button from '../../../components/ui/Button.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
@@ -14,7 +14,7 @@
     import RemoveCategoryContext from '../../../components/ui/contextdrawer/RemoveCategoryContext.svelte';
     import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
     import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
-    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import Container from '../../../components/ui/Container.svelte';
 
     enum ActiveMenu {
         Create,
@@ -67,9 +67,9 @@
     <h1>Categories</h1>
     <Button on:click={() => (ctx = { cid: 0, mode: ActiveMenu.Create })}>Create Category</Button>
 </header>
-<section>
+<Container ty={ContainerType.Divider}>
     <h2>Active Categories</h2>
-    <EnumerationContainer>
+    <Container ty={ContainerType.Enumeration}>
         {#each active as { id, name } (id)}
             <RowTemplate on:overflowClick={() => (ctx = { cid: id, mode: ActiveMenu.Remove })}>
                 <DocumentBlank slot="icon" alt="Document Icon" size={IconSize.Large}/>
@@ -78,11 +78,11 @@
         {:else}
             <p>No active categories.</p>
         {/each}
-    </EnumerationContainer>
-</section>
-<section>
+    </Container>
+</Container>
+<Container ty={ContainerType.Divider}>
     <h2>Retired Categories</h2>
-    <EnumerationContainer>
+    <Container ty={ContainerType.Enumeration}>
         {#each retire as { id, name} (id)}
             <RowTemplate on:overflowClick={() => (ctx = { cid: id, mode: ActiveMenu.Activate })}>
                 <DocumentBlank slot="icon" alt="Document Icon" size={IconSize.Large}/>
@@ -91,8 +91,8 @@
         {:else}
             <p>No retired categories.</p>
         {/each}
-    </EnumerationContainer>
-</section>
+    </Container>
+</Container>
 
 {#if ctx === null}
     <!-- Don't render anything! Intentionally left blank to make type inference happy. -->

@@ -4,12 +4,12 @@
     import { User } from '~model/user';
     import { assert } from '../../../assert';
     
-    import { IconSize } from '../../../components/types';
+    import { IconSize, ContainerType } from '../../../components/types';
     import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
-    import EnumerationContainer from '../../../components/ui/EnumerationContainer.svelte';
+    import Container from '../../../components/ui/Container.svelte';
 
     interface Context {
         id: User['id'],
@@ -38,7 +38,7 @@
     <p>Loading users page...</p>
 {:then}
     <h1>Users</h1>
-    <EnumerationContainer>
+    <Container ty={ContainerType.Enumeration}>
         {#each $userList as { id, name, email, picture, permission } (id)}
             <PersonRowGlobal
                 {id}
@@ -52,7 +52,7 @@
         {:else}
             <p>No users exist.</p>
         {/each}
-    </EnumerationContainer>
+    </Container>
 {:catch err}
     <PageUnavailable {err} />
 {/await}
