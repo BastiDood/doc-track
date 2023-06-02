@@ -35,12 +35,12 @@
 
 <style>
     section {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
     }
 
     div {
         text-align: center;
-        width: 33vw;
         position: relative;
         display: block;
     }
