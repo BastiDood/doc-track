@@ -3,24 +3,27 @@
     import { User } from '~model/user.ts';
 
     import { assert } from '../../../assert.ts';
-    import { IconSize, ContainerType } from '../../../components/types.ts';
+    import { IconColor, IconSize, ContainerType } from '../../../components/types.ts';
 
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { staffList } from '../../../stores/StaffStore.ts';
     import { allOffices } from '../../../stores/OfficeStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
 
+    import Button from '../../../components/ui/Button.svelte';
     import Container from '../../../components/ui/Container.svelte';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
+    import PersonDelete from '../../../components/icons/PersonDelete.svelte';
     import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
 
     enum ActiveMenu {
         EditStaff,
-        RemoveStaff
+        RemoveStaff,
     }
 
     interface Context {
@@ -34,7 +37,6 @@
 
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
-
 
     let ctx = null as Context | null;
 
@@ -73,7 +75,10 @@
     {:then}
         <header>
             <h1>Staffs of {officeName}</h1>
-            <!-- TODO: Put addStaff button here. -->
+            <Button>
+                <PersonAdd color={IconColor.White} alt="icon for adding an existing user"></PersonAdd>
+                Add Existing User
+            </Button>
         </header>
         <Container ty={ContainerType.Enumeration}>
             {@const staff = $staffList.filter(s => s.permission !== 0)}
