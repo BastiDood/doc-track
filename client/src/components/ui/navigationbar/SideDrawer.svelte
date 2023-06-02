@@ -3,14 +3,14 @@
 
     import type { Office } from '~model/office.ts';
     import type { User } from '~model/user.ts';
-    import { Local } from '../../../../../model/src/permission.ts';
+    import { checkAnyPerms } from '../forms/permissions/util.ts';
+    import { Local, Global } from '../../../../../model/src/permission.ts';
 
     import { userOffices, userSession } from '../../../stores/UserStore.ts';
     import { dashboardState } from '../../../stores/DashboardState.ts';
 
     import { ButtonType, IconColor } from '../../types.ts';
     import { goToTrackingPage } from '../itemrow/util.ts';
-    import { checkPerms } from '../forms/permissions/util.ts';
 
     import AdminIcon from '../../icons/PersonInfo.svelte';
     import BarcodesIcon from '../../icons/Barcode.svelte';
@@ -46,6 +46,7 @@
     $: localPermission = selectedOffice === null
         ? null
         : $userSession?.local_perms[selectedOffice] ?? null;
+    $: globalPermission = $userSession?.global_perms ?? null;
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
@@ -66,20 +67,40 @@
             <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
         </header>
         <section>
-            {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
-                <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
-                <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
-                <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
+            {#if localPermission}
+                {#if checkAnyPerms(localPermission, Local.ViewInbox)}
+                    <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
+                    <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
+                    <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
+                {/if}
+                <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
+                {#if checkAnyPerms(localPermission, Local.ViewBatch)}
+                    <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
+                {/if}
+                {#if checkAnyPerms(localPermission, Local.AddInvite
+                    | Local.RevokeInvite)}
+                    <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
+                {/if}
+                {#if checkAnyPerms(localPermission, Local.AddStaff
+                    | Local.RemoveStaff
+                    | Local.UpdateStaff)}
+                    <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
+                {/if}
             {/if}
-            <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
-            {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
-                <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
+            {#if globalPermission}
+                {#if checkAnyPerms(globalPermission, Global.UpdateUser)}
+                    <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
+                {/if}
+                {#if checkAnyPerms(globalPermission, Global.CreateCategory
+                    | Global.UpdateCategory
+                    | Global.DeleteCategory
+                    | Global.ActivateCategory)}
+                    <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
+                {/if}
+                {#if checkAnyPerms(globalPermission, Global.CreateOffice | Global.UpdateOffice)}
+                    <a href="#/offices" use:active><EventsIcon alt="Go to Offices" />Offices</a>
+                {/if}
             {/if}
-            <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
-            <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
-            <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
-            <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
-            <a href="#/offices" use:active><EventsIcon alt="Go to Offices" />Offices</a>
         </section>
     </main>
     <form id="logout" method="POST" action="/auth/logout">
