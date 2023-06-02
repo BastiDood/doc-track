@@ -1,18 +1,19 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+
+    import type { Staff } from '~model/staff.ts';
+    import type { User } from '~model/user.ts';
+
     import { assert } from '../../../../assert.ts';
     import { Staff as Api } from '../../../../api/staff.ts';
-    import { Staff } from '~model/staff.ts';
-    import { User } from '~model/user.ts';
-    
+    import { ButtonType, Events, IconColor, ToastType } from '../../../types.ts';
+
     import { staffList } from '../../../../stores/StaffStore.ts';
     import { allOffices } from '../../../../stores/OfficeStore.ts';
     import { topToastMessage } from '../../../../stores/ToastStore.ts';
-    
+
     import Button from '../../Button.svelte';
     import PersonDelete from '../../../icons/PersonDelete.svelte';
-    import { ButtonType, Events, IconColor, ToastType } from '../../../types.ts';
-    
 
     export let id: Staff['user_id'];
     export let office: Staff['office'];
@@ -39,8 +40,8 @@
     }
 </script>
 
-
 <p>Are you sure you want to remove {email} from {$allOffices[office]}?</p>
 <Button type={ButtonType.Danger} on:click={handleRemove}>
-    <PersonDelete color={IconColor.White} alt="Remove Staff" on:click/>Remove Staff
+    <PersonDelete color={IconColor.White} alt="Remove Staff" on:click />
+    Remove Staff
 </Button>

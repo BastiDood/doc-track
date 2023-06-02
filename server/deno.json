@@ -4,13 +4,13 @@
         "strict": true
     },
     "tasks": {
-        "init": "initdb -D data -U postgres -W",
+        "init": "initdb -D data -U postgres",
         "db": "postgres -D data",
-        "template": "psql -U postgres -W -f db/init.sql -1 template1",
-        "create": "createdb -U postgres -W doctrack",
-        "drop": "dropdb -U postgres -W doctrack",
-        "bootstrap": "psql -U postgres -W -f db/bootstrap.sql -1 doctrack",
-        "shell": "psql -U postgres -W doctrack",
+        "template": "psql -U postgres -f db/init.sql -1 template1",
+        "create": "createdb -U postgres doctrack",
+        "drop": "dropdb -U postgres doctrack",
+        "bootstrap": "psql -U postgres -f db/bootstrap.sql -1 doctrack",
+        "shell": "psql -U postgres doctrack",
         "test": "deno test --allow-env --allow-net",
         "start": "deno run --allow-env --allow-net --allow-read src/main.ts",
         "vapid": "deno run scripts/vapid.ts"

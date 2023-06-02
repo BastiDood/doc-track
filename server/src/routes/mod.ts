@@ -20,7 +20,7 @@ import {
     handleGetDossier,
     handleGetInbox,
     handleGetPaperTrail,
-    handleGetOutbox
+    handleGetOutbox,
 } from './api/document.ts';
 import { handleAddInvitation, handleRevokeInvitation, handleGetInvitedList } from './api/invite.ts';
 import {
