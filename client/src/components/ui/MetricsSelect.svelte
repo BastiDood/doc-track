@@ -1,6 +1,6 @@
 <script lang="ts">
     import { MetricsMode } from '../types.ts';
-    import { checkAllPerms } from './forms/permissions/util.ts';
+    import { checkIfAllPerms } from './forms/permissions/util.ts';
     import { Global, Local } from '../../../../model/src/permission.ts';
     import { User } from '~model/user.ts';
     import { Staff } from '~model/staff.ts';
@@ -12,10 +12,10 @@
 
 <select required bind:value>
     <option value={MetricsMode.User}>User Summary</option>
-    {#if checkAllPerms(localPermission, Local.ViewMetrics)}
+    {#if checkIfAllPerms(localPermission, Local.ViewMetrics)}
         <option value={MetricsMode.Local}>Local Summary</option>
     {/if}
-    {#if checkAllPerms(globalPermission, Global.ViewMetrics)}
+    {#if checkIfAllPerms(globalPermission, Global.ViewMetrics)}
         <option value={MetricsMode.Global}>Global Summary</option>
     {/if}
 </select>

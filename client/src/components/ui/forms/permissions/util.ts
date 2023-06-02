@@ -1,6 +1,6 @@
 import { Global, Local } from '../../../../../../model/src/permission.ts';
 
-export function checkAllPerms(perms: number, mask: Global | Local) {
+export function checkIfAllPerms(perms: number, mask: Global | Local) {
     const bits = Number(mask);
     return (perms & bits) === bits;
 }
