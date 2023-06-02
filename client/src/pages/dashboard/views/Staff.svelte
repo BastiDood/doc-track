@@ -25,7 +25,10 @@
         RemoveStaff,
     }
 
-    interface ExtraContext { selected: SelectedMenu | null }
+    interface ExtraContext {
+        selected: SelectedMenu | null;
+    }
+
     let ctx = false as ExtraContext & Omit<StaffMember, 'picture' | 'name'> | boolean;
 
     $: ({ currentOffice } = $dashboardState);
@@ -70,7 +73,7 @@
                     Add Existing User
                 </Button>
                 {#if !showUnprev}
-                    <Button on:click={() => {showUnprev = true;}}>Show Inactive Staff</Button>
+                    <Button on:click={() => (showUnprev = true)}>Show Inactive Staff</Button>
                 {/if}
             </div>
         </header>
