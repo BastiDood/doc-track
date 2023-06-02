@@ -77,12 +77,12 @@
                 {#if checkAnyPerms(localPermission, Local.ViewBatch)}
                     <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
                 {/if}
-                {#if checkAnyPerms(localPermission, Local.AddInvite 
+                {#if checkAnyPerms(localPermission, Local.AddInvite
                     | Local.RevokeInvite)}
                     <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
                 {/if}
-                {#if checkAnyPerms(localPermission, Local.AddStaff 
-                    | Local.RemoveStaff 
+                {#if checkAnyPerms(localPermission, Local.AddStaff
+                    | Local.RemoveStaff
                     | Local.UpdateStaff)}
                     <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
                 {/if}
@@ -91,9 +91,9 @@
                 {#if checkAnyPerms(globalPermission, Global.UpdateUser)}
                     <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
                 {/if}
-                {#if checkAnyPerms(globalPermission, Global.CreateCategory 
-                    | Global.UpdateCategory 
-                    | Global.DeleteCategory 
+                {#if checkAnyPerms(globalPermission, Global.CreateCategory
+                    | Global.UpdateCategory
+                    | Global.DeleteCategory
                     | Global.ActivateCategory)}
                     <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
                 {/if}
