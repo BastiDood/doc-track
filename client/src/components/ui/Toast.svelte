@@ -28,24 +28,25 @@
 
 <style>
     main {
-        padding: var(--spacing-large);
+        align-items: center;
         border-radius: var(--spacing-large) var(--spacing-large) 0 0;
         bottom: 0;
         box-sizing: border-box;
         color: white;
+        display: flex;  
+        padding: var(--spacing-large);
         position: fixed;
         width: 100%;
         z-index: 99999;
-        display: flex;  
     }
 
     main > section {
-        flex-grow: 1;
+        flex: 1 0 auto;
     }
 
     main > div {
-        flex-grow: 0;
         cursor: pointer;
+        flex: 0 1 auto;
     }
 
     h3, p {
