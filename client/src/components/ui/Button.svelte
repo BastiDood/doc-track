@@ -14,12 +14,13 @@
 
     button {
         margin: var(--spacing-normal);
-        padding: var(--spacing-medium);
+        padding: var(--spacing-large);
         border-radius: var(--border-radius);
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        column-gap: var(--spacing-normal);
     }
 
     button:hover {

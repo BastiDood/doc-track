@@ -15,8 +15,8 @@
 <article class:defer={isDeferred} on:keydown on:click={() => dispatch(Events.RowContainerClick)}>
     <div class="icon"><slot name="icon" /></div>
     <div id="middle">
-        <div><slot></slot></div>
-        <div class="subtext"><slot name="secondary"></slot></div>
+        <div class="mid-space"><slot></slot></div>
+        <div class="mid-space"><slot name="secondary"></slot></div>
     </div>
     {#if showOverflowIcon}
         <div class="overflow" on:keydown on:click|stopPropagation={() => dispatch(Events.OverflowClick)}>
@@ -28,16 +28,16 @@
 </article>
 
 <style>
-    @import url('../../pages/vars.css');
-
     article {
-        align-items: center;
         display: flex;
+        align-items: center;
+        justify-content: space-between;
         border-style: solid;
         border-width: var(--spacing-tiny);
         border-radius: var(--border-radius);
         gap: var(--spacing-normal);
-        padding: var(--spacing-small);
+        padding: var(--spacing-normal);
+        background-color: white;
     }
 
     article > div {
@@ -45,11 +45,11 @@
     }
 
     #middle {
-        flex: 1 0 auto;
+        flex: 1 auto;
     }
 
-    .subtext {
-        font-size: var(--small);
+    .mid-space {
+        padding: var(--spacing-small);
     }
 
     .defer {

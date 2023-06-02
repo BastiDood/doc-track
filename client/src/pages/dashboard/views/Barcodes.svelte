@@ -1,24 +1,22 @@
 <script lang="ts">
     import { assert } from '../../../assert.ts';
     import { Batch } from '../../../api/batch.ts';
+    import { ContainerType, IconColor, ToastType } from '../../../components/types.ts';
 
     import { earliestBatch } from '../../../stores/BatchStore.ts';
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { barcodeSummary } from '../../../stores/MetricStore.ts';
-    import { allOffices } from '../../../stores/OfficeStore.ts';
 
-    import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
-
-    import Download from '../../../components/icons/Download.svelte';
     import Add from '../../../components/icons/Add.svelte';
     import Button from '../../../components/ui/Button.svelte';
+    import Container from '../../../components/ui/Container.svelte';
+    import Download from '../../../components/icons/Download.svelte';
+    import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import { ToastType } from '../../../components/types.ts';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     $: ({ currentOffice } = $dashboardState);
-    $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
 
     let showDownloadBatch = false;
 
@@ -72,53 +70,51 @@
     {#await barcodeSumReady}
         <p>Loading barcode metrics...</p>
     {:then} 
-        {#if $barcodeSummary === null}
-            <p>No office is selected.</p>
-        {:else}
-            <h1>Barcodes</h1>
-            <main>
-                <table>
-                    <tr>
-                        <td>Unused</td>
-                        <td>{$barcodeSummary.pending}</td>
-                    </tr>
-                    <tr>
-                        <td>Used</td>
-                        <td>{$barcodeSummary.assigned}</td>
-                    </tr>
-                </table>
-                <br />
-                
-                <Button on:click={handleDownload}>
-                    <Download alt="download" />Download Stickers
-                </Button>
-                <Button on:click={handleGenerate}>
-                    <Add alt="add" /> Generate New Batch
-                </Button>
-            
-                <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
-                    <FetchEarliest />
-                </Modal>
-            </main>
-        {/if}
+        <h1>Barcodes</h1>
+        <Container ty={ContainerType.Divider}>
+            <section>
+                {#if $barcodeSummary === null}
+                    <p>No office is selected.</p>
+                {:else}
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Barcode Status</td>
+                                <td>Amount of Barcodes</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Unused</td>
+                                <td>{$barcodeSummary.pending}</td>
+                            </tr>
+                            <tr>
+                                <td>Used</td>
+                                <td>{$barcodeSummary.assigned}</td>
+                            </tr>
+                        </tbody>
+                    </table>    
+                    <Button on:click={handleDownload}>
+                        <Download alt="download" color={IconColor.White} />Download Stickers
+                    </Button>
+                    <Button on:click={handleGenerate}>
+                        <Add alt="add" color={IconColor.White} /> Generate New Batch
+                    </Button>
+                    <Modal title="Download Stickers" bind:showModal={showDownloadBatch}>
+                        <FetchEarliest />
+                    </Modal>
+                {/if}
+            </section>
+        </Container>
     {:catch err}
         <PageUnavailable {err} />
     {/await}
 {/if}
 
 <style>
-    main {
+    section {
         display: flex;
         flex-direction: column;
-        height: 100%;
-        place-items: center;
-    }
-
-    table {
-        border-collapse: collapse;
-    }
-
-    table, td {
-        border: 1px solid;
+        align-items: center;
     }
 </style>

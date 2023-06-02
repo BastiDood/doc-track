@@ -1,33 +1,36 @@
 <script lang="ts">
     import active from 'svelte-spa-router/active';
-    import { Office } from '~model/office.ts';
-    import { userOffices, userSession } from '../../../stores/UserStore.ts';
-    import { dashboardState } from '../../../stores/DashboardState.ts';
-    import { goToTrackingPage } from '../itemrow/util.ts';
-    import { checkPerms } from '../forms/permissions/util.ts';
+
+    import type { Office } from '~model/office.ts';
+    import type { User } from '~model/user.ts';
     import { Local } from '../../../../../model/src/permission.ts';
 
-    import InboxIcon from '../../icons/DocumentDownload.svelte';
-    import OutboxIcon from '../../icons/DocumentExport.svelte';
-    import Document from '../../icons/DocumentBlank.svelte';
-    import EventsIcon from '../../icons/Events.svelte';
-    import BarcodesIcon from '../../icons/Barcode.svelte';
-    import InvitesIcon from '../../icons/PersonAdd.svelte';
-    import StaffIcon from '../../icons/PersonMail.svelte';
-    import AdminIcon from '../../icons/PersonInfo.svelte';
-    import SettingsIcon from '../../icons/Settings.svelte';
-    import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
-    import MainLogo from '../../icons/MainLogo.svelte';
-    import OfficeSelect from '../OfficeSelect.svelte';
+    import { userOffices, userSession } from '../../../stores/UserStore.ts';
+    import { dashboardState } from '../../../stores/DashboardState.ts';
 
     import { ButtonType, IconColor } from '../../types.ts';
-    import QrScanner from '../QRScanner.svelte';
-    import Modal from '../Modal.svelte';
-    import TextInput from '../../ui/TextInput.svelte';
-    import Button from '../../ui/Button.svelte';
-    import Search from '../../icons/Search.svelte';
-    import Camera from '../../icons/Camera.svelte';
+    import { goToTrackingPage } from '../itemrow/util.ts';
+    import { checkPerms } from '../forms/permissions/util.ts';
 
+    import AdminIcon from '../../icons/PersonInfo.svelte';
+    import BarcodesIcon from '../../icons/Barcode.svelte';
+    import Button from '../../ui/Button.svelte';
+    import Camera from '../../icons/Camera.svelte';
+    import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
+    import Document from '../../icons/DocumentBlank.svelte';
+    import EventsIcon from '../../icons/Events.svelte';
+    import InboxIcon from '../../icons/DocumentDownload.svelte';
+    import InvitesIcon from '../../icons/PersonAdd.svelte';
+    import Modal from '../Modal.svelte';
+    import OfficeSelect from '../OfficeSelect.svelte';
+    import OutboxIcon from '../../icons/DocumentExport.svelte';
+    import QrScanner from '../QRScanner.svelte';
+    import Search from '../../icons/Search.svelte';
+    import SettingsIcon from '../../icons/Settings.svelte';
+    import StaffIcon from '../../icons/PersonMail.svelte';
+    import TextInput from '../../ui/TextInput.svelte';
+
+    export let user: User | undefined;
     export let show = false;
 
     let trackingNumber: string | undefined;
@@ -46,38 +49,40 @@
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
-    <section>
-        <div id="logo">
-            <MainLogo alt="Main DocTrack Logo" />
-        </div>
-        <header>
+    <main>
+        <header id="controls">
+            {#if typeof user !== 'undefined'}
+                <div>Hello {user.name}!</div>
+            {/if}
             {#if Object.getOwnPropertyNames($userOffices).length === 0}
                 No office detected!
             {:else}
                 <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
             {/if}
-            <div id="controls">
+            <div>
                 <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
-                <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
                 <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
             </div>
+            <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
         </header>
-        {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
-            <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
-            <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
-            <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
-        {/if}
-        <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
-        {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
-            <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
-        {/if}
-        <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
-        <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
-        <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
-        <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
-        <a href="#/offices" use:active><EventsIcon alt="Go to Offices" />Offices</a>
-    </section>
-    <form method="POST" action="/auth/logout">
+        <section>
+            {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
+                <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
+                <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
+                <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
+            {/if}
+            <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
+            {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
+                <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
+            {/if}
+            <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
+            <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
+            <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
+            <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
+            <a href="#/offices" use:active><EventsIcon alt="Go to Offices" />Offices</a>
+        </section>
+    </main>
+    <form id="logout" method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
     </form>
 </nav>
@@ -89,16 +94,20 @@
 {/if}
 
 <style>
-    #logo {
-        margin: auto;
-        width: 60%;
-        text-align: center;
-    }
-
     #controls {
         display: flex;
         align-items: stretch;
         flex-direction: column;
+    }
+
+    form {
+        margin: 0;
+        padding: 0;
+    }
+    
+    header > div {
+        display: flex;
+        justify-content: center;
     }
 
     nav {
@@ -123,6 +132,10 @@
         margin: var(--large);
     }
     
+    main {
+        overflow-y: auto;
+    }
+
     section > a {
         border-right: var(--spacing-small) solid transparent;
         color: initial;

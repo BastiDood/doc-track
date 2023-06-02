@@ -20,7 +20,6 @@
         background: var(--dashboard-bg);
         box-shadow: 0 var(--spacing-tiny) var(--spacing-small) -0.0625em var(--shadow-color);
         cursor: pointer;
-        font-size: var(--normal);
         transition: all var(--animation-length) ease;
     }
 

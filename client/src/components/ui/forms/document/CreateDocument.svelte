@@ -10,7 +10,7 @@
     import { DeferredSnap } from '../../../../api/error.ts';
 
     import { assert } from '../../../../assert.ts';
-    import { Events, ToastType } from '../../../types.ts';
+    import { Events, IconColor, ToastType } from '../../../types.ts';
 
     import { earliestBatch } from '../../../../stores/BatchStore.ts';
     import { categoryList } from '../../../../stores/CategoryStore.ts';
@@ -25,6 +25,7 @@
     import CategorySelect from '../../CategorySelect.svelte';
     import QrGenerator from '../../qr/QrGenerator.svelte';
     import TextInput from '../../TextInput.svelte';
+    import DocumentAdd from '../../../icons/DocumentAdd.svelte';
 
     let id = null as Document['id'] | null;
     let category: Category['id'] | null = null;
@@ -102,22 +103,20 @@
     {@const bytes = file?.size ?? 0}
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>
         Barcode: <BarcodeSelect bind:code={id} barcodes={$earliestBatch.codes}></BarcodeSelect>
-        <br />
         {#if id !== null}
             <div><QrGenerator url="/track?id={id}" /></div>
         {/if}
         <TextInput bind:value={title} placeholder="Document Title..." name="title" label="Document Title:"></TextInput>
-        <br />
         Category: <CategorySelect bind:catId={category} categories={$categoryList.active} />
-        <br />
         <TextInput bind:value={remark} placeholder="Remarks..." name="remark" label="Remark:" required={false}></TextInput> 
-        <br />
         <input type="file" multiple={false} required bind:files={fileList} />
         {#if typeof file !== 'undefined'}
             {convertToScale(file.size)}
         {/if}
-        <br />
-        <Button submit disabled={bytes >= MAX_FILE_SIZE}>Create Document</Button>
+        <Button submit disabled={bytes >= MAX_FILE_SIZE}>
+            <DocumentAdd alt="Create document" color={IconColor.White} />
+            Create Document
+        </Button>
     </form>
 {/if}
 

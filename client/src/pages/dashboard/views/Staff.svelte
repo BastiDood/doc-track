@@ -1,19 +1,22 @@
 <script lang="ts">
-    import { dashboardState } from '../../../stores/DashboardState';
-    import { staffList } from '../../../stores/StaffStore';
-    import { allOffices } from '../../../stores/OfficeStore';
-    import { topToastMessage } from '../../../stores/ToastStore';
-    import { Staff } from '~model/staff';
-    import { User } from '~model/user';
-    import { assert } from '../../../assert';
+    import { Staff } from '~model/staff.ts';
+    import { User } from '~model/user.ts';
 
-    import { IconSize } from '../../../components/types';
-    import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
+    import { assert } from '../../../assert.ts';
+    import { IconSize, ContainerType } from '../../../components/types.ts';
+
+    import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { staffList } from '../../../stores/StaffStore.ts';
+    import { allOffices } from '../../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+
+    import Container from '../../../components/ui/Container.svelte';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
-    import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
+    import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
+    import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
 
     enum ActiveMenu {
         EditStaff,
@@ -68,21 +71,27 @@
     {#await staffReady}
         <p>Loading staff page...</p>
     {:then}
-        <h1>Staffs of {officeName}</h1>
-        {#each $staffList.filter(s => s.permission !== 0) as { id, name, email, permission, picture } (id)}
-            <PersonRowLocal
-                {id}
-                {email}
-                {name}
-                {permission}
-                {picture}
-                office={currentOffice}
-                iconSize={IconSize.Large} 
-                on:overflowClick={openContextMenu.bind(null, id, currentOffice, email, permission)} 
-            />
-        {:else}
-            <p>No staff members exist in "{officeName}".</p>
-        {/each}
+        <header>
+            <h1>Staffs of {officeName}</h1>
+            <!-- TODO: Put addStaff button here. -->
+        </header>
+        <Container ty={ContainerType.Enumeration}>
+            {@const staff = $staffList.filter(s => s.permission !== 0)}
+            {#each staff as { id, name, email, permission, picture } (id)}
+                <PersonRowLocal
+                    {id}
+                    {email}
+                    {name}
+                    {permission}
+                    {picture}
+                    office={currentOffice}
+                    iconSize={IconSize.Large} 
+                    on:overflowClick={openContextMenu.bind(null, id, currentOffice, email, permission)} 
+                />
+            {:else}
+                <p>No staff members exist in "{officeName}".</p>
+            {/each}
+        </Container>
     {:catch err}
         <PageUnavailable {err} />
     {/await}

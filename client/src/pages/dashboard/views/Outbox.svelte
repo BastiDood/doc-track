@@ -1,22 +1,26 @@
 <script lang="ts">
+    import type { Document } from '~model/document.ts';
     import { Status } from '../../../../../model/src/snapshot.ts';
+
+    import { assert } from '../../../assert.ts';
+    import { IconSize, ToastType, IconColor, ContainerType } from '../../../components/types.ts';
+
     import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { deferRegistrationCount } from '../../../stores/DeferredStore.ts';
     import { documentOutbox } from '../../../stores/DocumentStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
-    import { assert } from '../../../assert.ts';
     
-    import { IconSize, ToastType } from '../../../components/types';
-    import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
-    import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
-    import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
     import Button from '../../../components/ui/Button.svelte';
+    import Container from '../../../components/ui/Container.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
-    import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
-    import { deferRegistrationCount } from '../../../stores/DeferredStore.ts';
-    import { Document } from '../../../../../model/src/document.ts';
+    import DocumentAdd from '../../../components/icons/DocumentAdd.svelte';
+    import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
+    import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
+    import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
 
     interface Context {
         docId: Document['id'] | null,
@@ -67,33 +71,48 @@
 {#if currentOffice === null}
     <p>You must select an office before accessing the Outbox page.</p>
 {:else}
-    <h1>Outbox</h1>
+    <header>
+        <h1>Outbox</h1>    
+        <Button on:click={openCreateDocument.bind(null)}>
+            <DocumentAdd alt="Create document" color={IconColor.White} />
+            Register and Stage a New Document
+        </Button>
+    </header>
     
-    <Button on:click={openCreateDocument.bind(null)}>
-        Register and Stage a New Document
-    </Button>
-
     {#await Promise.all([outboxReady, deferReady])}
         <p>Loading outbox...</p>
     {:then}
-        <h2>Staged Registered Documents</h2>
-        {#each $documentOutbox.ready as { doc, category, creation, title } (doc)}
-            <RegisterRow 
-                {doc}
-                {category}
-                {title}
-                {creation}
-                iconSize={IconSize.Large} 
-                on:overflowClick={openContext.bind(null, doc)}
-            />
-        {/each}
-        {#if $deferRegistrationCount > 0}
-            There are {$deferRegistrationCount} document/s awaiting to be registered on the next Background Sync.
-        {/if}
-        <h2>Sent Documents</h2>
-        {#each $documentOutbox.pending as entry (entry.doc)}
-            <SendRow {...entry} iconSize={IconSize.Large} />
-        {/each}
+        <Container ty={ContainerType.Divider}>
+            <h2>Staged Registered Documents</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {#each $documentOutbox.ready as { doc, category, creation, title } (doc)}
+                    <RegisterRow 
+                        {doc}
+                        {category}
+                        {title}
+                        {creation}
+                        iconSize={IconSize.Large} 
+                        on:overflowClick={openContext.bind(null, doc)}
+                    />
+                {:else}
+                    <p>Your office does not have registered documents ready to be sent.</p>
+                {/each}
+                {#if $deferRegistrationCount > 0}
+                    <p>There are {$deferRegistrationCount} document/s awaiting to be registered on the next Background Sync.</p>
+                {/if}
+            </Container>
+        </Container>
+
+        <Container ty={ContainerType.Divider}>
+            <h2>Sent Documents</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {#each $documentOutbox.pending as entry (entry.doc)}
+                    <SendRow {...entry} iconSize={IconSize.Large} />
+                {:else}
+                    <p>Your office currently has no documents pending to be accepted by another office.</p>
+                {/each}
+            </Container>
+        </Container>
     {:catch err}
         <PageUnavailable {err} />
     {/await}
@@ -122,3 +141,12 @@
         /> 
     </Modal>
 {/if}
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+

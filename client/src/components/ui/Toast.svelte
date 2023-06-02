@@ -13,7 +13,7 @@
 
 <style>
     div {
-        padding: var(--spacing-small);
+        padding: var(--spacing-large);
         border-radius: var(--spacing-large) var(--spacing-large) 0 0;
         bottom: 0;
         box-sizing: border-box;

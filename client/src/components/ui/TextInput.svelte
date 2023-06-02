@@ -7,14 +7,16 @@
     export let value: string | number = '';
 </script>
 
-<label>
-    {label}
+{#if label}
+    <label>
+        {label}
+        <input type="text" {placeholder} {name} {disabled} {required} bind:value />
+    </label>
+{:else}
     <input type="text" {placeholder} {name} {disabled} {required} bind:value />
-</label>
+{/if}
 
 <style>
-    @import url('../../pages/vars.css');
-
     input {
         border: var(--primary-color) 2px solid;
         border-radius: var(--border-radius);

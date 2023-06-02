@@ -10,7 +10,7 @@ body {
     background: var(--dashboard-bg);
     color: var(--text-color);
     font-family: 'Open Sans', sans-serif;
-    font-size: var(--normal);
+    font-size: clamp(var(--lower-font-size), 2vw, var(--upper-font-size));
     height: 100%;
     margin: 0;
     padding: 0;
@@ -33,6 +33,37 @@ p {
     font-size: var(--normal);
     margin: 0;
     padding: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: var(--spacing-large);
+    padding: var(--spacing-normal);
+    row-gap: var(--spacing-small);
+}
+
+table {
+    border-style: hidden;
+    box-shadow: 0 0 0 var(--spacing-small) var(--shadow-color);
+    border-collapse: collapse;
+    border-radius: var(--border-radius);
+    margin: var(--spacing-normal);
+}
+
+td {
+    padding: var(--spacing-normal);
+    border: 0;
+}
+
+tr:nth-child(even) {
+    background-color: var(--hover-color);
+}
+
+thead {
+    background-color: var(--primary-color);
+    color: white;
 }
 
 dialog::backdrop {
@@ -58,3 +89,4 @@ dialog[open]::backdrop {
 .danger {
     background-color: var(--danger-color);
 }
+

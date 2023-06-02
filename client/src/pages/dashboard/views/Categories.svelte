@@ -1,19 +1,21 @@
 <script lang="ts">
     import type { Category } from '~model/category.ts';
 
+    import { Category as Api } from '../../../api/category.ts';
+    import { ContainerType, IconSize, ToastType } from '../../../components/types.ts';
+
     import { categoryList } from '../../../stores/CategoryStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
-    import { Category as Api } from '../../../api/category.ts';
-    import { ToastType } from '../../../components/types.ts';
 
-    import Button from '../../../components/ui/Button.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
-    import DocumentBlank from '../../../components/icons/DocumentBlank.svelte';
-    import RowTemplate from '../../../components/ui/RowTemplate.svelte';
     import ActivateCategoryContext from '../../../components/ui/contextdrawer/ActivateCategoryContext.svelte';
-    import RemoveCategoryContext from '../../../components/ui/contextdrawer/RemoveCategoryContext.svelte';
+    import Button from '../../../components/ui/Button.svelte';
+    import Container from '../../../components/ui/Container.svelte';
     import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
+    import DocumentBlank from '../../../components/icons/DocumentBlank.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
+    import RemoveCategoryContext from '../../../components/ui/contextdrawer/RemoveCategoryContext.svelte';
     import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
+    import RowTemplate from '../../../components/ui/RowTemplate.svelte';
 
     enum ActiveMenu {
         Create,
@@ -62,31 +64,36 @@
     }
 </script>
 
-<article>
+<header>
+    <h1>Categories</h1>
     <Button on:click={() => (ctx = { cid: 0, mode: ActiveMenu.Create })}>Create Category</Button>
-    <section>
-        <h1>Active Categories</h1>
+</header>
+<Container ty={ContainerType.Divider}>
+    <h2>Active Categories</h2>
+    <Container ty={ContainerType.Enumeration}>
         {#each active as { id, name } (id)}
             <RowTemplate on:overflowClick={() => (ctx = { cid: id, mode: ActiveMenu.Remove })}>
-                <DocumentBlank slot="icon" alt="Document Icon" />
+                <DocumentBlank slot="icon" alt="Document Icon" size={IconSize.Large} />
                 {name}
             </RowTemplate>
         {:else}
             <p>No active categories.</p>
         {/each}
-    </section>
-    <section>
-        <h1>Retired Categories</h1>
+    </Container>
+</Container>
+<Container ty={ContainerType.Divider}>
+    <h2>Retired Categories</h2>
+    <Container ty={ContainerType.Enumeration}>
         {#each retire as { id, name} (id)}
             <RowTemplate on:overflowClick={() => (ctx = { cid: id, mode: ActiveMenu.Activate })}>
-                <DocumentBlank slot="icon" alt="Document Icon" />
+                <DocumentBlank slot="icon" alt="Document Icon" size={IconSize.Large} />
                 {name}
             </RowTemplate>
         {:else}
             <p>No retired categories.</p>
         {/each}
-    </section>
-</article>
+    </Container>
+</Container>
 
 {#if ctx === null}
     <!-- Don't render anything! Intentionally left blank to make type inference happy. -->
@@ -115,11 +122,9 @@
 {/if}
 
 <style>
-    h1 {
-        margin: var(--spacing-large) 0;
-    }
-
-    article {
-        margin: var(--spacing-medium);
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 </style>

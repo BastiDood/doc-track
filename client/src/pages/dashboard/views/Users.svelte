@@ -1,14 +1,18 @@
 <script lang="ts">
-    import { userList } from '../../../stores/UserStore';
-    import { topToastMessage } from '../../../stores/ToastStore';
-    import { User } from '~model/user';
-    import { assert } from '../../../assert';
+    import { User } from '~model/user.ts';
+
+    import { assert } from '../../../assert.ts';
+    import { IconSize, ContainerType } from '../../../components/types.ts';
+
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+    import { userList } from '../../../stores/UserStore.ts';
     
-    import { IconSize } from '../../../components/types';
-    import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
+    import Button from '../../../components/ui/Button.svelte';
+    import Container from '../../../components/ui/Container.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
 
     interface Context {
         id: User['id'],
@@ -17,6 +21,7 @@
     }
 
     let ctx = null as Context | null;
+    let showUnprev = false;
 
     function openEdit(id: User['id'], permissions: User['permission']) {
         ctx = { id: id, permissions: permissions, showEdit: true };
@@ -36,23 +41,57 @@
 {#await usersReady}
     <p>Loading users page...</p>
 {:then}
-    <h1>Users</h1>
-    {#each $userList as { id, name, email, picture, permission } (id)}
-        <PersonRowGlobal
-            {id}
-            {name}
-            {email}
-            {picture}
-            {permission}
-            iconSize={IconSize.Large} 
-            on:overflowClick={openEdit.bind(null, id, permission)} 
-        />
-    {:else}
-        <p>No users exist.</p>
-    {/each}
+    <header>
+        <h1>Users</h1>    
+        {#if !showUnprev}
+            <Button on:click={() => {showUnprev = true;}}>Show Unprivileged Users</Button>
+        {/if}
+    </header>
+    <Container ty={ContainerType.Divider}>
+        <h2>System Operators</h2>
+        <Container ty={ContainerType.Enumeration}>
+            {@const admins = $userList.filter(u => u.permission > 0)}
+            {#each admins as { id, name, email, picture, permission } (id)}
+                <PersonRowGlobal
+                    {id}
+                    {name}
+                    {email}
+                    {picture}
+                    {permission}
+                    iconSize={IconSize.Large} 
+                    on:overflowClick={openEdit.bind(null, id, permission)} 
+                />
+            {:else}
+                <p>No users exist.</p>
+            {/each}
+        </Container>
+    </Container>
+    {#if showUnprev}
+        <Container ty={ContainerType.Divider}>
+            <h2>Unprivileged Users</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {@const users = $userList.filter(u => u.permission === 0)}
+                {#each users as { id, name, email, picture, permission } (id)}
+                    <PersonRowGlobal
+                        {id}
+                        {name}
+                        {email}
+                        {picture}
+                        {permission}
+                        iconSize={IconSize.Large} 
+                        on:overflowClick={openEdit.bind(null, id, permission)} 
+                    />
+                {:else}
+                    <p>No users exist.</p>
+                {/each}
+            </Container>
+        </Container>
+    {/if}
+    
 {:catch err}
     <PageUnavailable {err} />
 {/await}
+
 {#if ctx === null} 
     <!-- Do not display anything! -->
 {:else if ctx.showEdit}
@@ -65,4 +104,10 @@
     </Modal>
 {/if}
 
-
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>

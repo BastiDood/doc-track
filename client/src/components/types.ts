@@ -41,6 +41,11 @@ export enum RowType {
     Person,
 }
 
+export enum ContainerType {
+    Enumeration = 'enumeration',
+    Divider = 'divider',
+}
+
 export enum Events {
     OnDocumentScan = 'onDocumentScan',
     Done = 'done',

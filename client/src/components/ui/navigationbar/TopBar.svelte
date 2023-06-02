@@ -8,6 +8,7 @@
     import Hamburger from '../../icons/Hamburger.svelte';
     import Logout from '../../icons/Logout.svelte';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
+    import MainLogo from '../../icons/MainLogo.svelte';
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
@@ -29,7 +30,9 @@
         {:else}
             <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
         {/if}
-        <span class:offline={!$isOnline} id="title">DocTrack</span>
+        <span id="title" class:offline={!$isOnline}>
+            <MainLogo alt="DocTrack Logo" mini/>
+        </span>
         {#await deferredSnaps.load()}
             <span>🔄</span>
         {:then}
@@ -38,7 +41,7 @@
             {/if}
         {/await}
         {#if officeName}
-            <span> - {officeName}</span>
+            <span>{officeName}</span>
         {/if}
     </span>
     <slot></slot>
@@ -50,8 +53,7 @@
                 </Button>
             </a>
         {:else}
-            <span>{user.name}</span>
-            <span><img src={user.picture} alt="Profile Picture for {user.name}" /></span>
+            <span><img id="user" src={user.picture} alt="Profile Picture for {user.name}" /></span>
         {/if}
     </nav>
 </nav>
@@ -70,7 +72,7 @@
         gap: var(--spacing-small);
     }
 
-    img {
+    #user {
         border-radius: 50%;
         display: block;
         height: 2rem;

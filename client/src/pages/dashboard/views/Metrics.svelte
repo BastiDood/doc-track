@@ -1,13 +1,16 @@
 <script lang="ts">
     import type { Metrics } from '~model/metrics.ts';
 
+    import { ContainerType, MetricsMode } from '../../../components/types.ts';
+
+    import Container from '../../../components/ui/Container.svelte';
     import MetricsSelect from '../../../components/ui/MetricsSelect.svelte';
-    import { MetricsMode } from '../../../components/types.ts';
 
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../../../stores/MetricStore.ts';
     import { allOffices } from '../../../stores/OfficeStore.ts';
     import { currentUser, userSession } from '../../../stores/UserStore.ts';
+
     function selectSummary(user: Metrics, local: Metrics, global: Metrics, mode?: MetricsMode): Metrics {
         switch (mode) {
             case MetricsMode.User: return user;
@@ -33,41 +36,51 @@
     <p>You must select an office before accessing the Metrics page.</p>
 {:else}
     <h1>Metrics</h1>
-    {#if mode === MetricsMode.User}
-        <p>You are viewing the metrics of user {userName}.</p>
-    {:else if mode === MetricsMode.Local}
-        <p>You are viewing the metrics of office {officeName}.</p>
-    {:else if mode === MetricsMode.Global}
-        <p>You are viewing the global metrics.</p>
-    {/if}
-    <main>
-        <div class='header'>
-            <h3>Report</h3>
-            <MetricsSelect bind:value={mode} {localPermission} {globalPermission} />
-        </div>
-        <table>
-            <tr>
-                <td>Registered</td>
-                <td>{metric.Register ?? 0}</td>
-            </tr>
-            <tr>
-                <td>Sent</td>
-                <td>{metric.Send ?? 0}</td>
-            </tr>
-            <tr>
-                <td>Received</td>
-                <td>{metric.Receive ?? 0}</td>
-            </tr>
-            <tr>
-                <td>Tagged as Terminal</td>
-                <td>{metric.Terminate ?? 0}</td>
-            </tr>
-        </table>
-    </main>
+    <Container ty={ContainerType.Divider}>
+        <article>
+            {#if mode === MetricsMode.User}
+                <p>You are viewing the metrics of user {userName}.</p>
+            {:else if mode === MetricsMode.Local}
+                <p>You are viewing the metrics of office {officeName}.</p>
+            {:else if mode === MetricsMode.Global}
+                <p>You are viewing the global metrics.</p>
+            {/if}
+            <div class='header'>
+                <h3>Report</h3>
+                <MetricsSelect bind:value={mode} {localPermission} {globalPermission} />
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Amount of Logged Documents</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Registered</td>
+                        <td>{metric.Register ?? 0}</td>
+                    </tr>
+                    <tr>
+                        <td>Sent</td>
+                        <td>{metric.Send ?? 0}</td>
+                    </tr>
+                    <tr>
+                        <td>Received</td>
+                        <td>{metric.Receive ?? 0}</td>
+                    </tr>
+                    <tr>
+                        <td>Tagged as Terminal</td>
+                        <td>{metric.Terminate ?? 0}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+    </Container>
 {/if}
 
 <style>
-    main {
+    article {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -81,11 +94,6 @@
     }
 
     table {
-        border-collapse: collapse;
         width: 50vw;
-    }
-
-    table, td {
-        border: 1px solid;
     }
 </style>

@@ -3,7 +3,7 @@
     import { assert } from '../../../../assert.ts';
     import { Invite } from '../../../../api/invite.ts';
     import { Global } from '../../../../../../model/src/permission.ts';
-    import { Events, ToastType } from '../../../types.ts';
+    import { Events, IconColor, ToastType } from '../../../types.ts';
 
     import Button from '../../Button.svelte';
     import Checkmark from '../../../icons/Checkmark.svelte';
@@ -53,54 +53,44 @@
 <p>You are currently inviting a user as {$userSession?.email}</p>
 <article>
     <form on:submit|preventDefault|stopPropagation={handleSubmit}>   
-        <br />
         <label>
             Email
             <input type="email" name="inputemail" placeholder="example@up.edu.ph" bind:value={email} />
         </label>
-        <br />
         <p><b>Permissions:</b></p>
         <label>
             <input type="checkbox" name="perms" value={Global.CreateOffice} />
             Create Office
         </label>
-        <br />
         <label>
             <input type="checkbox" name="perms" value={Global.UpdateOffice} />
             Update Office
         </label>
-        <br />
         <label>
             <input type="checkbox" name="perms" value={Global.UpdateUser} />
             Update User
         </label>
-        <br />
         <label>
             <input type="checkbox" name="perms" value={Global.CreateCategory} />
             Create Category
         </label>
-        <br />
         <label>
             <input type="checkbox" name="perms" value={Global.UpdateCategory} />
             Update Category
         </label>
-        <br />
         <label>
             <input type="checkbox" name="perms" value={Global.DeleteCategory} />
             Delete Category
         </label>
-        <br />
         <label>
             <input type="checkbox" name="perms" value={Global.ActivateCategory} />
             Activate Category
         </label>
-        <br />
         <label>
             <input type="checkbox" name="perms" value={Global.ViewMetrics} />
             View Metrics
         </label>
-        <br />
-        <Button submit><Checkmark alt="Invite User" />Invite User</Button> 
+        <Button submit><Checkmark alt="Invite User" color={IconColor.White} />Invite User</Button> 
     </form>
 </article>
 

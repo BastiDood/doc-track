@@ -1,19 +1,21 @@
 <script lang="ts">
+    import type { Invitation } from '~model/invitation.ts';
+
+    import { assert } from '../../../assert.ts';
+    import { ContainerType, IconColor, IconSize } from '../../../components/types.ts';
+
     import { dashboardState } from '../../../stores/DashboardState';
     import { inviteList } from '../../../stores/InviteStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
-    import { IconColor, IconSize } from '../../../components/types.ts';
-    import { assert } from '../../../assert.ts';
-    
 
     import Button from '../../../components/ui/Button.svelte';
+    import Container from '../../../components/ui/Container.svelte';
     import InviteForm from '../../../components/ui/forms/invite/AddInvite.svelte';
     import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
-    import { Invitation } from '~model/invitation.ts';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         CreateInvite,
@@ -26,6 +28,7 @@
     }
 
     $: ({ currentOffice } = $dashboardState);
+
     let ctx = null as Context | null;
 
     function openRevokeInvite(email: Invitation['email'], office: Invitation['office']) {
@@ -50,17 +53,16 @@
 {#if currentOffice === null}
     <p>You must select an office before accessing the Invites page.</p>
 {:else}
-    <h1>Invitations</h1>
-    <Button on:click={openCreateInvite.bind(null)}>
-        <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" />Invite User
-    </Button>
-
+    <header>
+        <h1>Invitations</h1>
+        <Button on:click={openCreateInvite.bind(null)}>
+            <PersonAdd color={IconColor.White} size={IconSize.Normal} alt="Invite person" /> Invite User
+        </Button>
+    </header>
     {#await inviteReady}
         <p>Loading invite list.</p>
     {:then}
-        {#if $inviteList.length === 0 || currentOffice === null}
-                <h3>No invite backlogs, yay!</h3>
-        {:else}
+        <Container ty={ContainerType.Enumeration}>
             {#each $inviteList as { email, permission, creation } (email)}
                 <InviteRow
                     email={email}
@@ -70,8 +72,10 @@
                     creation={creation}
                     on:overflowClick={openRevokeInvite.bind(null, email, currentOffice)}
                 />
+            {:else}
+                <p>Your office is currently not inviting anyone</p>
             {/each}
-        {/if}
+        </Container> 
     {:catch err}
         <PageUnavailable {err} />
     {/await}
@@ -91,3 +95,11 @@
             />
     </Modal>
 {/if}
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>

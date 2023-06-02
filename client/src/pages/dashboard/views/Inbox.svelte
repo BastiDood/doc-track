@@ -1,16 +1,18 @@
 <script lang="ts">
+    import { assert } from '../../../assert.ts';
+    import { ContainerType, IconSize, IconColor, ToastType } from '../../../components/types.ts';
+
+    import { Document } from '../../../../../model/src/document.ts';
+    import { Status } from '../../../../../model/src/snapshot.ts';
+
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { documentInbox } from '../../../stores/DocumentStore';
     import { deferredSnaps } from '../../../stores/DeferredStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
-    import { assert } from '../../../assert.ts';
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
-    import { IconSize, ToastType } from '../../../components/types';
-    import { Document } from '../../../../../model/src/document.ts';
-    import { Status } from '../../../../../model/src/snapshot.ts';
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
@@ -18,6 +20,8 @@
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import Container from '../../../components/ui/Container.svelte';
+    import DocumentAdd from '../../../components/icons/DocumentAdd.svelte';
 
     enum ActiveMenu {
         ContextInbox,
@@ -73,38 +77,52 @@
 {#if currentOffice === null}
     <p>You must select an office before accessing the Inbox page.</p>
 {:else}
-    <h1>Inbox</h1>
-
-    <Button on:click={openCreateDocument.bind(null)}>
-        Register and Stage a New Document
-    </Button>
+    <header>
+        <h1>Inbox</h1>
+        <Button on:click={openCreateDocument.bind(null)}>
+            <DocumentAdd alt="Create document" color={IconColor.White} />
+            Register and Stage a New Document
+        </Button>
+    </header>
 
     {#await Promise.all([inboxReady, deferReady])}
         <p>Loading inbox...</p>
     {:then}
-        <h2>Pending Acceptance</h2>
-        {#each $documentInbox.pending as { creation, category, title, doc } (doc)}
-            <AcceptRow
-                {doc}
-                {category}
-                {title}
-                {creation}
-                iconSize = {IconSize.Large}
-                on:overflowClick = {setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
-            />
-        {/each}
+        <Container ty={ContainerType.Divider}>
+            <h2>Pending Acceptance</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {#each $documentInbox.pending as { creation, category, title, doc } (doc)}
+                    <AcceptRow
+                        {doc}
+                        {category}
+                        {title}
+                        {creation}
+                        iconSize={IconSize.Large}
+                        on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextAccept)}
+                    />
+                {:else}
+                    <p>Your office does not have any documents pending to be accepted.</p>
+                {/each}
+            </Container>
+        </Container>
 
-        <h2>Office Inbox</h2>
-        {#each $documentInbox.accept as { creation, category, title, doc } (doc)}
-            <InboxRow
-                {doc}
-                {category}
-                {title}
-                {creation}
-                iconSize={IconSize.Large}
-                on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
-            />
-        {/each}
+        <Container ty={ContainerType.Divider}>
+            <h2>Office Inbox</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {#each $documentInbox.accept as { creation, category, title, doc } (doc)}
+                    <InboxRow
+                        {doc}
+                        {category}
+                        {title}
+                        {creation}
+                        iconSize={IconSize.Large}
+                        on:overflowClick={setOpenedContext.bind(null, doc, ActiveMenu.ContextInbox)}
+                    />
+                {:else}
+                    <p>Your office does not have any documents in its inbox.</p>
+                {/each}
+            </Container>
+        </Container>
     {:catch err}
         <PageUnavailable {err} />
     {/await}
@@ -141,3 +159,11 @@
         /> 
     </Modal>
 {/if}
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
