@@ -71,14 +71,10 @@
                 <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
                 <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
             {/if}
-
             <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
-            
             {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
                 <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
-            
             {/if}
-
             <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
             <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
             <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
