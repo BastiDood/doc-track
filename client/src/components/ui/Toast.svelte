@@ -2,6 +2,7 @@
     import { slide } from 'svelte/transition';
     import { topToastMessage } from '../../stores/ToastStore.ts';
     import Close from '../icons/Close.svelte';
+    import { IconColor, IconSize } from '../types.ts';
 </script>
 
 {#if $topToastMessage !== null}
@@ -9,7 +10,14 @@
     <main class={type} transition:slide>
         <header>
             <h3>{title}</h3>
-            <div><Close on:click={topToastMessage.dismiss} alt="Close Modal"/></div>
+            <div>
+                <Close 
+                    color={IconColor.White}
+                    size={IconSize.Large}
+                    on:click={topToastMessage.dismiss} 
+                    alt="Close Toast" 
+                />
+            </div>
         </header>
         <p>{body}</p>
     </main>
