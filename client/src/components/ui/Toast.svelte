@@ -1,18 +1,22 @@
 <script>
     import { slide } from 'svelte/transition';
     import { topToastMessage } from '../../stores/ToastStore.ts';
+    import Close from '../icons/Close.svelte';
 </script>
 
 {#if $topToastMessage !== null}
     {@const { title, body, type } = $topToastMessage}
-    <div class={type} transition:slide>
-        <h3>{title}</h3>
+    <main class={type} transition:slide>
+        <header>
+            <h3>{title}</h3>
+            <div><Close on:click={topToastMessage.dismiss} alt="Close Modal"/></div>
+        </header>
         <p>{body}</p>
-    </div>
+    </main>
 {/if}
 
 <style>
-    div {
+    main {
         padding: var(--spacing-large);
         border-radius: var(--spacing-large) var(--spacing-large) 0 0;
         bottom: 0;
@@ -21,6 +25,20 @@
         position: fixed;
         width: 100%;
         z-index: 99999;
+        
+    }
+
+    main > header {
+        display: flex;     
+    }
+
+    header > h3 {
+        flex-grow: 1;
+    }
+
+    header > div {
+        flex-grow: 0;
+        cursor: pointer;
     }
 
     h3, p {
