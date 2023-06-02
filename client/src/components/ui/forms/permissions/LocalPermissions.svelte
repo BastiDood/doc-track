@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { checkPerms } from './util.ts';
+    import { checkAllPerms } from './util.ts';
     import { assert } from '../../../../assert.ts';
     import { Events, IconColor, ToastType } from '../../../types.ts';
     import { Staff as Api } from '../../../../api/staff.ts';
@@ -72,7 +72,7 @@
             type="checkbox"
             name="perms"
             value={Local.AddStaff}
-            checked={checkPerms(permission, Local.AddStaff)}
+            checked={checkAllPerms(permission, Local.AddStaff)}
         />
         Add Staff
     </label>
@@ -81,7 +81,7 @@
             type="checkbox"
             name="perms"
             value={Local.RemoveStaff}
-            checked={checkPerms(permission, Local.RemoveStaff)}
+            checked={checkAllPerms(permission, Local.RemoveStaff)}
         />
         Remove Staff
     </label>
@@ -90,7 +90,7 @@
             type="checkbox"
             name="perms"
             value={Local.UpdateStaff}
-            checked={checkPerms(permission, Local.UpdateStaff)}
+            checked={checkAllPerms(permission, Local.UpdateStaff)}
         />
         Update Staff
     </label>
@@ -99,7 +99,7 @@
             type="checkbox"
             name="perms"
             value={Local.AddInvite}
-            checked={checkPerms(permission, Local.AddInvite)}
+            checked={checkAllPerms(permission, Local.AddInvite)}
         />
         Add Invite
     </label>
@@ -108,7 +108,7 @@
             type="checkbox"
             name="perms"
             value={Local.RevokeInvite}
-            checked={checkPerms(permission, Local.RevokeInvite)}
+            checked={checkAllPerms(permission, Local.RevokeInvite)}
         />
         Revoke Invite
     </label>
@@ -117,7 +117,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewBatch}
-            checked={checkPerms(permission, Local.ViewBatch)}
+            checked={checkAllPerms(permission, Local.ViewBatch)}
         />
         View Batch
     </label>
@@ -126,7 +126,7 @@
             type="checkbox"
             name="perms"
             value={Local.GenerateBatch}
-            checked={checkPerms(permission, Local.GenerateBatch)}
+            checked={checkAllPerms(permission, Local.GenerateBatch)}
         />
         Generate Batch
     </label>
@@ -135,7 +135,7 @@
             type="checkbox"
             name="perms"
             value={Local.InvalidateBatch}
-            checked={checkPerms(permission, Local.InvalidateBatch)}
+            checked={checkAllPerms(permission, Local.InvalidateBatch)}
         />
         Invalidate Batch
     </label>
@@ -144,7 +144,7 @@
             type="checkbox"
             name="perms"
             value={Local.CreateDocument}
-            checked={checkPerms(permission, Local.CreateDocument)}
+            checked={checkAllPerms(permission, Local.CreateDocument)}
         />
         Create Document
     </label>
@@ -153,7 +153,7 @@
             type="checkbox"
             name="perms"
             value={Local.InsertSnapshot}
-            checked={checkPerms(permission, Local.InsertSnapshot)}
+            checked={checkAllPerms(permission, Local.InsertSnapshot)}
         />
         Insert Snapshot
     </label>
@@ -162,7 +162,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewMetrics}
-            checked={checkPerms(permission, Local.ViewMetrics)}
+            checked={checkAllPerms(permission, Local.ViewMetrics)}
         />
         View Metrics
     </label>
@@ -171,7 +171,7 @@
             type="checkbox"
             name="perms"
             value={Local.ViewInbox}
-            checked={checkPerms(permission, Local.ViewInbox)}
+            checked={checkAllPerms(permission, Local.ViewInbox)}
         />
         View Inbox
     </label>
