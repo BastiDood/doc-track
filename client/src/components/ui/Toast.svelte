@@ -16,7 +16,7 @@
             <Close 
                 color={IconColor.White}
                 size={IconSize.Large}
-                on:click={topToastMessage.dismiss} 
+                on:click={() => topToastMessage.dismiss()} 
                 alt="Close Toast" 
             />
         </div>
