@@ -56,7 +56,7 @@
         throw err;
     });
 
-    let showUnprev = false;
+    let showInactive = false;
 </script>
 
 {#if currentOffice === null}
@@ -72,8 +72,8 @@
                     <PersonAdd color={IconColor.White} alt="icon for adding an existing user"></PersonAdd>
                     Add Existing User
                 </Button>
-                {#if !showUnprev}
-                    <Button on:click={() => (showUnprev = true)}>Show Inactive Staff</Button>
+                {#if !showInactive}
+                    <Button on:click={() => (showInactive = true)}>Show Inactive Staff</Button>
                 {/if}
             </div>
         </header>
@@ -97,7 +97,7 @@
                 {/each}
             </Container>
         </Container>
-        {#if showUnprev}
+        {#if showInactive}
             <Container ty={ContainerType.Divider}>
                 <h2>Inactive Staff</h2>
                 <Container ty={ContainerType.Enumeration}>
