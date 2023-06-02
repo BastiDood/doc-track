@@ -102,7 +102,7 @@
                 {/if}
             {/if}
         </section>
-    </main>
+    <main>
     <form id="logout" method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
     </form>
