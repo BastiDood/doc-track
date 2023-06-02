@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { checkPerms } from './util.ts';
+    import { checkAllPerms } from './util.ts';
     import { assert } from '../../../../assert.ts';
 
     import { topToastMessage } from '../../../../stores/ToastStore.ts';
@@ -67,7 +67,7 @@
             type="checkbox"
             name="perms"
             value={Global.CreateOffice}
-            checked={checkPerms(permission, Global.CreateOffice)}
+            checked={checkAllPerms(permission, Global.CreateOffice)}
         />
         Create Office
     </label>
@@ -76,7 +76,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateOffice}
-            checked={checkPerms(permission, Global.UpdateOffice)}
+            checked={checkAllPerms(permission, Global.UpdateOffice)}
         />
         Update Office
     </label>
@@ -85,7 +85,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateUser}
-            checked={checkPerms(permission, Global.UpdateUser)}
+            checked={checkAllPerms(permission, Global.UpdateUser)}
         />
         Update User
     </label>
@@ -94,7 +94,7 @@
             type="checkbox"
             name="perms"
             value={Global.CreateCategory}
-            checked={checkPerms(permission, Global.CreateCategory)}
+            checked={checkAllPerms(permission, Global.CreateCategory)}
         />
         Create Category
     </label>
@@ -103,7 +103,7 @@
             type="checkbox"
             name="perms"
             value={Global.UpdateCategory}
-            checked={checkPerms(permission, Global.UpdateCategory)}
+            checked={checkAllPerms(permission, Global.UpdateCategory)}
         />
         Update Category
     </label>
@@ -112,7 +112,7 @@
             type="checkbox"
             name="perms"
             value={Global.DeleteCategory}
-            checked={checkPerms(permission, Global.DeleteCategory)}
+            checked={checkAllPerms(permission, Global.DeleteCategory)}
         />
         Delete Category
     </label>
@@ -121,7 +121,7 @@
             type="checkbox"
             name="perms"
             value={Global.ActivateCategory}
-            checked={checkPerms(permission, Global.ActivateCategory)}
+            checked={checkAllPerms(permission, Global.ActivateCategory)}
         />
         Activate Category
     </label>
@@ -130,7 +130,7 @@
             type="checkbox"
             name="perms"
             value={Global.ViewMetrics}
-            checked={checkPerms(permission, Global.ViewMetrics)}
+            checked={checkAllPerms(permission, Global.ViewMetrics)}
         />
         View Metrics
     </label>
