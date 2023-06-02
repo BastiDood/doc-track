@@ -11,7 +11,7 @@ DocTrack is under the [GNU Affero General Public License v3.0](./LICENSE). Any f
 
 Files | Author(s) | License
 --- | --- | ---
-`client/src/assets/icons/bootstrap/*.svg` | [The Bootstrap Authors](https://github.com/twbs/icons) | [Apache 2.0](https://github.com/twbs/icons/blob/main/LICENSE.md)
+`client/src/assets/icons/bootstrap/*.svg` | [The Bootstrap Authors](https://github.com/twbs/icons) | [Apache 2.0](https://github.com/twbs/icons/blob/main/LICENSE)
 `client/src/assets/icons/carbon/*.svg` | [IBM Carbon Design System](https://github.com/carbon-design-system/carbon/tree/main/packages/icons) | [Apache 2.0](https://github.com/carbon-design-system/carbon/blob/main/LICENSE)
 `client/src/assets/icons/fluent/*.svg` | [Microsoft Fluent Design System](https://github.com/microsoft/fluentui-system-icons/tree/main/assets) | [MIT](https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE)
 
