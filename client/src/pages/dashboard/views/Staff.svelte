@@ -10,6 +10,7 @@
     import { allOffices } from '../../../stores/OfficeStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
 
+    import AddStaff from '../../../components/ui/forms/staff/AddStaff.svelte';
     import Button from '../../../components/ui/Button.svelte';
     import Container from '../../../components/ui/Container.svelte';
     import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
@@ -21,8 +22,8 @@
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
 
     enum ActiveMenu {
-        EditStaff,
         RemoveStaff,
+        EditStaff,
     }
 
     interface Context {
@@ -103,15 +104,9 @@
 
 {#if ctx === null}
     <!-- Do not render anything! -->
-{:else if ctx.activeMenu === ActiveMenu.EditStaff}
-    <Modal title="Edit Local Permissions" showModal>
-        <LocalPermissions
-            on:done={resetContext}
-            officeId={ctx.office}
-            permission={ctx.permission}
-            userId={ctx.id}
-            email={ctx.email}
-        />
+{:else if ctx.activeMenu === ActiveMenu.AddStaff}
+    <Modal title="Add Existing User" showModal>
+        <AddStaff on:done={resetContext} office={ctx.office} />
     </Modal>
 {:else if ctx.activeMenu === ActiveMenu.RemoveStaff}
     <Modal title="Remove Staff" showModal>
@@ -119,6 +114,16 @@
             on:done={resetContext}
             id={ctx.id}
             office={ctx.office} 
+            email={ctx.email}
+        />
+    </Modal>
+{:else if ctx.activeMenu === ActiveMenu.EditStaff}
+    <Modal title="Edit Local Permissions" showModal>
+        <LocalPermissions
+            on:done={resetContext}
+            officeId={ctx.office}
+            permission={ctx.permission}
+            userId={ctx.id}
             email={ctx.email}
         />
     </Modal>

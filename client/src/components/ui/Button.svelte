@@ -10,8 +10,6 @@
 </button>
 
 <style>
-    @import url('../../pages/vars.css');
-
     button {
         margin: var(--spacing-normal);
         padding: var(--spacing-large);

@@ -51,12 +51,14 @@
             name="officename"
             label="New Office Name:"
         />
-        <Button submit><Checkmark color={IconColor.White} alt="Create New Office"/> New Office</Button>
+        <Button submit>
+            <Checkmark color={IconColor.White} alt="Create New Office"/>
+            New Office
+        </Button>
     </form>
 </article>
 
 <style>
-    @import url('../../../../pages/vars.css');
     section {
         overflow-y: scroll;
         border: var(--spacing-tiny) solid;
