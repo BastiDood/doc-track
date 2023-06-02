@@ -1,8 +1,11 @@
 <script>
     import { slide } from 'svelte/transition';
-    import { topToastMessage } from '../../stores/ToastStore.ts';
-    import Close from '../icons/Close.svelte';
+
     import { IconColor, IconSize } from '../types.ts';
+
+    import { topToastMessage } from '../../stores/ToastStore.ts';
+
+    import Close from '../icons/Close.svelte';
 </script>
 
 {#if $topToastMessage !== null}
