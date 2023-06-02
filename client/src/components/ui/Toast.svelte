@@ -8,18 +8,18 @@
 {#if $topToastMessage !== null}
     {@const { title, body, type } = $topToastMessage}
     <main class={type} transition:slide>
-        <header>
+        <section>
             <h3>{title}</h3>
-            <div>
-                <Close 
-                    color={IconColor.White}
-                    size={IconSize.Large}
-                    on:click={topToastMessage.dismiss} 
-                    alt="Close Toast" 
-                />
-            </div>
-        </header>
-        <p>{body}</p>
+            <p>{body}</p>
+        </section>
+        <div>
+            <Close 
+                color={IconColor.White}
+                size={IconSize.Large}
+                on:click={topToastMessage.dismiss} 
+                alt="Close Toast" 
+            />
+        </div>
     </main>
 {/if}
 
@@ -33,18 +33,14 @@
         position: fixed;
         width: 100%;
         z-index: 99999;
-        
+        display: flex;  
     }
 
-    main > header {
-        display: flex;     
-    }
-
-    header > h3 {
+    main > section {
         flex-grow: 1;
     }
 
-    header > div {
+    main > div {
         flex-grow: 0;
         cursor: pointer;
     }
