@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { Staff } from '~model/staff.ts';
-    import { User } from '~model/user.ts';
+    import type { StaffMember } from '~model/api.ts';
 
     import { assert } from '../../../assert.ts';
     import { IconColor, IconSize, ContainerType } from '../../../components/types.ts';
@@ -21,43 +20,31 @@
     import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
 
-    enum ActiveMenu {
+    enum SelectedMenu {
+        EditLocalPermissions,
         RemoveStaff,
-        EditStaff,
     }
 
-    interface Context {
-        id: Staff['user_id'],
-        office: Staff['office'],
-        email: User['email'],
-        permission: Staff['permission'],
-        showContext: boolean,
-        activeMenu: ActiveMenu | null;
-    }
+    type ExtraContext = { selected: SelectedMenu | null }
+    let ctx = false as ExtraContext & Omit<StaffMember, 'picture' | 'name'> | boolean;
 
     $: ({ currentOffice } = $dashboardState);
     $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
 
-    let ctx = null as Context | null;
-
-    function openContextMenu(id: Staff['user_id'], office: Staff['office'], email: User['email'], permission: Staff['permission']) {
-        ctx = { id: id, office: office, email: email, permission: permission, showContext: true, activeMenu: null };
+    function openEditLocalPermissions() {
+        assert(typeof ctx === 'object');
+        ctx.selected = SelectedMenu.EditLocalPermissions;
+        ctx = ctx;
     }
 
-    function openEditStaff(ctxcpy: Context) {
-        ctxcpy.showContext = false;
-        ctxcpy.activeMenu = ActiveMenu.EditStaff;
-        ctx = ctxcpy;
-    }
-
-    function openRemoveStaff(ctxcpy: Context) {
-        ctxcpy.showContext = false;
-        ctxcpy.activeMenu = ActiveMenu.RemoveStaff;
-        ctx = ctxcpy;
+    function openRemoveStaff() {
+        assert(typeof ctx === 'object');
+        ctx.selected = SelectedMenu.RemoveStaff;
+        ctx = ctx;
     }
 
     function resetContext() {
-        ctx = null;
+        ctx = false;
     }
 
     const staffReady = staffList.load().catch(err => {
@@ -75,7 +62,7 @@
     {:then}
         <header>
             <h1>Staffs of {officeName}</h1>
-            <Button>
+            <Button on:click={() => (ctx = true)}>
                 <PersonAdd color={IconColor.White} alt="icon for adding an existing user"></PersonAdd>
                 Add Existing User
             </Button>
@@ -91,7 +78,7 @@
                     {picture}
                     office={currentOffice}
                     iconSize={IconSize.Large} 
-                    on:overflowClick={openContextMenu.bind(null, id, currentOffice, email, permission)} 
+                    on:overflowClick={() => (ctx = { id, email, permission, selected: null })} 
                 />
             {:else}
                 <p>No staff members exist in "{officeName}".</p>
@@ -100,38 +87,37 @@
     {:catch err}
         <PageUnavailable {err} />
     {/await}
-{/if}
-
-{#if ctx === null}
-    <!-- Do not render anything! -->
-{:else if ctx.activeMenu === ActiveMenu.AddStaff}
-    <Modal title="Add Existing User" showModal>
-        <AddStaff on:done={resetContext} office={ctx.office} />
-    </Modal>
-{:else if ctx.activeMenu === ActiveMenu.RemoveStaff}
-    <Modal title="Remove Staff" showModal>
-        <RemoveStaff
-            on:done={resetContext}
-            id={ctx.id}
-            office={ctx.office} 
-            email={ctx.email}
-        />
-    </Modal>
-{:else if ctx.activeMenu === ActiveMenu.EditStaff}
-    <Modal title="Edit Local Permissions" showModal>
-        <LocalPermissions
-            on:done={resetContext}
-            officeId={ctx.office}
-            permission={ctx.permission}
-            userId={ctx.id}
-            email={ctx.email}
-        />
-    </Modal>
-{:else if ctx.showContext}
-    <PersonContextLocal
-        on:close={resetContext}
-        show
-        on:editLocalPermission={openEditStaff.bind(null, ctx)}
-        on:removeStaff={openRemoveStaff.bind(null, ctx)}
-    />
+    {#if typeof ctx === 'object'}
+        {#if ctx.selected === SelectedMenu.EditLocalPermissions}
+            <Modal showModal on:close={resetContext} title="Edit Local Permissions">
+                <LocalPermissions
+                    on:done={resetContext}
+                    officeId={currentOffice}
+                    permission={ctx.permission}
+                    userId={ctx.id}
+                    email={ctx.email}
+                />
+            </Modal>
+        {:else if ctx.selected === SelectedMenu.RemoveStaff}
+            <Modal showModal on:close={resetContext} title="Remove Staff">
+                <RemoveStaff
+                    on:done={resetContext}
+                    office={currentOffice} 
+                    id={ctx.id}
+                    email={ctx.email}
+                />
+            </Modal>
+        {:else if ctx.selected === null}
+            <PersonContextLocal
+                show
+                on:close={resetContext}
+                on:editLocalPermission={openEditLocalPermissions}
+                on:removeStaff={openRemoveStaff}
+            />
+        {/if}
+    {:else if ctx}
+        <Modal showModal on:close={resetContext} title="Add Existing User">
+            <AddStaff on:done={resetContext} office={currentOffice} />
+        </Modal>
+    {/if}
 {/if}

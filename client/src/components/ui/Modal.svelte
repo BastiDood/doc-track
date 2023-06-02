@@ -24,9 +24,6 @@
 </dialog>
 
 <style>
-    /* https://svelte.dev/examples/modal */
-    @import url('../../pages/vars.css');
-
     dialog {
         border-radius: var(--border-radius);
         border: none;
