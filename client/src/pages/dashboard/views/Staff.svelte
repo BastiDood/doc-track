@@ -25,7 +25,10 @@
         RemoveStaff,
     }
 
-    type ExtraContext = { selected: SelectedMenu | null }
+    interface ExtraContext {
+        selected: SelectedMenu | null;
+    }
+
     let ctx = false as ExtraContext & Omit<StaffMember, 'picture' | 'name'> | boolean;
 
     $: ({ currentOffice } = $dashboardState);
@@ -52,6 +55,8 @@
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
     });
+
+    let showRetiredStaff = false;
 </script>
 
 {#if currentOffice === null}
@@ -62,28 +67,58 @@
     {:then}
         <header>
             <h1>Staffs of {officeName}</h1>
-            <Button on:click={() => (ctx = true)}>
-                <PersonAdd color={IconColor.White} alt="icon for adding an existing user"></PersonAdd>
-                Add Existing User
-            </Button>
+            <div>
+                <Button on:click={() => (ctx = true)}>
+                    <PersonAdd color={IconColor.White} alt="icon for adding an existing user"></PersonAdd>
+                    Add Existing User
+                </Button>
+                {#if !showRetiredStaff}
+                    <Button on:click={() => (showRetiredStaff = true)}>Show Inactive Staff</Button>
+                {/if}
+            </div>
         </header>
-        <Container ty={ContainerType.Enumeration}>
-            {@const staff = $staffList.filter(s => s.permission !== 0)}
-            {#each staff as { id, name, email, permission, picture } (id)}
-                <PersonRowLocal
-                    {id}
-                    {email}
-                    {name}
-                    {permission}
-                    {picture}
-                    office={currentOffice}
-                    iconSize={IconSize.Large} 
-                    on:overflowClick={() => (ctx = { id, email, permission, selected: null })} 
-                />
-            {:else}
-                <p>No staff members exist in "{officeName}".</p>
-            {/each}
+        <Container ty={ContainerType.Divider}>
+            <h2>Active Staff</h2>
+            <Container ty={ContainerType.Enumeration}>
+                {@const staff = $staffList.filter(s => s.permission !== 0)}
+                {#each staff as { id, name, email, permission, picture } (id)}
+                    <PersonRowLocal
+                        {id}
+                        {email}
+                        {name}
+                        {permission}
+                        {picture}
+                        office={currentOffice}
+                        iconSize={IconSize.Large} 
+                        on:overflowClick={() => (ctx = { id, email, permission, selected: null })} 
+                    />
+                {:else}
+                    <p>No staff members exist in "{officeName}".</p>
+                {/each}
+            </Container>
         </Container>
+        {#if showRetiredStaff}
+            <Container ty={ContainerType.Divider}>
+                <h2>Inactive Staff</h2>
+                <Container ty={ContainerType.Enumeration}>
+                    {@const inactive = $staffList.filter(s => s.permission === 0)}
+                    {#each inactive as { id, name, email, permission, picture } (id)}
+                        <PersonRowLocal
+                            {id}
+                            {email}
+                            {name}
+                            {permission}
+                            {picture}
+                            office={currentOffice}
+                            iconSize={IconSize.Large} 
+                            on:overflowClick={() => (ctx = { id, email, permission, selected: null })} 
+                        />
+                    {:else}
+                        <p>No staff inactive staff members exist in "{officeName}".</p>
+                    {/each}
+                </Container>
+            </Container>
+        {/if}
     {:catch err}
         <PageUnavailable {err} />
     {/await}
@@ -121,3 +156,16 @@
         </Modal>
     {/if}
 {/if}
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    div {
+        display: flex;
+        align-items: column;
+    }
+</style>
