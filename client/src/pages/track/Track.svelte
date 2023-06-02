@@ -1,26 +1,26 @@
 <script lang="ts">
     import type { PaperTrail } from '~model/api.ts';
-    import { Document as DocumentModel } from '~model/document.ts';
+    import type { Document as DocumentModel } from '~model/document.ts';
 
     import { assert } from '../../assert.ts';
-    import { Document } from '../../api/document.ts';
     import { register } from '../register.ts';
+    import { Document } from '../../api/document.ts';
+    import { Vapid } from '../../api/vapid.ts';
+    import { ContainerType, IconColor, IconSize, ToastType } from '../../components/types.ts';
 
     import { allOffices } from '../../stores/OfficeStore.ts';
     import { topToastMessage } from '../../stores/ToastStore.ts';
-    import { Vapid } from '../../api/vapid.ts';
 
     import Button from '../../components/ui/Button.svelte';
-    import Notification from '../../components/icons/Notification.svelte';
-    import PrintQr from '../../components/ui/qr/PrintQr.svelte';
-    import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
-    import PageUnavailable from '../../components/ui/PageUnavailable.svelte';
-    import Toast from '../../components/ui/Toast.svelte';
-    import { ContainerType, IconColor, IconSize, ToastType } from '../../components/types.ts';
     import Container from '../../components/ui/Container.svelte';
-    import QrGenerator from '../../components/ui/qr/QrGenerator.svelte';
-    import TrackingProgress from '../../components/ui/TrackingProgress.svelte';
     import DocumentDownload from '../../components/icons/DocumentDownload.svelte';
+    import PageUnavailable from '../../components/ui/PageUnavailable.svelte';
+    import PrintQr from '../../components/ui/qr/PrintQr.svelte';
+    import Notification from '../../components/icons/Notification.svelte';
+    import QrGenerator from '../../components/ui/qr/QrGenerator.svelte';
+    import Toast from '../../components/ui/Toast.svelte';
+    import TopBar from '../../components/ui/navigationbar/TopBar.svelte';
+    import TrackingProgress from '../../components/ui/TrackingProgress.svelte';
 
     $: ({ searchParams } = new URL(location.href));
     $: trackingNumber = searchParams.get('id');

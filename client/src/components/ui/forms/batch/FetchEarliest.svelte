@@ -1,6 +1,7 @@
 <script lang="ts">
     import { userSession } from '../../../../stores/UserStore.ts';
     import { earliestBatch } from '../../../../stores/BatchStore.ts';
+
     import Button from '../../Button.svelte';
     import QrGenerator from '../../qr/QrGenerator.svelte';
 

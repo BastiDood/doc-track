@@ -1,24 +1,26 @@
 <script lang="ts">
+    import type { Document } from '~model/document.ts';
     import { Status } from '../../../../../model/src/snapshot.ts';
+
+    import { assert } from '../../../assert.ts';
+    import { IconSize, ToastType, IconColor, ContainerType } from '../../../components/types.ts';
+
     import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { deferRegistrationCount } from '../../../stores/DeferredStore.ts';
     import { documentOutbox } from '../../../stores/DocumentStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
-    import { assert } from '../../../assert.ts';
     
-    import { IconSize, ToastType, IconColor, ContainerType } from '../../../components/types';
-    import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
-    import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
-    import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
     import Button from '../../../components/ui/Button.svelte';
-    import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
-    import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
-    import { deferRegistrationCount } from '../../../stores/DeferredStore.ts';
-    import { Document } from '../../../../../model/src/document.ts';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import Container from '../../../components/ui/Container.svelte';
+    import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import DocumentAdd from '../../../components/icons/DocumentAdd.svelte';
+    import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
+    import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
+    import SendRow from '../../../components/ui/itemrow/SendRow.svelte';
 
     interface Context {
         docId: Document['id'] | null,

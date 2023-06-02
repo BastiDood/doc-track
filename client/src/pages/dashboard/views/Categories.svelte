@@ -1,20 +1,21 @@
 <script lang="ts">
     import type { Category } from '~model/category.ts';
 
-    import { categoryList } from '../../../stores/CategoryStore.ts';
-    import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { Category as Api } from '../../../api/category.ts';
     import { ContainerType, IconSize, ToastType } from '../../../components/types.ts';
 
-    import Button from '../../../components/ui/Button.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
-    import DocumentBlank from '../../../components/icons/DocumentBlank.svelte';
-    import RowTemplate from '../../../components/ui/RowTemplate.svelte';
+    import { categoryList } from '../../../stores/CategoryStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+
     import ActivateCategoryContext from '../../../components/ui/contextdrawer/ActivateCategoryContext.svelte';
-    import RemoveCategoryContext from '../../../components/ui/contextdrawer/RemoveCategoryContext.svelte';
-    import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
-    import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
+    import Button from '../../../components/ui/Button.svelte';
     import Container from '../../../components/ui/Container.svelte';
+    import CreateCategory from '../../../components/ui/forms/category/CreateCategory.svelte';
+    import DocumentBlank from '../../../components/icons/DocumentBlank.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
+    import RemoveCategoryContext from '../../../components/ui/contextdrawer/RemoveCategoryContext.svelte';
+    import RenameCategory from '../../../components/ui/forms/category/RenameCategory.svelte';
+    import RowTemplate from '../../../components/ui/RowTemplate.svelte';
 
     enum ActiveMenu {
         Create,

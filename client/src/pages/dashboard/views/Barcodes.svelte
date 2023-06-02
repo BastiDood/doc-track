@@ -1,25 +1,22 @@
 <script lang="ts">
     import { assert } from '../../../assert.ts';
     import { Batch } from '../../../api/batch.ts';
+    import { ContainerType, IconColor, ToastType } from '../../../components/types.ts';
 
     import { earliestBatch } from '../../../stores/BatchStore.ts';
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { barcodeSummary } from '../../../stores/MetricStore.ts';
-    import { allOffices } from '../../../stores/OfficeStore.ts';
 
-    import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
-
-    import Download from '../../../components/icons/Download.svelte';
     import Add from '../../../components/icons/Add.svelte';
     import Button from '../../../components/ui/Button.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
-    import { ContainerType, IconColor, ToastType } from '../../../components/types.ts';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import Container from '../../../components/ui/Container.svelte';
+    import Download from '../../../components/icons/Download.svelte';
+    import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     $: ({ currentOffice } = $dashboardState);
-    $: officeName = currentOffice === null ? 'No office name.' : $allOffices[currentOffice];
 
     let showDownloadBatch = false;
 

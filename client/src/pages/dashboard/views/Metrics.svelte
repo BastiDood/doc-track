@@ -1,14 +1,16 @@
 <script lang="ts">
     import type { Metrics } from '~model/metrics.ts';
 
-    import MetricsSelect from '../../../components/ui/MetricsSelect.svelte';
     import { ContainerType, MetricsMode } from '../../../components/types.ts';
+
+    import Container from '../../../components/ui/Container.svelte';
+    import MetricsSelect from '../../../components/ui/MetricsSelect.svelte';
 
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { userSummary, localSummary, globalSummary } from '../../../stores/MetricStore.ts';
     import { allOffices } from '../../../stores/OfficeStore.ts';
     import { currentUser, userSession } from '../../../stores/UserStore.ts';
-    import Container from '../../../components/ui/Container.svelte';
+
     function selectSummary(user: Metrics, local: Metrics, global: Metrics, mode?: MetricsMode): Metrics {
         switch (mode) {
             case MetricsMode.User: return user;

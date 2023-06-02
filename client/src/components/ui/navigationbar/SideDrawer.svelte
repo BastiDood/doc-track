@@ -1,32 +1,34 @@
 <script lang="ts">
     import active from 'svelte-spa-router/active';
-    import { Office } from '~model/office.ts';
-    import { userOffices, userSession } from '../../../stores/UserStore.ts';
-    import { dashboardState } from '../../../stores/DashboardState.ts';
-    import { goToTrackingPage } from '../itemrow/util.ts';
+
+    import type { Office } from '~model/office.ts';
     import type { User } from '~model/user.ts';
-    import { checkPerms } from '../forms/permissions/util.ts';
     import { Local } from '../../../../../model/src/permission.ts';
 
-    import InboxIcon from '../../icons/DocumentDownload.svelte';
-    import OutboxIcon from '../../icons/DocumentExport.svelte';
-    import Document from '../../icons/DocumentBlank.svelte';
-    import EventsIcon from '../../icons/Events.svelte';
-    import BarcodesIcon from '../../icons/Barcode.svelte';
-    import InvitesIcon from '../../icons/PersonAdd.svelte';
-    import StaffIcon from '../../icons/PersonMail.svelte';
-    import AdminIcon from '../../icons/PersonInfo.svelte';
-    import SettingsIcon from '../../icons/Settings.svelte';
-    import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
-    import OfficeSelect from '../OfficeSelect.svelte';
+    import { userOffices, userSession } from '../../../stores/UserStore.ts';
+    import { dashboardState } from '../../../stores/DashboardState.ts';
 
     import { ButtonType, IconColor } from '../../types.ts';
-    import QrScanner from '../QRScanner.svelte';
-    import Modal from '../Modal.svelte';
-    import TextInput from '../../ui/TextInput.svelte';
+    import { goToTrackingPage } from '../itemrow/util.ts';
+    import { checkPerms } from '../forms/permissions/util.ts';
+
+    import AdminIcon from '../../icons/PersonInfo.svelte';
+    import BarcodesIcon from '../../icons/Barcode.svelte';
     import Button from '../../ui/Button.svelte';
-    import Search from '../../icons/Search.svelte';
     import Camera from '../../icons/Camera.svelte';
+    import ChartClusterBar from '../../icons/ChartClusterBar.svelte';
+    import Document from '../../icons/DocumentBlank.svelte';
+    import EventsIcon from '../../icons/Events.svelte';
+    import InboxIcon from '../../icons/DocumentDownload.svelte';
+    import InvitesIcon from '../../icons/PersonAdd.svelte';
+    import Modal from '../Modal.svelte';
+    import OfficeSelect from '../OfficeSelect.svelte';
+    import OutboxIcon from '../../icons/DocumentExport.svelte';
+    import QrScanner from '../QRScanner.svelte';
+    import Search from '../../icons/Search.svelte';
+    import SettingsIcon from '../../icons/Settings.svelte';
+    import StaffIcon from '../../icons/PersonMail.svelte';
+    import TextInput from '../../ui/TextInput.svelte';
 
     export let user: User | undefined;
     export let show = false;

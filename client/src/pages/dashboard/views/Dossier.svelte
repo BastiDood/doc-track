@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { dashboardState } from '../../../stores/DashboardState.ts';
-    import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { assert } from '../../../assert.ts';
     import { Document as Api } from '../../../api/document.ts';
-    import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
     import { IconSize, ContainerType } from '../../../components/types.ts';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+
+    import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+
     import Container from '../../../components/ui/Container.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
 
     $: ({ currentOffice } = $dashboardState);
 
@@ -17,7 +19,6 @@
             throw err;
         });
     }
-    
 </script>
 
 {#if currentOffice === null}

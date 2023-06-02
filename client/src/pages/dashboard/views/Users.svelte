@@ -1,16 +1,18 @@
 <script lang="ts">
-    import { userList } from '../../../stores/UserStore';
-    import { topToastMessage } from '../../../stores/ToastStore';
-    import { User } from '~model/user';
-    import { assert } from '../../../assert';
+    import { User } from '~model/user.ts';
+
+    import { assert } from '../../../assert.ts';
+    import { IconSize, ContainerType } from '../../../components/types.ts';
+
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+    import { userList } from '../../../stores/UserStore.ts';
     
-    import { IconSize, ContainerType } from '../../../components/types';
-    import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
+    import Button from '../../../components/ui/Button.svelte';
+    import Container from '../../../components/ui/Container.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
-    import Container from '../../../components/ui/Container.svelte';
-    import Button from '../../../components/ui/Button.svelte';
+    import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
 
     interface Context {
         id: User['id'],

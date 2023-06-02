@@ -1,19 +1,21 @@
 <script lang="ts">
-    import { allOffices } from '../../../stores/OfficeStore';
-    import { topToastMessage } from '../../../stores/ToastStore';
-    import { Office } from '~model/office';
-    import { assert } from '../../../assert';
+    import type { Office } from '~model/office.ts';
 
-    import Modal from '../../../components/ui/Modal.svelte';
-    import RowTemplate from '../../../components/ui/RowTemplate.svelte';
-    import Events from '../../../components/icons/Events.svelte';
-    import Edit from '../../../components/icons/Edit.svelte';
-    import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
-    import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
+    import { assert } from '../../../assert.ts';
+    import { IconSize, ContainerType } from '../../../components/types.ts';
+
+    import { allOffices } from '../../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+
     import Button from '../../../components/ui/Button.svelte';
-    import { IconSize, ContainerType } from '../../../components/types';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import Container from '../../../components/ui/Container.svelte';
+    import Edit from '../../../components/icons/Edit.svelte';
+    import EditOffice from '../../../components/ui/forms/office/EditOffice.svelte';
+    import Events from '../../../components/icons/Events.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
+    import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import RowTemplate from '../../../components/ui/RowTemplate.svelte';
 
     enum OfficeEvents {
         Create,

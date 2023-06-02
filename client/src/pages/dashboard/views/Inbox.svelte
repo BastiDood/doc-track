@@ -1,16 +1,18 @@
 <script lang="ts">
+    import { assert } from '../../../assert.ts';
+    import { ContainerType, IconSize, IconColor, ToastType } from '../../../components/types.ts';
+
+    import { Document } from '../../../../../model/src/document.ts';
+    import { Status } from '../../../../../model/src/snapshot.ts';
+
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { documentInbox } from '../../../stores/DocumentStore';
     import { deferredSnaps } from '../../../stores/DeferredStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
-    import { assert } from '../../../assert.ts';
 
     import Button from '../../../components/ui/Button.svelte';
     import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
-    import { IconSize, ToastType, IconColor, ContainerType } from '../../../components/types';
-    import { Document } from '../../../../../model/src/document.ts';
-    import { Status } from '../../../../../model/src/snapshot.ts';
     import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';

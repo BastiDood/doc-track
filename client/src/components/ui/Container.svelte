@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { ContainerType } from '../types';
-
+    import { ContainerType } from '../types.ts';
     export let ty: ContainerType;
 </script>
 

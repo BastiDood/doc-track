@@ -1,20 +1,22 @@
 <script lang="ts">
-    import { dashboardState } from '../../../stores/DashboardState';
-    import { staffList } from '../../../stores/StaffStore';
-    import { allOffices } from '../../../stores/OfficeStore';
-    import { topToastMessage } from '../../../stores/ToastStore';
-    import { Staff } from '~model/staff';
-    import { User } from '~model/user';
-    import { assert } from '../../../assert';
+    import { Staff } from '~model/staff.ts';
+    import { User } from '~model/user.ts';
 
-    import { IconSize, ContainerType } from '../../../components/types';
-    import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
-    import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
-    import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
-    import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import { assert } from '../../../assert.ts';
+    import { IconSize, ContainerType } from '../../../components/types.ts';
+
+    import { dashboardState } from '../../../stores/DashboardState.ts';
+    import { staffList } from '../../../stores/StaffStore.ts';
+    import { allOffices } from '../../../stores/OfficeStore.ts';
+    import { topToastMessage } from '../../../stores/ToastStore.ts';
+
     import Container from '../../../components/ui/Container.svelte';
+    import LocalPermissions from '../../../components/ui/forms/permissions/LocalPermissions.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
+    import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
+    import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
 
     enum ActiveMenu {
         EditStaff,

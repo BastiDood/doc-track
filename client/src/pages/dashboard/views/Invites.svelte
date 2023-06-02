@@ -1,20 +1,21 @@
 <script lang="ts">
+    import type { Invitation } from '~model/invitation.ts';
+
+    import { assert } from '../../../assert.ts';
+    import { ContainerType, IconColor, IconSize } from '../../../components/types.ts';
+
     import { dashboardState } from '../../../stores/DashboardState';
     import { inviteList } from '../../../stores/InviteStore.ts';
     import { topToastMessage } from '../../../stores/ToastStore.ts';
-    import { IconColor, IconSize, ContainerType } from '../../../components/types.ts';
-    import { assert } from '../../../assert.ts';
-    
 
     import Button from '../../../components/ui/Button.svelte';
+    import Container from '../../../components/ui/Container.svelte';
     import InviteForm from '../../../components/ui/forms/invite/AddInvite.svelte';
     import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
-    import { Invitation } from '~model/invitation.ts';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
-    import Container from '../../../components/ui/Container.svelte';
 
     enum ActiveMenu {
         CreateInvite,
@@ -27,6 +28,7 @@
     }
 
     $: ({ currentOffice } = $dashboardState);
+
     let ctx = null as Context | null;
 
     function openRevokeInvite(email: Invitation['email'], office: Invitation['office']) {
