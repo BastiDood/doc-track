@@ -70,7 +70,7 @@
     <Modal showModal title="Create New Office" on:close={resetContext}>
         <NewOffice on:done={resetContext} />
     </Modal>
-{:else if ctx.mode === OfficeEvents.Edit || ctx.id}
+{:else if ctx.mode === OfficeEvents.Edit && typeof ctx.id !== 'undefined'}
     <Modal showModal title="Edit Office" on:close={resetContext}>
         <EditOffice currId={ctx.id} on:done={resetContext} />
     </Modal>

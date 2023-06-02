@@ -17,7 +17,6 @@
     import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import PersonContextLocal from '../../../components/ui/contextdrawer/PersonContextLocal.svelte';
-    import PersonDelete from '../../../components/icons/PersonDelete.svelte';
     import PersonRowLocal from '../../../components/ui/itemrow/PersonRowLocal.svelte';
     import RemoveStaff from '../../../components/ui/forms/staff/RemoveStaff.svelte';
 
