@@ -49,41 +49,43 @@
 </script>
 
 <nav class:show on:click|stopPropagation on:keypress>
-    <header id="controls">
-        {#if typeof user !== 'undefined'}
-            <div>Hello {user.name}!</div>
-        {/if}
-        {#if Object.getOwnPropertyNames($userOffices).length === 0}
-            No office detected!
-        {:else}
-            <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
-        {/if}
-        <div>
-            <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
-            <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
-        </div>
-        <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
-    </header>
-    <section>
-        {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
-            <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
-            <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
-            <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
-        {/if}
+    <main>
+        <header id="controls">
+            {#if typeof user !== 'undefined'}
+                <div>Hello {user.name}!</div>
+            {/if}
+            {#if Object.getOwnPropertyNames($userOffices).length === 0}
+                No office detected!
+            {:else}
+                <OfficeSelect offices={$userOffices} bind:oid={selectedOffice} />
+            {/if}
+            <div>
+                <Button type={ButtonType.Primary} on:click={() => (showScan = true)}><Camera color={IconColor.White} alt="Take/select an image." /></Button>
+                <Button type={ButtonType.Primary}><Search color={IconColor.White} alt="Search specified tracking number." /></Button>
+            </div>
+            <TextInput name="trackingnumber" placeholder="Enter tracking number here..." label="" bind:value={trackingNumber} />
+        </header>
+        <section>
+            {#if localPermission && checkPerms(localPermission, Local.ViewInbox)}
+                <a href="#/inbox" use:active><InboxIcon alt="Go to Inbox" />Inbox</a>
+                <a href="#/outbox" use:active><OutboxIcon alt="Go to Outbox" />Outbox</a>
+                <a href="#/dossier" use:active><Document alt="Go to Dossier" />Dossier</a>
+            {/if}
 
-        <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
-        
-        {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
-            <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
-        
-        {/if}
+            <a href="#/metrics" use:active><ChartClusterBar alt="Go to Metrics" />Metrics</a>
+            
+            {#if localPermission && checkPerms(localPermission, Local.ViewBatch)}
+                <a href="#/barcodes" use:active><BarcodesIcon alt="Go to Barcodes" />Barcodes</a>
+            
+            {/if}
 
-        <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
-        <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
-        <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
-        <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
-        <a href="#/offices" use:active><EventsIcon alt="Go to Offices" />Offices</a>
-    </section>
+            <a href="#/invites" use:active><InvitesIcon alt="Manage Invites" />Invites</a>
+            <a href="#/staff" use:active><StaffIcon alt="Manage Staff" />Staff</a>
+            <a href="#/users" use:active><AdminIcon alt="Manage Users" />Users</a>
+            <a href="#/categories" use:active><SettingsIcon alt="Manage Categories" />Categories</a>
+            <a href="#/offices" use:active><EventsIcon alt="Go to Offices" />Offices</a>
+        </section>
+    </main>
     <form id="logout" method="POST" action="/auth/logout">
         <input type="submit" value="Logout" />
     </form>
@@ -134,7 +136,7 @@
         margin: var(--large);
     }
     
-    section {
+    main {
         overflow-y: auto;
     }
 
