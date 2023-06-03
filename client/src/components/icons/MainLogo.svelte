@@ -21,4 +21,8 @@
     article {
         cursor: pointer;
     }
+
+    img { 
+        user-select: none;
+    }
 </style>

@@ -8,3 +8,8 @@
 
 <img {alt} src={iconUrl.pathname} on:click on:keydown />
 
+<style>
+    img { 
+        user-select: none;
+    }
+</style>

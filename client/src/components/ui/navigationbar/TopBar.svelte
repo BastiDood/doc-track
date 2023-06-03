@@ -33,7 +33,7 @@
             <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
         {/if}
         <span id="title" class:offline={!$isOnline}>
-            <a href='/'>
+            <a href='/dashboard'>
                 <MainLogo alt="DocTrack Logo" mini />
             </a>
         </span>
@@ -84,6 +84,7 @@
         border-radius: 50%;
         display: block;
         height: 2rem;
+        user-select: none;
     }
 
     #navcontainer {
