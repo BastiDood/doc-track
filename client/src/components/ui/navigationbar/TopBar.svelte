@@ -12,7 +12,7 @@
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
-    // Import chip-style.css
+    
     import './../itemrow/chip-style.css';
 
     // eslint-disable-next-line no-undefined
