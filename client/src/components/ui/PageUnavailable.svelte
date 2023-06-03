@@ -3,10 +3,14 @@
 
     export let err = null as Error | null;
 
+    const doctrackAngry = new URL('../../assets/icons/doctrack-angry.svg', import.meta.url);
 </script>
 
 <div>
+    <br>
+    <img src="{doctrackAngry.pathname}" alt="Doctrack angry logo" />
     <h2>Well... this is awkward.</h2>
+    <h3>Mr. Doctrack wasn't happy with what you did.</h3>
     {#if err !== null}
         {#if err instanceof InvalidSession}
             <p>Your session has expired. <a href="/auth/login">Log back in?</a></p>
@@ -19,5 +23,10 @@
 <style>
     div {
         text-align: center;
+    }
+
+    img {
+        user-select: none;
+        max-width: 300px;
     }
 </style>
