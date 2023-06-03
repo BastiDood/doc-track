@@ -15,5 +15,6 @@
 <style>
     img { 
         user-select: none;
+        cursor: pointer;
     }
 </style>

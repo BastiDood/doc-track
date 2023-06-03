@@ -43,7 +43,6 @@
     article > div {
         flex: 0 1 auto;
     }
-    
 
     #middle {
         flex: 1 auto;
@@ -56,4 +55,5 @@
     .defer {
         border-bottom: var(--spacing-small) var(--offline-color) solid;
     }
+    
 </style>
