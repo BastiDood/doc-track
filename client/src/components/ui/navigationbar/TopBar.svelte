@@ -23,6 +23,9 @@
         ? null
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '';
+
+    let isLogoutHovered = false as boolean;
+    const logoutIcon = new URL('../../../assets/icons/carbon/logout-profile.svg', import.meta.url);
 </script>
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
@@ -57,7 +60,9 @@
                 </Button>
             </a>
         {:else}
-            <span><img id="user" src={user.picture} alt="Profile Picture for {user.name}" /></span>
+            <a href="/" on:mouseenter={ () => isLogoutHovered = true } on:mouseleave={ () => isLogoutHovered = false }>
+                <img id="user" src={isLogoutHovered ? logoutIcon.pathname : user.picture} alt="Profile Picture for {user.name}" />
+            </a>
         {/if}
     </nav>
 </nav>
