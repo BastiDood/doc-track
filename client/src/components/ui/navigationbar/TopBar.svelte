@@ -12,6 +12,8 @@
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
+    // Import chip-style.css
+    import './../itemrow/chip-style.css';
 
     // eslint-disable-next-line no-undefined
     export let user = undefined as User | undefined;
@@ -41,7 +43,7 @@
             {/if}
         {/await}
         {#if officeName}
-            <span>{officeName}</span>
+            <span class="chip background">{officeName}</span>
         {/if}
     </span>
     <slot></slot>
@@ -60,6 +62,10 @@
 
 <style>
     @import url('../../../pages/vars.css');
+
+    .background {
+        background-color: var(--secondary-color);
+    }
 
     span {
         color: white;
