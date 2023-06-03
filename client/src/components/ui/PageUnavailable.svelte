@@ -2,10 +2,11 @@
     import { InvalidSession } from '../../api/error';
 
     export let err = null as Error | null;
+
 </script>
 
 <div>
-    <h2>Sorry, this page isn't available.</h2>
+    <h2>Well... this is awkward.</h2>
     {#if err !== null}
         {#if err instanceof InvalidSession}
             <p>Your session has expired. <a href="/auth/login">Log back in?</a></p>
