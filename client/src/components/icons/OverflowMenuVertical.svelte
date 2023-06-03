@@ -11,10 +11,3 @@
 </script>
 
 <img class="{color} {size}" {alt} src="{iconUrl.pathname}" on:click on:keydown />
-
-<style>
-    img { 
-        user-select: none;
-        cursor: pointer;
-    }
-</style>
