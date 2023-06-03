@@ -32,6 +32,8 @@
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
     });
+
+    const logoAngry = new URL('../assets/icons/bootstrap/techstack.svg', import.meta.url);
 </script>
 
 <main>
@@ -71,6 +73,7 @@
 
 <footer>
     <p>© <a href="https://github.com/BastiDood/doc-track">2023 Doctrack</a>. All rights reserved.</p>
+    <img type="image/svg" alt="Tech stack" src="https://skillicons.dev/icons?i=svelte,ts,deno,postgres,html,css,&theme=light" />
 </footer>
 
 <style>

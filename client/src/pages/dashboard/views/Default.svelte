@@ -1,11 +1,12 @@
 <script>
     import Container from "../../../components/ui/Container.svelte";
     import { ContainerType } from "../../../components/types";
+
 </script>
 
 <Container ty={ContainerType.Enumeration} class="center">
     <div id="heading">
-        <h2>Heya! Welcome to DocTrack</h2>
+        <h2>Heya, {`Name`}! Welcome to DocTrack</h2>
     </div>
 </Container>
 <Container ty={ContainerType.Divider} class="center">
@@ -58,9 +59,9 @@
 	@media (min-width: 600px) {
 		main {
 			grid-template-columns: 1fr 1fr;
-			grid-template-rows: 250px 250px;
+			grid-template-rows: 50% 50%;
 		}
-		div {
+		.division {
 			min-height: auto;
 		}
 	}
