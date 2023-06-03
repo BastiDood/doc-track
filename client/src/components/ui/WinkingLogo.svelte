@@ -17,7 +17,7 @@
         cursor: pointer;
     }
 
-    img { 
-        user-select: none;
+    img {
+        height: 2rem;
     }
 </style>
