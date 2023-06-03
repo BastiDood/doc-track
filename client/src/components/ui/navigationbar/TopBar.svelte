@@ -12,7 +12,7 @@
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
-    
+
     import './../itemrow/chip-style.css';
 
     // eslint-disable-next-line no-undefined
@@ -33,7 +33,9 @@
             <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
         {/if}
         <span id="title" class:offline={!$isOnline}>
-            <MainLogo alt="DocTrack Logo" mini/>
+            <a href='/'>
+                <MainLogo alt="DocTrack Logo" mini />
+            </a>
         </span>
         {#await deferredSnaps.load()}
             <span>🔄</span>

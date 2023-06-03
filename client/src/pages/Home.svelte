@@ -9,7 +9,7 @@
     import Camera from '../components/icons/Camera.svelte';
     import Search from '../components/icons/Search.svelte';
     import TextInput from '../components/ui/TextInput.svelte';
-    import MainLogo from '../components/icons/MainLogo.svelte';
+    import HomeLogo from '../components/icons/HomeLogo.svelte';
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
@@ -39,7 +39,7 @@
         Waiting for service worker...
     {:then}
         <article in:fade={{ duration: 1000 }}>
-            <MainLogo alt='Logo' />
+            <HomeLogo alt='Logo' />
             <div id="doctrack">
                 {#each 'DOCTRACK' as char, i}
                     {@const delay = 500 + i * 150}
