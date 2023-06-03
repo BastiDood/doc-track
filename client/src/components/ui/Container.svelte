@@ -1,9 +1,11 @@
 <script lang="ts">
     import { ContainerType } from '../types.ts';
+    import { fly } from 'svelte/transition';
+    import { cubicInOut } from 'svelte/easing';
     export let ty: ContainerType;
 </script>
 
-<section class={ty}>
+<section class={ty} in:fly|local='{ { x: -200, duration: 600, easing: cubicInOut } }'>
     <slot></slot>
 </section>
 
