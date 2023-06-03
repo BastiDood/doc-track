@@ -69,6 +69,10 @@
     <Toast />
 </main>
 
+<footer>
+    <p>© <a href="https://github.com/BastiDood/doc-track">2023 Doctrack</a>. All rights reserved.</p>
+</footer>
+
 <style>
     main {
         display: flex;
@@ -106,6 +110,15 @@
         font-weight: 700;
         justify-content: center;
         column-gap: 0.75rem;
+    }
+
+    footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        padding: var(--spacing-small);
+        color: var(--text-color);
     }
 
     section {
