@@ -5,7 +5,7 @@
     export let ty: ContainerType;
 </script>
 
-<section class={ty} in:fly|local='{ { x: -200, duration: 600, easing: cubicInOut } }'>
+<section class={ty} in:fly='{ { x: -200, duration: 600, easing: cubicInOut } }'>
     <slot></slot>
 </section>
 
