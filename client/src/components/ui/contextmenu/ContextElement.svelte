@@ -19,4 +19,10 @@
         transition: 0.3s;
         border: var(--spacing-tiny) solid black;
     }
+
+    div:active {
+        background-color: white;
+        color: var(--primary-color);
+        border: var(--spacing-tiny) solid black;
+    }
 </style>
