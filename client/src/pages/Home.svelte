@@ -33,7 +33,8 @@
         throw err;
     });
 
-    const logoAngry = new URL('../assets/icons/bootstrap/techstack.svg', import.meta.url);
+    // Made it local for performance reasons; we also don't want to spam their site with requests
+    const techstackIcon = new URL('../assets/icons/bootstrap/techstack.svg', import.meta.url);
 </script>
 
 <main>
@@ -72,8 +73,11 @@
 </main>
 
 <footer>
-    <p>© <a href="https://github.com/BastiDood/doc-track">2023 Doctrack</a>. All rights reserved.</p>
-    <img type="image/svg" alt="Tech stack" src="https://skillicons.dev/icons?i=svelte,ts,deno,postgres,html,css,&theme=light" />
+    <a href="https://github.com/BastiDood/doc-track">
+        <p>© 2023 Doctrack. All rights reserved.</p>
+        <p>Powered by:</p>
+        <img alt="Tech stack" src={techstackIcon.pathname} />
+    </a>
 </footer>
 
 <style>
