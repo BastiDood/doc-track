@@ -12,19 +12,25 @@
 <Container ty={ContainerType.Divider} class="center">
     <main>
         <div class="division red">
-            <h2>Red</h2>
+            <h2>What is DocTrack; features</h2>
         </div>
         <div class="division green">
-            <h2>Green</h2>
+            <h2>Navigation tutorial</h2>
         </div>
         <div class="division blue">
-            <h2>Blue</h2>
+            <h2>how to use</h2>
         </div>
     </main>
 </Container>
 
 <style>
-    main {
+
+    #heading {
+        text-align: center;
+        margin: 0px;
+    }
+
+	main {
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: auto;
@@ -32,36 +38,26 @@
 		max-width: 960px;
 		margin: 0 auto;
 	}
-
-	.division {
+	div {
 		border: 3px solid;
 		min-height: 250px;
 	}
-
-    #heading {
-        text-align: center;
-        margin: 0px;
-    }
-
 	.red {
 		background-color: #ED1C24;
 		grid-row: 1 / 3
 	}
-
 	.green {
 		background-color: #B5E61D;
 	}
-
 	.blue {
 		background-color: #99D9EA
 	}
-
 	@media (min-width: 600px) {
 		main {
 			grid-template-columns: 1fr 1fr;
-			grid-template-rows: 50% 50%;
+			grid-template-rows: 100% 100%;
 		}
-		.division {
+		div {
 			min-height: auto;
 		}
 	}

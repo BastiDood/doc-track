@@ -8,7 +8,7 @@
     import Hamburger from '../../icons/Hamburger.svelte';
     import Logout from '../../icons/Logout.svelte';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
-    import MainLogo from '../../icons/MainLogo.svelte';
+    import WinkingLogo from '../WinkingLogo.svelte';
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
@@ -37,7 +37,7 @@
         {/if}
         <span id="title" class:offline={!$isOnline}>
             <a href='/dashboard'>
-                <MainLogo alt="DocTrack Logo" mini />
+                <WinkingLogo alt="DocTrack Logo" />
             </a>
         </span>
         {#await deferredSnaps.load()}

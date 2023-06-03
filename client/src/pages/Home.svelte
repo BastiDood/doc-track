@@ -76,7 +76,7 @@
     <a href="https://github.com/BastiDood/doc-track">
         <p>© 2023 Doctrack. All rights reserved.</p>
         <p>Powered by:</p>
-        <img alt="Tech stack" src={techstackIcon.pathname} />
+        <img id="techstack" alt="Tech stack" src={techstackIcon.pathname} />
     </a>
 </footer>
 
@@ -132,5 +132,18 @@
         display: flex;
         justify-content: space-evenly;
         align-items: center;
+    }
+
+    @media (max-height: 680px) {
+        article {
+            position: absolute;
+            top: 1rem;
+        }
+    }
+
+    @media (max-height: 620px) {
+        #techstack {
+            display: none;
+        }
     }
 </style>
