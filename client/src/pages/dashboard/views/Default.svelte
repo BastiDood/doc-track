@@ -1,13 +1,10 @@
 <script>
-    import Container from '../../../components/ui/Container.svelte';
-    import { ContainerType } from '../../../components/types';
-	import Hamburger from '../../../components/icons/Hamburger.svelte';
-	import { currentUser } from '../../../stores/UserStore';
-
-	import '../../../components/ui/itemrow/chip-style.css';
-	
-	const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg', import.meta.url);
-	const techstackIcon = new URL('../../../assets/icons/bootstrap/techstack.svg', import.meta.url);
+import Container from '../../../components/ui/Container.svelte';
+import { ContainerType } from '../../../components/types';
+import { currentUser } from '../../../stores/UserStore';
+import '../../../components/ui/itemrow/chip-style.css';
+const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg', import.meta.url);
+const techstackIcon = new URL('../../../assets/icons/bootstrap/techstack.svg', import.meta.url);
 </script>
 
 <div id="heading">
@@ -15,14 +12,14 @@
 </div>
 <Container ty={ContainerType.Divider}>
 	<main>
-	   <Container ty={ContainerType.Enumeration}>
-		  	<h2 class="chip category centering">What am I?</h2>
-			  <Container ty={ContainerType.Divider}>
+		<Container ty={ContainerType.Enumeration}>
+			<h2 class="chip category centering">What am I?</h2>
+				<Container ty={ContainerType.Divider}>
 			 	<p><b>DocTrack</b> is a robust, open-source document tracking system that utilizes a modern web stack to meet the demands of document management in the modern age. It offers a powerful and intuitive platform to efficiently manage and monitor documents within an organization or in any collaborative environment.</p>
-		  	</Container>
+			</Container>
 		  	<Container ty={ContainerType.Divider}>
 				<p>With a strong focus on modern web development paradigms, DocTrack is a proof-of-concept on the usage of modern web technologies (such as Svelte + Typescript in the front-end and Deno + PostgreSQL in the back-end) to develop a Progressive Web Application that can handle offline usage, deferred operations, and resource caching.</p>
-		  	</Container>
+			</Container>
 			<div class="centering">
 				<a href="https://github.com/BastiDood/doc-track">
 					<p>© 2023 Doctrack. All rights reserved.</p>
@@ -30,17 +27,17 @@
 					<img id="techstack" alt="Tech stack" src={techstackIcon.pathname} />
 				</a>
 			</div>
-	   </Container>
-	   <Container ty={ContainerType.Enumeration}>
+		</Container>
+		<Container ty={ContainerType.Enumeration}>
 			<Container ty={ContainerType.Divider}>
 		  		<h2 class="chip category centering">Navigation tutorial</h2>
 		  		<p>Ready to start? Click on the hamburger icon (beside the Logo) on the top left corner!</p>
 		  		<img src={imgNavigation} alt="Navigation tutorial" />
 			</Container>
-	   </Container>
-	   <Container ty={ContainerType.Enumeration}>
-		  <h2 class="chip category centering">Features</h2>
-		  <Container ty={ContainerType.Divider}>
+		</Container>
+		<Container ty={ContainerType.Enumeration}>
+		  	<h2 class="chip category centering">Features</h2>
+		  	<Container ty={ContainerType.Divider}>
 			<ol>
 				<li><b class="chip doc">📄  Document Management</b> - Store, organize, and send documents between registered offices and organizations. </li>
 				<li><b class="chip doc">🔍 Document Tracking</b> - Track the lifecycle of documents. Creation, transmission, reception, and termination times are archived in the Paper Trail. Gain visibility into document statuses and history for comprehensive audits. </li>
@@ -54,9 +51,9 @@
 				<li><b class="chip doc">👨🏻‍💼 User Management</b> - Grant system-wide permissions to other users that will manage the system. </li>
 			</ol>
 		</Container>
-	   </Container>
-	   <Container ty={ContainerType.Enumeration}>
-		  	<h2 class="chip category centering">Getting Started...</h2>
+		</Container>
+		<Container ty={ContainerType.Enumeration}>
+			<h2 class="chip category centering">Getting Started...</h2>
 			<Container ty={ContainerType.Divider}>
 				<p>Start by creating an office. This is on the <b>Offices page</b> (see navigation panel). Join the office by refreshing the page and clicking the appropriate office on the <b>navigation panel</b>.</p>
 			</Container>
