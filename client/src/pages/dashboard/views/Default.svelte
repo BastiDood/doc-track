@@ -18,12 +18,12 @@
 			<p>With a strong focus on modern web development paradigms, DocTrack is a proof-of-concept on the usage of modern web technologies (such as Svelte + Typescript in the front-end and Deno + PostgreSQL in the back-end) to develop a Progressive Web Application that can handle offline usage, deferred operations, and resource caching.</p>
 		</Container>
 		<Container ty={ContainerType.Enumeration}>
-			<h2>Navigation tutorial</h2>
+			<h2 class="chip category centering">Navigation tutorial</h2>
 
 			Ready to start? Click on the <span><Hamburger /></span> icon on the top-left corner of the screen to open the navigation menu. From there, you click on the <b>Offices</b>
 		</Container>
 		<Container ty={ContainerType.Enumeration}>
-			<h2>What does it do?</h2>
+			<h2 class="chip category centering">What does it do?</h2>
 			<ol>
 				<li>📄 <b>Document Management</b> - Store, organize, and send documents between registered offices and organizations. </li>
 				<li>🔍 <b>Document Tracking</b> - Track the lifecycle of documents. Creation, transmission, reception, and termination times are archived in the Paper Trail. Gain visibility into document statuses and history for comprehensive audits. </li>
@@ -38,7 +38,7 @@
 			</ol>
 		</Container>
 		<Container ty={ContainerType.Enumeration}>
-			<h2>Getting Started...</h2>
+			<h2 class="chip category centering">Getting Started...</h2>
 		</Container>
 	</main>
 </Container>
