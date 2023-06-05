@@ -2,12 +2,13 @@
     import Container from '../../../components/ui/Container.svelte';
     import { ContainerType } from '../../../components/types';
 	import Hamburger from '../../../components/icons/Hamburger.svelte';
+	import { currentUser } from '../../../stores/UserStore';
 
 	import '../../../components/ui/itemrow/chip-style.css';
 </script>
 
 <div id="heading">
-	<h2>Heya, {'Name'}! Welcome to DocTrack</h2>
+	<h1>Welcome, {$currentUser.name ?? 'Guest'}, to DocTrack!</h1>
 </div>
 <Container ty={ContainerType.Divider}>
 	<main>
@@ -61,9 +62,12 @@
         margin: 0px;
     }
 
+	li {
+		margin: 0.75rem;
+	}
+
 	main {
 		display: grid;
-		grid-template-columns: 1fr;
 		grid-template-rows: auto;
 		grid-gap: 5px;
 		margin: 0 auto;
@@ -71,15 +75,11 @@
 
 	ol {
   		list-style-position: inside;
-  		padding-left: 0;
 	}
 
 	@media (min-width: 960px) {
 		main {
 			grid-template-columns: 1fr 1fr;
-		}
-		div {
-			min-height: auto;
 		}
 	}
 </style>
