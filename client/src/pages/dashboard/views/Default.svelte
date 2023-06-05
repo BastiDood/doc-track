@@ -58,7 +58,25 @@
 	   <Container ty={ContainerType.Enumeration}>
 		  	<h2 class="chip category centering">Getting Started...</h2>
 			<Container ty={ContainerType.Divider}>
-				<p>DocTrack is a <b>Progressive Web Application</b> that can be installed on your device. It is recommended to install DocTrack on your device for a more native experience.</p>
+				<p>Start by creating an office. This is on the <b>Offices page</b> (see navigation panel). Join the office by refreshing the page and clicking the appropriate office on the <b>navigation panel</b>.</p>
+			</Container>
+			<Container ty={ContainerType.Divider}>
+				<p>Create a category by looking at the <b>categories </b> page (see navigation panel).</p>
+			</Container>
+			<Container ty={ContainerType.Divider}>
+				<p>Go to <b>Barcodes</b> and click on <b>Generate New Batch</b>. These are barcodes that will be used on the <b>tracking page</b>, as well as uniquely identify your document. You can download the barcodes as QR by clicking on <b>Download Stickers</b> button.</p>
+			</Container>
+			<Container ty={ContainerType.Divider}>
+				<p>Go to the <b>outbox</b> and click on the <b>Register and Stage a New Document</b>. Input the necessary details such as the barcode generated.</p>
+			</Container>
+			<Container ty={ContainerType.Divider}>
+				<p>Click on the ellipsis (triple dots) on the right of the row and click <b>Send Document</b>. Specify the target office and put some remarks and voila!</p>
+			</Container>
+			<Container ty={ContainerType.Divider}>
+				<p>As a receiver, go to the <b>Inbox</b> page and click on the ellipsis (triple dots) on the document row. Click <b>Accept Document</b> and the document is now on your inbox. You may send the document to another office just like before!</p>
+			</Container>
+			<Container ty={ContainerType.Divider}>
+				<p>You can also track your document. Anytime in the <b>Inbox/Outbox</b>, you can click on the white space of the document row to go to its tracking page. Alternatively, you can copy the barcode (the ID with the #) by highlighting it. Then, you can input the identifier on the sidebar or the home page and clicking the <i>Magnifying glass</i> icon. Alternatively, you can use the barcodes generated from the <b>Barcodes</b> page and click on the <i>Camera icon</i> to scan the generated QR code. Take note non-staff may view the tracking status of the document any time.</p>
 			</Container>
 	   </Container>
 	</main>
