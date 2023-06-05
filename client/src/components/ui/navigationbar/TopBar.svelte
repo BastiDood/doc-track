@@ -32,14 +32,16 @@
     <span id="icon">
         {#if typeof user !== 'undefined'}
             <Hamburger bind:open on:click={() => (open = !open)} /> 
+            <span id="title" class:offline={!$isOnline}>
+                <a href='/dashboard'>
+                    <WinkingLogo alt="DocTrack Logo" />
+                </a>
+            </span>
         {:else}
-            <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
+            <span on:keydown on:click = {() => window.history.back()}>
+                <ChevronLeft color={IconColor.White} alt="Return to previous page" /><b>Back</b>
+            </span>
         {/if}
-        <span id="title" class:offline={!$isOnline}>
-            <a href='/dashboard'>
-                <WinkingLogo alt="DocTrack Logo" />
-            </a>
-        </span>
         {#await deferredSnaps.load()}
             <span>🔄</span>
         {:then}
@@ -60,7 +62,7 @@
                 </Button>
             </a>
         {:else}
-            <a href="/" on:mouseenter={ () => isLogoutHovered = true } on:mouseleave={ () => isLogoutHovered = false }>
+            <a href="/" on:mouseenter={ () => { isLogoutHovered = true } } on:mouseleave={ () => { isLogoutHovered = false } }>
                 <img id="user" src={isLogoutHovered ? logoutIcon.pathname : user.picture} alt="Profile Picture for {user.name}" />
             </a>
         {/if}

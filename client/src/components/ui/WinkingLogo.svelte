@@ -8,7 +8,7 @@
     const iconUrl_winked = new URL('../../assets/icons/doctrack-wink.svg', import.meta.url);
 </script>
 
-<article on:mouseenter={ () => isWinked = true } on:mouseleave={ () => isWinked = false }>
+<article on:mouseenter={ () => { isWinked = true } } on:mouseleave={ () => { isWinked = false } }>
     <img {alt} src={isWinked ? iconUrl_winked.pathname : iconUrl.pathname} on:click on:keydown />
 </article>
 
