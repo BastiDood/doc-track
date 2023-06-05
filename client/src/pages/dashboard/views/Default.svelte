@@ -1,8 +1,6 @@
 <script>
     import Container from '../../../components/ui/Container.svelte';
     import { ContainerType } from '../../../components/types';
-
-	// import './../itemrow/chip-style.css';
 </script>
 
 <Container ty={ContainerType.Enumeration} class="center">

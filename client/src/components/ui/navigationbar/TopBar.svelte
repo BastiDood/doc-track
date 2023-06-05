@@ -62,7 +62,7 @@
                 </Button>
             </a>
         {:else}
-            <a href="/" on:mouseenter={ () => { isLogoutHovered = true } } on:mouseleave={ () => { isLogoutHovered = false } }>
+            <a href="/" on:mouseenter={ () => { isLogoutHovered = true; } } on:mouseleave={ () => { isLogoutHovered = false; } }>
                 <img id="user" src={isLogoutHovered ? logoutIcon.pathname : user.picture} alt="Profile Picture for {user.name}" />
             </a>
         {/if}
