@@ -5,6 +5,9 @@
 	import { currentUser } from '../../../stores/UserStore';
 
 	import '../../../components/ui/itemrow/chip-style.css';
+	
+	const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg', import.meta.url);
+	const techstackIcon = new URL('../../../assets/icons/bootstrap/techstack.svg', import.meta.url);
 </script>
 
 <div id="heading">
@@ -13,21 +16,27 @@
 <Container ty={ContainerType.Divider}>
 	<main>
 	   <Container ty={ContainerType.Enumeration}>
-		  <h2 class="chip category centering">What am I?</h2>
-		  <Container ty={ContainerType.Divider}>
-			 <p><b>DocTrack</b> is a robust, open-source document tracking system that utilizes a modern web stack to meet the demands of document management in the modern age. It offers a powerful and intuitive platform to efficiently manage and monitor documents within an organization or in any collaborative environment.</p>
-		  </Container>
-		  <Container ty={ContainerType.Divider}>
-			 <p>With a strong focus on modern web development paradigms, DocTrack is a proof-of-concept on the usage of modern web technologies (such as Svelte + Typescript in the front-end and Deno + PostgreSQL in the back-end) to develop a Progressive Web Application that can handle offline usage, deferred operations, and resource caching.</p>
-		  </Container>
+		  	<h2 class="chip category centering">What am I?</h2>
+			  <Container ty={ContainerType.Divider}>
+			 	<p><b>DocTrack</b> is a robust, open-source document tracking system that utilizes a modern web stack to meet the demands of document management in the modern age. It offers a powerful and intuitive platform to efficiently manage and monitor documents within an organization or in any collaborative environment.</p>
+		  	</Container>
+		  	<Container ty={ContainerType.Divider}>
+				<p>With a strong focus on modern web development paradigms, DocTrack is a proof-of-concept on the usage of modern web technologies (such as Svelte + Typescript in the front-end and Deno + PostgreSQL in the back-end) to develop a Progressive Web Application that can handle offline usage, deferred operations, and resource caching.</p>
+		  	</Container>
+			<div class="centering">
+				<a href="https://github.com/BastiDood/doc-track">
+					<p>© 2023 Doctrack. All rights reserved.</p>
+					<p>Powered by:</p>
+					<img id="techstack" alt="Tech stack" src={techstackIcon.pathname} />
+				</a>
+			</div>
 	   </Container>
 	   <Container ty={ContainerType.Enumeration}>
-		  <h2 class="chip category centering">Navigation tutorial</h2>
-		  Ready to start? Click on the 
-		  <span>
-			 <Hamburger />
-		  </span>
-		  icon on the top-left corner of the screen to open the navigation menu. From there, you click on the <b>Offices</b>
+			<Container ty={ContainerType.Divider}>
+		  		<h2 class="chip category centering">Navigation tutorial</h2>
+		  		<p>Ready to start? Click on the hamburger icon (beside the Logo) on the top left corner!</p>
+		  		<img src={imgNavigation} alt="Navigation tutorial" />
+			</Container>
 	   </Container>
 	   <Container ty={ContainerType.Enumeration}>
 		  <h2 class="chip category centering">Features</h2>
@@ -47,7 +56,10 @@
 		</Container>
 	   </Container>
 	   <Container ty={ContainerType.Enumeration}>
-		  <h2 class="chip category centering">Getting Started...</h2>
+		  	<h2 class="chip category centering">Getting Started...</h2>
+			<Container ty={ContainerType.Divider}>
+				<p>DocTrack is a <b>Progressive Web Application</b> that can be installed on your device. It is recommended to install DocTrack on your device for a more native experience.</p>
+			</Container>
 	   </Container>
 	</main>
  </Container>
@@ -62,6 +74,10 @@
         margin: 0px;
     }
 
+	img {
+		width: 100%;
+	}
+
 	li {
 		margin: 0.75rem;
 	}
@@ -75,6 +91,10 @@
 
 	ol {
   		list-style-position: inside;
+	}
+
+	#techstack {
+		width: 75%;
 	}
 
 	@media (min-width: 960px) {
