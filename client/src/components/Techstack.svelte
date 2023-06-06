@@ -10,9 +10,3 @@
     <p>Powered by:</p>
     <img {alt} src="{techstackIcon.pathname}" on:click on:keydown />
 </a>
-
-<style>
-    img {
-        max-width: 30svw;
-    }
-</style>
