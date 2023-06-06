@@ -7,6 +7,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import Hamburger from '../../icons/Hamburger.svelte';
     import Logout from '../../icons/Logout.svelte';
+    import LogoutIcon from './logoutIcon.svelte';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
     import WinkingLogo from '../WinkingLogo.svelte';
 
@@ -62,9 +63,7 @@
                 </Button>
             </a>
         {:else}
-            <a href="/" on:mouseenter={ () => { isLogoutHovered = true; } } on:mouseleave={ () => { isLogoutHovered = false; } }>
-                <img id="user" src={isLogoutHovered ? logoutIcon.pathname : user.picture} alt="Profile Picture for {user.name}" />
-            </a>
+            <LogoutIcon picture={user.picture} />
         {/if}
     </nav>
 </nav>
@@ -85,13 +84,6 @@
         display: flex;
         align-items: center;
         gap: var(--spacing-small);
-    }
-
-    #user {
-        border-radius: 50%;
-        display: block;
-        height: 2rem;
-        user-select: none;
     }
 
     #navcontainer {
