@@ -13,4 +13,8 @@
     span {
         cursor: pointer;
     }
+
+    img {
+        height: 2rem;
+    }
 </style>
