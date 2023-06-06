@@ -43,7 +43,7 @@
 {:then}
     <header>
         <h1>Users</h1>    
-        <Button on:click={() => {showUnprev = !showUnprev;}}>{showUnprev ? 'Hide' : 'Show'} Unprivileged Users</Button>
+        <Button on:click={() => (showUnprev = !showUnprev)}>{showUnprev ? 'Hide' : 'Show'} Unprivileged Users</Button>
     </header>
     <Container ty={ContainerType.Divider}>
         <h2>System Operators</h2>
