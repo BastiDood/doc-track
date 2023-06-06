@@ -84,7 +84,7 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 
     #heading {
         text-align: center;
-        margin: 0px;
+        margin: 0;
     }
 
 	img {
