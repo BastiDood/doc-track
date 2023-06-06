@@ -21,10 +21,10 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 			</Container>
 		  	<Container ty={ContainerType.Divider}>
 				<p>With a strong focus on modern web development paradigms, DocTrack is a proof-of-concept on the usage of modern web technologies (such as Svelte + Typescript in the front-end and Deno + PostgreSQL in the back-end) to develop a Progressive Web Application that can handle offline usage, deferred operations, and resource caching.</p>
+				<div class="centering">
+					<Techstack />
+				</div>
 			</Container>
-			<div class="centering">
-				<Techstack />
-			</div>
 		</Container>
 		<Container ty={ContainerType.Enumeration}>
 			<Container ty={ContainerType.Divider}>
