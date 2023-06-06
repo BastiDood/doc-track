@@ -72,7 +72,7 @@
                     <PersonAdd color={IconColor.White} alt="icon for adding an existing user"></PersonAdd>
                     Add Existing User
                 </Button>
-                <Button on:click={() => {showRetiredStaff = !showRetiredStaff;}}>{showRetiredStaff ? 'Hide' : 'Show'} Inactive Staff</Button>
+                <Button on:click={() => (showRetiredStaff = !showRetiredStaff)}>{showRetiredStaff ? 'Hide' : 'Show'} Inactive Staff</Button>
             </div>
         </header>
         <Container ty={ContainerType.Divider}>

@@ -5,11 +5,15 @@
     let isWinked = false as boolean;
 
     const iconUrl = new URL('../../assets/icons/doctrack.svg', import.meta.url);
-    const iconUrl_winked = new URL('../../assets/icons/doctrack-wink.svg', import.meta.url);
+    const iconUrlWinked = new URL('../../assets/icons/doctrack-wink.svg', import.meta.url);
+
+    function enableWinked() {
+        isWinked = true;
+    }
 </script>
 
-<article on:mouseenter={ () => { isWinked = true; } } on:mouseleave={ () => { isWinked = false; } }>
-    <img {alt} src={isWinked ? iconUrl_winked.pathname : iconUrl.pathname} on:click on:keydown />
+<article on:mouseenter={enableWinked} on:mouseleave={enableWinked}>
+    <img {alt} src={isWinked ? iconUrlWinked.pathname : iconUrl.pathname} on:click on:keydown />
 </article>
 
 <style>

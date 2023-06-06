@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './../itemrow/chip-style.css';
+
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { allOffices } from '../../../stores/OfficeStore.ts';
     import { isOnline } from '../../../stores/NetState.ts';
@@ -12,8 +14,6 @@
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
-
-    import './../itemrow/chip-style.css';
 
     // eslint-disable-next-line no-undefined
     export let user = undefined as User | undefined;

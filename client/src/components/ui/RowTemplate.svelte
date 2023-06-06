@@ -55,5 +55,4 @@
     .defer {
         border-bottom: var(--spacing-small) var(--offline-color) solid;
     }
-    
 </style>
