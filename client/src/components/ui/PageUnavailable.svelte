@@ -21,6 +21,6 @@
 <style>
     div {
         text-align: center;
-        margin-top: 1rem;
+        margin-top: var(--spacing-large);
     }
 </style>
