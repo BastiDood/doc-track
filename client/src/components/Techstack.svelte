@@ -13,6 +13,6 @@
 
 <style>
     img {
-        max-width: 256px;
+        max-width: 30svw;
     }
 </style>
