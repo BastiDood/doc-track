@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { User } from '../../../../../model/src/user.ts';
 
+    // eslint-disable-next-line no-undefined
     export let picture = undefined as User['picture'] | undefined;
     let isLogoutHovered = false as boolean;
     const logoutIcon = new URL('../../../assets/icons/carbon/logout-profile.svg', import.meta.url);

@@ -1,5 +1,5 @@
 <script>
-    import DoctrackSus from "../../../components/doctrack/DoctrackSus.svelte";
+    import DoctrackSus from '../../../components/doctrack/DoctrackSus.svelte';
 </script>
 
 <div>

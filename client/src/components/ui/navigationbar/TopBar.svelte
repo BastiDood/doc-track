@@ -11,7 +11,7 @@
     import Logout from '../../icons/Logout.svelte';
     import LogoutIcon from './logoutIcon.svelte';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
-    import WinkingLogo from '../../doctrack/WinkingLogo.svelte';
+    import DoctrackWink from '../../doctrack/DoctrackWink.svelte';
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
@@ -24,9 +24,6 @@
         ? null
         : $allOffices[$dashboardState.currentOffice];
     $: officeName = maybeOfficeName ?? '';
-
-    let isLogoutHovered = false as boolean;
-    const logoutIcon = new URL('../../../assets/icons/carbon/logout-profile.svg', import.meta.url);
 </script>
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
@@ -35,7 +32,7 @@
             <Hamburger bind:open on:click={() => (open = !open)} /> 
             <span id="title" class:offline={!$isOnline}>
                 <a href='/dashboard'>
-                    <WinkingLogo alt="DocTrack Logo" />
+                    <DoctrackWink alt="DocTrack Logo" />
                 </a>
             </span>
         {:else}
