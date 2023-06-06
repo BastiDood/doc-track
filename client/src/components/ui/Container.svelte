@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { fly } from 'svelte/transition';
+    import { fade } from 'svelte/transition';
     import { quadInOut } from 'svelte/easing';
 
     import { ContainerType } from '../types.ts';
@@ -7,7 +7,7 @@
     export let ty: ContainerType;
 </script>
 
-<section class={ty} in:fly={{ x: -100, duration: 600, easing: quadInOut }}>
+<section class={ty} in:fade={{ duration: 300, easing: quadInOut }}>
     <slot></slot>
 </section>
 

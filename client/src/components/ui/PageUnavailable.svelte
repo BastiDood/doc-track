@@ -6,7 +6,6 @@
 </script>
 
 <div>
-    <br>
     <DoctrackAngry />
     <h2>Well... this is awkward.</h2>
     <h3>Mr. Doctrack wasn't happy with what you did.</h3>
@@ -22,5 +21,6 @@
 <style>
     div {
         text-align: center;
+        margin-top: 1rem;
     }
 </style>
