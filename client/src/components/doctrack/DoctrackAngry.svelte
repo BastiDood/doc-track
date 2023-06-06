@@ -6,6 +6,6 @@
 
 <style>
     img {
-        max-width: 300px;
+        max-width: 30svw;
     }
 </style>
