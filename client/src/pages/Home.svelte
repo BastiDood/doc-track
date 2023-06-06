@@ -71,14 +71,6 @@
     <Techstack alt="Techstack" />
 </main>
 
-<footer>
-    <a href="https://github.com/BastiDood/doc-track">
-        <p>&copy; 2023 Doctrack. All rights reserved.</p>
-        <p>Powered by:</p>
-        <img id="techstack" alt="Tech stack" src={techstackIcon.pathname} />
-    </a>
-</footer>
-
 <style>
     main {
         display: flex;
