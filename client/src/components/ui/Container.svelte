@@ -7,7 +7,7 @@
     export let ty: ContainerType;
 </script>
 
-<section class={ty} in:fade={{ duration: 150, easing: quadInOut }}>
+<section class={ty} in:fade={{ duration: 100, easing: quadInOut }}>
     <slot></slot>
 </section>
 
