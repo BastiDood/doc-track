@@ -2,9 +2,11 @@
 import Container from '../../../components/ui/Container.svelte';
 import { ContainerType } from '../../../components/types';
 import { currentUser } from '../../../stores/UserStore';
+import Techstack from '../../../components/Techstack.svelte';
+
 import '../../../components/ui/itemrow/chip-style.css';
 const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg', import.meta.url);
-const techstackIcon = new URL('../../../assets/techstack.svg', import.meta.url);
+
 </script>
 
 <div id="heading">
@@ -21,11 +23,7 @@ const techstackIcon = new URL('../../../assets/techstack.svg', import.meta.url);
 				<p>With a strong focus on modern web development paradigms, DocTrack is a proof-of-concept on the usage of modern web technologies (such as Svelte + Typescript in the front-end and Deno + PostgreSQL in the back-end) to develop a Progressive Web Application that can handle offline usage, deferred operations, and resource caching.</p>
 			</Container>
 			<div class="centering">
-				<a href="https://github.com/BastiDood/doc-track">
-					<p>© 2023 Doctrack. All rights reserved.</p>
-					<p>Powered by:</p>
-					<img id="techstack" alt="Tech stack" src={techstackIcon.pathname} />
-				</a>
+				<Techstack />
 			</div>
 		</Container>
 		<Container ty={ContainerType.Enumeration}>
@@ -106,10 +104,6 @@ const techstackIcon = new URL('../../../assets/techstack.svg', import.meta.url);
 
 	ol {
   		list-style-position: inside;
-	}
-
-	#techstack {
-		width: 75%;
 	}
 
 	@media (min-width: 960px) {

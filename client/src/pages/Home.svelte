@@ -13,6 +13,7 @@
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
+    import Techstack from '../components/Techstack.svelte';
     import Toast from '../components/ui/Toast.svelte';
 
     import { topToastMessage } from '../stores/ToastStore.ts';
@@ -32,9 +33,6 @@
         topToastMessage.enqueue({ title: err.name, body: err.message });
         throw err;
     });
-
-    // Made it local for performance reasons; we also don't want to spam their site with requests
-    const techstackIcon = new URL('../assets/techstack.svg', import.meta.url);
 </script>
 
 <main>
@@ -70,20 +68,16 @@
         </Modal>
     {/if}
     <Toast />
+    <Techstack alt="Techstack" />
 </main>
 
-<footer>
-    <a href="https://github.com/BastiDood/doc-track">
-        <p>© 2023 Doctrack. All rights reserved.</p>
-        <p>Powered by:</p>
-        <img id="techstack" alt="Tech stack" src={techstackIcon.pathname} />
-    </a>
-</footer>
+
 
 <style>
     main {
         display: flex;
         align-items: center;
+        flex-direction: column;
         justify-content: center;
         height: 100%;
         width: 100%;
@@ -119,31 +113,9 @@
         column-gap: 0.75rem;
     }
 
-    footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        text-align: center;
-        padding: var(--spacing-small);
-        color: var(--text-color);
-    }
-
     section {
         display: flex;
         justify-content: space-evenly;
         align-items: center;
-    }
-
-    @media (max-height: 680px) {
-        article {
-            position: absolute;
-            top: 1rem;
-        }
-    }
-
-    @media (max-height: 620px) {
-        #techstack {
-            display: none;
-        }
     }
 </style>
