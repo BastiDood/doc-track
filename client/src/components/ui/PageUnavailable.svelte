@@ -1,14 +1,13 @@
 <script lang="ts">
     import { InvalidSession } from '../../api/error';
+    import DoctrackAngry from '../doctrack/DoctrackAngry.svelte';
 
     export let err = null as Error | null;
-
-    const doctrackAngry = new URL('../../assets/logo/doctrack-angry.svg', import.meta.url);
 </script>
 
 <div>
     <br>
-    <img src="{doctrackAngry.pathname}" alt="Doctrack angry logo" />
+    <DoctrackAngry />
     <h2>Well... this is awkward.</h2>
     <h3>Mr. Doctrack wasn't happy with what you did.</h3>
     {#if err !== null}
@@ -23,10 +22,5 @@
 <style>
     div {
         text-align: center;
-    }
-
-    img {
-        user-select: none;
-        max-width: 300px;
     }
 </style>

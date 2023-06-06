@@ -9,7 +9,7 @@
     import Logout from '../../icons/Logout.svelte';
     import LogoutIcon from './logoutIcon.svelte';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
-    import WinkingLogo from '../WinkingLogo.svelte';
+    import WinkingLogo from '../../doctrack/WinkingLogo.svelte';
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';

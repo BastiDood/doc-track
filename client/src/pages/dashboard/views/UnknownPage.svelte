@@ -1,9 +1,9 @@
 <script>
-    const logoAngry = new URL('../../../assets/logo/doctrack-sus.svg', import.meta.url);
+    import DoctrackSus from "../../../components/doctrack/DoctrackSus.svelte";
 </script>
 
 <div>
-    <img src="{logoAngry.pathname}" alt="Doctrack sus logo" />
+    <DoctrackSus />
     <h2>Hey, how did you end up here?</h2>
     <p>You are accessing an invalid route! Click the Hamburger icon on the top left corner.</p>
     <b>Hurry before Mr. Doctrack gets angry!</b>
@@ -12,11 +12,6 @@
 <style>
     b {
         color: red;
-    }
-    
-    img {
-        max-width: 300px;
-        user-select: none;
     }
 
     div {
