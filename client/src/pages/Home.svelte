@@ -21,7 +21,6 @@
     import { ButtonType, IconColor } from '../components/types.ts';
 
     let showScan = false as boolean;
-
     let trackingNumber = '';
 
     function scanHandler({ detail }: CustomEvent<string>) {
