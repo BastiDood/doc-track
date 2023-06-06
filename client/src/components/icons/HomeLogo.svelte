@@ -3,7 +3,7 @@
 
     export let alt: string;
 
-    const iconUrl = new URL('../../assets/icons/doctrack.svg', import.meta.url);
+    const iconUrl = new URL('../../assets/logo/doctrack.svg', import.meta.url);
 </script>
 
 <img {alt} src={iconUrl.pathname} on:click on:keydown />

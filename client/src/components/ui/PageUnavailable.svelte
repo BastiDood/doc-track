@@ -3,7 +3,7 @@
 
     export let err = null as Error | null;
 
-    const doctrackAngry = new URL('../../assets/icons/doctrack-angry.svg', import.meta.url);
+    const doctrackAngry = new URL('../../assets/logo/doctrack-angry.svg', import.meta.url);
 </script>
 
 <div>

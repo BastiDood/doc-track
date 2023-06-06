@@ -1,5 +1,5 @@
 <script>
-    const logoAngry = new URL('../../../assets/icons/doctrack-sus.svg', import.meta.url);
+    const logoAngry = new URL('../../../assets/logo/doctrack-sus.svg', import.meta.url);
 </script>
 
 <div>

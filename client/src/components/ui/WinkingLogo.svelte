@@ -4,8 +4,8 @@
     export let alt: string;
     let isWinked = false as boolean;
 
-    const iconUrl = new URL('../../assets/icons/doctrack.svg', import.meta.url);
-    const iconUrl_winked = new URL('../../assets/icons/doctrack-wink.svg', import.meta.url);
+    const iconUrl = new URL('../../assets/logo/doctrack.svg', import.meta.url);
+    const iconUrl_winked = new URL('../../assets/logo/doctrack-wink.svg', import.meta.url);
 </script>
 
 <article on:mouseenter={ () => { isWinked = true; } } on:mouseleave={ () => { isWinked = false; } }>

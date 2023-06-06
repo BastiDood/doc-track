@@ -4,7 +4,7 @@ import { ContainerType } from '../../../components/types';
 import { currentUser } from '../../../stores/UserStore';
 import '../../../components/ui/itemrow/chip-style.css';
 const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg', import.meta.url);
-const techstackIcon = new URL('../../../assets/icons/bootstrap/techstack.svg', import.meta.url);
+const techstackIcon = new URL('../../../assets/techstack.svg', import.meta.url);
 </script>
 
 <div id="heading">

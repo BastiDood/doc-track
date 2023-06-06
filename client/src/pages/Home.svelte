@@ -34,7 +34,7 @@
     });
 
     // Made it local for performance reasons; we also don't want to spam their site with requests
-    const techstackIcon = new URL('../assets/icons/bootstrap/techstack.svg', import.meta.url);
+    const techstackIcon = new URL('../assets/techstack.svg', import.meta.url);
 </script>
 
 <main>
