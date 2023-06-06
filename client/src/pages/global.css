@@ -18,7 +18,6 @@ body {
 
 img {
     user-select: none;
-    -webkit-user-drag: none;
 }
 
 h1 {
