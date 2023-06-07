@@ -31,7 +31,7 @@
         {#if typeof user !== 'undefined'}
             <Hamburger bind:open on:click={() => (open = !open)} /> 
             <span id="title" class:offline={!$isOnline}>
-                <a href='/dashboard'>
+                <a href="#/dashboard">
                     <DoctrackWink alt="DocTrack Logo" />
                 </a>
             </span>
