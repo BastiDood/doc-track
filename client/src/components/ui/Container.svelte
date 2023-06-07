@@ -1,9 +1,13 @@
 <script lang="ts">
+    import { fade } from 'svelte/transition';
+    import { quadInOut } from 'svelte/easing';
+
     import { ContainerType } from '../types.ts';
+
     export let ty: ContainerType;
 </script>
 
-<section class={ty}>
+<section class={ty} in:fade={{ duration: 100, easing: quadInOut }}>
     <slot></slot>
 </section>
 

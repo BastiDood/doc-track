@@ -9,10 +9,11 @@
     import Camera from '../components/icons/Camera.svelte';
     import Search from '../components/icons/Search.svelte';
     import TextInput from '../components/ui/TextInput.svelte';
-    import MainLogo from '../components/icons/MainLogo.svelte';
+    import HomeLogo from '../components/icons/HomeLogo.svelte';
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
+    import Techstack from '../components/icons/Techstack.svelte';
     import Toast from '../components/ui/Toast.svelte';
 
     import { topToastMessage } from '../stores/ToastStore.ts';
@@ -20,7 +21,6 @@
     import { ButtonType, IconColor } from '../components/types.ts';
 
     let showScan = false as boolean;
-
     let trackingNumber = '';
 
     function scanHandler({ detail }: CustomEvent<string>) {
@@ -39,7 +39,7 @@
         Waiting for service worker...
     {:then}
         <article in:fade={{ duration: 1000 }}>
-            <MainLogo alt='Logo' />
+            <HomeLogo alt='Logo' />
             <div id="doctrack">
                 {#each 'DOCTRACK' as char, i}
                     {@const delay = 500 + i * 150}
@@ -67,12 +67,18 @@
         </Modal>
     {/if}
     <Toast />
+    <a href="https://github.com/BastiDood/doc-track">
+        <p>&copy; 2023 Doctrack. All rights reserved.</p>
+        <p>Powered by:</p>
+        <Techstack alt="Techstack" />
+    </a>
 </main>
 
 <style>
     main {
         display: flex;
         align-items: center;
+        flex-direction: column;
         justify-content: center;
         height: 100%;
         width: 100%;

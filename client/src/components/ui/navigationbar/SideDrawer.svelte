@@ -31,11 +31,11 @@
     import TextInput from '../../ui/TextInput.svelte';
 
     export let user: User | undefined;
-    export let show = false;
+    export let show = false as boolean;
 
     let trackingNumber: string | undefined;
     let selectedOffice: Office['id'] | null = null;
-    let showScan = false;
+    let showScan = false as boolean;
 
     $: dashboardState.setOffice(selectedOffice);
 

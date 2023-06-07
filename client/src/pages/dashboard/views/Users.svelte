@@ -21,7 +21,7 @@
     }
 
     let ctx = null as Context | null;
-    let showUnprev = false;
+    let showUnprev = false as boolean;
 
     function openEdit(id: User['id'], permissions: User['permission']) {
         ctx = { id: id, permissions: permissions, showEdit: true };
@@ -43,9 +43,7 @@
 {:then}
     <header>
         <h1>Users</h1>    
-        {#if !showUnprev}
-            <Button on:click={() => {showUnprev = true;}}>Show Unprivileged Users</Button>
-        {/if}
+        <Button on:click={() => (showUnprev = !showUnprev)}>{showUnprev ? 'Hide' : 'Show'} Unprivileged Users</Button>
     </header>
     <Container ty={ContainerType.Divider}>
         <h2>System Operators</h2>

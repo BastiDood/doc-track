@@ -10,3 +10,21 @@
     </slot>
     <slot></slot>
 </div>
+
+<style>
+    div {
+        border: var(--spacing-tiny) solid black;
+    }
+
+    div:hover {
+        background-color: var(--primary-color);
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    div:active {
+        background-color: white;
+        color: var(--primary-color);
+    }
+</style>

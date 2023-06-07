@@ -64,9 +64,11 @@
     {/if}
     <main on:click={() => (toggleDrawer &&= false)} on:keydown>
         <SideDrawer user={$currentUser} show={toggleDrawer} />
-        <section>
-            <Router {routes} />
-        </section>
+        <div>
+            <section>
+                <Router {routes} />
+            </section>
+        </div>
     </main>
     <Toast />
 {:catch err}
@@ -85,9 +87,12 @@
         position: relative;
     }
 
-    section {
+    main > div {
         height: 100%;
         overflow-y: auto;
+    }
+
+    section {
         margin: var(--spacing-large);
     }
 </style>

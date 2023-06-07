@@ -11,17 +11,17 @@
     import { topToastMessage } from '../../../stores/ToastStore.ts';
     import { earliestBatch } from '../../../stores/BatchStore.ts';
 
-    import Button from '../../../components/ui/Button.svelte';
-    import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
-    import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
-    import Modal from '../../../components/ui/Modal.svelte';
-    import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
-    import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
-    import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import AcceptRow from '../../../components/ui/itemrow/AcceptRow.svelte';
+    import Button from '../../../components/ui/Button.svelte';
     import Container from '../../../components/ui/Container.svelte';
+    import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import DocumentAdd from '../../../components/icons/DocumentAdd.svelte';
+    import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
+    import InboxRow from '../../../components/ui/itemrow/InboxRow.svelte';
+    import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
+    import Modal from '../../../components/ui/Modal.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     enum ActiveMenu {
         ContextInbox,

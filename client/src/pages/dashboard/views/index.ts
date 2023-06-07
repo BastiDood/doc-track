@@ -8,6 +8,8 @@ import ManageInvites from './Invites.svelte';
 import ManageStaff from './Staff.svelte';
 import Metrics from './Metrics.svelte';
 import Outbox from './Outbox.svelte';
+import Default from './Default.svelte';
+import UnknownPage from './UnknownPage.svelte';
 
 export default {
     '/barcodes': Barcodes,
@@ -20,4 +22,6 @@ export default {
     '/staff': ManageStaff,
     '/metrics': Metrics,
     '/outbox': Outbox,
+    '/': Default,
+    '*': UnknownPage,
 };

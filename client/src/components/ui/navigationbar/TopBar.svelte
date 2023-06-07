@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './../itemrow/chip-style.css';
+
     import { dashboardState } from '../../../stores/DashboardState.ts';
     import { allOffices } from '../../../stores/OfficeStore.ts';
     import { isOnline } from '../../../stores/NetState.ts';
@@ -7,8 +9,9 @@
     import Button from '../../../components/ui/Button.svelte';
     import Hamburger from '../../icons/Hamburger.svelte';
     import Logout from '../../icons/Logout.svelte';
+    import ProfileLogout from './ProfileLogout.svelte';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
-    import MainLogo from '../../icons/MainLogo.svelte';
+    import DoctrackWink from '../../doctrack/DoctrackWink.svelte';
 
     import { ButtonType, IconColor } from '../../../components/types.ts';
     import type { User } from '../../../../../model/src/user.ts';
@@ -25,14 +28,18 @@
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon">
-        {#if typeof user !== 'undefined'}
-            <Hamburger bind:open on:click={() => (open = !open)} /> 
+        {#if typeof user === 'undefined'}
+            <span on:keydown on:click = {() => window.history.back()}>
+                <ChevronLeft color={IconColor.White} alt="Return to previous page" /><b>Back</b>
+            </span>
         {:else}
-            <ChevronLeft color={IconColor.White} alt="Return to previous page" on:click = {() => window.history.back()} />
+            <Hamburger bind:open on:click={() => (open = !open)} /> 
+            <span id="title" class:offline={!$isOnline}>
+                <a href="#/">
+                    <DoctrackWink alt="DocTrack Logo" />
+                </a>
+            </span>
         {/if}
-        <span id="title" class:offline={!$isOnline}>
-            <MainLogo alt="DocTrack Logo" mini/>
-        </span>
         {#await deferredSnaps.load()}
             <span>🔄</span>
         {:then}
@@ -41,7 +48,7 @@
             {/if}
         {/await}
         {#if officeName}
-            <span>{officeName}</span>
+            <span class="chip background">{officeName}</span>
         {/if}
     </span>
     <slot></slot>
@@ -53,13 +60,17 @@
                 </Button>
             </a>
         {:else}
-            <span><img id="user" src={user.picture} alt="Profile Picture for {user.name}" /></span>
+            <ProfileLogout picture={user.picture} />
         {/if}
     </nav>
 </nav>
 
 <style>
     @import url('../../../pages/vars.css');
+
+    .background {
+        background-color: var(--secondary-color);
+    }
 
     span {
         color: white;
@@ -70,12 +81,6 @@
         display: flex;
         align-items: center;
         gap: var(--spacing-small);
-    }
-
-    #user {
-        border-radius: 50%;
-        display: block;
-        height: 2rem;
     }
 
     #navcontainer {

@@ -16,6 +16,10 @@ body {
     padding: 0;
 }
 
+img {
+    user-select: none;
+}
+
 h1 {
     color: var(--primary-color);
     font-size: var(--x-large);
