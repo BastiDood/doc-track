@@ -67,7 +67,11 @@
         </Modal>
     {/if}
     <Toast />
-    <Techstack alt="Techstack" />
+    <a href="https://github.com/BastiDood/doc-track">
+        <p>© 2023 Doctrack. All rights reserved.</p>
+        <p>Powered by:</p>
+        <Techstack alt="Techstack" />
+    </a>
 </main>
 
 <style>
