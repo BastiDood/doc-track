@@ -9,7 +9,7 @@
     import Button from '../../../components/ui/Button.svelte';
     import Hamburger from '../../icons/Hamburger.svelte';
     import Logout from '../../icons/Logout.svelte';
-    import LogoutIcon from './logoutIcon.svelte';
+    import ProfileLogout from './ProfileLogout.svelte';
     import ChevronLeft from '../../icons/ChevronLeft.svelte';
     import DoctrackWink from '../../doctrack/DoctrackWink.svelte';
 
@@ -60,7 +60,7 @@
                 </Button>
             </a>
         {:else}
-            <LogoutIcon picture={user.picture} />
+            <ProfileLogout picture={user.picture} />
         {/if}
     </nav>
 </nav>
