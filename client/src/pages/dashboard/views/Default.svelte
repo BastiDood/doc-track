@@ -32,9 +32,7 @@ const imgScanning = new URL('../../../assets/doctrack-scanning.png', import.meta
 		<Container ty={ContainerType.Enumeration}>
 			<h2 class="chip category centering">Navigation tutorial</h2>
 			<Container ty={ContainerType.Divider}>
-		  		<h2 class="chip category centering">Navigation tutorial</h2>
 		  		<p>Ready to start? Click on the hamburger icon (beside the Logo) on the top left corner!</p>
-				{@const imgNavigation = new URL('../../../assets/doctrack-navigation.png', import.meta.url)}
 		  		<img src={imgNavigation} alt="Navigation tutorial" />
 			</Container>
 		</Container>
@@ -108,7 +106,7 @@ const imgScanning = new URL('../../../assets/doctrack-scanning.png', import.meta
 	}
 
 	li {
-		margin: 0.75rem;
+		margin: 0;
 	}
 
 	main {
