@@ -12,17 +12,19 @@
 </div>
 
 <style>
+    div {
+        border: var(--spacing-tiny) solid black;
+    }
+
     div:hover {
-        cursor: pointer;
         background-color: var(--primary-color);
         color: white;
-        transition: 0.3s;
-        border: var(--spacing-tiny) solid black;
+        cursor: pointer;
+        transition: background-color 0.3s;
     }
 
     div:active {
         background-color: white;
         color: var(--primary-color);
-        border: var(--spacing-tiny) solid black;
     }
 </style>
