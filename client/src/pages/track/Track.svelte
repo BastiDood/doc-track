@@ -133,7 +133,7 @@
                 {@const { title, category, mime, trail } = meta}
                 {@const overview = renderOverview(trail, $allOffices)}
                 <section>
-                    <QrGenerator url={title} />
+                    <QrGenerator url={trackingNumber} />
                     <div class="column">
                         <p>Tracking No: {trackingNumber}</p>
                         <h1 class="removemargin">{title}</h1>
