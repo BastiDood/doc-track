@@ -2,7 +2,7 @@
 import Container from '../../../components/ui/Container.svelte';
 import { ContainerType } from '../../../components/types';
 import { currentUser } from '../../../stores/UserStore';
-import Techstack from '../../../components/Techstack.svelte';
+import Techstack from '../../../components/icons/Techstack.svelte';
 
 import '../../../components/ui/itemrow/chip-style.css';
 const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg', import.meta.url);
@@ -22,7 +22,9 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 		  	<Container ty={ContainerType.Divider}>
 				<p>With a strong focus on modern web development paradigms, DocTrack is a proof-of-concept on the usage of modern web technologies (such as Svelte + Typescript in the front-end and Deno + PostgreSQL in the back-end) to develop a Progressive Web Application that can handle offline usage, deferred operations, and resource caching.</p>
 				<div class="centering">
-					<Techstack />
+					<a href="https://github.com/BastiDood/doc-track">
+						<Techstack />
+					</a>
 				</div>
 			</Container>
 		</Container>

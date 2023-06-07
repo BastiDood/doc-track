@@ -13,7 +13,7 @@
     import Modal from '../components/ui/Modal.svelte';
     import QrScanner from '../components/ui/QRScanner.svelte';
     import PageUnavailable from '../components/ui/PageUnavailable.svelte';
-    import Techstack from '../components/Techstack.svelte';
+    import Techstack from '../components/icons/Techstack.svelte';
     import Toast from '../components/ui/Toast.svelte';
 
     import { topToastMessage } from '../stores/ToastStore.ts';
