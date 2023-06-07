@@ -5,8 +5,9 @@ import { currentUser } from '../../../stores/UserStore';
 import Techstack from '../../../components/icons/Techstack.svelte';
 
 import '../../../components/ui/itemrow/chip-style.css';
-const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg', import.meta.url);
-
+const imgNavigation = new URL('../../../assets/doctrack-navigation.png', import.meta.url);
+const imgTracking = new URL('../../../assets/doctrack-trackingpage.png', import.meta.url);
+const imgScanning = new URL('../../../assets/doctrack-scanning.png', import.meta.url);
 </script>
 
 <div id="heading">
@@ -29,9 +30,9 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 			</Container>
 		</Container>
 		<Container ty={ContainerType.Enumeration}>
+			<h2 class="chip category centering">Navigation tutorial</h2>
 			<Container ty={ContainerType.Divider}>
-		  		<h2 class="chip category centering">Navigation tutorial</h2>
-		  		<p>Ready to start? Click on the hamburger icon (beside the Logo) on the top left corner!</p>
+		  		<p>Ready to start? Click on the hamburger icon (beside the logo) on the top left corner!</p>
 		  		<img src={imgNavigation} alt="Navigation tutorial" />
 			</Container>
 		</Container>
@@ -72,10 +73,21 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 			<Container ty={ContainerType.Divider}>
 				<p>As a receiver, go to the <b>Inbox</b> page and click on the ellipsis (vertical triple dots) on the document row. Click <b>Accept Document</b> and the document is now on your inbox. You may send the document to another office just like before!</p>
 			</Container>
-			<Container ty={ContainerType.Divider}>
-				<p>You can also track your document. Anytime in the <b>Inbox/Outbox</b>, you can click on the white space of the document row to go to its tracking page. Alternatively, you can copy the barcode (the ID with the #) by highlighting it. Then, you can input the identifier on the sidebar or the home page and clicking the <i>Magnifying glass</i> icon. Alternatively, you can use the barcodes generated from the <b>Barcodes</b> page and click on the <i>Camera icon</i> to scan the generated QR code. Take note non-staff may view the tracking status of the document any time.</p>
-			</Container>
 	   </Container>
+	   <Container ty={ContainerType.Enumeration}>
+		<h2 class="chip category centering">Tracking your document</h2>
+			<Container ty={ContainerType.Divider}>
+				<p>You can also track your document. Anytime in the <b>Inbox/Outbox</b>, you can click on the white space of the document row to go to its tracking page. Alternatively, you can copy the barcode (the ID with the #) by highlighting it. Then, you can input the identifier on the sidebar or the home page and clicking the <i>Magnifying glass</i> icon. Alternatively, you can use the barcodes generated from the <b>Barcodes</b> page and click on the <i>Camera icon</i> to scan the generated QR code.</p>
+				<img src={imgScanning} alt="Tracking tutorial" />
+			</Container>
+		</Container>
+		<Container ty={ContainerType.Enumeration}>
+			<h2 class="chip category centering">Tracking Page</h2>
+				<Container ty={ContainerType.Divider}>
+					<p>The <b>Tracking page</b> allows <i>anyone</i> with the link or tracking number to view the status of the document. The page allows you to view the QR code of the tracking number and the detailed description of the document. It also allows you to <b>Subscribe to push notifications</b> that tells you if there was an update in the document such as being transferred to another office. It also lets you <b>Download</b> the file and show it <b>Paper Trail</b>.</p>
+					<img src={imgTracking} alt="Tracking page" />
+				</Container>
+			</Container>
 	</main>
  </Container>
 
