@@ -12,7 +12,11 @@
 </script>
 
 <div id="heading">
-    <h1>Welcome, {$currentUser.name ?? 'Guest'}, to DocTrack!</h1>
+    {#if $currentUser === null}
+        <h1>Welcome to DocTrack!</h1>
+    {:else}
+        <h1>Welcome, {$currentUser.name}, to DocTrack!</h1>
+    {/if}
 </div>
 <Container ty={ContainerType.Divider}>
     <main>
