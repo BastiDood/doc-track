@@ -64,7 +64,7 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 				<p>Go to <b>Barcodes</b> and click on <b>Generate New Batch</b>. These are barcodes that will be used on the <b>tracking page</b>, as well as uniquely identify your document. You can download the barcodes as QR codes by clicking on <b>Download Stickers</b> button.</p>
 			</Container>
 			<Container ty={ContainerType.Divider}>
-				<p>Go to the <b>outbox</b> and click on the <b>Register and Stage a New Document</b>. Input the necessary details such as the barcode generated.</p>
+				<p>Go to the <b>inbox</b> or the <b>outbox</b>, and click on the <b>Register and Stage a New Document</b>. Input the necessary details such as the barcode generated.</p>
 			</Container>
 			<Container ty={ContainerType.Divider}>
 				<p>Click on the ellipsis (triple dots) on the right of the row and click <b>Send Document</b>. Specify the target office and put some remarks and voila!</p>
