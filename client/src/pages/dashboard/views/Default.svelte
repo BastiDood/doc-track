@@ -70,7 +70,7 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 				<p>Click on the ellipsis (vertical triple dots) on the right of the row and click <b>Send Document</b>. Specify the target office and put some remarks and voila!</p>
 			</Container>
 			<Container ty={ContainerType.Divider}>
-				<p>As a receiver, go to the <b>Inbox</b> page and click on the ellipsis (triple dots) on the document row. Click <b>Accept Document</b> and the document is now on your inbox. You may send the document to another office just like before!</p>
+				<p>As a receiver, go to the <b>Inbox</b> page and click on the ellipsis (vertical triple dots) on the document row. Click <b>Accept Document</b> and the document is now on your inbox. You may send the document to another office just like before!</p>
 			</Container>
 			<Container ty={ContainerType.Divider}>
 				<p>You can also track your document. Anytime in the <b>Inbox/Outbox</b>, you can click on the white space of the document row to go to its tracking page. Alternatively, you can copy the barcode (the ID with the #) by highlighting it. Then, you can input the identifier on the sidebar or the home page and clicking the <i>Magnifying glass</i> icon. Alternatively, you can use the barcodes generated from the <b>Barcodes</b> page and click on the <i>Camera icon</i> to scan the generated QR code. Take note non-staff may view the tracking status of the document any time.</p>
