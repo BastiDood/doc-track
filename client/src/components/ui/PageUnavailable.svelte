@@ -23,7 +23,6 @@
 <style>
     div {
         text-align: center;
-        margin-top: var(--spacing-large);
     }
 
     #doctrack-logo {
