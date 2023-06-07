@@ -3,9 +3,3 @@
 </script>
 
 <img src="{doctrackAngry.pathname}" alt="Doctrack angry logo" />
-
-<style>
-    img {
-        max-width: 30svw;
-    }
-</style>

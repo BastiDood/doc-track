@@ -6,7 +6,9 @@
 </script>
 
 <div>
-    <DoctrackAngry />
+    <div id="doctrack-logo">
+        <DoctrackAngry />
+    </div>
     <h2>Well... this is awkward.</h2>
     <h3>Mr. Doctrack wasn't happy with what you did.</h3>
     {#if err !== null}
@@ -22,5 +24,12 @@
     div {
         text-align: center;
         margin-top: var(--spacing-large);
+    }
+
+    #doctrack-logo {
+        display: block;
+        text-align: center;
+        margin: 0 auto;
+        max-width: 50svw;
     }
 </style>
