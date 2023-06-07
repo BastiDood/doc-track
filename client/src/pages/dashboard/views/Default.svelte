@@ -78,7 +78,7 @@
             </Container>
         </Container>
         <Container ty={ContainerType.Enumeration}>
-            <h2 class="chip category centering">Tracking your document</h2>
+            <h2 class="chip category centering">Tracking Your Document</h2>
             <Container ty={ContainerType.Divider}>
                 <p>You can also track your document. Anytime in the <b>Inbox/Outbox</b>, you can click on the white space of the document row to go to its tracking page. Alternatively, you can copy the barcode (the ID with the #) by highlighting it. Then, you can input the identifier on the sidebar or the home page and clicking the <i>Magnifying glass</i> icon. Alternatively, you can use the barcodes generated from the <b>Barcodes</b> page and click on the <i>Camera icon</i> to scan the generated QR code.</p>
                 <img src={imgScanning} alt="Tracking tutorial" />
