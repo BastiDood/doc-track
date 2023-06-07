@@ -67,7 +67,7 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 				<p>Go to the <b>inbox</b> or the <b>outbox</b>, and click on the <b>Register and Stage a New Document</b>. Input the necessary details such as the barcode generated.</p>
 			</Container>
 			<Container ty={ContainerType.Divider}>
-				<p>Click on the ellipsis (triple dots) on the right of the row and click <b>Send Document</b>. Specify the target office and put some remarks and voila!</p>
+				<p>Click on the ellipsis (vertical triple dots) on the right of the row and click <b>Send Document</b>. Specify the target office and put some remarks and voila!</p>
 			</Container>
 			<Container ty={ContainerType.Divider}>
 				<p>As a receiver, go to the <b>Inbox</b> page and click on the ellipsis (triple dots) on the document row. Click <b>Accept Document</b> and the document is now on your inbox. You may send the document to another office just like before!</p>
