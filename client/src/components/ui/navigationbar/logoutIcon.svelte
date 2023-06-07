@@ -17,10 +17,9 @@
 {/if}
 
 <style>
-#user {
-    border-radius: 50%;
-    display: block;
-    height: 2rem;
-    user-select: none;
-}
+    #user {
+        border-radius: 50%;
+        display: block;
+        height: 2rem;
+    }
 </style>
