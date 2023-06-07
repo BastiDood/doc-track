@@ -1,13 +1,14 @@
 <script>
+    import '../../../components/ui/itemrow/chip-style.css';
+
 	import Container from '../../../components/ui/Container.svelte';
 	import { ContainerType } from '../../../components/types';
 	import { currentUser } from '../../../stores/UserStore';
 	import Techstack from '../../../components/icons/Techstack.svelte';
 
-import '../../../components/ui/itemrow/chip-style.css';
-const imgNavigation = new URL('../../../assets/doctrack-navigation.png', import.meta.url);
-const imgTracking = new URL('../../../assets/doctrack-trackingpage.png', import.meta.url);
-const imgScanning = new URL('../../../assets/doctrack-scanning.png', import.meta.url);
+    const imgNavigation = new URL('../../../assets/doctrack-navigation.png', import.meta.url);
+    const imgTracking = new URL('../../../assets/doctrack-trackingpage.png', import.meta.url);
+    const imgScanning = new URL('../../../assets/doctrack-scanning.png', import.meta.url);
 </script>
 
 <div id="heading">
