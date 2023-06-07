@@ -1,20 +1,20 @@
 <script lang="ts">
-    let isWinked = false as boolean;
+    import Doctrack from '../icons/Doctrack.svelte';
+    import DoctrackWink from '../icons/DoctrackWink.svelte';
 
-    const iconUrl = new URL('../../assets/logo/doctrack.svg', import.meta.url);
-    const iconUrl_winked = new URL('../../assets/logo/doctrack-wink.svg', import.meta.url);
+    let isWinked = false;
 </script>
 
-<span on:mouseenter={() => (isWinked = true)} on:mouseleave={() => (isWinked = false)}>
-    <img alt="Doctrack logo" src={isWinked ? iconUrl_winked.pathname : iconUrl.pathname} on:click on:keydown />
-</span>
+<div on:mouseenter={() => (isWinked = true)} on:mouseleave={() => (isWinked = false)}>
+    {#if isWinked}
+        <DoctrackWink alt="see help page" />
+    {:else}
+        <Doctrack alt="see help page" />
+    {/if}
+</div>
 
 <style>
-    span {
+    div {
         cursor: pointer;
-    }
-
-    img {
-        height: 2rem;
     }
 </style>
