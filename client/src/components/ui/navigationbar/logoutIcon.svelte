@@ -10,7 +10,8 @@
 {#if typeof picture === 'undefined'}
     <img id="user" src={logoutIcon.pathname} alt="Profile" />
 {:else}
-    <a href="/" on:mouseenter={ () => { isLogoutHovered = true; } } on:mouseleave={ () => { isLogoutHovered = false; } }>
+    <a href="/" on:mouseenter={() => (isLogoutHovered = true)} on:mouseleave={() => (isLogoutHovered = false)}>
+
         <img id="user" src={isLogoutHovered ? logoutIcon.pathname : picture} alt="Changing" />
     </a>
 {/if}
