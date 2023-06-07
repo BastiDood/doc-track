@@ -82,7 +82,7 @@
         };
     }
 
-    let prev: Date | null = null;
+    let prev = null as Date | null;
     function computeTimeDiff(date: Date) {
         if (prev === null) {
             prev = date;

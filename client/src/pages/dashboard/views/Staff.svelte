@@ -56,7 +56,7 @@
         throw err;
     });
 
-    let showRetiredStaff = false;
+    let showRetiredStaff = false as boolean;
 </script>
 
 {#if currentOffice === null}

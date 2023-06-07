@@ -1,10 +1,10 @@
 <script>
     import '../../../components/ui/itemrow/chip-style.css';
 
-	import Container from '../../../components/ui/Container.svelte';
-	import { ContainerType } from '../../../components/types';
-	import { currentUser } from '../../../stores/UserStore';
-	import Techstack from '../../../components/icons/Techstack.svelte';
+    import Container from '../../../components/ui/Container.svelte';
+    import { ContainerType } from '../../../components/types';
+    import { currentUser } from '../../../stores/UserStore';
+    import Techstack from '../../../components/icons/Techstack.svelte';
 
     const imgNavigation = new URL('../../../assets/doctrack-navigation.png', import.meta.url);
     const imgTracking = new URL('../../../assets/doctrack-trackingpage.png', import.meta.url);
@@ -12,7 +12,7 @@
 </script>
 
 <div id="heading">
-	<h1>Welcome, {$currentUser.name ?? 'Guest'}, to DocTrack!</h1>
+    <h1>Welcome, {$currentUser.name ?? 'Guest'}, to DocTrack!</h1>
 </div>
 <Container ty={ContainerType.Divider}>
     <main>
@@ -88,44 +88,44 @@
             <h2 class="chip category centering">Tracking Page</h2>
             <Container ty={ContainerType.Divider}>
                 <p>The <b>Tracking page</b> allows <i>anyone</i> with the link or tracking number to view the status and <b>paper trail</b> of the document. The page allows you to view the QR code of the tracking number and the detailed description of the document. It also allows you to <b>Subscribe to push notifications</b>, which tells you about any updates in the document (e.g., documents being transferred to another office). If the need arises, one may also <b>Download</b> the file.
-                <img src={imgTracking} alt="Tracking page" />
+                    <img src={imgTracking} alt="Tracking page" />
             </Container>
         </Container>
     </main>
- </Container>
+</Container>
 
 <style>
-	.centering {
-		text-align: center;
-	}
+    .centering {
+        text-align: center;
+    }
 
     #heading {
         text-align: center;
         margin: 0;
     }
 
-	img {
-		width: 100%;
-	}
+    img {
+        width: 100%;
+    }
 
-	li {
-		margin: 0;
-	}
+    li {
+        margin: 0;
+    }
 
-	main {
-		display: grid;
-		grid-template-rows: auto;
-		grid-gap: 0.25rem;
-		margin: 0 auto;
-	}
+    main {
+        display: grid;
+        grid-template-rows: auto;
+        grid-gap: 0.25rem;
+        margin: 0 auto;
+    }
 
-	ol {
-  		list-style-position: inside;
-	}
+    ol {
+        list-style-position: inside;
+    }
 
-	@media (min-width: 960px) {
-		main {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
+    @media (min-width: 960px) {
+        main {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
 </style>

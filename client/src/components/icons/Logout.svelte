@@ -1,6 +1,6 @@
 <script lang="ts">
     import './icon-styles.css';
-    import { IconColor, IconSize } from '../types.ts';
+    import { IconColor } from '../types.ts';
     
     export let color: IconColor = IconColor.Default;
     export let alt: string;

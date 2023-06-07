@@ -21,7 +21,7 @@
     }
 
     let ctx = null as Context | null;
-    let showUnprev = false;
+    let showUnprev = false as boolean;
 
     function openEdit(id: User['id'], permissions: User['permission']) {
         ctx = { id: id, permissions: permissions, showEdit: true };
