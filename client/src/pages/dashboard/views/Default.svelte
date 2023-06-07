@@ -87,7 +87,7 @@
         <Container ty={ContainerType.Enumeration}>
             <h2 class="chip category centering">Tracking Page</h2>
             <Container ty={ContainerType.Divider}>
-                <p>The <b>Tracking page</b> allows <i>anyone</i> with the link or tracking number to view the status of the document. The page allows you to view the QR code of the tracking number and the detailed description of the document. It also allows you to <b>Subscribe to push notifications</b> that tells you if there was an update in the document such as being transferred to another office. It also lets you <b>Download</b> the file and show it <b>Paper Trail</b>.</p>
+                <p>The <b>Tracking page</b> allows <i>anyone</i> with the link or tracking number to view the status and <b>paper trail</b> of the document. The page allows you to view the QR code of the tracking number and the detailed description of the document. It also allows you to <b>Subscribe to push notifications</b>, which tells you about any updates in the document (e.g., documents being transferred to another office). If the need arises, one may also <b>Download</b> the file.
                 <img src={imgTracking} alt="Tracking page" />
             </Container>
         </Container>
