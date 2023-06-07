@@ -53,7 +53,7 @@ const imgNavigation = new URL('../../../assets/doctrack-navigation.tutorial.svg'
 		</Container>
 		</Container>
 		<Container ty={ContainerType.Enumeration}>
-			<h2 class="chip category centering">Getting Started...</h2>
+			<h2 class="chip category centering">Getting Started</h2>
 			<Container ty={ContainerType.Divider}>
 				<p>Start by creating an office. This is on the <b>Offices page</b> (see navigation panel). Join the office by refreshing the page and clicking the appropriate office on the <b>navigation panel</b>.</p>
 			</Container>
