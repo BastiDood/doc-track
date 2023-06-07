@@ -10,7 +10,7 @@
         <DoctrackAngry />
     </div>
     <h2>Well... this is awkward.</h2>
-    <h3>Mr. Doctrack wasn't happy with what you did.</h3>
+    <h3>Mr. DocTrack wasn't happy with what you did.</h3>
     {#if err !== null}
         {#if err instanceof InvalidSession}
             <p>Your session has expired. <a href="/auth/login">Log back in?</a></p>
@@ -27,7 +27,6 @@
 
     #doctrack-logo {
         display: block;
-        text-align: center;
         margin: 0 auto;
         max-width: 50svw;
     }
