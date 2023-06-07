@@ -13,7 +13,7 @@
     import InviteForm from '../../../components/ui/forms/invite/AddInvite.svelte';
     import InviteRow from '../../../components/ui/itemrow/InviteRow.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import PageUnavailable from './PageUnavailable.svelte';
     import PersonAdd from '../../../components/icons/PersonAdd.svelte';
     import RevokeInvite from '../../../components/ui/forms/invite/RevokeInvite.svelte';
 

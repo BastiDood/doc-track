@@ -14,7 +14,7 @@
     import Events from '../../../components/icons/Events.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
     import NewOffice from '../../../components/ui/forms/office/NewOffice.svelte';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import PageUnavailable from './PageUnavailable.svelte';
     import RowTemplate from '../../../components/ui/RowTemplate.svelte';
 
     enum OfficeEvents {

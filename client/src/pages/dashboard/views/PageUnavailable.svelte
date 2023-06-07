@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { InvalidSession } from '../../../api/error';
-    import DoctrackAngry from '../../../components/doctrack/DoctrackAngry.svelte';
+    import { InvalidSession } from '../../api/error';
+    import DoctrackAngry from '../doctrack/DoctrackAngry.svelte';
 
     export let err = null as Error | null;
 </script>

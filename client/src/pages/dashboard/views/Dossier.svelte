@@ -7,7 +7,7 @@
     import { topToastMessage } from '../../../stores/ToastStore.ts';
 
     import Container from '../../../components/ui/Container.svelte';
-    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
+    import PageUnavailable from './PageUnavailable.svelte';
     import RegisterRow from '../../../components/ui/itemrow/RegisterRow.svelte';
 
     $: ({ currentOffice } = $dashboardState);
