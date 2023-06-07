@@ -28,16 +28,16 @@
 
 <nav class:offline={!$isOnline} id="navcontainer" on:click|stopPropagation on:keypress>
     <span id="icon">
-        {#if typeof user !== 'undefined'}
-            <Hamburger bind:open on:click={() => (open = !open)} /> 
-            <span id="title" class:offline={!$isOnline}>
-                <a href="#/dashboard">
-                    <DoctrackWink alt="DocTrack Logo" />
-                </a>
-            </span>
-        {:else}
+        {#if typeof user === 'undefined'}
             <span on:keydown on:click = {() => window.history.back()}>
                 <ChevronLeft color={IconColor.White} alt="Return to previous page" /><b>Back</b>
+            </span>
+        {:else}
+            <Hamburger bind:open on:click={() => (open = !open)} /> 
+            <span id="title" class:offline={!$isOnline}>
+                <a href="#/">
+                    <DoctrackWink alt="DocTrack Logo" />
+                </a>
             </span>
         {/if}
         {#await deferredSnaps.load()}
