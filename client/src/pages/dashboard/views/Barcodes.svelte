@@ -14,7 +14,7 @@
     import Download from '../../../components/icons/Download.svelte';
     import FetchEarliest from '../../../components/ui/forms/batch/FetchEarliest.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import PageUnavailable from './PageUnavailable.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
 
     $: ({ currentOffice } = $dashboardState);
 

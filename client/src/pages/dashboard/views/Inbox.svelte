@@ -18,8 +18,8 @@
     import InsertSnapshot from '../../../components/ui/forms/document/InsertSnapshot.svelte';
     import CreateDocument from '../../../components/ui/forms/document/CreateDocument.svelte';
     import AcceptContext from '../../../components/ui/contextdrawer/AcceptContext.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import InboxContext from '../../../components/ui/contextdrawer/InboxContext.svelte';
-    import PageUnavailable from './PageUnavailable.svelte';
     import Container from '../../../components/ui/Container.svelte';
     import DocumentAdd from '../../../components/icons/DocumentAdd.svelte';
 

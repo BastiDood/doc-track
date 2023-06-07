@@ -11,7 +11,7 @@
     import Container from '../../../components/ui/Container.svelte';
     import GlobalPermissions from '../../../components/ui/forms/permissions/GlobalPermissions.svelte';
     import Modal from '../../../components/ui/Modal.svelte';
-    import PageUnavailable from './PageUnavailable.svelte';
+    import PageUnavailable from '../../../components/ui/PageUnavailable.svelte';
     import PersonRowGlobal from '../../../components/ui/itemrow/PersonRowGlobal.svelte';
 
     interface Context {
